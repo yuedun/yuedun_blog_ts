@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "noImplicitAny": false,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "noEmitOnError": true,
+        "removeComments": true,
+        "rootDir": "./",
+        "outDir": "./dist",
+        "sourceMap": false
+    }
+}
