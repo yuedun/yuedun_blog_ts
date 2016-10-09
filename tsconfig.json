@@ -7,8 +7,13 @@
         "noFallthroughCasesInSwitch": true,
         "noEmitOnError": true,
         "removeComments": true,
-        "rootDir": "./",
-        "outDir": "./dist",
-        "sourceMap": false
-    }
+        "rootDir": "./src",
+        "outDir": "./build",
+        "sourceMap": true
+    },
+    "filesGlob": [
+        "*/**/*.ts",
+        "!node_modules/**",
+        "!typings/**"
+    ]
 }
