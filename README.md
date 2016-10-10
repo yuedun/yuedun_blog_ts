@@ -48,3 +48,5 @@ typings相关文档[https://github.com/typings/typings](https://github.com/typin
 ./build为编译出来的js文件
 运行方法：
 运行pm2 start ./build/bin/www.js --watch 即可
+
+或者可以使用VScode更方便的开发，已经配置好编译文件和启动文件，ctrl+shift+b启动编译，并监听文件变化自动编译，F5启动服务

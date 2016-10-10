@@ -7,7 +7,7 @@
         "noFallthroughCasesInSwitch": true,
         "noEmitOnError": true,
         "removeComments": true,
-        "rootDir": "./src",
+        "rootDir": "./",
         "outDir": "./build",
         "sourceMap": true
     },

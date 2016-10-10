@@ -1,9 +1,12 @@
 import * as express from 'express';
 let router = express.Router();
 
-/* GET home page. */
+/* GET users listing. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: '基于Express的typescript开发的项目' });
+  res.send('respond with a resource');
 });
+let a=6;
+let b=1;
+let c=2;
 
 module.exports = router;
