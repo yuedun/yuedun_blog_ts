@@ -12,16 +12,25 @@ tsconfig.json配置说明：
         "noFallthroughCasesInSwitch": true,//switch没有break提示
         "removeComments": true,//输出文件移除注释
         "noEmitOnError": true,//ts文件错误时不生成js
-        "rootDir": "./src",//
-        "outDir": "./build",//
-        "sourceMap": false//
+        "rootDir": "./",//需要编译的根目录
+        "outDir": "./build",//编译文件输出目录
+        "sourceMap": ture//是否生成.map文件，用于ts debug调试
     },
-    "filesGlob": [
+    "include": [
+        "*/**/*.ts"
+    ],
+    "exclude": [
+        //默认排除了node_modules
+    ]    
+}
+```
+使用include，exclude代替下面
+```
+"filesGlob": [
         "*/**/*.ts",
         "!node_modules/**",
         "!typings/**"
     ]
-}
 ```
 
 > tsd
@@ -50,3 +59,5 @@ typings相关文档[https://github.com/typings/typings](https://github.com/typin
 运行pm2 start ./build/bin/www.js --watch 即可
 
 或者可以使用VScode更方便的开发，已经配置好编译文件和启动文件，ctrl+shift+b启动编译，并监听文件变化自动编译，F5启动服务
+
+> 由于未找到生成的代码，已忽略断点（是否是源映射问题？）

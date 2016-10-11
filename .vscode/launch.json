@@ -8,7 +8,7 @@
             "program": "${workspaceRoot}/build/bin/www.js",
             "stopOnEntry": false,
             "args": [],
-            "cwd": "${workspaceRoot}",
+            "cwd": "${workspaceRoot}/build",
             "preLaunchTask": null,
             "runtimeExecutable": null,
             "runtimeArgs": [
@@ -18,8 +18,8 @@
                 "NODE_ENV": "development"
             },
             "externalConsole": false,
-            "sourceMaps": false,
-            "outDir": null
+            "sourceMaps": true,
+            "outDir": "${workspaceRoot}/build/"
         },
         {
             "name": "附加",
@@ -30,7 +30,7 @@
             "restart": false,
             "sourceMaps": false,
             "outDir": null,
-            "localRoot": "${workspaceRoot}",
+            "localRoot": "${workspaceRoot}/build",
             "remoteRoot": null
         },
         {

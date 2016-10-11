@@ -11,9 +11,10 @@
         "outDir": "./build",
         "sourceMap": true
     },
-    "filesGlob": [
-        "*/**/*.ts",
-        "!node_modules/**",
-        "!typings/**"
+    "include": [
+        "*/**/*.ts"
+    ],
+    "exclude": [
+        
     ]
 }
