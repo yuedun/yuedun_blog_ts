@@ -1,9 +1,24 @@
 import * as express from 'express';
-let router = express.Router();
+import {route} from '../utils/route';
+export class Routes {
+    private a: string;
+    constructor() {
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: '基于Express的typescript开发的项目,hhh' });
-});
-
-module.exports = router;
+    }
+    @route({
+        path: "/index",
+        method: "get"
+    })
+    static index(req, res, next): any {
+        console.log(">>>>>>>>>>>>>index");
+        res.send(">>>>>>>>>>>>>>>>>>>>>>>>index")
+    }
+    @route({
+        path: "/home",
+        method: "get"
+    })
+    static home(req, res, next): any {
+        console.log(">>>>>>>>>>>>>home");
+        res.send(">>>>>>>>>>>>>>>>>>>>>>>>home")
+    }
+}

@@ -5,6 +5,7 @@
         "noImplicitAny": false,
         "noImplicitReturns": true,
         "noFallthroughCasesInSwitch": true,
+        "experimentalDecorators": true,
         "noEmitOnError": true,
         "removeComments": true,
         "rootDir": "./",
@@ -12,9 +13,6 @@
         "sourceMap": true
     },
     "include": [
-        "*/**/*.ts"
-    ],
-    "exclude": [
-        
+        "./**/*.ts"
     ]
 }
