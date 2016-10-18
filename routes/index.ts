@@ -1,9 +1,15 @@
 import * as express from 'express';
 import {route} from '../utils/route';
 export class Routes {
-    private a: string;
-    constructor() {
 
+    @route({
+        path: "/",
+        method: "get"
+    })
+    static default(req, res, next): any {
+        console.log(">>>>>>>>>>>>>default");
+        res.send(">>>>>>>>>>>>>>>>>>>>>>>>default")
+        
     }
     @route({
         path: "/index",

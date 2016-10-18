@@ -14,8 +14,6 @@ export default class Cover {
     }
 
     registerRouters() {
-        console.log("retoures:",Cover.__DecoratedRouters);
-        
         for (let [config, controller] of Cover.__DecoratedRouters) {
             let controllers = Array.isArray(controller) ? controller : [controller]
             controllers.forEach((controller) => this.router[config.method](config.path, controller))

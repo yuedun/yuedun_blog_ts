@@ -8,7 +8,6 @@ var Cover = (function () {
     }
     Cover.prototype.registerRouters = function () {
         var _this = this;
-        console.log("retoures:", Cover.__DecoratedRouters);
         var _loop_1 = function(config, controller) {
             var controllers = Array.isArray(controller) ? controller : [controller];
             controllers.forEach(function (controller) { return _this.router[config.method](config.path, controller); });

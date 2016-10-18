@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+require('source-map-support/register');
 var app = require('../app');
 var debug = require('debug')('yuedun_ts:server');
 var http = require('http');

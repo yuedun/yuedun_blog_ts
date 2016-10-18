@@ -1,4 +1,3 @@
-"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -9,6 +8,10 @@ var route_1 = require('../utils/route');
 var Routes = (function () {
     function Routes() {
     }
+    Routes.default = function (req, res, next) {
+        console.log(">>>>>>>>>>>>>default");
+        res.send(">>>>>>>>>>>>>>>>>>>>>>>>default");
+    };
     Routes.index = function (req, res, next) {
         console.log(">>>>>>>>>>>>>index");
         res.send(">>>>>>>>>>>>>>>>>>>>>>>>index");
@@ -17,6 +20,12 @@ var Routes = (function () {
         console.log(">>>>>>>>>>>>>home");
         res.send(">>>>>>>>>>>>>>>>>>>>>>>>home");
     };
+    __decorate([
+        route_1.route({
+            path: "/",
+            method: "get"
+        })
+    ], Routes, "default", null);
     __decorate([
         route_1.route({
             path: "/index",

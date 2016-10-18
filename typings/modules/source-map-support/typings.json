@@ -1,0 +1,11 @@
+{
+  "resolution": "main",
+  "tree": {
+    "src": "https://raw.githubusercontent.com/types/npm-source-map-support/159351be25d45edcb08a197c573c02cb32b0a7c9/typings.json",
+    "raw": "registry:npm/source-map-support#0.3.0+20161006200546",
+    "main": "source-map-support.d.ts",
+    "version": "0.4.3",
+    "name": "source-map-support",
+    "type": "typings"
+  }
+}

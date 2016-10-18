@@ -8,7 +8,10 @@
         "experimentalDecorators": true,
         "noEmitOnError": true,
         "removeComments": true,
-        "rootDir": "./",
+        "allowUnreachableCode": true,
+        "noImplicitUseStrict": true,
+        "diagnostics":false,
+        "pretty": true,
         "outDir": "./build",
         "sourceMap": true
     },
