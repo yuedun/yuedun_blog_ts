@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<title>婚纱照</title>
+		<link rel="stylesheet" type="text/css" href="//cdn.bootcss.com/bootstrap/3.3.4/css/bootstrap.min.css" />
+	</head>
+	<body>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-sm-12" id="picList">
+					<h3 class="text-center">我们的婚纱照</h3>
+				</div>
+			</div>
+		</div>
+		<div class="modal fade" id="myModal">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+						<h4 class="modal-title">评论内容</h4>
+					</div>
+					<div class="modal-body">
+						<img class="img-responsive center-block" id="img1" src="" />
+						<p id="comlist"></p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+					</div>
+				</div>
+				<!-- /.modal-content -->
+			</div>
+			<!-- /.modal-dialog -->
+		</div>
+		<!-- /.modal -->
+		<script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+		<script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+		<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.5.7.js"></script>
+		<script type="text/javascript">
+			AV.initialize("2as2m7q6c17qe0wjp2eq168ijkdta9dneqd9q0q7dgt9entq", "espjiug7ma0e79q0zsyx70278kjr8my6k7ucm74wswg4y62b");
+			var Picture = AV.Object.extend("Picture");
+			var PictureComment = AV.Object.extend("PictureComment");
+			var picQuery = new AV.Query(Picture);
+			var picComQuery = new AV.Query(PictureComment);
+			$(function() {
+				picQuery.descending("likeCount");//likeCount降序
+				picQuery.find({
+					success: function(results) {
+						//图片列表
+						results.forEach(function(item, index){
+							var picObj = '<div class="thumbnail">'
+								+ '<img class="img-responsive center-block" src="'+item.get("picUrl")+'?imageView2/2/w/565/h/847" />'
+								+ '<div class="caption">'
+								+ '	<p data-toggle="modal" data-target="#myModal" onclick="comlist(\''+item.id+'\',\''+item.get("picUrl")+'?imageView2/2/w/565/h/847\');">点击查看评论内容</p>'
+								+ '	<div class="row">'
+								+ '		<div class="col-xs-3">'
+								+ '			<button type="button" class="btn btn-warning btn-small" onclick="like(\''+item.id+'\', this);">'
+								+ '				<span class="glyphicon glyphicon-heart" aria-hidden="true"></span>&nbsp;'+item.get("likeCount")
+								+ '			</button>'
+								+ '		</div>'
+								+ '		<div class="col-xs-9">'
+								+ '			<div class="input-group">'
+								+ '				<input type="text" class="form-control" placeholder="发祝福" id="com'+item.id+'">'
+								+ '				<span class="input-group-btn">'
+								+ '		        	<button class="btn btn-info" type="button" onclick="comment(\''+item.id+'\', this);">OK</button>'
+								+ '		    	</span>'
+								+ '			</div>'
+								+ '		</div>'
+								+ '	</div>'
+								+ '</div>'
+								+ '</div>';
+							$("#picList").append(picObj);
+						});
+					}
+				});
+			});
+			//点赞
+			function like(id, el) {
+				picQuery.get(id, {
+					success: function(pic) {
+						pic.increment("likeCount");//加1
+						pic.save();
+						$(el).attr("disabled", "disabled");
+						$(el).html('<span class="glyphicon glyphicon-heart" aria-hidden="true"></span>&nbsp;'+pic.get("likeCount"));
+					},
+					error: function(object, error){
+						console.log("err"+error);
+					}
+				});
+			};
+			//评论
+			function comment(id, el){
+				var picCom = new PictureComment();
+				var com = $("#com"+id).val();
+				picCom.set("comment", com);
+				picCom.set("picId", id);
+				picCom.save(null, {
+				  success: function(post) {
+				    alert("感谢您的评论");
+				  },
+				  error: function(post, error) {
+				    alert('评论失败');
+				  }
+				});
+			};
+			function comlist(id, picurl) {
+				picComQuery.equalTo("picId", id);
+				picComQuery.find({
+					success: function(results) {
+						$(".modal-body").empty();
+						results.forEach(function(item, index){
+							$(".modal-body").append("<p>"+index+"、"+item.get("comment")+"</p>");
+						});
+					},
+					error: function(error) {
+						alert("Error: " + error.code + " " + error.message);
+					}
+				});
+			}
+		</script>
+	</body>
+
+</html>

@@ -1,0 +1,1 @@
+{"version":3,"file":"QuickNote.js","sourceRoot":"","sources":["../../models/QuickNote.ts"],"names":[],"mappings":"AAAA,2BAA6C,UAAU,CAAC,CAAA;AAExD,IAAI,eAAe,GAAW,IAAI,iBAAM,CAAC;IACrC,UAAU,EAAC,MAAM;IACjB,OAAO,EAAC,MAAM;IACd,MAAM,EAAC,MAAM;CAChB,CAAC,CAAC;AASH,IAAI,cAAc,GAAsB,gBAAK,CAAa,WAAW,EAAE,eAAe,CAAC,CAAC;AAExF;kBAAe,cAAc,CAAC"}

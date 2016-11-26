@@ -1,0 +1,25 @@
+<aside>
+    <div class="aside-item">
+        <h3>阅读排行</h3>
+        <ul>
+            <% topList.forEach(function(blog){%>
+            <li><a href="/blogdetail/<%= blog._id%>"><%=blog.title%></a></li>
+            <%})%>
+        </ul>
+    </div>
+    <div class="aside-item">
+        <h3>近两月发布</h3>
+        <ul>
+            <% newList.forEach(function(blog){%>
+            <li><a href="/blogdetail/<%= blog._id%>"><%=blog.title%></a></li>
+            <%})%>
+        </ul>
+    </div>
+    <div class="aside-item">
+        <h3>其他博客</h3>
+        <ul>
+            <li><a href="http://guard.iteye.com/admin">ITEYE</a></li>
+            <li><a href="http://blog.sina.com.cn/guard90">新浪博客</a></li>
+        </ul>
+    </div>
+</aside>

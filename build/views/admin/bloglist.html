@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8"/>
+    <title>文章列表</title>
+    <link rel="stylesheet" href="/stylesheets/layout.css" type="text/css" media="screen"/>
+    <!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <!--
+    <link rel="stylesheet" href="/stylesheets/ie.css" type="text/css" media="screen" />
+    -->
+</head>
+
+<body>
+
+<header id="header">
+    <hgroup>
+        <h1 class="site_title"><a href="/admin/home">Website Admin</a></h1>
+
+        <h2 class="section_title">后台管理系统</h2>
+
+        <div class="btn_view_site"><a href="/" target="_blank">View Site</a></div>
+    </hgroup>
+</header>
+<!-- end of header bar -->
+
+<!--导入菜单-->
+<%- include menu.html %>
+<section id="main" class="column">
+
+    <%if(success==1){%>
+    <h4 class="alert_info">创建成功。</h4>
+    <%}%>
+
+    <article class="module width_full">
+        <header><h3>Blogs</h3></header>
+        <div class="tab_container">
+            <div class="module_content">
+                <% blogList.forEach(function(blog){%>
+                <div class="message">
+                    <p><strong><a href="/admin/blogDetail/<%= blog._id%>"><%= blog.title%></a></strong></p>
+
+                    <p><%- blog.content%></p>
+                    <p class="breadcrumb">
+                        <span>发表时间：<%= blog.createDate%></span>
+                        <span>分类【<a href=""><%= blog.category%></a>】</span>
+                        <span>浏览(<a href=""><%= blog.pv%></a>)</span>
+                        <span>评论(<a href=""><%= blog.commentCount%></a>)</span>
+                        <span><a href="/admin/toEditArticle/<%= blog._id%>" name="update">修改</a></span>
+                        <span><a href="javascript:void(0);" id="<%= blog._id%>" name="del">删除</a></span>
+                    </p>
+                </div>
+                <% });%>
+                <ul class="pager">
+                    <li><a href="/admin/blogList?pageIndex=<%= pageIndex==1?1:parseInt(pageIndex)-1%>">上一页</a></li>&nbsp;<%= pageIndex%>&nbsp;
+                    <li><a href="/admin/blogList?pageIndex=<%= pageCount<10?pageIndex:parseInt(pageIndex)+1%>">下一页</a></li>
+                </ul>
+            </div>
+        </div>
+    </article>
+    <!-- end of messages article -->
+    <div class="clear"></div>
+
+    <div class="spacer"></div>
+</section>
+<!--<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>-->
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //删除文章
+        $("[name='del']").click(function () {
+            if (confirm("确定删除此文章吗？")) {
+                location.href = "/admin/deleteBlog/" + this.id;
+            }
+        });
+    });
+</script>
+</body>
+
+</html>

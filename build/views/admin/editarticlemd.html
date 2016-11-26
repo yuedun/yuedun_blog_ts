@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="utf-8"/>
+    <title>修改文章</title>
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
+    <link rel="stylesheet" href="/stylesheets/layout.css" type="text/css" media="screen"/>
+	<link rel="stylesheet" href="/stylesheets/editor.css" />
+	<link rel="stylesheet" href="/vendors/uploader/webuploader.css" />
+</head>
+<body>
+<header id="header">
+    <hgroup>
+        <h1 class="site_title"><a href="/admin/home">Website Admin</a></h1>
+        <h2 class="section_title">后台管理系统</h2>
+        <div class="btn_view_site"><a href="/" target="_blank">View Site</a></div>
+    </hgroup>
+</header>
+<!-- end of header bar -->
+<!--导入菜单-->
+<% include menu.html %>
+<section id="main" class="column">
+    <%if(success==1){%>
+    <h4 class="alert_info">修改成功。</h4>
+    <%}%>
+    <div class="clear"></div>
+    <article class="module width_full">
+        <form action="/admin/editArticle/<%= blog._id%>" method="post">
+            <header><h3>markdown修改文章</h3></header>
+            <div class="module_content">
+                <fieldset>
+                    <label>标题：</label>
+                    <input type="text" name="title" id="title_color" value="<%= blog.title%>">
+                </fieldset>
+                <fieldset>
+                    <textarea rows="25" name="content" id="content"><%- blog.content%></textarea>
+                </fieldset>
+                <fieldset>
+                    <!-- to make two field float next to one another, adjust values accordingly -->
+                    <label>分类</label>
+                    <input class="input-large" type="text" list="catelist" name="category">
+                    <datalist id="catelist">
+                        <% categories.forEach(function(cate){%>
+                        <option><%= cate.cateName%></option>
+                        <% });%>
+                    </datalist>
+                    <label>标签</label>
+                    <input type="text" value="<%= blog.tags%>" id="tags" name="tags">
+                    <input type="hidden" name="ismd" value="1">
+                </fieldset>
+                <div class="clear"></div>
+            </div>
+            <footer>
+                <div class="submit_link">
+                    <select name="status">
+                        <%if(blog.status==-1){%>
+                            <option value="-1" selected>草稿</option>
+                            <option value="1" >发布</option>
+                            <%}else{%>
+                            <option value="-1">草稿</option>
+                            <option value="1" selected>发布</option>
+                            <%}%>
+                    </select>
+                    <input type="submit" value="Publish" class="alt_btn">
+                    <input type="reset" value="Reset">
+                </div>
+            </footer>
+            <input type="hidden" name="qntoken" value="<%=token%>">
+        </form>
+    </article>
+    <!-- end of post new article -->
+    <div class="spacer"></div>
+</section>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script type="text/javascript" src="/javascripts/editor.js"></script>
+	<script type="text/javascript" src="/javascripts/marked.js"></script>
+    <script type="text/javascript" src="/vendors/uploader/webuploader.js"></script>
+    <script type="text/javascript" src="/javascripts/bootstrap.min.js"></script>
+	<script src="/javascripts/ext.js"></script>
+	<script>
+		window.onload = function () {
+			// body...
+			var editor = new Editor()
+			editor.render();
+		}
+	</script>
+</body>
+</html>

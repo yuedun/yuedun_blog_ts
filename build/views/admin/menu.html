@@ -1,0 +1,32 @@
+<aside id="sidebar" class="column">
+    <form class="quick_search">
+        <input type="text" value="Quick Search" onfocus="if(!this._haschanged){this.value=''};this._haschanged=true;">
+    </form>
+    <hr/>
+    <h3>Content</h3>
+    <ul class="toggle">
+        <li class="icn_new_article"><a href="/admin/newArticleUi">新建博客</a></li>
+        <li class="icn_edit_article"><a href="/admin/newArticleMd">markdown博客</a></li>
+        <li class="icn_security"><a href="/admin/blogList?pageIndex=1&pageSize=10">列表</a></li>
+        <li class="icn_categories"><a href="/admin/category">分类</a></li>
+        <li class="icn_tags"><a href="/admin/tags">标签</a></li>
+        <li class="icn_security"><a href="/admin/quickNoteList?pageIndex=1&pageSize=10">速记列表</a></li>
+    </ul>
+    <h3>Users</h3>
+    <ul class="toggle">
+        <li class="icn_add_user"><a href="/admin/addUser">添加用户</a></li>
+        <li class="icn_view_users"><a href="/admin/viewUser">查看用户</a></li>
+        <li class="icn_add_user"><a href="/admin/addWeatherUser">天气预报用户</a></li>
+        <li class="icn_view_users"><a href="/admin/weatherUserList">天气预报用户列表</a></li>
+    </ul>
+    <h3>Admin</h3>
+    <ul class="toggle">
+        <li class="icn_settings"><a href="/admin/readCount">访问统计</a></li>
+        <li class="icn_jump_back"><a href="/admin/logout">Logout</a></li>
+    </ul>
+    <footer>
+        <hr/>
+        <p><strong>Copyright &copy; 2011 Website Admin</strong></p>
+        <p>Theme by <a href="/">MediaLoot</a></p>
+    </footer>
+</aside><!-- end of sidebar -->

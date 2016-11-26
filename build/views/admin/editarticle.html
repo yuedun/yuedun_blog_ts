@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="zh-cn">
+<head>
+    <meta charset="utf-8"/>
+    <title>修改文章</title>
+    <link rel="stylesheet" href="/stylesheets/layout.css" type="text/css" media="screen"/>
+    <script src="/vendors/ckeditor/ckeditor.js"></script> 
+</head>
+<body>
+    <header id="header">
+        <hgroup>
+            <h1 class="site_title"><a href="/admin/home">Website Admin</a></h1>
+            <h2 class="section_title">后台管理系统</h2>
+            <div class="btn_view_site"><a href="/" target="_blank">View Site</a></div>
+        </hgroup>
+    </header>
+    <!-- end of header bar -->
+    <!--导入菜单-->
+    <% include menu.html %>
+    <section id="main" class="column">
+        <%if(success==1){%>
+        <h4 class="alert_info">修改成功。</h4>
+        <%}%>
+        <div class="clear"></div>
+        <article class="module width_full">
+            <form action="/admin/editArticle/<%= blog._id%>" method="post">
+                <header><h3>修改博客</h3></header>
+                <div class="module_content">
+                    <fieldset>
+                        <label>标题：</label>
+                        <input type="text" value="<%= blog.title%>" name="title">
+                    </fieldset>
+                    <fieldset>
+                        <textarea rows="20" id="content" name="content"><%= blog.content%></textarea>
+                        <script>
+                            // Replace the <textarea id="editor1"> with a CKEditor
+                            // instance, using default configuration.
+                            CKEDITOR.replace('content');
+                        </script>
+                    </fieldset>
+                    <fieldset>
+                        <label>分类</label>
+                        <select name="category">
+                            <% categories.forEach(function(cate){
+                                if(cate.cateName===blog.category){
+                            %>
+                            <option selected><%= cate.cateName%></option>
+                            <%}else{%>
+                            <option><%= cate.cateName%></option>
+                            <% }});%>
+                        </select>
+                        <label for="tags">标签</label>
+                        <input type="text" value="<%= blog.tags%>" id="tags" name="tags">
+                    </fieldset>
+                    <div class="clear"></div>
+                </div>
+                <footer>
+                    <div class="submit_link">
+                        <select name="status">
+                            <%if(blog.status==-1){%>
+                            <option value="-1" selected>草稿</option>
+                            <option value="1" >发布</option>
+                            <%}else{%>
+                            <option value="-1">草稿</option>
+                            <option value="1" selected>发布</option>
+                            <%}%>
+                        </select>
+                        <input type="submit" value="Publish" class="alt_btn">
+                        <input type="submit" value="Reset">
+                    </div>
+                </footer>
+            </form>
+        </article>
+        <!-- end of post new article -->
+        <div class="spacer"></div>
+    </section>
+    <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+</body>
+</html>
