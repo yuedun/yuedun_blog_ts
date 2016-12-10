@@ -1,5 +1,6 @@
 var qiniu = require('qiniu');
-var secret_key = require('../settings').qiniuKey;
+const settings = require('../settings');
+var secret_key = settings.qiniuKey;
 qiniu.conf.ACCESS_KEY = secret_key.accessKey;
 qiniu.conf.SECRET_KEY = secret_key.secretKey;
 exports.uptoken = function (bucketName, callbackUrl, callbackBody) {

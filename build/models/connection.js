@@ -1,6 +1,8 @@
 var mongoose = require('mongoose');
-var settings = require('../settings').mongodb;
-var host = settings.host, port = settings.port, username = settings.uid, password = settings.pwd, dbName = settings.db, url = "mongodb://" + username + ":" + password + "@" + host + ":" + port + "/" + dbName;
+exports.mongoose = mongoose;
+const settings = require('../settings');
+var mongodbConfig = settings.mongodb;
+var host = mongodbConfig.host, port = mongodbConfig.port, username = mongodbConfig.uid, password = mongodbConfig.pwd, dbName = mongodbConfig.db, url = "mongodb://" + username + ":" + password + "@" + host + ":" + port + "/" + dbName;
 var count = 0;
 var dbcon = null;
 function getConnect() {
@@ -29,5 +31,4 @@ function getConnect() {
     }
 }
 exports.getConnect = getConnect;
-exports.mongoose = mongoose;
 //# sourceMappingURL=connection.js.map

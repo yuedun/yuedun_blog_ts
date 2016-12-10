@@ -1,6 +1,7 @@
 import * as _ from 'lodash';
-import * as moment from 'moment';//日期格式化组件
-import * as async from 'async';
+import * as Moment from 'moment';//日期格式化组件
+import * as Async from 'async';
+import * as Promise from 'bluebird';
 import {default as User } from '../models/User';
 import { default as Blog, IBlog as BlogInstance } from '../models/Blog';
 import { default as QuickNote }  from '../models/QuickNote';
@@ -10,7 +11,7 @@ import * as qiniu from '../utils/qiniu';
 var md = require('markdown-it')();
 var area = require('../area');
 import { default as PvModel } from '../models/ViewerLog';
-import {route} from '../utils/route';
+import {adminRoute as route} from '../utils/route';
 
 export class Routes {
     /**   success0未修改，1成功   **/
@@ -88,7 +89,7 @@ export class Routes {
         var content = req.body.content;
         var blog = new Blog({
             title: req.body.title,//标题
-            createDate: moment().format('YYYY-MM-DD HH:mm:ss'),//发表时间
+            createDate: Moment().format('YYYY-MM-DD HH:mm:ss'),//发表时间
             content: content, //内容
             status: req.body.status,//发布，草稿，
             comments: [],//评论，可以在评论时添加
@@ -109,7 +110,7 @@ export class Routes {
                 var category = new Category({
                     cateName: req.body.category,
                     state: true,
-                    createDate: moment().format('YYYY-MM-DD HH:mm:ss')
+                    createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
                 });
                 category.save(function (e, docs, numberAffected) {
                     if (e) res.send(e.message);
@@ -151,7 +152,7 @@ export class Routes {
         var pageSize = 10;
         pageIndex = req.query.pageIndex ? req.query.pageIndex : pageIndex;
         pageSize = req.query.pageSize ? req.query.pageSize : pageSize;
-         Blog.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize }, function (err, docs) {
+        Blog.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize }, function (err, docs) {
             if (err) {
                 res.send(err.message);
                 return;
@@ -207,25 +208,46 @@ export class Routes {
     })
     static toEditArticle(req, res) {
         var token = qiniu.uptoken('hopefully');
-        async.series<any>([
-            function (callback) {
-                Blog.findById(req.params.id, function (err, doc) {
-                    if (err) res.send(err.message);
-                    callback(null, doc);
-                });
-            },
-            function (callback) {
-                Category.find({}, function (err, docs) {
-                    if (err) res.send(err.message);
-                    callback(null, docs);
-                });
-            }], function (err, [result1, result2]:[BlogInstance, CategoryInstance[]]) {
-                if (result1.ismd) {
-                    res.render('admin/editarticlemd', { success: 0, blog: result1, categories: result2, token: token });
-                } else {
-                    res.render('admin/editarticle', { success: 0, blog: result1, categories: result2, token: token });
-                }
+        // Async.series<any>([
+        //     function (callback) {
+        //         Blog.findById(req.params.id, function (err, doc) {
+        //             if (err) res.send(err.message);
+        //             callback(null, doc);
+        //         });
+        //     },
+        //     function (callback) {
+        //         Category.find({}, function (err, docs) {
+        //             if (err) res.send(err.message);
+        //             callback(null, docs);
+        //         });
+        //     }], function (err, [result1, result2]:[BlogInstance, CategoryInstance[]]) {
+        //         if (result1.ismd) {
+        //             res.render('admin/editarticlemd', { success: 0, blog: result1, categories: result2, token: token });
+        //         } else {
+        //             res.render('admin/editarticle', { success: 0, blog: result1, categories: result2, token: token });
+        //         }
+        //     });
+        let getBlogById = new Promise((resolve, reject) => {
+            Blog.findById(req.params.id, function (err, doc) {
+                if (err) reject(err);
+                resolve(doc);
             });
+        })
+        let getCategory = new Promise((resolve, reject) => {
+            Category.find({}, function (err, docs) {
+                if (err) reject(err);
+                resolve(docs);
+            });
+        })
+
+        Promise.all([getBlogById, getCategory])
+            .then(([blogObj, categories]: [BlogInstance, CategoryInstance[]]) => {
+                if (blogObj.ismd) {
+                    res.render('admin/editarticlemd', { success: 0, blog: blogObj, categories: categories, token: token });
+                } else {
+                    res.render('admin/editarticle', { success: 0, blog: blogObj, categories: categories, token: token });
+                }
+            })
     }
     /**
      * 修改操作
@@ -244,7 +266,7 @@ export class Routes {
                 category: req.body.category,
                 tags: req.body.tags,
                 status: req.body.status,
-                updateTime: moment().format('YYYY-MM-DD HH:mm:ss')
+                updateTime: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
         }, function (err, doc) {
             if (err) res.send(err.message);
@@ -273,7 +295,7 @@ export class Routes {
         var category = new Category();
         category.cateName = req.body.cateName;
         category.state = true;
-        category.createDate = moment().format('YYYY-MM-DD HH:mm:ss');
+        category.createDate = Moment().format('YYYY-MM-DD HH:mm:ss');
         category.save(function (e, docs, numberAffected) {
             if (e) res.send(e.message);
             res.redirect('/admin/category');
@@ -317,7 +339,7 @@ export class Routes {
             password: password,
             level: 1,//权限级别，最高
             state: true,//可用/停用
-            createDate: moment().format('YYYY-MM-DD HH:mm:ss')
+            createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
         });
         user.save(function (e, docs, numberAffected) {
             if (e) res.send(e.message);
@@ -369,7 +391,7 @@ export class Routes {
                 username: req.body.username,
                 nickname: req.body.nickname,
                 password: req.body.password,
-                updateDate: moment().format('YYYY-MM-DD HH:mm:ss')
+                updateDate: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
         }, function (err, doc) {
             if (err) res.send(err.message);
@@ -434,7 +456,7 @@ export class Routes {
             cityCode: areaId,
             sendCount: 0,
             status: 1,//1可用/0停用
-            createAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+            createAt: Moment().format('YYYY-MM-DD HH:mm:ss'),
         });
         weathUser.save(function (e, docs, numberAffected) {
             if (e) res.send(e.message);
@@ -478,7 +500,7 @@ export class Routes {
         var quicknote = new QuickNote({
             content: req.body.content,
             state: true,//可用/停用
-            createDate: moment().format('YYYY-MM-DD HH:mm:ss')
+            createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
         });
         quicknote.save(function (e, docs, numberAffected) {
             if (e) res.send(e.message);
@@ -521,8 +543,8 @@ export class Routes {
         method: "get"
     })
     static readCount(req, res) {
-        var today = moment().format('YYYY-MM-DD');
-        async.parallel([
+        var today = Moment().format('YYYY-MM-DD');
+        Async.parallel([
             function (callback) {
                 Blog.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }, function (err, doc) {
                     callback(err, doc[0].pvCount);

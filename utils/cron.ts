@@ -3,7 +3,7 @@ var async = require('async');
 var _ = require('lodash');
 var schedule = require("node-schedule");
 var http = require('http');
-var settings = require('../settings');
+import * as settings from '../settings';
 var connection = require('../models/connection');
 import * as sms from'./sms';
 var WeatherUser = require('../models/WeatherUser');

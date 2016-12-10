@@ -6,7 +6,6 @@ var logger = require('morgan');//此模块及以下部分模块由express分离�
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var ejs = require('ejs');
-var moment = require('moment');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);//connect-mongo(session),mongoose(orm)
 var connection = require('./models/connection');
@@ -94,7 +93,7 @@ app.use('/admin', function(req, res, next){
         next();
     }
 });
-app.use('/admin', admin);//添加路由-后台登陆-添加博客
+// app.use('/admin', admin);//添加路由-后台登陆-添加博客
 // catch 404 and forward to error handler
 // this middleware will be executed for every request to the app
 //加next每个请求都会经过，不加next所有请求不会通过，没有交给下一个路由
@@ -129,4 +128,4 @@ app.use(function(err, req, res, next) {
     });
 });
 
-module.exports = app;
+export { app };

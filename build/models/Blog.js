@@ -1,5 +1,5 @@
 const mongoose_1 = require('mongoose');
-var BlogSchema = new mongoose_1.Schema({
+exports.BlogSchema = new mongoose_1.Schema({
     title: String,
     createDate: String,
     updateTime: String,
@@ -13,7 +13,7 @@ var BlogSchema = new mongoose_1.Schema({
     pv: Number,
     ismd: Number
 });
-var BlogModel = mongoose_1.model('Blog', BlogSchema);
+var BlogModel = mongoose_1.model('Blog', exports.BlogSchema);
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = BlogModel;
 //# sourceMappingURL=Blog.js.map

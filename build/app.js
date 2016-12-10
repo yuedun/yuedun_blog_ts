@@ -6,7 +6,6 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var ejs = require('ejs');
-var moment = require('moment');
 var session = require('express-session');
 var MongoStore = require('connect-mongo')(session);
 var connection = require('./models/connection');
@@ -23,6 +22,7 @@ var message = require('./routes/message');
 const viewerLog_1 = require('./utils/viewerLog');
 const cover_1 = require('./utils/cover');
 var app = express();
+exports.app = app;
 const cover = new cover_1.default(app);
 var store = new MongoStore({
     interval: 60000,
@@ -69,7 +69,6 @@ app.use('/admin', function (req, res, next) {
         next();
     }
 });
-app.use('/admin', admin);
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
     next(err);
@@ -90,5 +89,4 @@ app.use(function (err, req, res, next) {
         error: {}
     });
 });
-module.exports = app;
 //# sourceMappingURL=app.js.map

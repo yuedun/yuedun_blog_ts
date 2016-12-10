@@ -4,15 +4,14 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var express = require('express');
-var async = require('async');
-var moment = require('moment');
+const async = require('async');
+const moment = require('moment');
 const Blog_1 = require('../models/Blog');
 const QuickNote_1 = require('../models/QuickNote');
 var md = require('markdown-it')();
 const route_1 = require('../utils/route');
-var blogRouter = express.Router();
-var config = require('../settings').blog_config;
+const settings = require('../settings');
+var config = settings.blog_config;
 class Routes {
     latestTop(callback) {
         var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
@@ -29,7 +28,7 @@ class Routes {
             callback(null, docs3);
         });
     }
-    static default(req, res) {
+    static index(req, res) {
         var pageIndex = 0;
         var pageSize = 10;
         pageIndex = req.query.pageIndex ? Number(req.query.pageIndex) : pageIndex;
@@ -243,7 +242,7 @@ __decorate([
         path: "/",
         method: "get"
     })
-], Routes, "default", null);
+], Routes, "index", null);
 __decorate([
     route_1.route({
         path: "/blogdetail/:id",

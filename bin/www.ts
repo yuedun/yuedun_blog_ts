@@ -4,7 +4,7 @@
  * Module dependencies.
  */
 import 'source-map-support/register';
-var app = require('../app');
+import { app } from '../app';
 var debug = require('debug')('yuedun_ts:server');
 var http = require('http');
 

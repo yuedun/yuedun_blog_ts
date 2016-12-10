@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 require('source-map-support/register');
-var app = require('../app');
+const app_1 = require('../app');
 var debug = require('debug')('yuedun_ts:server');
 var http = require('http');
 var port = normalizePort(process.env.PORT || '3000');
-app.set('port', port);
-var server = http.createServer(app);
+app_1.app.set('port', port);
+var server = http.createServer(app_1.app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);

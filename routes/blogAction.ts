@@ -28,7 +28,7 @@ export class Routes {
         path: "/",
         method: "get"
     })
-    static default(req, res) {
+    static index(req, res) {
         var pageIndex = 0;
         var pageSize = 10;
         pageIndex = req.query.pageIndex ? Number(req.query.pageIndex) : pageIndex;
