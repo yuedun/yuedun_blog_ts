@@ -1,4 +1,4 @@
-const mongoose_1 = require('mongoose');
+const mongoose_1 = require("mongoose");
 exports.CategorySchema = new mongoose_1.Schema({
     cateName: String,
     state: Boolean,

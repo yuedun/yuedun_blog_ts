@@ -1,4 +1,4 @@
-const mongoose_1 = require('mongoose');
+const mongoose_1 = require("mongoose");
 exports.BlogSchema = new mongoose_1.Schema({
     title: String,
     createDate: String,

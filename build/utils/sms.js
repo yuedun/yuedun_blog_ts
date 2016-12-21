@@ -1,9 +1,9 @@
 'use strict';
-const http = require('http');
-const moment = require('moment');
-const querystring = require('querystring');
-const WeatherLog_1 = require('../models/WeatherLog');
-const settings = require('../settings');
+const http = require("http");
+const moment = require("moment");
+const querystring = require("querystring");
+const WeatherLog_1 = require("../models/WeatherLog");
+const settings = require("../settings");
 const SMS_ACCOUNT = settings.SMS_ACCOUNT;
 exports.sendSMS = function (mobiles, text, callback) {
     let postData = querystring.stringify({

@@ -1,4 +1,4 @@
-const crypto = require('crypto');
+const crypto = require("crypto");
 function validateToken(req, res) {
     var query = req.query;
     var signature = query.signature;

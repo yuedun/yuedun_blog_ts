@@ -4,20 +4,20 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-const _ = require('lodash');
-const Moment = require('moment');
-const Async = require('async');
-const Promise = require('bluebird');
-const User_1 = require('../models/User');
-const Blog_1 = require('../models/Blog');
-const QuickNote_1 = require('../models/QuickNote');
-const Category_1 = require('../models/Category');
-const WeatherUser_1 = require('../models/WeatherUser');
-const qiniu = require('../utils/qiniu');
+const _ = require("lodash");
+const Moment = require("moment");
+const Async = require("async");
+const Promise = require("bluebird");
+const User_1 = require("../models/User");
+const Blog_1 = require("../models/Blog");
+const QuickNote_1 = require("../models/QuickNote");
+const Category_1 = require("../models/Category");
+const WeatherUser_1 = require("../models/WeatherUser");
+const qiniu = require("../utils/qiniu");
 var md = require('markdown-it')();
 var area = require('../area');
-const ViewerLog_1 = require('../models/ViewerLog');
-const route_1 = require('../utils/route');
+const ViewerLog_1 = require("../models/ViewerLog");
+const route_1 = require("../utils/route");
 class Routes {
     static login(req, res) {
         res.render('admin/login', {});

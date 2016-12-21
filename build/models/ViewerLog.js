@@ -1,4 +1,4 @@
-const mongoose_1 = require('mongoose');
+const mongoose_1 = require("mongoose");
 var ViewerLogSchema = new mongoose_1.Schema({
     ip: String,
     url: String,

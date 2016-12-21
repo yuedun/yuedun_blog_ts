@@ -1,4 +1,4 @@
-const cover_1 = require('./cover');
+const cover_1 = require("./cover");
 function route(config) {
     return (target, name) => {
         cover_1.default.__DecoratedRouters.push([{

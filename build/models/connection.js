@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 exports.mongoose = mongoose;
-const settings = require('../settings');
+const settings = require("../settings");
 var mongodbConfig = settings.mongodb;
 var host = mongodbConfig.host, port = mongodbConfig.port, username = mongodbConfig.uid, password = mongodbConfig.pwd, dbName = mongodbConfig.db, url = "mongodb://" + username + ":" + password + "@" + host + ":" + port + "/" + dbName;
 var count = 0;

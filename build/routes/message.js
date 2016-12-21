@@ -5,12 +5,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-const http = require('http');
-const express = require('express');
+const http = require("http");
+const express = require("express");
 var router = express.Router;
-const sms = require('../utils/sms');
-const settings = require('../settings');
-const route_1 = require('../utils/route');
+const sms = require("../utils/sms");
+const settings = require("../settings");
+const route_1 = require("../utils/route");
 var SMS_ACCOUNT = settings.SMS_ACCOUNT;
 class Routes {
     static sendmsg(req, res) {

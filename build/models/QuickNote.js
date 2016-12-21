@@ -1,4 +1,4 @@
-const mongoose_1 = require('mongoose');
+const mongoose_1 = require("mongoose");
 var QuickNoteSchema = new mongoose_1.Schema({
     createDate: String,
     content: String,

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
-require('source-map-support/register');
-const app_1 = require('../app');
+require("source-map-support/register");
+const app_1 = require("../app");
 var debug = require('debug')('yuedun_ts:server');
 var http = require('http');
 var port = normalizePort(process.env.PORT || '3000');

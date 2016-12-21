@@ -4,30 +4,15 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-const async = require('async');
-const moment = require('moment');
-const Blog_1 = require('../models/Blog');
-const QuickNote_1 = require('../models/QuickNote');
+const Promise = require("bluebird");
+const moment = require("moment");
+const Blog_1 = require("../models/Blog");
+const QuickNote_1 = require("../models/QuickNote");
 var md = require('markdown-it')();
-const route_1 = require('../utils/route');
-const settings = require('../settings');
+const route_1 = require("../utils/route");
+const settings = require("../settings");
 var config = settings.blog_config;
 class Routes {
-    latestTop(callback) {
-        var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
-        Blog_1.default.find({ 'status': 1, createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }, function (err, docs2) {
-            if (err)
-                callback(err.message);
-            callback(null, docs2);
-        });
-    }
-    visitedTop(callback) {
-        Blog_1.default.find({ 'status': 1 }, null, { sort: { 'pv': -1 }, limit: 5 }, function (err, docs3) {
-            if (err)
-                callback(err.message);
-            callback(null, docs3);
-        });
-    }
     static index(req, res) {
         var pageIndex = 0;
         var pageSize = 10;
@@ -41,15 +26,15 @@ class Routes {
         if (category != "" && category != null) {
             condition.category = category;
         }
-        async.parallel([
-            function (callback) {
+        Promise.all([
+            new Promise(function (resolve, reject) {
                 Blog_1.default.find(condition, null, {
                     sort: { '_id': -1 },
                     skip: pageIndex * pageSize,
                     limit: pageSize
                 }, function (err, docs) {
                     if (err)
-                        res.send(err.message);
+                        reject(err.message);
                     docs.forEach(function (item, index) {
                         if (item.ismd) {
                             item.content = md.render(item.content).replace(/<\/?.+?>/g, "").substring(0, 300);
@@ -58,46 +43,36 @@ class Routes {
                             item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
                         }
                     });
-                    callback(null, docs);
+                    resolve(docs);
                 });
-            },
-            function (callback) {
-                latestTop(callback);
-            },
-            function (callback) {
-                visitedTop(callback);
-            },
-            function (callback) {
+            }),
+            this.latestTop,
+            this.visitedTop,
+            new Promise((resolve, reject) => {
                 Blog_1.default.count(condition, function (err, count) {
-                    callback(null, count);
+                    resolve(count);
                 });
-            }
-        ], function (err, result) {
-            if (err)
-                res.send(err.message);
+            })
+        ]).then(([result1, result2, result3, result4]) => {
             res.render('index', {
                 config: config,
-                blogList: result[0],
-                newList: result[1],
-                topList: result[2],
+                blogList: result1,
+                newList: result2,
+                topList: result3,
                 pageIndex: req.query.pageIndex ? req.query.pageIndex : pageIndex,
-                totalIndex: result[3],
+                totalIndex: result4,
                 pageSize: pageSize,
-                pageCount: result[0].length,
+                pageCount: result1.length,
                 category: category
             });
         });
     }
     ;
     static blogDetail(req, res) {
-        async.parallel([
-            function (callback) {
-                latestTop(callback);
-            },
-            function (callback) {
-                visitedTop(callback);
-            }
-        ], function (err, result) {
+        Promise.all([
+            this.latestTop,
+            this.visitedTop
+        ]).then(([result1, result2]) => {
             var ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
             var blogId = req.params.id;
             var visitor = ip + blogId;
@@ -110,8 +85,8 @@ class Routes {
                     }
                     res.render('blogdetail', {
                         config: config,
-                        newList: result[0],
-                        topList: result[1],
+                        newList: result1,
+                        topList: result2,
                         blog: doc
                     });
                 });
@@ -128,8 +103,8 @@ class Routes {
                     res.cookie('visitor' + blogId, visitor, { maxAge: 1000 * 60 * 60 * 8, httpOnly: true });
                     res.render('blogdetail', {
                         config: config,
-                        newList: result[0],
-                        topList: result[1],
+                        newList: result1,
+                        topList: result2,
                         blog: doc
                     });
                 });
@@ -138,64 +113,56 @@ class Routes {
     }
     ;
     static catalog(req, res) {
-        async.parallel([
-            function (callback) {
+        Promise.all([
+            new Promise((resolve, reject) => {
                 Blog_1.default.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err, list) {
-                    callback(null, list);
+                    resolve(list);
                 });
-            },
-            function (callback) {
-                latestTop(callback);
-            },
-            function (callback) {
-                visitedTop(callback);
-            }
-        ], function (err, result) {
-            if (err)
-                res.send(err.message);
+            }),
+            this.latestTop,
+            this.visitedTop
+        ]).then(([result1, result2, result3]) => {
             res.render('catalog', {
                 config: config,
-                catalog: result[0],
-                newList: result[1],
-                topList: result[2]
+                catalog: result1,
+                newList: result2,
+                topList: result3
             });
         });
     }
     ;
     static weibo(req, res) {
-        async.parallel([
-            function (callback) {
-                latestTop(callback);
-            },
-            function (callback) {
-                visitedTop(callback);
-            }
-        ], function (err, result) {
-            if (err)
-                res.send(err.message);
+        Promise.all([
+            new Promise((resolve, reject) => {
+                Blog_1.default.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err, list) {
+                    resolve(list);
+                });
+            }),
+            this.latestTop,
+            this.visitedTop
+        ]).then(([result1, result2]) => {
             res.render('weibo', {
                 config: config,
-                newList: result[0],
-                topList: result[1]
+                newList: result1,
+                topList: result2
             });
         });
     }
     ;
     static about(req, res) {
-        async.parallel([
-            function (callback) {
-                latestTop(callback);
-            },
-            function (callback) {
-                visitedTop(callback);
-            }
-        ], function (err, result) {
-            if (err)
-                res.send(err.message);
+        Promise.all([
+            new Promise((resolve, reject) => {
+                Blog_1.default.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err, list) {
+                    resolve(list);
+                });
+            }),
+            this.latestTop,
+            this.visitedTop
+        ]).then(([result1, result2]) => {
             res.render('about', {
                 config: config,
-                newList: result[0],
-                topList: result[1]
+                newList: result1,
+                topList: result2
             });
         });
     }
@@ -210,33 +177,47 @@ class Routes {
     }
     ;
     static quicknote(req, res) {
-        async.parallel([
-            function (callback) {
-                latestTop(callback);
-            },
-            function (callback) {
-                visitedTop(callback);
-            },
-            function (callback) {
+        Promise.all([
+            new Promise((resolve, reject) => {
+                Blog_1.default.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err, list) {
+                    resolve(list);
+                });
+            }),
+            this.latestTop,
+            this.visitedTop,
+            new Promise((resolve, reject) => {
                 QuickNote_1.default.find(null, null, {
                     sort: { '_id': -1 }
                 }, function (err, docs) {
-                    callback(err, docs);
+                    resolve(docs);
                 });
-            }
-        ], function (err, result) {
-            if (err)
-                res.send(err.message);
+            })
+        ]).then(([result1, result2, result3]) => {
             res.render('quicknote', {
                 config: config,
-                newList: result[0],
-                topList: result[1],
-                quickNoteList: result[2]
+                newList: result1,
+                topList: result2,
+                quickNoteList: result3
             });
         });
     }
     ;
 }
+Routes.latestTop = new Promise((resolve, reject) => {
+    var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
+    Blog_1.default.find({ 'status': 1, createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }, function (err, docs2) {
+        if (err)
+            reject(err.message);
+        resolve(docs2);
+    });
+});
+Routes.visitedTop = new Promise((resolve, reject) => {
+    Blog_1.default.find({ 'status': 1 }, null, { sort: { 'pv': -1 }, limit: 5 }, function (err, docs3) {
+        if (err)
+            reject(err.message);
+        resolve(docs3);
+    });
+});
 __decorate([
     route_1.route({
         path: "/",
@@ -286,19 +267,4 @@ __decorate([
     })
 ], Routes, "quicknote", null);
 exports.Routes = Routes;
-function latestTop(callback) {
-    var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
-    Blog_1.default.find({ 'status': 1, createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }, function (err, docs2) {
-        if (err)
-            callback(err.message);
-        callback(null, docs2);
-    });
-}
-function visitedTop(callback) {
-    Blog_1.default.find({ 'status': 1 }, null, { sort: { 'pv': -1 }, limit: 5 }, function (err, docs3) {
-        if (err)
-            callback(err.message);
-        callback(null, docs3);
-    });
-}
 //# sourceMappingURL=blogAction.js.map

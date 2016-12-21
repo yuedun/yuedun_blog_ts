@@ -11,9 +11,9 @@ var utils = require('utility');
 var moment = require('moment');
 var nodemailer = require('nodemailer');
 var router = express.Router();
-const LogId_1 = require('../models/LogId');
-const Blog_1 = require('../models/Blog');
-const route_1 = require('../utils/route');
+const LogId_1 = require("../models/LogId");
+const Blog_1 = require("../models/Blog");
+const route_1 = require("../utils/route");
 var secret = '82a854439cab3a11b334ae4c60558a78';
 var short_name = 'hopefully';
 class Routes {

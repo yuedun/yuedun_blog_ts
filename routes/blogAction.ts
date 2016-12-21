@@ -1,28 +1,14 @@
 import * as async from 'async';
+import * as Promise from 'bluebird';
 import * as moment from 'moment';
 import { default as Blog, IBlog as BlogInstance } from '../models/Blog';
-import { default as QuickNote }  from '../models/QuickNote';
+import { default as QuickNote } from '../models/QuickNote';
 var md = require('markdown-it')();
-import {route} from '../utils/route';
+import { route } from '../utils/route';
 import * as settings from '../settings';
 var config = settings.blog_config;
 
 export class Routes {
-    //最新,近两月
-    latestTop(callback) {
-        var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
-        Blog.find({ 'status': 1, createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }, function (err:any, docs2) {
-            if (err) callback(err.message);
-            callback(null, docs2);
-        });
-    }
-    //访问最多
-    visitedTop(callback) {
-        Blog.find({ 'status': 1 }, null, { sort: { 'pv': -1 }, limit: 5 }, function (err:any, docs3) {
-            if (err) callback(err.message);
-            callback(null, docs3);
-        });
-    }
     /* 首页 */
     @route({
         path: "/",
@@ -41,15 +27,14 @@ export class Routes {
         if (category != "" && category != null) {
             condition.category = category;
         }
-        async.parallel([
-            function (callback) {
-                //博客列表find(条件，字段，)
+        Promise.all([
+            new Promise(function (resolve, reject) {
                 Blog.find(condition, null, {
                     sort: { '_id': -1 },
                     skip: pageIndex * pageSize,
                     limit: pageSize
-                }, function (err:any, docs) {
-                    if (err) res.send(err.message);
+                }, function (err: any, docs) {
+                    if (err) reject(err.message);
                     docs.forEach(function (item, index) {
                         if (item.ismd) {
                             item.content = md.render(item.content).replace(/<\/?.+?>/g, "").substring(0, 300);
@@ -57,36 +42,31 @@ export class Routes {
                             item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
                         }
                     });
-                    callback(null, docs);
+                    resolve(docs);
                 });
-            },
-            function (callback) {
-                //最新列表
-                latestTop(callback);
-            },
-            function (callback) {
-                //浏览量排行
-                visitedTop(callback);
-            },
-            function (callback) {
-                Blog.count(condition, function (err:any, count) {
-                    callback(null, count);
+            }),
+            //最新列表
+            this.latestTop,
+            //浏览量排行
+            this.visitedTop,
+            new Promise((resolve, reject) => {
+                Blog.count(condition, function (err: any, count) {
+                    resolve(count);
                 })
-            }
-        ], function (err:any, result) {
-            if (err) res.send(err.message);
+            })
+        ]).then(([result1, result2, result3, result4]: [Array<BlogInstance>, Array<BlogInstance>, Array<BlogInstance>, number]) => {
             res.render('index', {
                 config: config,
-                blogList: result[0],
-                newList: result[1],
-                topList: result[2],
+                blogList: result1,
+                newList: result2,
+                topList: result3,
                 pageIndex: req.query.pageIndex ? req.query.pageIndex : pageIndex,
-                totalIndex: result[3],
+                totalIndex: result4,
                 pageSize: pageSize,
-                pageCount: result[0].length,
+                pageCount: result1.length,
                 category: category
             });
-        });
+        })
     };
 
     /**
@@ -97,36 +77,30 @@ export class Routes {
         method: "get"
     })
     static blogDetail(req, res) {
-        async.parallel([
-            function (callback) {
-                //最新列表
-                latestTop(callback);
-            },
-            function (callback) {
-                //浏览量排行
-                visitedTop(callback);
-            }
-        ], function (err:any, result) {
+        Promise.all([
+            this.latestTop,
+            this.visitedTop
+        ]).then(([result1, result2]) => {
             var ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
             var blogId = req.params.id;
             var visitor = ip + blogId;
             if (req.cookies[visitor + blogId]) {
-                Blog.findById(req.params.id, function (err:any, doc) {
+                Blog.findById(req.params.id, function (err: any, doc) {
                     if (err) res.send(err.message);
                     if (doc.ismd) {
                         doc.content = md.render(doc.content);
                     }
                     res.render('blogdetail', {
                         config: config,
-                        newList: result[0],
-                        topList: result[1],
+                        newList: result1,
+                        topList: result2,
                         blog: doc
                     });
                 });
             } else {
                 Blog.findByIdAndUpdate(req.params.id, {
                     $inc: { pv: 1 }
-                }, function (err:any, doc) {
+                }, function (err: any, doc) {
                     if (err) res.send(err.message);
                     if (doc.ismd) {
                         doc.content = md.render(doc.content);
@@ -134,13 +108,13 @@ export class Routes {
                     res.cookie('visitor' + blogId, visitor, { maxAge: 1000 * 60 * 60 * 8, httpOnly: true });
                     res.render('blogdetail', {
                         config: config,
-                        newList: result[0],
-                        topList: result[1],
+                        newList: result1,
+                        topList: result2,
                         blog: doc
                     });
                 });
             }
-        });
+        })
     };
     /* 博客目录 */
     @route({
@@ -148,27 +122,20 @@ export class Routes {
         method: "get"
     })
     static catalog(req, res) {
-        async.parallel([
-            function (callback) {
-                Blog.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err:any, list) {
-                    callback(null, list);
-                });
-            },
-            function (callback) {
-                //最新列表
-                latestTop(callback);
-            },
-            function (callback) {
-                //浏览量排行
-                visitedTop(callback);
-            }
-        ], function (err:any, result) {
-            if (err) res.send(err.message);
+        Promise.all([
+            new Promise((resolve, reject) => {
+                Blog.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err: any, list) {
+                    resolve(list);
+                })
+            }),
+            this.latestTop,
+            this.visitedTop
+        ]).then(([result1, result2, result3]) => {
             res.render('catalog', {
                 config: config,
-                catalog: result[0],
-                newList: result[1],
-                topList: result[2]
+                catalog: result1,
+                newList: result2,
+                topList: result3
             });
         })
     };
@@ -178,21 +145,19 @@ export class Routes {
         method: "get"
     })
     static weibo(req, res) {
-        async.parallel([
-            function (callback) {
-                //最新列表
-                latestTop(callback);
-            },
-            function (callback) {
-                //浏览量排行
-                visitedTop(callback);
-            }
-        ], function (err:any, result) {
-            if (err) res.send(err.message);
+        Promise.all([
+            new Promise((resolve, reject) => {
+                Blog.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err: any, list) {
+                    resolve(list);
+                })
+            }),
+            this.latestTop,
+            this.visitedTop
+        ]).then(([result1, result2]) => {
             res.render('weibo', {
                 config: config,
-                newList: result[0],
-                topList: result[1]
+                newList: result1,
+                topList: result2
             });
         })
     };
@@ -202,21 +167,19 @@ export class Routes {
         method: "get"
     })
     static about(req, res) {
-        async.parallel([
-            function (callback) {
-                //最新列表
-                latestTop(callback);
-            },
-            function (callback) {
-                //浏览量排行
-                visitedTop(callback);
-            }
-        ], function (err:any, result) {
-            if (err) res.send(err.message);
+        Promise.all([
+            new Promise((resolve, reject) => {
+                Blog.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err: any, list) {
+                    resolve(list);
+                })
+            }),
+            this.latestTop,
+            this.visitedTop
+        ]).then(([result1, result2]) => {
             res.render('about', {
                 config: config,
-                newList: result[0],
-                topList: result[1]
+                newList: result1,
+                topList: result2
             });
         })
     };
@@ -229,6 +192,7 @@ export class Routes {
     static gallery(req, res) {
         res.render("gallery", {});
     };
+
     //简历
     @route({
         path: "/resume",
@@ -245,46 +209,43 @@ export class Routes {
         method: "get"
     })
     static quicknote(req, res) {
-        async.parallel([
-            function (callback) {
-                //最新列表
-                latestTop(callback);
-            },
-            function (callback) {
-                //浏览量排行
-                visitedTop(callback);
-            },
-            function (callback) {
+        Promise.all([
+            new Promise((resolve, reject) => {
+                Blog.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err: any, list) {
+                    resolve(list);
+                })
+            }),
+            this.latestTop,
+            this.visitedTop,
+            new Promise((resolve, reject) => {
                 QuickNote.find(null, null, {
                     sort: { '_id': -1 }
-                }, function (err:any, docs) {
-                    callback(err, docs);
+                }, function (err: any, docs) {
+                    resolve(docs);
                 });
-            }
-        ], function (err:any, result) {
-            if (err) res.send(err.message);
+            })
+        ]).then(([result1, result2, result3]) => {
             res.render('quicknote', {
                 config: config,
-                newList: result[0],
-                topList: result[1],
-                quickNoteList: result[2]
+                newList: result1,
+                topList: result2,
+                quickNoteList: result3
             });
         })
     };
-}
-
-//最新,近两月
-function latestTop(callback) {
-    var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
-    Blog.find({ 'status': 1, createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }, function (err:any, docs2) {
-        if (err) callback(err.message);
-        callback(null, docs2);
+    //最近新建
+    static latestTop = new Promise((resolve, reject) => {
+            var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
+            Blog.find({ 'status': 1, createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }, function (err: any, docs2) {
+                if (err) reject(err.message);
+                resolve(docs2);
+            });
     });
-}
-//访问最多
-function visitedTop(callback) {
-    Blog.find({ 'status': 1 }, null, { sort: { 'pv': -1 }, limit: 5 }, function (err:any, docs3) {
-        if (err) callback(err.message);
-        callback(null, docs3);
-    });
+    //访问最多
+    static visitedTop = new Promise((resolve, reject) => {
+        Blog.find({ 'status': 1 }, null, { sort: { 'pv': -1 }, limit: 5 }, function (err: any, docs3) {
+            if (err) reject(err.message);
+            resolve(docs3);
+        });
+    })
 }

@@ -2,7 +2,7 @@ import * as _ from 'lodash';
 import * as Moment from 'moment';//日期格式化组件
 import * as Async from 'async';
 import * as Promise from 'bluebird';
-import {default as User } from '../models/User';
+import { default as User } from '../models/User';
 import { default as Blog, IBlog as BlogInstance } from '../models/Blog';
 import { default as QuickNote }  from '../models/QuickNote';
 import { default as Category, ICategory as CategoryInstance }  from '../models/Category';
@@ -208,25 +208,6 @@ export class Routes {
     })
     static toEditArticle(req, res) {
         var token = qiniu.uptoken('hopefully');
-        // Async.series<any>([
-        //     function (callback) {
-        //         Blog.findById(req.params.id, function (err, doc) {
-        //             if (err) res.send(err.message);
-        //             callback(null, doc);
-        //         });
-        //     },
-        //     function (callback) {
-        //         Category.find({}, function (err, docs) {
-        //             if (err) res.send(err.message);
-        //             callback(null, docs);
-        //         });
-        //     }], function (err, [result1, result2]:[BlogInstance, CategoryInstance[]]) {
-        //         if (result1.ismd) {
-        //             res.render('admin/editarticlemd', { success: 0, blog: result1, categories: result2, token: token });
-        //         } else {
-        //             res.render('admin/editarticle', { success: 0, blog: result1, categories: result2, token: token });
-        //         }
-        //     });
         let getBlogById = new Promise((resolve, reject) => {
             Blog.findById(req.params.id, function (err, doc) {
                 if (err) reject(err);
@@ -241,13 +222,13 @@ export class Routes {
         })
 
         Promise.all([getBlogById, getCategory])
-            .then(([blogObj, categories]: [BlogInstance, CategoryInstance[]]) => {
-                if (blogObj.ismd) {
-                    res.render('admin/editarticlemd', { success: 0, blog: blogObj, categories: categories, token: token });
-                } else {
-                    res.render('admin/editarticle', { success: 0, blog: blogObj, categories: categories, token: token });
-                }
-            })
+        .then(([blogObj, categories]: [BlogInstance, CategoryInstance[]]) => {
+            if (blogObj.ismd) {
+                res.render('admin/editarticlemd', { success: 0, blog: blogObj, categories: categories, token: token });
+            } else {
+                res.render('admin/editarticle', { success: 0, blog: blogObj, categories: categories, token: token });
+            }
+        })
     }
     /**
      * 修改操作
