@@ -24,25 +24,25 @@ export function getConnect() {
             native_parser: true
         },
         server: {
-            poolSize : 5,//默认为5
+            poolSize: 5,//默认为5
             auto_reconnect: true
         },
         user: username,
         pass: password
     };
-    (function connect(){
-        mongoose.connect(url,opts);//一个数据库用connect,多个用createConnection
+    (function connect() {
+        mongoose.connect(url, opts);//一个数据库用connect,多个用createConnection
         dbcon = mongoose.connection;//获取Connection 连接对象
-        dbcon.on('error', function(error) {
+        dbcon.on('error', function (error) {
             console.log('connection error');
             // dbcon.readyState = "disconnected";
             reConnect();
         });
     })();//定义完自执行
     //connected
-    function reConnect(){
+    function reConnect() {
         console.log(">>>>>>>>>reconnect")
         getConnect();
     }
 }
- export {mongoose}
+export { mongoose }

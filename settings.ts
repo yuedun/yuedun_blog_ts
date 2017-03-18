@@ -4,10 +4,10 @@
 export var mongodb = {
     cookieSecret: 'node-blog',
     db: 'blogs',
-    port: '8908',
+    port: '27017',//8908
     uid: 'admin' || process.env.BAE_ENV_AK,
     pwd: 'admin' || process.env.BAE_ENV_SK,
-    host: 'localhost:27017'
+    host: 'localhost'
 };
 
 //建周短信账户

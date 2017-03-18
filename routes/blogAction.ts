@@ -46,9 +46,9 @@ export class Routes {
                 });
             }),
             //最新列表
-            this.latestTop,
+            latestTop(),
             //浏览量排行
-            this.visitedTop,
+            visitedTop(),
             new Promise((resolve, reject) => {
                 Blog.count(condition, function (err: any, count) {
                     resolve(count);
@@ -78,8 +78,8 @@ export class Routes {
     })
     static blogDetail(req, res) {
         Promise.all([
-            this.latestTop,
-            this.visitedTop
+            latestTop(),
+            visitedTop()
         ]).then(([result1, result2]) => {
             var ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
             var blogId = req.params.id;
@@ -128,8 +128,8 @@ export class Routes {
                     resolve(list);
                 })
             }),
-            this.latestTop,
-            this.visitedTop
+            latestTop(),
+            visitedTop()
         ]).then(([result1, result2, result3]) => {
             res.render('catalog', {
                 config: config,
@@ -151,8 +151,8 @@ export class Routes {
                     resolve(list);
                 })
             }),
-            this.latestTop,
-            this.visitedTop
+            latestTop(),
+            visitedTop()
         ]).then(([result1, result2]) => {
             res.render('weibo', {
                 config: config,
@@ -173,8 +173,8 @@ export class Routes {
                     resolve(list);
                 })
             }),
-            this.latestTop,
-            this.visitedTop
+            latestTop(),
+            visitedTop()
         ]).then(([result1, result2]) => {
             res.render('about', {
                 config: config,
@@ -215,8 +215,8 @@ export class Routes {
                     resolve(list);
                 })
             }),
-            this.latestTop,
-            this.visitedTop,
+            latestTop(),
+            visitedTop(),
             new Promise((resolve, reject) => {
                 QuickNote.find(null, null, {
                     sort: { '_id': -1 }
@@ -233,19 +233,23 @@ export class Routes {
             });
         })
     };
-    //最近新建
-    static latestTop = new Promise((resolve, reject) => {
-            var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
-            Blog.find({ 'status': 1, createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }, function (err: any, docs2) {
-                if (err) reject(err.message);
-                resolve(docs2);
-            });
+}
+//最近新建
+var latestTop = function () {
+    return new Promise((resolve, reject) => {
+        var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
+        Blog.find({ 'status': 1, createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }, function (err: any, docs2) {
+            if (err) reject(err.message);
+            resolve(docs2);
+        });
     });
-    //访问最多
-    static visitedTop = new Promise((resolve, reject) => {
+}
+//访问最多
+var visitedTop = function () {
+    return new Promise((resolve, reject) => {
         Blog.find({ 'status': 1 }, null, { sort: { 'pv': -1 }, limit: 5 }, function (err: any, docs3) {
             if (err) reject(err.message);
             resolve(docs3);
         });
-    })
+    });
 }

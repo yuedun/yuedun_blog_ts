@@ -1,21 +1,21 @@
-import {Document, model, Model, Schema} from 'mongoose';
+import { Document, model, Model, Schema } from 'mongoose';
 
 var UserSchema: Schema = new Schema({
-  mobiles: String,//用户
-  weather: String,//天气内容
-  createAt: String,//创建时间
+  username: String,
+  password: String,
+  nickname: String,
+  level: Number,//权限等级
+  state: Boolean,//用户是否可用
+  createDate: String
 });
 
-var UserSchema: Schema = new Schema({
-  mobiles: String,
-  weather: String,
-  createAt: String
-});
-
-interface IUser extends Document {
-  mobiles: string;
-  weather: string;
-  createAt: string;
+export interface IUser extends Document {
+  username: string,
+  password: string,
+  nickname: string,
+  level: number,//权限等级
+  state: boolean,//用户是否可用
+  createDate: string
 }
 var UserModel: Model<IUser> = model<IUser>('User', UserSchema);
 
