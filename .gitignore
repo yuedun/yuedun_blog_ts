@@ -7,3 +7,4 @@ npm-debug.log
 node_modules/
 #忽略编辑器配置
 .vscode/
+settings.ts

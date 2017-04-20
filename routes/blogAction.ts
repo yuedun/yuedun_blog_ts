@@ -1,20 +1,22 @@
 import * as async from 'async';
+import { Request, Response } from 'express';
 import * as Promise from 'bluebird';
 import * as moment from 'moment';
 import { default as Blog, IBlog as BlogInstance } from '../models/Blog';
 import { default as QuickNote } from '../models/QuickNote';
-var md = require('markdown-it')();
+import * as Markdown from 'markdown-it';
+var md = Markdown();
 import { route } from '../utils/route';
 import * as settings from '../settings';
 var config = settings.blog_config;
 
-export class Routes {
+export default class Routes {
     /* 首页 */
     @route({
         path: "/",
         method: "get"
     })
-    static index(req, res) {
+    static index(req: Request, res: Response) {
         var pageIndex = 0;
         var pageSize = 10;
         pageIndex = req.query.pageIndex ? Number(req.query.pageIndex) : pageIndex;
@@ -76,7 +78,7 @@ export class Routes {
         path: "/blogdetail/:id",
         method: "get"
     })
-    static blogDetail(req, res) {
+    static blogDetail(req: Request, res: Response) {
         Promise.all([
             latestTop(),
             visitedTop()
@@ -121,7 +123,7 @@ export class Routes {
         path: "/catalog",
         method: "get"
     })
-    static catalog(req, res) {
+    static catalog(req: Request, res: Response) {
         Promise.all([
             new Promise((resolve, reject) => {
                 Blog.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err: any, list) {
@@ -144,7 +146,7 @@ export class Routes {
         path: "/weibo",
         method: "get"
     })
-    static weibo(req, res) {
+    static weibo(req: Request, res: Response) {
         Promise.all([
             new Promise((resolve, reject) => {
                 Blog.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err: any, list) {
@@ -166,7 +168,7 @@ export class Routes {
         path: "/about",
         method: "get"
     })
-    static about(req, res) {
+    static about(req: Request, res: Response) {
         Promise.all([
             new Promise((resolve, reject) => {
                 Blog.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err: any, list) {
@@ -189,7 +191,7 @@ export class Routes {
         path: "/gallery",
         method: "get"
     })
-    static gallery(req, res) {
+    static gallery(req: Request, res: Response) {
         res.render("gallery", {});
     };
 
@@ -198,7 +200,7 @@ export class Routes {
         path: "/resume",
         method: "get"
     })
-    static resume(req, res) {
+    static resume(req: Request, res: Response) {
         console.log("*****resume:" + moment().format("YYYY-MM-DD HH:ss:mm"));
         res.render("resume", {});
     };
@@ -208,7 +210,7 @@ export class Routes {
         path: "/quicknote",
         method: "get"
     })
-    static quicknote(req, res) {
+    static quicknote(req: Request, res: Response) {
         Promise.all([
             new Promise((resolve, reject) => {
                 Blog.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err: any, list) {

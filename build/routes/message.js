@@ -5,33 +5,36 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-const http = require("http");
-const express = require("express");
+Object.defineProperty(exports, "__esModule", { value: true });
+var http = require("http");
+var express = require("express");
 var router = express.Router;
-const sms = require("../utils/sms");
-const settings = require("../settings");
-const route_1 = require("../utils/route");
+var sms = require("../utils/sms");
+var settings = require("../settings");
+var route_1 = require("../utils/route");
 var SMS_ACCOUNT = settings.SMS_ACCOUNT;
-class Routes {
-    static sendmsg(req, res) {
+var Routes = (function () {
+    function Routes() {
+    }
+    Routes.sendmsg = function (req, res) {
         if (req.query.code = SMS_ACCOUNT.code) {
-            sms.sendSMS(req.query.mobile, req.query.text, (err, result) => {
+            sms.sendSMS(req.query.mobile, req.query.text, function (err, result) {
                 res.render('sms', { code: result });
             });
         }
         else {
             res.render('sms', { code: "code error" });
         }
-    }
-    static balance(req, res) {
-        let options = {
+    };
+    Routes.balance = function (req, res) {
+        var options = {
             hostname: 'www.jianzhou.sh.cn',
             port: 80,
             path: '/JianzhouSMSWSServer/http/getUserInfo?account=' + SMS_ACCOUNT.account + '&password=' + SMS_ACCOUNT.password,
             method: 'GET'
         };
-        let resStr = "";
-        let myReq = http.request(options, function (result) {
+        var resStr = "";
+        var myReq = http.request(options, function (result) {
             result.setEncoding('utf8');
             result.on('data', function (chunk) {
                 resStr += chunk;
@@ -47,11 +50,12 @@ class Routes {
         });
         myReq.write("");
         myReq.end();
-    }
-    static sms(req, res) {
+    };
+    Routes.sms = function (req, res) {
         res.render('sms', { code: "" });
-    }
-}
+    };
+    return Routes;
+}());
 __decorate([
     route_1.route({
         path: "/sendmsg",

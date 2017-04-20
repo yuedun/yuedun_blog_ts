@@ -3,6 +3,7 @@
  */
 var async = require('async');
 var express = require('express');
+import { Request, Response } from 'express';
 var http = require('http');
 var utils = require('utility');
 var moment = require('moment');
@@ -10,7 +11,7 @@ var nodemailer = require('nodemailer');
 var router = express.Router();//获取路由变量，对其设置路径，再导出在app.js中使用app.use(blog)
 import { default as LogId } from '../models/LogId';
 import { default as Blog } from '../models/Blog';
-import {route} from '../utils/route';
+import { route } from '../utils/route';
 var secret = '82a854439cab3a11b334ae4c60558a78';
 var short_name = 'hopefully';
 
@@ -20,10 +21,10 @@ export class Routes {
         path: "/callbackComments",
         method: "get"
     })
-    static callbackComments(req, res) {
+    static callbackComments(req: Request, res: Response) {
         if (check_signature(req, secret)) {
-            var last_log_id = null;//上一次同步时读到的最后一条log的ID，开发者自行维护此变量（如保存在你的数据库）
-            var params = {
+            var last_log_id: number;//上一次同步时读到的最后一条log的ID，开发者自行维护此变量（如保存在你的数据库）
+            var params: any = {
                 short_name: short_name,
                 secret: secret,
                 since_id: last_log_id,
@@ -38,19 +39,19 @@ export class Routes {
             }
             paramsStr = paramsStr.substring(0, paramsStr.lastIndexOf("&"));
             //*****************start
-            var myReq = http.request('http://api.duoshuo.com/log/list.json' + paramsStr, function (result) {
+            var myReq = http.request('http://api.duoshuo.com/log/list.json' + paramsStr, function (result: any) {
                 result.setEncoding('utf8');
-                result.on('data', function (chunk) {
+                result.on('data', function (chunk: any) {
                     var comObj = JSON.parse(chunk).response[0];
                     if (comObj.action === 'create') {
                         async.waterfall([
-                            function (callback) {
+                            function (callback: Function) {
                                 //修改评论数{$inc: {wheels:1}}, { w: 1 }
                                 Blog.update({ _id: comObj.meta.thread_key }, { $inc: { commentCount: 1 } }, { upsert: true }, function (err, obj) {
                                     callback(err, comObj);
                                 });
                             },
-                            function (comment, callback) {
+                            function (comment: any, callback: Function) {
                                 // create reusable transporter object using the default SMTP transport 
                                 var transporter = nodemailer.createTransport({
                                     service: '163',
@@ -74,19 +75,19 @@ export class Routes {
                                     text: comment.meta.author_name + ":" + comment.meta.message + '🐴', // plaintext body 
                                     html: html // html body 
                                 };
-                                transporter.verify(function (error, success) {
+                                transporter.verify(function (error: any, success: any) {
                                     if (error) {
                                         console.log(error);
                                     } else {
                                         // send mail with defined transport object 
-                                        transporter.sendMail(mailOptions, function (error, info) {
+                                        transporter.sendMail(mailOptions, function (error: any, info: any) {
                                             callback(error, "sendMail");
                                         });
                                     }
                                 });
 
                             }
-                        ], function (err, result) {
+                        ], function (err: any, result: any) {
                             if (err) console.log(err);
                             console.log("邮件发送成功");
                             res.send('{"status":"ok","comment_id":"' + comObj.log_id + '", "action":"' + comObj.action + '"}');
@@ -96,7 +97,7 @@ export class Routes {
                     }
                 });
             });
-            myReq.on('error', function (e) {
+            myReq.on('error', function (e: Error) {
                 console.log('problem with request: ' + e.message);
             });
             myReq.end();
@@ -115,8 +116,8 @@ export class Routes {
         path: "/getLastLogId",
         method: "get"
     })
-    static getLastLogId(params, callback) {
-        LogId.findById(params.id, function (err, obj) {
+    static getLastLogId(params: any, callback: Function) {
+        LogId.findById(params.id, function (err: any, obj: any) {
             callback(null, obj);
         });
     };
@@ -129,8 +130,8 @@ export class Routes {
         path: "/updateLastLogId",
         method: "get"
     })
-    static updateLastLogId(params, callback) {
-        LogId.update({ _id: params.id }, { lastLogId: params.lastLogId }, function (err, obj) {
+    static updateLastLogId(params: any, callback: Function) {
+        LogId.update({ _id: params.id }, { lastLogId: params.lastLogId }, function (err: any, obj: any) {
             callback(null, obj);
         });
     };
@@ -141,7 +142,7 @@ export class Routes {
 * req 请求参数
 * secret 多说密匙
 **/
-function check_signature(req, secret) {
+function check_signature(req: Request, secret: string) {
     var oriArray = [];
     var signature = req.body.signature;//多说请求签名，与此签名对比
     oriArray[0] = secret;

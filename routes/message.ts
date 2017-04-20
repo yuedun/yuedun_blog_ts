@@ -1,6 +1,7 @@
 'use strict';
 import * as http from 'http';
 import * as express from 'express';
+import { Request, Response } from 'express';
 var router = express.Router;
 import * as querystring from 'querystring';
 import * as errmsg from '../utils/errorCode';
@@ -16,9 +17,9 @@ export class Routes {
         path: "/sendmsg",
         method: "get"
     })
-    static sendmsg(req: any, res: any) {
+    static sendmsg(req: Request, res: Response) {
         if (req.query.code = SMS_ACCOUNT.code) {
-            sms.sendSMS(req.query.mobile, req.query.text, (err, result) => {
+            sms.sendSMS(req.query.mobile, req.query.text, (err:any, result:any) => {
                 res.render('sms', { code: result });
             })
         } else {
@@ -31,7 +32,7 @@ export class Routes {
         path: "/balance",
         method: "get"
     })
-    static balance(req, res) {
+    static balance(req: Request, res: Response) {
         let options = {
             hostname: 'www.jianzhou.sh.cn',
             port: 80,
@@ -56,11 +57,12 @@ export class Routes {
         myReq.write("");
         myReq.end();
     }
+    
     @route({
         path: "/sms",
         method: "get"
     })
-    static sms(req, res) {
+    static sms(req: Request, res: Response) {
         res.render('sms', { code: "" });
     }
 }

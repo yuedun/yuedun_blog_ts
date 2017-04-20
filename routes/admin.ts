@@ -1,17 +1,19 @@
 import * as _ from 'lodash';
+import { Request, Response } from 'express';
 import * as Moment from 'moment';//日期格式化组件
 import * as Async from 'async';
 import * as Promise from 'bluebird';
 import { default as User } from '../models/User';
 import { default as Blog, IBlog as BlogInstance } from '../models/Blog';
-import { default as QuickNote }  from '../models/QuickNote';
-import { default as Category, ICategory as CategoryInstance }  from '../models/Category';
-import { default as WeatherUser }  from '../models/WeatherUser';
+import { default as QuickNote } from '../models/QuickNote';
+import { default as Category, ICategory as CategoryInstance } from '../models/Category';
+import { default as WeatherUser } from '../models/WeatherUser';
 import * as qiniu from '../utils/qiniu';
-var md = require('markdown-it')();
+import * as Markdown from 'markdown-it';
+var md = Markdown();
 var area = require('../area');
 import { default as PvModel } from '../models/ViewerLog';
-import {adminRoute as route} from '../utils/route';
+import { adminRoute as route } from '../utils/route';
 
 export class Routes {
     /**   success0未修改，1成功   **/
@@ -20,7 +22,7 @@ export class Routes {
         path: "/login",
         method: "get"
     })
-    static login(req, res) {
+    static login(req: Request, res: Response) {
         res.render('admin/login', {});
     }
 
@@ -29,7 +31,7 @@ export class Routes {
         path: "/doLogin",
         method: "post"
     })
-    static doLogin(req, res) {
+    static doLogin(req: Request, res: Response) {
         var object = req.body;
         var user = {
             username: object.username,
@@ -55,7 +57,7 @@ export class Routes {
         path: "/home",
         method: "get"
     })
-    static home(req, res) {
+    static home(req: Request, res: Response) {
         var user = req.session.user;
         if (user != null) {
             res.render('admin/home', { title: '后台管理首页', user: user });
@@ -70,7 +72,7 @@ export class Routes {
         path: "/newArticleUi",
         method: "get"
     })
-    static newArticleUi(req, res) {
+    static newArticleUi(req: Request, res: Response) {
         var token = qiniu.uptoken('hopefully');
         Category.find({}, function (err, docs) {
             if (err) res.send(err.message);
@@ -85,7 +87,7 @@ export class Routes {
         path: "/newArticle",
         method: "post"
     })
-    static newArticle(req, res) {
+    static newArticle(req: Request, res: Response) {
         var content = req.body.content;
         var blog = new Blog({
             title: req.body.title,//标题
@@ -130,7 +132,7 @@ export class Routes {
         path: "/newArticleMd",
         method: "get"
     })
-    static newArticleMd(req, res) {
+    static newArticleMd(req: Request, res: Response) {
         var token = qiniu.uptoken('hopefully');
         Category.find({}, function (err, docs) {
             if (err) res.send(err.message);
@@ -145,7 +147,7 @@ export class Routes {
         path: "/blogList",
         method: "get"
     })
-    static blogList(req, res) {
+    static blogList(req: Request, res: Response) {
         var user = req.session.user;
         var success = req.query.success || 0;
         var pageIndex = 1;
@@ -176,7 +178,7 @@ export class Routes {
         path: "/blogDetail/:id",
         method: "get"
     })
-    static blogDetail(req, res) {
+    static blogDetail(req: Request, res: Response) {
         var user = req.session.user;
         Blog.findById(req.params.id, function (err, doc) {
             if (err) res.send(err.message);
@@ -193,7 +195,7 @@ export class Routes {
         path: "/deleteBlog/:id",
         method: "delete"
     })
-    static deleteBlog(req, res) {
+    static deleteBlog(req: Request, res: Response) {
         var user = req.session.user;
         Blog.findByIdAndRemove(req.params.id, function (err) {
             res.redirect('/admin/blogList');
@@ -206,7 +208,7 @@ export class Routes {
         path: "/toEditArticle/:id",
         method: "get"
     })
-    static toEditArticle(req, res) {
+    static toEditArticle(req: Request, res: Response) {
         var token = qiniu.uptoken('hopefully');
         let getBlogById = new Promise((resolve, reject) => {
             Blog.findById(req.params.id, function (err, doc) {
@@ -222,13 +224,13 @@ export class Routes {
         })
 
         Promise.all([getBlogById, getCategory])
-        .then(([blogObj, categories]: [BlogInstance, CategoryInstance[]]) => {
-            if (blogObj.ismd) {
-                res.render('admin/editarticlemd', { success: 0, blog: blogObj, categories: categories, token: token });
-            } else {
-                res.render('admin/editarticle', { success: 0, blog: blogObj, categories: categories, token: token });
-            }
-        })
+            .then(([blogObj, categories]: [BlogInstance, CategoryInstance[]]) => {
+                if (blogObj.ismd) {
+                    res.render('admin/editarticlemd', { success: 0, blog: blogObj, categories: categories, token: token });
+                } else {
+                    res.render('admin/editarticle', { success: 0, blog: blogObj, categories: categories, token: token });
+                }
+            })
     }
     /**
      * 修改操作
@@ -237,7 +239,7 @@ export class Routes {
         path: "/editArticle/:id",
         method: "get"
     })
-    static editArticle(req, res) {
+    static editArticle(req: Request, res: Response) {
         var content = req.body.content;
         Blog.findByIdAndUpdate(req.params.id, {
             $set:
@@ -261,7 +263,7 @@ export class Routes {
         path: "/category",
         method: "get"
     })
-    static category(req, res) {
+    static category(req: Request, res: Response) {
         Category.find({}, function (err, docs) {
             if (err) res.send(err.message);
             res.render('admin/category', { user: req.session.user, cates: docs });
@@ -272,7 +274,7 @@ export class Routes {
         path: "/addCategory",
         method: "post"
     })
-    static addCategory(req, res) {
+    static addCategory(req: Request, res: Response) {
         var category = new Category();
         category.cateName = req.body.cateName;
         category.state = true;
@@ -289,7 +291,7 @@ export class Routes {
         path: "/deleteCate/:id",
         method: "get"
     })
-    static deleteCate(req, res) {
+    static deleteCate(req: Request, res: Response) {
         var user = req.session.user;
         Category.findByIdAndRemove(req.params.id, function (err) {
             res.redirect('/admin/category');
@@ -301,7 +303,7 @@ export class Routes {
         path: "/addUserUi",
         method: "get"
     })
-    static addUserUi(req, res) {
+    static addUserUi(req: Request, res: Response) {
         res.render('admin/adduser', { success: 0, flag: 0, user: req.session.user });
     }
 
@@ -312,7 +314,7 @@ export class Routes {
         path: "/addUser",
         method: "post"
     })
-    static addUser(req, res) {
+    static addUser(req: Request, res: Response) {
         var password = req.body.password;
         var user = new User({
             username: req.body.username,
@@ -334,7 +336,7 @@ export class Routes {
         path: "/viewUser",
         method: "get"
     })
-    static viewUser(req, res) {
+    static viewUser(req: Request, res: Response) {
         User.find({}, null, function (err, docs) {
             if (err) res.send(err.message);
             res.render('admin/viewuser', { users: docs, user: req.session.user });
@@ -347,7 +349,7 @@ export class Routes {
         path: "/toModifyUser/:userId",
         method: "get"
     })
-    static toModifyUser(req, res) {
+    static toModifyUser(req: Request, res: Response) {
         User.findById(req.params.userId, function (err, doc) {
             if (err) res.send(err.message);
             res.render('admin/modifyuser', {
@@ -365,7 +367,7 @@ export class Routes {
         path: "/modifyUser/:userId",
         method: "post"
     })
-    static modifyUser(req, res) {
+    static modifyUser(req: Request, res: Response) {
         User.findByIdAndUpdate(req.params.userId, {
             $set:
             {
@@ -386,7 +388,7 @@ export class Routes {
         path: "/deleteUser/:userI",
         method: "get"
     })
-    static deleteUser(req, res) {
+    static deleteUser(req: Request, res: Response) {
         User.remove({ _id: req.params.userId }, function (err) {
             res.redirect('/admin/viewUser');
         });
@@ -397,7 +399,7 @@ export class Routes {
         path: "/logout",
         method: "get"
     })
-    static logout(req, res) {
+    static logout(req: Request, res: Response) {
         req.session.user = null;
         res.clearCookie("autologin");
         res.redirect('/admin/login');
@@ -407,7 +409,7 @@ export class Routes {
         path: "/test",
         method: "get"
     })
-    static test(req, res) {
+    static test(req: Request, res: Response) {
         res.render('admin/menu', {});
     }
 
@@ -416,7 +418,7 @@ export class Routes {
         path: "/addWeatherUser",
         method: "get"
     })
-    static addWeatherUserUi(req, res) {
+    static addWeatherUserUi(req: Request, res: Response) {
         res.render('admin/addweatheruser', { success: 0, flag: 0, user: req.session.user });
     }
     /**
@@ -426,7 +428,7 @@ export class Routes {
         path: "/addWeatherUser",
         method: "post"
     })
-    static addWeatherUser(req, res) {
+    static addWeatherUser(req: Request, res: Response) {
         var args = req.body;
         // var areaObjs = JSON.parse(area);
         var areaId = _.result(_.find(area, { 'NAMECN': args.city }), 'AREAID');
@@ -451,7 +453,7 @@ export class Routes {
         path: "/weatherUserList",
         method: "get"
     })
-    static weatherUserList(req, res) {
+    static weatherUserList(req: Request, res: Response) {
         WeatherUser.find({}, null, function (err, docs) {
             if (err) res.send(err.message);
             res.render('admin/weatherUser', { wusers: docs, user: req.session.user });
@@ -465,7 +467,7 @@ export class Routes {
         path: "/delWeatherUser/:userId",
         method: "get"
     })
-    static delWeatherUser(req, res) {
+    static delWeatherUser(req: Request, res: Response) {
         WeatherUser.remove({ _id: req.params.userId }, function (err) {
             res.redirect('/admin/weatherUserList');
         });
@@ -477,7 +479,7 @@ export class Routes {
         path: "/quicknote",
         method: "get"
     })
-    static quicknote(req, res) {
+    static quicknote(req: Request, res: Response) {
         var quicknote = new QuickNote({
             content: req.body.content,
             state: true,//可用/停用
@@ -495,7 +497,7 @@ export class Routes {
         path: "/quickNoteList",
         method: "get"
     })
-    static quickNoteList(req, res) {
+    static quickNoteList(req: Request, res: Response) {
         var user = req.session.user;
         var success = req.query.success || 0;
         var pageIndex = 1;
@@ -523,11 +525,11 @@ export class Routes {
         path: "/readCount",
         method: "get"
     })
-    static readCount(req, res) {
+    static readCount(req: Request, res: Response) {
         var today = Moment().format('YYYY-MM-DD');
         Async.parallel([
             function (callback) {
-                Blog.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }, function (err, doc) {
+                Blog.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }, function (err: any, doc: any) {
                     callback(err, doc[0].pvCount);
                 });
             },

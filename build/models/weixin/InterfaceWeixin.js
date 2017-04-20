@@ -1,4 +1,6 @@
-const crypto = require("crypto");
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var crypto = require("crypto");
 function validateToken(req, res) {
     var query = req.query;
     var signature = query.signature;

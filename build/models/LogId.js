@@ -1,5 +1,6 @@
-var mongoose = require('mongoose');
+"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+var mongoose = require('mongoose');
 exports.default = mongoose.model('LogId', {
     updateAt: Date,
     lastLogId: Number

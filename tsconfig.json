@@ -1,21 +1,25 @@
 {
     "compilerOptions": {
-        "module": "commonjs",
-        "target": "es6",
-        "noImplicitAny": false,
-        "noImplicitReturns": true,
-        "noFallthroughCasesInSwitch": true,
+        "module": "commonjs", //模块化规范
+        "target": "es5", //生成js版本
+        "noImplicitAny": false, //隐式返回any报错
+        "noImplicitReturns": true, //函数没有返回值提示
+        "noEmitOnError": true, //ts文件错误时不生成js
+        "noFallthroughCasesInSwitch": true, //switch没有break提示
         "experimentalDecorators": true,
-        "noEmitOnError": true,
-        "removeComments": true,
-        "allowUnreachableCode": true,
-        "noImplicitUseStrict": true,
-        "diagnostics":false,
+        "removeComments": true, //输出文件移除注释
         "pretty": true,
-        "outDir": "./build",
-        "sourceMap": true
+        "allowJs": true,
+        "skipDefaultLibCheck": true,
+        "rootDir": "./",
+        "outDir": "./build", //编译文件输出目录
+        "sourceMap": true, //是否生成.map文件，用于ts debug调试
+        "inlineSourceMap":true //生成单个sourcemaps文件，而不是将每sourcemaps生成不同的文件
     },
     "include": [
         "./**/*.ts"
+    ],
+    "exclude": [
+        //默认排除了node_modules
     ]
 }

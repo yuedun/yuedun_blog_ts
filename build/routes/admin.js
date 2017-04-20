@@ -1,28 +1,33 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-const _ = require("lodash");
-const Moment = require("moment");
-const Async = require("async");
-const Promise = require("bluebird");
-const User_1 = require("../models/User");
-const Blog_1 = require("../models/Blog");
-const QuickNote_1 = require("../models/QuickNote");
-const Category_1 = require("../models/Category");
-const WeatherUser_1 = require("../models/WeatherUser");
-const qiniu = require("../utils/qiniu");
-var md = require('markdown-it')();
+Object.defineProperty(exports, "__esModule", { value: true });
+var _ = require("lodash");
+var Moment = require("moment");
+var Async = require("async");
+var Promise = require("bluebird");
+var User_1 = require("../models/User");
+var Blog_1 = require("../models/Blog");
+var QuickNote_1 = require("../models/QuickNote");
+var Category_1 = require("../models/Category");
+var WeatherUser_1 = require("../models/WeatherUser");
+var qiniu = require("../utils/qiniu");
+var Markdown = require("markdown-it");
+var md = Markdown();
 var area = require('../area');
-const ViewerLog_1 = require("../models/ViewerLog");
-const route_1 = require("../utils/route");
-class Routes {
-    static login(req, res) {
-        res.render('admin/login', {});
+var ViewerLog_1 = require("../models/ViewerLog");
+var route_1 = require("../utils/route");
+var Routes = (function () {
+    function Routes() {
     }
-    static doLogin(req, res) {
+    Routes.login = function (req, res) {
+        res.render('admin/login', {});
+    };
+    Routes.doLogin = function (req, res) {
         var object = req.body;
         var user = {
             username: object.username,
@@ -42,8 +47,8 @@ class Routes {
                 res.redirect('/admin/login');
             }
         });
-    }
-    static home(req, res) {
+    };
+    Routes.home = function (req, res) {
         var user = req.session.user;
         if (user != null) {
             res.render('admin/home', { title: '后台管理首页', user: user });
@@ -51,16 +56,16 @@ class Routes {
         else {
             res.render('admin/login', { title: '用户登录' });
         }
-    }
-    static newArticleUi(req, res) {
+    };
+    Routes.newArticleUi = function (req, res) {
         var token = qiniu.uptoken('hopefully');
         Category_1.default.find({}, function (err, docs) {
             if (err)
                 res.send(err.message);
             res.render('admin/newarticle', { success: 0, categories: docs, token: token });
         });
-    }
-    static newArticle(req, res) {
+    };
+    Routes.newArticle = function (req, res) {
         var content = req.body.content;
         var blog = new Blog_1.default({
             title: req.body.title,
@@ -101,16 +106,16 @@ class Routes {
                 });
             }
         });
-    }
-    static newArticleMd(req, res) {
+    };
+    Routes.newArticleMd = function (req, res) {
         var token = qiniu.uptoken('hopefully');
         Category_1.default.find({}, function (err, docs) {
             if (err)
                 res.send(err.message);
             res.render('admin/newarticlemd', { success: 0, categories: docs, token: token });
         });
-    }
-    static blogList(req, res) {
+    };
+    Routes.blogList = function (req, res) {
         var user = req.session.user;
         var success = req.query.success || 0;
         var pageIndex = 1;
@@ -135,8 +140,8 @@ class Routes {
             });
             res.render('admin/bloglist', { success: success, blogList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length });
         });
-    }
-    static blogDetail(req, res) {
+    };
+    Routes.blogDetail = function (req, res) {
         var user = req.session.user;
         Blog_1.default.findById(req.params.id, function (err, doc) {
             if (err)
@@ -146,23 +151,23 @@ class Routes {
             }
             res.render('admin/blogdetail', { blog: doc, user: user });
         });
-    }
-    static deleteBlog(req, res) {
+    };
+    Routes.deleteBlog = function (req, res) {
         var user = req.session.user;
         Blog_1.default.findByIdAndRemove(req.params.id, function (err) {
             res.redirect('/admin/blogList');
         });
-    }
-    static toEditArticle(req, res) {
+    };
+    Routes.toEditArticle = function (req, res) {
         var token = qiniu.uptoken('hopefully');
-        let getBlogById = new Promise((resolve, reject) => {
+        var getBlogById = new Promise(function (resolve, reject) {
             Blog_1.default.findById(req.params.id, function (err, doc) {
                 if (err)
                     reject(err);
                 resolve(doc);
             });
         });
-        let getCategory = new Promise((resolve, reject) => {
+        var getCategory = new Promise(function (resolve, reject) {
             Category_1.default.find({}, function (err, docs) {
                 if (err)
                     reject(err);
@@ -170,7 +175,8 @@ class Routes {
             });
         });
         Promise.all([getBlogById, getCategory])
-            .then(([blogObj, categories]) => {
+            .then(function (_a) {
+            var blogObj = _a[0], categories = _a[1];
             if (blogObj.ismd) {
                 res.render('admin/editarticlemd', { success: 0, blog: blogObj, categories: categories, token: token });
             }
@@ -178,8 +184,8 @@ class Routes {
                 res.render('admin/editarticle', { success: 0, blog: blogObj, categories: categories, token: token });
             }
         });
-    }
-    static editArticle(req, res) {
+    };
+    Routes.editArticle = function (req, res) {
         var content = req.body.content;
         Blog_1.default.findByIdAndUpdate(req.params.id, {
             $set: {
@@ -195,15 +201,15 @@ class Routes {
                 res.send(err.message);
             res.redirect('/admin/blogDetail/' + req.params.id);
         });
-    }
-    static category(req, res) {
+    };
+    Routes.category = function (req, res) {
         Category_1.default.find({}, function (err, docs) {
             if (err)
                 res.send(err.message);
             res.render('admin/category', { user: req.session.user, cates: docs });
         });
-    }
-    static addCategory(req, res) {
+    };
+    Routes.addCategory = function (req, res) {
         var category = new Category_1.default();
         category.cateName = req.body.cateName;
         category.state = true;
@@ -213,17 +219,17 @@ class Routes {
                 res.send(e.message);
             res.redirect('/admin/category');
         });
-    }
-    static deleteCate(req, res) {
+    };
+    Routes.deleteCate = function (req, res) {
         var user = req.session.user;
         Category_1.default.findByIdAndRemove(req.params.id, function (err) {
             res.redirect('/admin/category');
         });
-    }
-    static addUserUi(req, res) {
+    };
+    Routes.addUserUi = function (req, res) {
         res.render('admin/adduser', { success: 0, flag: 0, user: req.session.user });
-    }
-    static addUser(req, res) {
+    };
+    Routes.addUser = function (req, res) {
         var password = req.body.password;
         var user = new User_1.default({
             username: req.body.username,
@@ -238,15 +244,15 @@ class Routes {
                 res.send(e.message);
             res.render('admin/adduser', { success: 1, user: req.session.user });
         });
-    }
-    static viewUser(req, res) {
+    };
+    Routes.viewUser = function (req, res) {
         User_1.default.find({}, null, function (err, docs) {
             if (err)
                 res.send(err.message);
             res.render('admin/viewuser', { users: docs, user: req.session.user });
         });
-    }
-    static toModifyUser(req, res) {
+    };
+    Routes.toModifyUser = function (req, res) {
         User_1.default.findById(req.params.userId, function (err, doc) {
             if (err)
                 res.send(err.message);
@@ -256,8 +262,8 @@ class Routes {
                 flag: 1
             });
         });
-    }
-    static modifyUser(req, res) {
+    };
+    Routes.modifyUser = function (req, res) {
         User_1.default.findByIdAndUpdate(req.params.userId, {
             $set: {
                 username: req.body.username,
@@ -270,24 +276,24 @@ class Routes {
                 res.send(err.message);
             res.render('admin/modifyuser', { user: doc, success: 1, flag: 1 });
         });
-    }
-    static deleteUser(req, res) {
+    };
+    Routes.deleteUser = function (req, res) {
         User_1.default.remove({ _id: req.params.userId }, function (err) {
             res.redirect('/admin/viewUser');
         });
-    }
-    static logout(req, res) {
+    };
+    Routes.logout = function (req, res) {
         req.session.user = null;
         res.clearCookie("autologin");
         res.redirect('/admin/login');
-    }
-    static test(req, res) {
+    };
+    Routes.test = function (req, res) {
         res.render('admin/menu', {});
-    }
-    static addWeatherUserUi(req, res) {
+    };
+    Routes.addWeatherUserUi = function (req, res) {
         res.render('admin/addweatheruser', { success: 0, flag: 0, user: req.session.user });
-    }
-    static addWeatherUser(req, res) {
+    };
+    Routes.addWeatherUser = function (req, res) {
         var args = req.body;
         var areaId = _.result(_.find(area, { 'NAMECN': args.city }), 'AREAID');
         var weathUser = new WeatherUser_1.default({
@@ -304,20 +310,20 @@ class Routes {
                 res.send(e.message);
             res.render('admin/addweatheruser', { success: 1, user: req.session.user });
         });
-    }
-    static weatherUserList(req, res) {
+    };
+    Routes.weatherUserList = function (req, res) {
         WeatherUser_1.default.find({}, null, function (err, docs) {
             if (err)
                 res.send(err.message);
             res.render('admin/weatherUser', { wusers: docs, user: req.session.user });
         });
-    }
-    static delWeatherUser(req, res) {
+    };
+    Routes.delWeatherUser = function (req, res) {
         WeatherUser_1.default.remove({ _id: req.params.userId }, function (err) {
             res.redirect('/admin/weatherUserList');
         });
-    }
-    static quicknote(req, res) {
+    };
+    Routes.quicknote = function (req, res) {
         var quicknote = new QuickNote_1.default({
             content: req.body.content,
             state: true,
@@ -328,8 +334,8 @@ class Routes {
                 res.send(e.message);
             res.redirect('/admin/quickNoteList');
         });
-    }
-    static quickNoteList(req, res) {
+    };
+    Routes.quickNoteList = function (req, res) {
         var user = req.session.user;
         var success = req.query.success || 0;
         var pageIndex = 1;
@@ -349,8 +355,8 @@ class Routes {
             });
             res.render('admin/quicknote', { success: success, noteList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length });
         });
-    }
-    static readCount(req, res) {
+    };
+    Routes.readCount = function (req, res) {
         var today = Moment().format('YYYY-MM-DD');
         Async.parallel([
             function (callback) {
@@ -366,8 +372,9 @@ class Routes {
         ], function (err, result) {
             res.render('admin/readcount', { readCount: result[0], todayRead: result[1] });
         });
-    }
-}
+    };
+    return Routes;
+}());
 __decorate([
     route_1.adminRoute({
         path: "/login",

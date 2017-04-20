@@ -1,13 +1,12 @@
 'use strict';
-var async = require('async');
-var _ = require('lodash');
-var schedule = require("node-schedule");
-var http = require('http');
+import * as async from 'async';
+import * as _ from 'lodash';
+import * as schedule from "node-schedule";
+import * as http from 'http';
 import * as settings from '../settings';
-var connection = require('../models/connection');
-import * as sms from'./sms';
-var WeatherUser = require('../models/WeatherUser');
-
+import * as connection from '../models/connection';
+import * as sms from './sms';
+import { default as WeatherUser, IWeatherUser as WeatherUserInstance } from '../models/WeatherUser';
 var WeatherCron = function () {
     // this.m_rule = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59];//数字或数组
     // this.m_rule = [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 59];//数字或数组
@@ -16,14 +15,14 @@ var WeatherCron = function () {
     this.cron = function () {
         console.log("天气定时任务启动")
         async.waterfall([
-            function (callback) {
+            function (callback: Function) {
                 //获取需要发送的手机号队列
-                WeatherUser.find({ 'status': 1 }, null, { sort: { '_id': -1 } }, function (err, docs) {
+                WeatherUser.find({ status: 1 }, null, { sort: { _id: -1 } }, function (err: any, docs: any) {
                     //手机号和对应和要查询的城市
                     callback(null, docs);
                 });
             },
-            function (mobiles, callback) {
+            function (mobiles: string, callback: Function) {
                 let cityGroup = _.groupBy(mobiles, "cityCode");//按照城市分组
                 _.forEach(cityGroup, function (umObjs, cityCode) {
                     let options = {
@@ -39,8 +38,8 @@ var WeatherCron = function () {
                             resStr += chunk;
                         }).on("end", function () {
                             var w = JSON.parse(resStr).forecast;
-                            console.log(">>>>>>>>>>>",w)
-                            if(w[0].cond.cond_d.indexOf("雨")>-1){
+                            console.log(">>>>>>>>>>>", w)
+                            if (w[0].cond.cond_d.indexOf("雨") > -1) {
                                 sendSms(w, umObjs, callback);
                             }
                         })
@@ -57,8 +56,8 @@ var WeatherCron = function () {
     }
 }
 //发送短信
-function sendSms(weatherObjs, umObjs, callback) {
-    let mobileArray = _.chain(umObjs).map(function (o) {
+function sendSms(weatherObjs: any, umObjs: any, callback: Function) {
+    let mobileArray = _.chain(umObjs).map(function (o: any) {
         return o.mobile
     }).value();
     let mobilesStr = mobileArray.join(";");//这样的字符串13996396369;13659865896
@@ -68,7 +67,7 @@ function sendSms(weatherObjs, umObjs, callback) {
     let weatherTomorrow = weatherAll[1];//明天
     let msg = `今天${weatherToday.date},${weatherToday.tmp.min}°C-${weatherToday.tmp.max}°C,${weatherToday.wind.sc}级${weatherToday.wind.dir}${weatherToday.cond.cond_d}
     	明天${weatherTomorrow.date},${weatherTomorrow.tmp.min}°C-${weatherTomorrow.tmp.max}°C,${weatherTomorrow.wind.sc}级${weatherTomorrow.wind.dir}${weatherTomorrow.cond.cond_d}`;
-    sms.sendSMS(mobilesStr, msg, function (err, resStr) {
+    sms.sendSMS(mobilesStr, msg, function (err: any, resStr: string) {
         console.log("短信发送完成", msg);
         callback(null, "succece");
     });
@@ -89,9 +88,12 @@ var ReqCron = function () {
     }
 }
 
-var cronMap = new Map();
-cronMap.set("weather_cron", WeatherCron);
-cronMap.set("req_cron", ReqCron);
+// var cronMap = new Map();
+// cronMap.set("weather_cron", WeatherCron);
+// cronMap.set("req_cron", ReqCron);
+var cronMap = new Array();
+cronMap.push(WeatherCron);
+cronMap.push(ReqCron);
 
 //定时任务
 module.exports = function () {

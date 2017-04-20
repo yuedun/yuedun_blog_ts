@@ -33,7 +33,7 @@ export function getConnect() {
     (function connect() {
         mongoose.connect(url, opts);//一个数据库用connect,多个用createConnection
         dbcon = mongoose.connection;//获取Connection 连接对象
-        dbcon.on('error', function (error) {
+        dbcon.on('error', function (error: any) {
             console.log('connection error');
             // dbcon.readyState = "disconnected";
             reConnect();

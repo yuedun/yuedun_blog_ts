@@ -1,19 +1,24 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-const Promise = require("bluebird");
-const moment = require("moment");
-const Blog_1 = require("../models/Blog");
-const QuickNote_1 = require("../models/QuickNote");
-var md = require('markdown-it')();
-const route_1 = require("../utils/route");
-const settings = require("../settings");
+Object.defineProperty(exports, "__esModule", { value: true });
+var Promise = require("bluebird");
+var moment = require("moment");
+var Blog_1 = require("../models/Blog");
+var QuickNote_1 = require("../models/QuickNote");
+var Markdown = require("markdown-it");
+var md = Markdown();
+var route_1 = require("../utils/route");
+var settings = require("../settings");
 var config = settings.blog_config;
-class Routes {
-    static index(req, res) {
+var Routes = (function () {
+    function Routes() {
+    }
+    Routes.index = function (req, res) {
         var pageIndex = 0;
         var pageSize = 10;
         pageIndex = req.query.pageIndex ? Number(req.query.pageIndex) : pageIndex;
@@ -48,12 +53,13 @@ class Routes {
             }),
             latestTop(),
             visitedTop(),
-            new Promise((resolve, reject) => {
+            new Promise(function (resolve, reject) {
                 Blog_1.default.count(condition, function (err, count) {
                     resolve(count);
                 });
             })
-        ]).then(([result1, result2, result3, result4]) => {
+        ]).then(function (_a) {
+            var result1 = _a[0], result2 = _a[1], result3 = _a[2], result4 = _a[3];
             res.render('index', {
                 config: config,
                 blogList: result1,
@@ -66,13 +72,14 @@ class Routes {
                 category: category
             });
         });
-    }
+    };
     ;
-    static blogDetail(req, res) {
+    Routes.blogDetail = function (req, res) {
         Promise.all([
             latestTop(),
             visitedTop()
-        ]).then(([result1, result2]) => {
+        ]).then(function (_a) {
+            var result1 = _a[0], result2 = _a[1];
             var ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
             var blogId = req.params.id;
             var visitor = ip + blogId;
@@ -110,18 +117,19 @@ class Routes {
                 });
             }
         });
-    }
+    };
     ;
-    static catalog(req, res) {
+    Routes.catalog = function (req, res) {
         Promise.all([
-            new Promise((resolve, reject) => {
+            new Promise(function (resolve, reject) {
                 Blog_1.default.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err, list) {
                     resolve(list);
                 });
             }),
             latestTop(),
             visitedTop()
-        ]).then(([result1, result2, result3]) => {
+        ]).then(function (_a) {
+            var result1 = _a[0], result2 = _a[1], result3 = _a[2];
             res.render('catalog', {
                 config: config,
                 catalog: result1,
@@ -129,70 +137,73 @@ class Routes {
                 topList: result3
             });
         });
-    }
+    };
     ;
-    static weibo(req, res) {
+    Routes.weibo = function (req, res) {
         Promise.all([
-            new Promise((resolve, reject) => {
+            new Promise(function (resolve, reject) {
                 Blog_1.default.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err, list) {
                     resolve(list);
                 });
             }),
             latestTop(),
             visitedTop()
-        ]).then(([result1, result2]) => {
+        ]).then(function (_a) {
+            var result1 = _a[0], result2 = _a[1];
             res.render('weibo', {
                 config: config,
                 newList: result1,
                 topList: result2
             });
         });
-    }
+    };
     ;
-    static about(req, res) {
+    Routes.about = function (req, res) {
         Promise.all([
-            new Promise((resolve, reject) => {
+            new Promise(function (resolve, reject) {
                 Blog_1.default.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err, list) {
                     resolve(list);
                 });
             }),
             latestTop(),
             visitedTop()
-        ]).then(([result1, result2]) => {
+        ]).then(function (_a) {
+            var result1 = _a[0], result2 = _a[1];
             res.render('about', {
                 config: config,
                 newList: result1,
                 topList: result2
             });
         });
-    }
+    };
     ;
-    static gallery(req, res) {
+    Routes.gallery = function (req, res) {
         res.render("gallery", {});
-    }
+    };
     ;
-    static resume(req, res) {
+    Routes.resume = function (req, res) {
         console.log("*****resume:" + moment().format("YYYY-MM-DD HH:ss:mm"));
         res.render("resume", {});
-    }
+    };
     ;
-    static quicknote(req, res) {
+    Routes.quicknote = function (req, res) {
         Promise.all([
-            new Promise((resolve, reject) => {
+            new Promise(function (resolve, reject) {
                 Blog_1.default.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err, list) {
                     resolve(list);
                 });
             }),
             latestTop(),
             visitedTop(),
-            new Promise((resolve, reject) => {
+            new Promise(function (resolve, reject) {
                 QuickNote_1.default.find(null, null, {
                     sort: { '_id': -1 }
                 }, function (err, docs) {
                     resolve(docs);
                 });
             })
-        ]).then(([result1, result2, result3]) => {
+        ]).then(function (_a) {
+            var result1 = _a[0], result2 = _a[1], result3 = _a[2];
             res.render('quicknote', {
                 config: config,
                 newList: result1,
@@ -200,9 +211,10 @@ class Routes {
                 quickNoteList: result3
             });
         });
-    }
+    };
     ;
-}
+    return Routes;
+}());
 __decorate([
     route_1.route({
         path: "/",
@@ -251,9 +263,9 @@ __decorate([
         method: "get"
     })
 ], Routes, "quicknote", null);
-exports.Routes = Routes;
+exports.default = Routes;
 var latestTop = function () {
-    return new Promise((resolve, reject) => {
+    return new Promise(function (resolve, reject) {
         var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
         Blog_1.default.find({ 'status': 1, createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }, function (err, docs2) {
             if (err)
@@ -263,7 +275,7 @@ var latestTop = function () {
     });
 };
 var visitedTop = function () {
-    return new Promise((resolve, reject) => {
+    return new Promise(function (resolve, reject) {
         Blog_1.default.find({ 'status': 1 }, null, { sort: { 'pv': -1 }, limit: 5 }, function (err, docs3) {
             if (err)
                 reject(err.message);

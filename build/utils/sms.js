@@ -1,19 +1,20 @@
 'use strict';
-const http = require("http");
-const moment = require("moment");
-const querystring = require("querystring");
-const WeatherLog_1 = require("../models/WeatherLog");
-const settings = require("../settings");
-const SMS_ACCOUNT = settings.SMS_ACCOUNT;
+Object.defineProperty(exports, "__esModule", { value: true });
+var http = require("http");
+var moment = require("moment");
+var querystring = require("querystring");
+var WeatherLog_1 = require("../models/WeatherLog");
+var settings = require("../settings");
+var SMS_ACCOUNT = settings.SMS_ACCOUNT;
 exports.sendSMS = function (mobiles, text, callback) {
-    let postData = querystring.stringify({
+    var postData = querystring.stringify({
         'account': SMS_ACCOUNT.account,
         'password': SMS_ACCOUNT.password,
         'destmobile': mobiles,
         'msgText': text + SMS_ACCOUNT.signature,
         'sendDateTime': ''
     });
-    let options = {
+    var options = {
         hostname: 'www.jianzhou.sh.cn',
         port: 80,
         path: '/JianzhouSMSWSServer/http/sendBatchMessage',
@@ -22,8 +23,8 @@ exports.sendSMS = function (mobiles, text, callback) {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
     };
-    let resStr = "";
-    let myReq = http.request(options, function (result) {
+    var resStr = "";
+    var myReq = http.request(options, function (result) {
         result.setEncoding('utf8');
         result.on('data', function (chunk) {
             resStr += chunk;

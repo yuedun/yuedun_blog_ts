@@ -1,5 +1,6 @@
 'use strict'
 import * as express from 'express';
+import { Express } from 'express';
 
 const router = express.Router();
 
@@ -7,8 +8,8 @@ export default class Cover {
 
     static __DecoratedRouters: Array<[{path: string, method: string}, Function | Function[]]> = [];
     private router: any;
-    private app: any;
-    constructor(app) {
+    private app: Express;
+    constructor(app: Express) {
         this.router = router;
         this.app = app;
     }

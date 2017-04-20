@@ -1,6 +1,7 @@
 'use strict';
-const moment = require("moment");
-const ViewerLog_1 = require("../models/ViewerLog");
+Object.defineProperty(exports, "__esModule", { value: true });
+var moment = require("moment");
+var ViewerLog_1 = require("../models/ViewerLog");
 function default_1(req) {
     var ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     var realIp = req.headers['x-forwarded-for'];
@@ -25,6 +26,5 @@ function default_1(req) {
         });
     }
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = default_1;
 //# sourceMappingURL=viewerLog.js.map

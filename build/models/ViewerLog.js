@@ -1,4 +1,6 @@
-const mongoose_1 = require("mongoose");
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var mongoose_1 = require("mongoose");
 var ViewerLogSchema = new mongoose_1.Schema({
     ip: String,
     url: String,
@@ -7,6 +9,5 @@ var ViewerLogSchema = new mongoose_1.Schema({
     createdAt: String,
 });
 var ViewerLogModel = mongoose_1.model('ViewerLog', ViewerLogSchema);
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = ViewerLogModel;
 //# sourceMappingURL=ViewerLog.js.map

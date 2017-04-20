@@ -1,5 +1,5 @@
 'use strict';
-export var errorCode = {
+export var errorCode:any = {
 	"1":"提交成功，该数字为本批次的任务ID，提交成功后请自行保存发送记录。",
 	"-1":"余额不足",
 	"-2":"帐号或密码错误",

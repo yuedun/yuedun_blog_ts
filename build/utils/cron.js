@@ -1,12 +1,13 @@
 'use strict';
-var async = require('async');
-var _ = require('lodash');
+Object.defineProperty(exports, "__esModule", { value: true });
+var async = require("async");
+var _ = require("lodash");
 var schedule = require("node-schedule");
-var http = require('http');
-const settings = require("../settings");
-var connection = require('../models/connection');
-const sms = require("./sms");
-var WeatherUser = require('../models/WeatherUser');
+var http = require("http");
+var settings = require("../settings");
+var connection = require("../models/connection");
+var sms = require("./sms");
+var WeatherUser_1 = require("../models/WeatherUser");
 var WeatherCron = function () {
     this.h_rule = 7;
     this.m_rule = 35;
@@ -14,21 +15,21 @@ var WeatherCron = function () {
         console.log("天气定时任务启动");
         async.waterfall([
             function (callback) {
-                WeatherUser.find({ 'status': 1 }, null, { sort: { '_id': -1 } }, function (err, docs) {
+                WeatherUser_1.default.find({ status: 1 }, null, { sort: { _id: -1 } }, function (err, docs) {
                     callback(null, docs);
                 });
             },
             function (mobiles, callback) {
-                let cityGroup = _.groupBy(mobiles, "cityCode");
+                var cityGroup = _.groupBy(mobiles, "cityCode");
                 _.forEach(cityGroup, function (umObjs, cityCode) {
-                    let options = {
+                    var options = {
                         hostname: 'service.envicloud.cn',
                         port: 8082,
                         path: '/v2/weatherforecast/' + settings.weather_key + '/' + cityCode,
                         method: 'GET'
                     };
-                    let resStr = "";
-                    let myReq = http.request(options, function (result) {
+                    var resStr = "";
+                    var myReq = http.request(options, function (result) {
                         result.setEncoding('utf8');
                         result.on('data', function (chunk) {
                             resStr += chunk;
@@ -52,16 +53,15 @@ var WeatherCron = function () {
     };
 };
 function sendSms(weatherObjs, umObjs, callback) {
-    let mobileArray = _.chain(umObjs).map(function (o) {
+    var mobileArray = _.chain(umObjs).map(function (o) {
         return o.mobile;
     }).value();
-    let mobilesStr = mobileArray.join(";");
+    var mobilesStr = mobileArray.join(";");
     console.log("手机串：", mobilesStr);
-    let weatherAll = weatherObjs;
-    let weatherToday = weatherAll[0];
-    let weatherTomorrow = weatherAll[1];
-    let msg = `今天${weatherToday.date},${weatherToday.tmp.min}°C-${weatherToday.tmp.max}°C,${weatherToday.wind.sc}级${weatherToday.wind.dir}${weatherToday.cond.cond_d}
-    	明天${weatherTomorrow.date},${weatherTomorrow.tmp.min}°C-${weatherTomorrow.tmp.max}°C,${weatherTomorrow.wind.sc}级${weatherTomorrow.wind.dir}${weatherTomorrow.cond.cond_d}`;
+    var weatherAll = weatherObjs;
+    var weatherToday = weatherAll[0];
+    var weatherTomorrow = weatherAll[1];
+    var msg = "\u4ECA\u5929" + weatherToday.date + "," + weatherToday.tmp.min + "\u00B0C-" + weatherToday.tmp.max + "\u00B0C," + weatherToday.wind.sc + "\u7EA7" + weatherToday.wind.dir + weatherToday.cond.cond_d + "\n    \t\u660E\u5929" + weatherTomorrow.date + "," + weatherTomorrow.tmp.min + "\u00B0C-" + weatherTomorrow.tmp.max + "\u00B0C," + weatherTomorrow.wind.sc + "\u7EA7" + weatherTomorrow.wind.dir + weatherTomorrow.cond.cond_d;
     sms.sendSMS(mobilesStr, msg, function (err, resStr) {
         console.log("短信发送完成", msg);
         callback(null, "succece");
@@ -81,13 +81,13 @@ var ReqCron = function () {
         myReq.end();
     };
 };
-var cronMap = new Map();
-cronMap.set("weather_cron", WeatherCron);
-cronMap.set("req_cron", ReqCron);
+var cronMap = new Array();
+cronMap.push(WeatherCron);
+cronMap.push(ReqCron);
 module.exports = function () {
     cronMap.forEach(function (Cron, key) {
-        let rule = new schedule.RecurrenceRule();
-        let cronObj = new Cron();
+        var rule = new schedule.RecurrenceRule();
+        var cronObj = new Cron();
         rule.hour = cronObj.h_rule;
         rule.minute = cronObj.m_rule;
         schedule.scheduleJob(rule, cronObj.cron);

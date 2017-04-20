@@ -3,7 +3,7 @@
 import * as http from 'http';
 import * as moment from 'moment';
 import * as querystring from 'querystring';
-import { default as WeatherLog }from '../models/WeatherLog';
+import { default as WeatherLog } from '../models/WeatherLog';
 import * as errmsg from '../utils/errorCode';
 import * as settings from '../settings';
 const SMS_ACCOUNT = settings.SMS_ACCOUNT;
@@ -11,7 +11,7 @@ const SMS_ACCOUNT = settings.SMS_ACCOUNT;
  * mobiles string 单个或多个手机号字符串，用;分割
  * text string 发送内容
  */
-export var sendSMS = function (mobiles:string, text:string, callback):void {
+export var sendSMS = function (mobiles:string, text:string, callback: Function):void {
     let postData = querystring.stringify({
         'account': SMS_ACCOUNT.account,
         'password': SMS_ACCOUNT.password,

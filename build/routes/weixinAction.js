@@ -1,5 +1,7 @@
-var express = require('express');
-var weixin = express.Router();
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var Express = require("express");
+var weixin = Express.Router();
 var interfaceWX = require('../models/weixin/InterfaceWeixin');
 weixin.get('/weixin/validateToken', function (req, res) {
     interfaceWX.validateToken(req, res);
