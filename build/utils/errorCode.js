@@ -1,4 +1,5 @@
 'use strict';
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.errorCode = {
     "1": "提交成功，该数字为本批次的任务ID，提交成功后请自行保存发送记录。",
     "-1": "余额不足",
@@ -28,4 +29,3 @@ exports.getErrorCode = function (code) {
         }
     }
 };
-//# sourceMappingURL=errorCode.js.map

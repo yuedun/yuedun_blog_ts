@@ -5,8 +5,9 @@
  */
 import 'source-map-support/register';
 import { app } from '../app';
-var debug = require('debug')('yuedun_ts:server');
-var http = require('http');
+import * as debug from 'debug';
+debug('yuedun_ts:server');
+import * as http from 'http';
 
 /**
  * Get port from environment and store in Express.
@@ -33,7 +34,7 @@ server.on('listening', onListening);
  * Normalize a port into a number, string, or false.
  */
 
-function normalizePort(val) {
+function normalizePort(val: string) {
   var port = parseInt(val, 10);
 
   if (isNaN(port)) {
@@ -53,7 +54,7 @@ function normalizePort(val) {
  * Event listener for HTTP server "error" event.
  */
 
-function onError(error) {
+function onError(error: any) {
   if (error.syscall !== 'listen') {
     throw error;
   }

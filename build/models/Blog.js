@@ -1,4 +1,6 @@
-const mongoose_1 = require("mongoose");
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var mongoose_1 = require("mongoose");
 exports.BlogSchema = new mongoose_1.Schema({
     title: String,
     createDate: String,
@@ -14,6 +16,4 @@ exports.BlogSchema = new mongoose_1.Schema({
     ismd: Number
 });
 var BlogModel = mongoose_1.model('Blog', exports.BlogSchema);
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = BlogModel;
-//# sourceMappingURL=Blog.js.map

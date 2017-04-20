@@ -1,4 +1,6 @@
-const crypto = require("crypto");
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var crypto = require("crypto");
 function validateToken(req, res) {
     var query = req.query;
     var signature = query.signature;
@@ -33,4 +35,3 @@ function getAccessToken() {
     var url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxdec38c03e93cd4e8&secret=ba19fa2a324780addde9818d889bb1b1";
 }
 exports.validateToken = validateToken;
-//# sourceMappingURL=InterfaceWeixin.js.map

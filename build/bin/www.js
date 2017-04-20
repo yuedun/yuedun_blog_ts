@@ -1,8 +1,11 @@
 #!/usr/bin/env node
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 require("source-map-support/register");
-const app_1 = require("../app");
-var debug = require('debug')('yuedun_ts:server');
-var http = require('http');
+var app_1 = require("../app");
+var debug = require("debug");
+debug('yuedun_ts:server');
+var http = require("http");
 var port = normalizePort(process.env.PORT || '3000');
 app_1.app.set('port', port);
 var server = http.createServer(app_1.app);
@@ -46,4 +49,3 @@ function onListening() {
         : 'port ' + addr.port;
     debug('Listening on ' + bind);
 }
-//# sourceMappingURL=www.js.map

@@ -1,5 +1,7 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var qiniu = require('qiniu');
-const settings = require("../settings");
+var settings = require("../settings");
 var secret_key = settings.qiniuKey;
 qiniu.conf.ACCESS_KEY = secret_key.accessKey;
 qiniu.conf.SECRET_KEY = secret_key.secretKey;
@@ -35,4 +37,3 @@ exports.uploadFile = function (localFile, key, uptoken) {
         }
     });
 };
-//# sourceMappingURL=qiniu.js.map

@@ -1,11 +1,12 @@
 'use strict';
 import * as moment from 'moment';
+import {Request, Response} from 'express';
 import {default as ViewerLogModel}from '../models/ViewerLog';
 
 /**
  * params req 路由的request参数
  */
-export default function (req) {
+export default function (req: Request) {
     var ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     var realIp = req.headers['x-forwarded-for'];
     if (req.headers['referer'] && req.headers['user-agent']) {

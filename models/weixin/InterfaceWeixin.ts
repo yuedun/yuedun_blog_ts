@@ -2,12 +2,13 @@
  * Created by huopanpan on 2014/10/10.
  */
 import * as crypto from 'crypto';
+import { Request, Response } from 'express';
 /**
  * 验证token
  * @param req
  * @param res
  */
-function validateToken(req, res) {
+function validateToken(req: Request, res: Response) {
     var query = req.query;
     var signature = query.signature;//微信服务器加密字符串
     var echostr = query.echostr;//随机字符串
@@ -35,7 +36,7 @@ function validateToken(req, res) {
  * @param str
  * @returns {*}
  */
-function sha1(str) {
+function sha1(str:string) {
     var md5sum = crypto.createHash('sha1');
     md5sum.update(str);
     str = md5sum.digest('hex');

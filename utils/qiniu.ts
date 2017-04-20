@@ -2,7 +2,7 @@
  * Created by huopanpan on 2014/10/22.
  */
 var qiniu = require('qiniu');
-import settings = require('../settings');
+import * as settings from '../settings';
 var secret_key = settings.qiniuKey;
 
 // @gist init
@@ -25,7 +25,7 @@ export var uptoken = function (bucketName: string, callbackUrl?: string, callbac
 // @endgist
 
 // @gist downloadUrl
-export var downloadUrl = function (domain, key) {
+export var downloadUrl = function (domain: string, key: string) {
     var baseUrl = qiniu.rs.makeBaseUrl(domain, key);
     var policy = new qiniu.rs.GetPolicy();
     return policy.makeRequest(baseUrl);
@@ -33,14 +33,14 @@ export var downloadUrl = function (domain, key) {
 /**
  * 服务端上传时使用
  */
-export var uploadBuf = function (body, key, uptoken) {
+export var uploadBuf = function (body: any, key: string, uptoken: string) {
     var extra = new qiniu.io.PutExtra();
     //extra.params = params;
     //extra.mimeType = mimeType;
     //extra.crc32 = crc32;
     //extra.checkCrc = checkCrc;
 
-    qiniu.io.put(uptoken, key, body, extra, function (err, ret) {
+    qiniu.io.put(uptoken, key, body, extra, function (err: any, ret: any) {
         if (!err) {
             // 上传成功， 处理返回值
             console.log(ret.key, ret.hash);
@@ -58,14 +58,14 @@ export var uploadBuf = function (body, key, uptoken) {
  * @param key
  * @param uptoken
  */
-export var uploadFile = function (localFile, key, uptoken) {
+export var uploadFile = function (localFile: string, key: string, uptoken: string) {
     var extra = new qiniu.io.PutExtra();
     //extra.params = params;
     //extra.mimeType = mimeType;
     //extra.crc32 = crc32;
     //extra.checkCrc = checkCrc;
 
-    qiniu.io.putFile(uptoken, key, localFile, extra, function (err, ret) {
+    qiniu.io.putFile(uptoken, key, localFile, extra, function (err: any, ret: any) {
         if (!err) {
             // 上传成功， 处理返回值
             console.log(ret.key, ret.hash);

@@ -1,6 +1,7 @@
-var mongoose = require('mongoose');
+"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.default = mongoose.model('WeatherUser', {
+var mongoose_1 = require("mongoose");
+exports.WeatherUserSchema = new mongoose_1.Schema({
     username: String,
     mobile: String,
     city: String,
@@ -9,4 +10,5 @@ exports.default = mongoose.model('WeatherUser', {
     sendCount: Number,
     status: Number,
 });
-//# sourceMappingURL=WeatherUser.js.map
+var WeatherUserModel = mongoose_1.model('WeatherUser', exports.WeatherUserSchema);
+exports.default = WeatherUserModel;

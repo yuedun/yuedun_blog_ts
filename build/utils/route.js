@@ -1,6 +1,8 @@
-const cover_1 = require("./cover");
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+var cover_1 = require("./cover");
 function route(config) {
-    return (target, name) => {
+    return function (target, name) {
         cover_1.default.__DecoratedRouters.push([{
                 path: config.path,
                 method: config.method
@@ -9,7 +11,7 @@ function route(config) {
 }
 exports.route = route;
 function adminRoute(config) {
-    return (target, name) => {
+    return function (target, name) {
         cover_1.default.__DecoratedRouters.push([{
                 path: "/admin" + config.path,
                 method: config.method
@@ -17,4 +19,3 @@ function adminRoute(config) {
     };
 }
 exports.adminRoute = adminRoute;
-//# sourceMappingURL=route.js.map
