@@ -1,21 +1,24 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var cover_1 = require("./cover");
-function route(config) {
-    var method = config.method ? config.method : "get";
+var route_register_1 = require("./route-register");
+function route(_a) {
+    var path = _a.path, _b = _a.method, method = _b === void 0 ? "get" : _b;
+    console.log(route_register_1.default);
     return function (target, name) {
-        cover_1.default.__DecoratedRouters.push([{
-                path: config.path,
+        route_register_1.default.__DecoratedRouters.push([{
+                path: path,
                 method: method
             }, target[name]]);
     };
 }
 exports.route = route;
-function adminRoute(config) {
+function adminRoute(_a) {
+    var path = _a.path, _b = _a.method, method = _b === void 0 ? "get" : _b;
+    console.log(route_register_1.default);
     return function (target, name) {
-        cover_1.default.__DecoratedRouters.push([{
-                path: "/admin" + config.path,
-                method: config.method
+        route_register_1.default.__DecoratedRouters.push([{
+                path: "/admin" + path,
+                method: method
             }, target[name]]);
     };
 }
