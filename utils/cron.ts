@@ -3,6 +3,7 @@ import * as async from 'async';
 import * as _ from 'lodash';
 import * as schedule from "node-schedule";
 import * as http from 'http';
+import * as Moment from 'moment';
 import * as settings from '../settings';
 import * as connection from '../models/connection';
 import * as sms from './sms';
@@ -76,7 +77,7 @@ function sendSms(weatherObjs: any, umObjs: any, callback: Function) {
 var ReqCron = function () {
     this.m_rule = [1, 11, 21, 31, 41, 51];
     this.cron = function () {
-        console.log("请求定时任务启动")
+        console.log("请求定时任务启动", Moment().format("YYYY-MM-DD HH:mm:ss"))
         var myReq = http.request(settings.host, function (result) {
             console.log('request yuedun');
         });

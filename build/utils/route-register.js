@@ -3,12 +3,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
 var Path = require("path");
 var IO = require("./Io");
-require('../routes/admin-router');
-require('../routes/article-router');
-require('../routes/duoshuo');
-require('../routes/message');
 var router = express.Router();
-var cwd = process.cwd;
+var cwd = process.cwd();
 var RouteRegister = (function () {
     function RouteRegister(app, module) {
         this.jsExtRegex = /\.js$/;
@@ -23,7 +19,7 @@ var RouteRegister = (function () {
                 .replace(/\\/g, '/')
                 .replace(this.jsExtRegex, '');
             var RouteClass = apiModule.default;
-            if (RouteClass && RouteClass.__DecoratedRouters) {
+            if (RouteClass && RouteRegister.__DecoratedRouters.length > 0) {
                 this.registerRouters();
             }
         }
@@ -39,6 +35,8 @@ var RouteRegister = (function () {
             _loop_1(config, controller);
         }
         this.app.use(this.router);
+    };
+    RouteRegister.prototype.attach = function () {
     };
     return RouteRegister;
 }());

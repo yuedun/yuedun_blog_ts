@@ -4,6 +4,7 @@ var async = require("async");
 var _ = require("lodash");
 var schedule = require("node-schedule");
 var http = require("http");
+var Moment = require("moment");
 var settings = require("../settings");
 var connection = require("../models/connection");
 var sms = require("./sms");
@@ -70,7 +71,7 @@ function sendSms(weatherObjs, umObjs, callback) {
 var ReqCron = function () {
     this.m_rule = [1, 11, 21, 31, 41, 51];
     this.cron = function () {
-        console.log("请求定时任务启动");
+        console.log("请求定时任务启动", Moment().format("YYYY-MM-DD HH:mm:ss"));
         var myReq = http.request(settings.host, function (result) {
             console.log('request yuedun');
         });

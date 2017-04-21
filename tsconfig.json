@@ -10,6 +10,8 @@
         "pretty": true,
         "noEmitOnError": true, //ts文件错误时不生成js
         "outDir": "./build", //编译文件输出目录
+        // "inlineSources":true, //将代码与sourcemaps生成到一个文件中(编译后的js文件)，要求同时设置了--inlineSourceMap或--sourceMap属性
+        // "inlineSourceMap":true
         "sourceMap": true //是否生成.map文件，用于ts debug调试
     },
     "include": [
@@ -17,5 +19,6 @@
     ],
     "exclude": [
         // 默认排除node_modules
+        "settings-sample.ts"
     ]    
 }

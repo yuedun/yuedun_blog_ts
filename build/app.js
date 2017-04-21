@@ -47,7 +47,6 @@ app.use('/*', function (req, res, next) {
     }
     next();
 });
-routeRegister.registerRouters();
 app.use('/admin', function (req, res, next) {
     if (req.cookies['autologin']) {
         next();

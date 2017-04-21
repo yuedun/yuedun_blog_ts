@@ -1,5 +1,4 @@
-
-import { default as RouteRegister } from './route-register'
+import RouteRegister from './route-register'
 
 interface routeParam {
   path: string,
@@ -9,8 +8,6 @@ interface routeParam {
  * 用户界面路由
  */
 export function route({ path, method = "get" }: routeParam) {
-  console.log(RouteRegister);
-
   return (target: any, name: string) => {
     RouteRegister.__DecoratedRouters.push([{
       path: path,
@@ -23,7 +20,6 @@ export function route({ path, method = "get" }: routeParam) {
  * admin路由
  */
 export function adminRoute({ path, method = "get" }: routeParam) {
-  console.log(RouteRegister);
   return (target: any, name: string) => {
     RouteRegister.__DecoratedRouters.push([{
       path: "/admin" + path,

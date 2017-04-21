@@ -4,13 +4,9 @@ import { Express, Router } from 'express';
 import * as Fs from 'fs';
 import * as Path from 'path';
 import * as IO from './Io';
-require('../routes/admin-router');//此处require只是为了让代码执行
-require('../routes/article-router');
-require('../routes/duoshuo');
-require('../routes/message');
 
 const router = express.Router();
-const cwd = process.cwd;
+const cwd = process.cwd();
 
 export default class RouteRegister {
     static __DecoratedRouters: Array<[{path: string, method: string}, Function | Function[]]> = [];
@@ -30,18 +26,22 @@ export default class RouteRegister {
                 .replace(this.jsExtRegex, '');
 
             var RouteClass = apiModule.default;
-
-            if (RouteClass && RouteClass.__DecoratedRouters) {
-                this.registerRouters();
+            
+            if (RouteClass && RouteRegister.__DecoratedRouters.length > 0) {
+                this.registerRouters()
+                //new RouteRegister类的时候就执行
             }
         }
     }
-
+    // TODO 实现自动路由，不需要再指定path参数，直接根据函数名来生成路由
     registerRouters() {
         for (let [config, controller] of RouteRegister.__DecoratedRouters) {
             let controllers = Array.isArray(controller) ? controller : [controller]
             controllers.forEach((controller) => this.router[config.method](config.path, controller))
         }
         this.app.use(this.router)
+    }
+    private attach(){
+        
     }
 }

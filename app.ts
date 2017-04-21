@@ -16,7 +16,7 @@ import * as settins from './settings';
 var mongodb = settins.mongodb;
 (require('./utils/cron'))();//定时任务
 import { default as pvLog } from './utils/viewerLog';//访问日志
-import { default as RouteRegister } from './utils/route-register';
+import RouteRegister from './utils/route-register';
 var app = express();
 const routeRegister = new RouteRegister(app, "routes");
 var store = new MongoStore({
@@ -55,7 +55,7 @@ app.use('/*', function (req, res, next) {
     next();
 });
 
-routeRegister.registerRouters();
+// routeRegister.registerRouters();
 
 /**
  * 后台动态显示用户登录状态
@@ -78,7 +78,6 @@ app.use('/admin', function (req, res, next) {
         next();
     }
 });
-// app.use('/admin', admin);//添加路由-后台登陆-添加博客
 // catch 404 and forward to error handler
 // this middleware will be executed for every request to the app
 //加next每个请求都会经过，不加next所有请求不会通过，没有交给下一个路由

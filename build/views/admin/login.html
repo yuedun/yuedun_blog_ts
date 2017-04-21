@@ -1,26 +1,24 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
+
 <head>
     <title>Admin Login</title>
     <link href="/stylesheets/bootstrap.min.css" rel="stylesheet" media="screen">
-    <link href="/stylesheets/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
     <link href="/assets/styles.css" rel="stylesheet" media="screen">
-    <script src="/vendors/jquery-1.9.1.min.js"></script>
-    <script src="/vendors/modernizr-2.6.2-respond-1.1.0.min.js"></script>
 </head>
+
 <body id="login">
-<div class="container">
-
-    <form action="/admin/doLogin" method="post" class="form-signin">
-        <h2 class="form-signin-heading">Please sign in</h2>
-        <input type="text" name="username" class="input-block-level" placeholder="Username" autofocus="autofocus">
-        <input type="password" name="password" class="input-block-level" placeholder="Password">
-        <label class="checkbox">
-            <input type="checkbox" name="remeber"> Remember me
-        </label>
-        <button class="btn btn-large btn-primary" type="submit">Sign in</button>
-    </form>
-
-</div>
+    <div class="container">
+        <form action="/admin/doLogin" method="post" class="form-signin">
+            <h2 class="form-signin-heading">Please sign in</h2>
+            <input type="text" name="username" class="input-block-level" placeholder="Username" autofocus="autofocus">
+            <input type="password" name="password" class="input-block-level" placeholder="Password">
+            <label class="checkbox">
+                <input type="checkbox" name="remeber"> Remember me
+            </label>
+            <button class="btn btn-large btn-primary" type="submit">Sign in</button>
+        </form>
+    </div>
 </body>
+
 </html>
