@@ -22,7 +22,6 @@ import * as message from './routes/message';//发送短信
 import { default as pvLog } from './utils/viewerLog';//访问日志
 import Cover from './utils/cover';
 var app = express();
-console.log(">>>>>>>>>>")
 const cover = new Cover(app);
 var store = new MongoStore({
     // //    url:"mongodb://"+mongodb.uid+":"+mongodb.pwd+"@"+mongodb.host+":"+mongodb.port+"/"+mongodb.db,

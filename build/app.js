@@ -19,6 +19,7 @@ var viewerLog_1 = require("./utils/viewerLog");
 var cover_1 = require("./utils/cover");
 var app = express();
 exports.app = app;
+console.log(">>>>>>>>>>");
 var cover = new cover_1.default(app);
 var store = new MongoStore({
     mongooseConnection: connection.mongoose.connection
