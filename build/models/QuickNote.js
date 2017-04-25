@@ -8,4 +8,3 @@ var QuickNoteSchema = new mongoose_1.Schema({
 });
 var QuickNoteModel = mongoose_1.model('QuickNote', QuickNoteSchema);
 exports.default = QuickNoteModel;
-//# sourceMappingURL=QuickNote.js.map

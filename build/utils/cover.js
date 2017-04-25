@@ -23,4 +23,3 @@ var Cover = (function () {
 }());
 Cover.__DecoratedRouters = [];
 exports.default = Cover;
-//# sourceMappingURL=cover.js.map

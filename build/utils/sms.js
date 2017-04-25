@@ -46,4 +46,3 @@ exports.sendSMS = function (mobiles, text, callback) {
     myReq.write(postData);
     myReq.end();
 };
-//# sourceMappingURL=sms.js.map

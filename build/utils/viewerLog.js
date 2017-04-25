@@ -27,4 +27,3 @@ function default_1(req) {
     }
 }
 exports.default = default_1;
-//# sourceMappingURL=viewerLog.js.map

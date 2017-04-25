@@ -20,4 +20,3 @@ function adminRoute(config) {
     };
 }
 exports.adminRoute = adminRoute;
-//# sourceMappingURL=route.js.map

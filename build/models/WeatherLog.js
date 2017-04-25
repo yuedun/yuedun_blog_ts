@@ -13,4 +13,3 @@ var WeatherLogSchema = new mongoose_1.Schema({
 });
 var WeatherLogModel = mongoose_1.model('WeatherLog', WeatherLogSchema);
 exports.default = WeatherLogModel;
-//# sourceMappingURL=WeatherLog.js.map

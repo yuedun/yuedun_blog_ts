@@ -37,4 +37,3 @@ exports.uploadFile = function (localFile, key, uptoken) {
         }
     });
 };
-//# sourceMappingURL=qiniu.js.map

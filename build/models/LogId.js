@@ -5,4 +5,3 @@ exports.default = mongoose.model('LogId', {
     updateAt: Date,
     lastLogId: Number
 });
-//# sourceMappingURL=LogId.js.map

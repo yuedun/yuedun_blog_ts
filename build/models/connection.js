@@ -33,4 +33,3 @@ function getConnect() {
     }
 }
 exports.getConnect = getConnect;
-//# sourceMappingURL=connection.js.map

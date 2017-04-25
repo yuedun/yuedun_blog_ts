@@ -145,4 +145,3 @@ function check_signature(req, secret) {
     }
     return true;
 }
-//# sourceMappingURL=duoshuo.js.map

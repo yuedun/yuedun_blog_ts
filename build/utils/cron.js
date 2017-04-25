@@ -93,4 +93,3 @@ module.exports = function () {
         schedule.scheduleJob(rule, cronObj.cron);
     });
 };
-//# sourceMappingURL=cron.js.map

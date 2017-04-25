@@ -43,4 +43,3 @@ __decorate([
     })
 ], Routes, "home", null);
 exports.Routes = Routes;
-//# sourceMappingURL=index.js.map
