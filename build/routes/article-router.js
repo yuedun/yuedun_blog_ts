@@ -8,8 +8,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 var Promise = require("bluebird");
 var moment = require("moment");
-var Blog_1 = require("../models/Blog");
-var QuickNote_1 = require("../models/QuickNote");
+var blog_model_1 = require("../models/blog-model");
+var quick_note_model_1 = require("../models/quick-note-model");
 var Markdown = require("markdown-it");
 var md = Markdown();
 var route_1 = require("../utils/route");
@@ -33,7 +33,7 @@ var Routes = (function () {
         }
         Promise.all([
             new Promise(function (resolve, reject) {
-                Blog_1.default.find(condition, null, {
+                blog_model_1.default.find(condition, null, {
                     sort: { '_id': -1 },
                     skip: pageIndex * pageSize,
                     limit: pageSize
@@ -54,7 +54,7 @@ var Routes = (function () {
             latestTop(),
             visitedTop(),
             new Promise(function (resolve, reject) {
-                Blog_1.default.count(condition, function (err, count) {
+                blog_model_1.default.count(condition, function (err, count) {
                     resolve(count);
                 });
             })
@@ -84,7 +84,7 @@ var Routes = (function () {
             var blogId = req.params.id;
             var visitor = ip + blogId;
             if (req.cookies[visitor + blogId]) {
-                Blog_1.default.findById(req.params.id, function (err, doc) {
+                blog_model_1.default.findById(req.params.id, function (err, doc) {
                     if (err)
                         res.send(err.message);
                     if (doc.ismd) {
@@ -99,7 +99,7 @@ var Routes = (function () {
                 });
             }
             else {
-                Blog_1.default.findByIdAndUpdate(req.params.id, {
+                blog_model_1.default.findByIdAndUpdate(req.params.id, {
                     $inc: { pv: 1 }
                 }, function (err, doc) {
                     if (err)
@@ -122,7 +122,7 @@ var Routes = (function () {
     Routes.catalog = function (req, res) {
         Promise.all([
             new Promise(function (resolve, reject) {
-                Blog_1.default.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err, list) {
+                blog_model_1.default.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err, list) {
                     resolve(list);
                 });
             }),
@@ -142,7 +142,7 @@ var Routes = (function () {
     Routes.weibo = function (req, res) {
         Promise.all([
             new Promise(function (resolve, reject) {
-                Blog_1.default.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err, list) {
+                blog_model_1.default.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err, list) {
                     resolve(list);
                 });
             }),
@@ -161,7 +161,7 @@ var Routes = (function () {
     Routes.about = function (req, res) {
         Promise.all([
             new Promise(function (resolve, reject) {
-                Blog_1.default.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err, list) {
+                blog_model_1.default.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err, list) {
                     resolve(list);
                 });
             }),
@@ -178,7 +178,15 @@ var Routes = (function () {
     };
     ;
     Routes.gallery = function (req, res) {
-        res.render("gallery", {});
+        if (req.query.pass === settings.gallery_pass) {
+            res.render("gallery", settings.LEACLOUD);
+        }
+        else {
+            res.render('error', {
+                message: "您无权限访问！",
+                error: {}
+            });
+        }
     };
     ;
     Routes.resume = function (req, res) {
@@ -189,14 +197,14 @@ var Routes = (function () {
     Routes.quicknote = function (req, res) {
         Promise.all([
             new Promise(function (resolve, reject) {
-                Blog_1.default.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err, list) {
+                blog_model_1.default.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err, list) {
                     resolve(list);
                 });
             }),
             latestTop(),
             visitedTop(),
             new Promise(function (resolve, reject) {
-                QuickNote_1.default.find(null, null, {
+                quick_note_model_1.default.find(null, null, {
                     sort: { '_id': -1 }
                 }, function (err, docs) {
                     resolve(docs);
@@ -267,7 +275,7 @@ exports.default = Routes;
 var latestTop = function () {
     return new Promise(function (resolve, reject) {
         var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
-        Blog_1.default.find({ 'status': 1, createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }, function (err, docs2) {
+        blog_model_1.default.find({ 'status': 1, createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }, function (err, docs2) {
             if (err)
                 reject(err.message);
             resolve(docs2);
@@ -276,7 +284,7 @@ var latestTop = function () {
 };
 var visitedTop = function () {
     return new Promise(function (resolve, reject) {
-        Blog_1.default.find({ 'status': 1 }, null, { sort: { 'pv': -1 }, limit: 5 }, function (err, docs3) {
+        blog_model_1.default.find({ 'status': 1 }, null, { sort: { 'pv': -1 }, limit: 5 }, function (err, docs3) {
             if (err)
                 reject(err.message);
             resolve(docs3);

@@ -15,6 +15,11 @@ exports.SMS_ACCOUNT = {
     code: 963852
 };
 exports.weather_key = "EXVLZHVUMTQ3NDYXNZE2NTY0NG==";
+exports.gallery_pass = "mylovehfl";
+exports.LEACLOUD = {
+    appId: '2as2m7q6c17qe0wjp2eq168ijkdta9dneqd9q0q7dgt9entq',
+    appKey: 'espjiug7ma0e79q0zsyx70278kjr8my6k7ucm74wswg4y62b'
+};
 exports.host = "http://yuedun.duapp.com";
 exports.blog_config = {
     nickname: '月盾',

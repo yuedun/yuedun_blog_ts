@@ -1,7 +1,7 @@
 'use strict';
 import * as moment from 'moment';
 import {Request, Response} from 'express';
-import {default as ViewerLogModel}from '../models/ViewerLog';
+import {default as ViewerLogModel}from '../models/viewer-log-model';
 
 /**
  * params req 路由的request参数

@@ -14,7 +14,7 @@ var moment = require('moment');
 var nodemailer = require('nodemailer');
 var router = express.Router();
 var LogId_1 = require("../models/LogId");
-var Blog_1 = require("../models/Blog");
+var blog_model_1 = require("../models/blog-model");
 var route_1 = require("../utils/route");
 var secret = '82a854439cab3a11b334ae4c60558a78';
 var short_name = 'hopefully';
@@ -46,7 +46,7 @@ var Routes = (function () {
                     if (comObj.action === 'create') {
                         async.waterfall([
                             function (callback) {
-                                Blog_1.default.update({ _id: comObj.meta.thread_key }, { $inc: { commentCount: 1 } }, { upsert: true }, function (err, obj) {
+                                blog_model_1.default.update({ _id: comObj.meta.thread_key }, { $inc: { commentCount: 1 } }, { upsert: true }, function (err, obj) {
                                     callback(err, comObj);
                                 });
                             },

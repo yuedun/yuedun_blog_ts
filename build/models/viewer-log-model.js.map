@@ -1,0 +1,1 @@
+{"version":3,"file":"viewer-log-model.js","sourceRoot":"","sources":["../../models/viewer-log-model.ts"],"names":[],"mappings":";;AAGA,qCAAwD;AAExD,IAAI,eAAe,GAAW,IAAI,iBAAM,CAAC;IACrC,EAAE,EAAE,MAAM;IACV,GAAG,EAAE,MAAM;IACX,OAAO,EAAE,MAAM;IACf,SAAS,EAAE,MAAM;IACjB,SAAS,EAAE,MAAM;CACpB,CAAC,CAAC;AASH,IAAI,cAAc,GAAsB,gBAAK,CAAa,WAAW,EAAE,eAAe,CAAC,CAAC;AAExF,kBAAe,cAAc,CAAC"}

@@ -8,4 +8,4 @@ exports.CategorySchema = new mongoose_1.Schema({
 });
 var CategoryModel = mongoose_1.model('Category', exports.CategorySchema);
 exports.default = CategoryModel;
-//# sourceMappingURL=Category.js.map
+//# sourceMappingURL=category-model.js.map

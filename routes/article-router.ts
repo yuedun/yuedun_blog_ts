@@ -2,8 +2,8 @@ import * as async from 'async';
 import { Request, Response } from 'express';
 import * as Promise from 'bluebird';
 import * as moment from 'moment';
-import { default as Blog, IBlog as BlogInstance } from '../models/Blog';
-import { default as QuickNote } from '../models/QuickNote';
+import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
+import { default as QuickNote } from '../models/quick-note-model';
 import * as Markdown from 'markdown-it';
 var md = Markdown();
 import { route } from '../utils/route';
@@ -192,7 +192,14 @@ export default class Routes {
         method: "get"
     })
     static gallery(req: Request, res: Response) {
-        res.render("gallery", {});
+        if (req.query.pass === settings.gallery_pass) {
+            res.render("gallery", settings.LEACLOUD);
+        } else {
+            res.render('error', {
+                message: "您无权限访问！",
+                error: {}
+            });
+        }
     };
 
     //简历

@@ -3,7 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var http = require("http");
 var moment = require("moment");
 var querystring = require("querystring");
-var WeatherLog_1 = require("../models/WeatherLog");
+var weather_log_model_1 = require("../models/weather-log-model");
 var settings = require("../settings");
 var SMS_ACCOUNT = settings.SMS_ACCOUNT;
 exports.sendSMS = function (mobiles, text, callback) {
@@ -29,7 +29,7 @@ exports.sendSMS = function (mobiles, text, callback) {
         result.on('data', function (chunk) {
             resStr += chunk;
         }).on("end", function () {
-            var weathLog = new WeatherLog_1.default({
+            var weathLog = new weather_log_model_1.default({
                 mobiles: mobiles,
                 weather: text,
                 createAt: moment().format('YYYY-MM-DD HH:mm:ss'),

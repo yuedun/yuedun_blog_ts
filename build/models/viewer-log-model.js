@@ -10,4 +10,4 @@ var ViewerLogSchema = new mongoose_1.Schema({
 });
 var ViewerLogModel = mongoose_1.model('ViewerLog', ViewerLogSchema);
 exports.default = ViewerLogModel;
-//# sourceMappingURL=ViewerLog.js.map
+//# sourceMappingURL=viewer-log-model.js.map

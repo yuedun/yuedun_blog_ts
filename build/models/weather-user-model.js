@@ -12,4 +12,4 @@ exports.WeatherUserSchema = new mongoose_1.Schema({
 });
 var WeatherUserModel = mongoose_1.model('WeatherUser', exports.WeatherUserSchema);
 exports.default = WeatherUserModel;
-//# sourceMappingURL=WeatherUser.js.map
+//# sourceMappingURL=weather-user-model.js.map

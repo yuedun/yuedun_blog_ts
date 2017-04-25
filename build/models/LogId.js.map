@@ -1,1 +1,1 @@
-{"version":3,"file":"LogId.js","sourceRoot":"","sources":["../../models/LogId.ts"],"names":[],"mappings":";;AAYA,IAAI,QAAQ,GAAG,OAAO,CAAC,UAAU,CAAC,CAAC;AAEnC,kBAAe,QAAQ,CAAC,KAAK,CAAC,OAAO,EAAC;IAClC,QAAQ,EAAC,IAAI;IACb,SAAS,EAAC,MAAM;CACnB,CAAC,CAAC"}
+{"version":3,"file":"LogId.js","sourceRoot":"","sources":["../../models/LogId.ts"],"names":[],"mappings":";;AAAA,qCAA0D;AAE1D,IAAI,WAAW,GAAW,IAAI,iBAAM,CAAC;IACnC,QAAQ,EAAC,IAAI;IACb,SAAS,EAAC,MAAM;CACjB,CAAC,CAAC;AAUH,IAAI,UAAU,GAAkB,gBAAK,CAAS,OAAO,EAAE,WAAW,CAAC,CAAC;AAEpE,kBAAe,UAAU,CAAC"}

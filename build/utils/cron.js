@@ -8,7 +8,7 @@ var Moment = require("moment");
 var settings = require("../settings");
 var connection = require("../models/connection");
 var sms = require("./sms");
-var WeatherUser_1 = require("../models/WeatherUser");
+var weather_user_model_1 = require("../models/weather-user-model");
 var WeatherCron = function () {
     this.h_rule = 7;
     this.m_rule = 35;
@@ -16,7 +16,7 @@ var WeatherCron = function () {
         console.log("天气定时任务启动");
         async.waterfall([
             function (callback) {
-                WeatherUser_1.default.find({ status: 1 }, null, { sort: { _id: -1 } }, function (err, docs) {
+                weather_user_model_1.default.find({ status: 1 }, null, { sort: { _id: -1 } }, function (err, docs) {
                     callback(null, docs);
                 });
             },

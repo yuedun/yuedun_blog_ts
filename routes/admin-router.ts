@@ -3,16 +3,16 @@ import { Request, Response } from 'express';
 import * as Moment from 'moment';//日期格式化组件
 import * as Async from 'async';
 import * as Promise from 'bluebird';
-import { default as User } from '../models/User';
-import { default as Blog, IBlog as BlogInstance } from '../models/Blog';
-import { default as QuickNote } from '../models/QuickNote';
-import { default as Category, ICategory as CategoryInstance } from '../models/Category';
-import { default as WeatherUser } from '../models/WeatherUser';
+import { default as User } from '../models/user-model';
+import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
+import { default as QuickNote } from '../models/quick-note-model';
+import { default as Category, ICategory as CategoryInstance } from '../models/category-model';
+import { default as WeatherUser } from '../models/weather-user-model';
 import * as qiniu from '../utils/qiniu';
 import * as Markdown from 'markdown-it';
 var md = Markdown();
 var area = require('../area');
-import { default as PvModel } from '../models/ViewerLog';
+import { default as PvModel } from '../models/viewer-log-model';
 import { adminRoute as route } from '../utils/route';
 
 export default class Routes {

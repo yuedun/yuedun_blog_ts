@@ -10,16 +10,16 @@ var _ = require("lodash");
 var Moment = require("moment");
 var Async = require("async");
 var Promise = require("bluebird");
-var User_1 = require("../models/User");
-var Blog_1 = require("../models/Blog");
-var QuickNote_1 = require("../models/QuickNote");
-var Category_1 = require("../models/Category");
-var WeatherUser_1 = require("../models/WeatherUser");
+var user_model_1 = require("../models/user-model");
+var blog_model_1 = require("../models/blog-model");
+var quick_note_model_1 = require("../models/quick-note-model");
+var category_model_1 = require("../models/category-model");
+var weather_user_model_1 = require("../models/weather-user-model");
 var qiniu = require("../utils/qiniu");
 var Markdown = require("markdown-it");
 var md = Markdown();
 var area = require('../area');
-var ViewerLog_1 = require("../models/ViewerLog");
+var viewer_log_model_1 = require("../models/viewer-log-model");
 var route_1 = require("../utils/route");
 var Routes = (function () {
     function Routes() {
@@ -34,7 +34,7 @@ var Routes = (function () {
             username: object.username,
             password: object.password
         };
-        User_1.default.findOne(user, function (err, obj) {
+        user_model_1.default.findOne(user, function (err, obj) {
             if (obj || process.env.NODE_ENV === 'development') {
                 req.session.user = user;
                 if (object.remeber) {
@@ -60,7 +60,7 @@ var Routes = (function () {
     };
     Routes.newArticleUi = function (req, res) {
         var token = qiniu.uptoken('hopefully');
-        Category_1.default.find({}, function (err, docs) {
+        category_model_1.default.find({}, function (err, docs) {
             if (err)
                 res.send(err.message);
             res.render('admin/newarticle', { success: 0, categories: docs, token: token });
@@ -68,7 +68,7 @@ var Routes = (function () {
     };
     Routes.newArticle = function (req, res) {
         var content = req.body.content;
-        var blog = new Blog_1.default({
+        var blog = new blog_model_1.default({
             title: req.body.title,
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss'),
             content: content,
@@ -81,7 +81,7 @@ var Routes = (function () {
             pv: 0,
             ismd: req.body.ismd
         });
-        Category_1.default.findOne({ cateName: req.body.category }, function (err, doc) {
+        category_model_1.default.findOne({ cateName: req.body.category }, function (err, doc) {
             if (doc) {
                 blog.save(function (e, docs, numberAffected) {
                     if (e)
@@ -90,7 +90,7 @@ var Routes = (function () {
                 });
             }
             else {
-                var category = new Category_1.default({
+                var category = new category_model_1.default({
                     cateName: req.body.category,
                     state: true,
                     createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
@@ -110,7 +110,7 @@ var Routes = (function () {
     };
     Routes.newArticleMd = function (req, res) {
         var token = qiniu.uptoken('hopefully');
-        Category_1.default.find({}, function (err, docs) {
+        category_model_1.default.find({}, function (err, docs) {
             if (err)
                 res.send(err.message);
             res.render('admin/newarticlemd', { success: 0, categories: docs, token: token });
@@ -123,7 +123,7 @@ var Routes = (function () {
         var pageSize = 10;
         pageIndex = req.query.pageIndex ? req.query.pageIndex : pageIndex;
         pageSize = req.query.pageSize ? req.query.pageSize : pageSize;
-        Blog_1.default.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize }, function (err, docs) {
+        blog_model_1.default.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize }, function (err, docs) {
             if (err) {
                 res.send(err.message);
                 return;
@@ -144,7 +144,7 @@ var Routes = (function () {
     };
     Routes.blogDetail = function (req, res) {
         var user = req.session.user;
-        Blog_1.default.findById(req.params.id, function (err, doc) {
+        blog_model_1.default.findById(req.params.id, function (err, doc) {
             if (err)
                 res.send(err.message);
             if (doc.ismd) {
@@ -155,21 +155,21 @@ var Routes = (function () {
     };
     Routes.deleteBlog = function (req, res) {
         var user = req.session.user;
-        Blog_1.default.findByIdAndRemove(req.params.id, function (err) {
+        blog_model_1.default.findByIdAndRemove(req.params.id, function (err) {
             res.redirect('/admin/blogList');
         });
     };
     Routes.toEditArticle = function (req, res) {
         var token = qiniu.uptoken('hopefully');
         var getBlogById = new Promise(function (resolve, reject) {
-            Blog_1.default.findById(req.params.id, function (err, doc) {
+            blog_model_1.default.findById(req.params.id, function (err, doc) {
                 if (err)
                     reject(err);
                 resolve(doc);
             });
         });
         var getCategory = new Promise(function (resolve, reject) {
-            Category_1.default.find({}, function (err, docs) {
+            category_model_1.default.find({}, function (err, docs) {
                 if (err)
                     reject(err);
                 resolve(docs);
@@ -188,7 +188,7 @@ var Routes = (function () {
     };
     Routes.editArticle = function (req, res) {
         var content = req.body.content;
-        Blog_1.default.findByIdAndUpdate(req.params.id, {
+        blog_model_1.default.findByIdAndUpdate(req.params.id, {
             $set: {
                 title: req.body.title,
                 content: content,
@@ -204,14 +204,14 @@ var Routes = (function () {
         });
     };
     Routes.category = function (req, res) {
-        Category_1.default.find({}, function (err, docs) {
+        category_model_1.default.find({}, function (err, docs) {
             if (err)
                 res.send(err.message);
             res.render('admin/category', { user: req.session.user, cates: docs });
         });
     };
     Routes.addCategory = function (req, res) {
-        var category = new Category_1.default();
+        var category = new category_model_1.default();
         category.cateName = req.body.cateName;
         category.state = true;
         category.createDate = Moment().format('YYYY-MM-DD HH:mm:ss');
@@ -223,7 +223,7 @@ var Routes = (function () {
     };
     Routes.deleteCate = function (req, res) {
         var user = req.session.user;
-        Category_1.default.findByIdAndRemove(req.params.id, function (err) {
+        category_model_1.default.findByIdAndRemove(req.params.id, function (err) {
             res.redirect('/admin/category');
         });
     };
@@ -232,7 +232,7 @@ var Routes = (function () {
     };
     Routes.addUser = function (req, res) {
         var password = req.body.password;
-        var user = new User_1.default({
+        var user = new user_model_1.default({
             username: req.body.username,
             nickname: req.body.nickname,
             password: password,
@@ -247,14 +247,14 @@ var Routes = (function () {
         });
     };
     Routes.viewUser = function (req, res) {
-        User_1.default.find({}, null, function (err, docs) {
+        user_model_1.default.find({}, null, function (err, docs) {
             if (err)
                 res.send(err.message);
             res.render('admin/viewuser', { users: docs, user: req.session.user });
         });
     };
     Routes.toModifyUser = function (req, res) {
-        User_1.default.findById(req.params.userId, function (err, doc) {
+        user_model_1.default.findById(req.params.userId, function (err, doc) {
             if (err)
                 res.send(err.message);
             res.render('admin/modifyuser', {
@@ -265,7 +265,7 @@ var Routes = (function () {
         });
     };
     Routes.modifyUser = function (req, res) {
-        User_1.default.findByIdAndUpdate(req.params.userId, {
+        user_model_1.default.findByIdAndUpdate(req.params.userId, {
             $set: {
                 username: req.body.username,
                 nickname: req.body.nickname,
@@ -279,7 +279,7 @@ var Routes = (function () {
         });
     };
     Routes.deleteUser = function (req, res) {
-        User_1.default.remove({ _id: req.params.userId }, function (err) {
+        user_model_1.default.remove({ _id: req.params.userId }, function (err) {
             res.redirect('/admin/viewUser');
         });
     };
@@ -297,7 +297,7 @@ var Routes = (function () {
     Routes.addWeatherUser = function (req, res) {
         var args = req.body;
         var areaId = _.result(_.find(area, { 'NAMECN': args.city }), 'AREAID');
-        var weathUser = new WeatherUser_1.default({
+        var weathUser = new weather_user_model_1.default({
             username: args.username,
             mobile: args.mobile,
             city: args.city,
@@ -313,19 +313,19 @@ var Routes = (function () {
         });
     };
     Routes.weatherUserList = function (req, res) {
-        WeatherUser_1.default.find({}, null, function (err, docs) {
+        weather_user_model_1.default.find({}, null, function (err, docs) {
             if (err)
                 res.send(err.message);
             res.render('admin/weatherUser', { wusers: docs, user: req.session.user });
         });
     };
     Routes.delWeatherUser = function (req, res) {
-        WeatherUser_1.default.remove({ _id: req.params.userId }, function (err) {
+        weather_user_model_1.default.remove({ _id: req.params.userId }, function (err) {
             res.redirect('/admin/weatherUserList');
         });
     };
     Routes.quicknote = function (req, res) {
-        var quicknote = new QuickNote_1.default({
+        var quicknote = new quick_note_model_1.default({
             content: req.body.content,
             state: true,
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
@@ -343,7 +343,7 @@ var Routes = (function () {
         var pageSize = 10;
         pageIndex = req.query.pageIndex ? req.query.pageIndex : pageIndex;
         pageSize = req.query.pageSize ? req.query.pageSize : pageSize;
-        QuickNote_1.default.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize }, function (err, docs) {
+        quick_note_model_1.default.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize }, function (err, docs) {
             if (err) {
                 res.send(err.message);
                 return;
@@ -361,12 +361,12 @@ var Routes = (function () {
         var today = Moment().format('YYYY-MM-DD');
         Async.parallel([
             function (callback) {
-                Blog_1.default.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }, function (err, doc) {
+                blog_model_1.default.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }, function (err, doc) {
                     callback(err, doc[0].pvCount);
                 });
             },
             function (callback) {
-                ViewerLog_1.default.count({ createdAt: { $regex: today, $options: 'i' } }, function (err, count) {
+                viewer_log_model_1.default.count({ createdAt: { $regex: today, $options: 'i' } }, function (err, count) {
                     callback(err, count);
                 });
             }
