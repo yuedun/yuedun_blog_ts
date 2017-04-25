@@ -38,7 +38,7 @@
 		<script src="http://apps.bdimg.com/libs/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 		<script src="https://cdn1.lncld.net/static/js/av-core-mini-0.5.7.js"></script>
 		<script type="text/javascript">
-			AV.initialize("2as2m7q6c17qe0wjp2eq168ijkdta9dneqd9q0q7dgt9entq", "espjiug7ma0e79q0zsyx70278kjr8my6k7ucm74wswg4y62b");
+			AV.initialize("<%= appId%>", "<%= appKey%>");
 			var Picture = AV.Object.extend("Picture");
 			var PictureComment = AV.Object.extend("PictureComment");
 			var picQuery = new AV.Query(Picture);

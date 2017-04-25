@@ -3,21 +3,22 @@
         "module": "commonjs", //模块化规范
         "target": "es5", //生成js版本
         "noImplicitAny": false, //隐式返回any报错
-        "noImplicitReturns": true, //函数没有返回值提示
-        "noEmitOnError": true, //ts文件错误时不生成js
-        "noFallthroughCasesInSwitch": true, //switch没有break提示
+        "noImplicitReturns": false,//函数没有返回值提示
+        "noFallthroughCasesInSwitch": true,//switch没有break提示
         "experimentalDecorators": true,
         "removeComments": true, //输出文件移除注释
         "pretty": true,
-        "allowJs": true,
-        "skipDefaultLibCheck": true,
+        "noEmitOnError": true, //ts文件错误时不生成js
         "outDir": "./build", //编译文件输出目录
-        "sourceMap": false //是否生成.map文件，用于ts debug调试
+        // "inlineSources":true, //将代码与sourcemaps生成到一个文件中(编译后的js文件)，要求同时设置了--inlineSourceMap或--sourceMap属性
+        // "inlineSourceMap":true
+        "sourceMap": true //是否生成.map文件，用于ts debug调试
     },
     "include": [
         "./**/*.ts"
     ],
     "exclude": [
-        //默认排除了node_modules
+        // 默认排除node_modules
+        "settings-sample.ts"
     ]
 }

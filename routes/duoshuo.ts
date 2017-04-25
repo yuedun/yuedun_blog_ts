@@ -10,7 +10,7 @@ var moment = require('moment');
 var nodemailer = require('nodemailer');
 var router = express.Router();//获取路由变量，对其设置路径，再导出在app.js中使用app.use(blog)
 import { default as LogId } from '../models/LogId';
-import { default as Blog } from '../models/Blog';
+import { default as Blog } from '../models/blog-model';
 import { route } from '../utils/route';
 var secret = '82a854439cab3a11b334ae4c60558a78';
 var short_name = 'hopefully';

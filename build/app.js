@@ -16,11 +16,10 @@ var settins = require("./settings");
 var mongodb = settins.mongodb;
 (require('./utils/cron'))();
 var viewerLog_1 = require("./utils/viewerLog");
-var cover_1 = require("./utils/cover");
+var route_register_1 = require("./utils/route-register");
 var app = express();
 exports.app = app;
-console.log(">>>>>>>>>>");
-var cover = new cover_1.default(app);
+var routeRegister = new route_register_1.default(app, "routes");
 var store = new MongoStore({
     mongooseConnection: connection.mongoose.connection
 });
@@ -48,7 +47,6 @@ app.use('/*', function (req, res, next) {
     }
     next();
 });
-cover.registerRouters();
 app.use('/admin', function (req, res, next) {
     if (req.cookies['autologin']) {
         next();
@@ -85,3 +83,4 @@ app.use(function (err, req, res, next) {
         error: {}
     });
 });
+//# sourceMappingURL=app.js.map

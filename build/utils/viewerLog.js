@@ -1,7 +1,7 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 var moment = require("moment");
-var ViewerLog_1 = require("../models/ViewerLog");
+var viewer_log_model_1 = require("../models/viewer-log-model");
 function default_1(req) {
     var ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     var realIp = req.headers['x-forwarded-for'];
@@ -12,7 +12,7 @@ function default_1(req) {
         else {
             realIp = ip;
         }
-        var pvLogObj = new ViewerLog_1.default({
+        var pvLogObj = new viewer_log_model_1.default({
             ip: realIp,
             url: req.originalUrl,
             referer: req.headers['referer'] || '',
@@ -27,3 +27,4 @@ function default_1(req) {
     }
 }
 exports.default = default_1;
+//# sourceMappingURL=viewerLog.js.map

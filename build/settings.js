@@ -34,3 +34,4 @@ exports.qiniuKey = {
     accessKey: '6CG6fo8XjOhLV-z7g9a-RdfntNFqFEuhTMil-3vy',
     secretKey: 'NxeiNiy1DATcwu_BBrYQCb8GxVREalSHZi7hSzJ9'
 };
+//# sourceMappingURL=settings.js.map

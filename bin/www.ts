@@ -5,8 +5,8 @@
  */
 import 'source-map-support/register';
 import { app } from '../app';
-import * as debug from 'debug';
-debug('yuedun_ts:server');
+import * as Debug from 'debug';
+var debug = Debug('yuedun');
 import * as http from 'http';
 
 /**

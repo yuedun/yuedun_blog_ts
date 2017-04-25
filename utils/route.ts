@@ -1,14 +1,16 @@
+import RouteRegister from './route-register'
 
-import Cover from './cover'
-
+interface routeParam {
+  path: string,
+  method?: string
+}
 /**
  * 用户界面路由
  */
-export function route(config: { path: string, method?: string }) {
-  let method = config.method ? config.method : "get";  
+export function route({ path, method = "get" }: routeParam) {
   return (target: any, name: string) => {
-    Cover.__DecoratedRouters.push([{
-      path: config.path,
+    RouteRegister.__DecoratedRouters.push([{
+      path: path,
       method: method
     }, target[name]]);
   }
@@ -17,11 +19,11 @@ export function route(config: { path: string, method?: string }) {
 /**
  * admin路由
  */
-export function adminRoute(config: { path: string, method: string }) {
+export function adminRoute({ path, method = "get" }: routeParam) {
   return (target: any, name: string) => {
-    Cover.__DecoratedRouters.push([{
-      path: "/admin" + config.path,
-      method: config.method
+    RouteRegister.__DecoratedRouters.push([{
+      path: "/admin" + path,
+      method: method
     }, target[name]]);
   }
 }

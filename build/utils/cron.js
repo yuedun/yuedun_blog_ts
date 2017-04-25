@@ -4,10 +4,11 @@ var async = require("async");
 var _ = require("lodash");
 var schedule = require("node-schedule");
 var http = require("http");
+var Moment = require("moment");
 var settings = require("../settings");
 var connection = require("../models/connection");
 var sms = require("./sms");
-var WeatherUser_1 = require("../models/WeatherUser");
+var weather_user_model_1 = require("../models/weather-user-model");
 var WeatherCron = function () {
     this.h_rule = 7;
     this.m_rule = 35;
@@ -15,7 +16,7 @@ var WeatherCron = function () {
         console.log("天气定时任务启动");
         async.waterfall([
             function (callback) {
-                WeatherUser_1.default.find({ status: 1 }, null, { sort: { _id: -1 } }, function (err, docs) {
+                weather_user_model_1.default.find({ status: 1 }, null, { sort: { _id: -1 } }, function (err, docs) {
                     callback(null, docs);
                 });
             },
@@ -70,7 +71,7 @@ function sendSms(weatherObjs, umObjs, callback) {
 var ReqCron = function () {
     this.m_rule = [1, 11, 21, 31, 41, 51];
     this.cron = function () {
-        console.log("请求定时任务启动");
+        console.log("请求定时任务启动", Moment().format("YYYY-MM-DD HH:mm:ss"));
         var myReq = http.request(settings.host, function (result) {
             console.log('request yuedun');
         });
@@ -93,3 +94,4 @@ module.exports = function () {
         schedule.scheduleJob(rule, cronObj.cron);
     });
 };
+//# sourceMappingURL=cron.js.map

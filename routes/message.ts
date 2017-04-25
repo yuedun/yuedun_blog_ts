@@ -4,7 +4,7 @@ import * as express from 'express';
 import { Request, Response } from 'express';
 var router = express.Router;
 import * as querystring from 'querystring';
-import * as errmsg from '../utils/errorCode';
+import * as errmsg from '../utils/error-code';
 import * as sms from '../utils/sms';
 import * as settings from '../settings';
 import {route} from '../utils/route';

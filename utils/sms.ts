@@ -3,8 +3,8 @@
 import * as http from 'http';
 import * as moment from 'moment';
 import * as querystring from 'querystring';
-import { default as WeatherLog } from '../models/WeatherLog';
-import * as errmsg from '../utils/errorCode';
+import { default as WeatherLog } from '../models/weather-log-model';
+import * as errmsg from '../utils/error-code';
 import * as settings from '../settings';
 const SMS_ACCOUNT = settings.SMS_ACCOUNT;
 /**

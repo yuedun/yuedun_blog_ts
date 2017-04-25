@@ -3,10 +3,11 @@ import * as async from 'async';
 import * as _ from 'lodash';
 import * as schedule from "node-schedule";
 import * as http from 'http';
+import * as Moment from 'moment';
 import * as settings from '../settings';
 import * as connection from '../models/connection';
 import * as sms from './sms';
-import { default as WeatherUser, IWeatherUser as WeatherUserInstance } from '../models/WeatherUser';
+import { default as WeatherUser, IWeatherUser as WeatherUserInstance } from '../models/weather-user-model';
 var WeatherCron = function () {
     // this.m_rule = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59];//数字或数组
     // this.m_rule = [1, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 59];//数字或数组
@@ -76,7 +77,7 @@ function sendSms(weatherObjs: any, umObjs: any, callback: Function) {
 var ReqCron = function () {
     this.m_rule = [1, 11, 21, 31, 41, 51];
     this.cron = function () {
-        console.log("请求定时任务启动")
+        console.log("请求定时任务启动", Moment().format("YYYY-MM-DD HH:mm:ss"))
         var myReq = http.request(settings.host, function (result) {
             console.log('request yuedun');
         });
