@@ -11,6 +11,8 @@ var moment = require("moment");
 var blog_model_1 = require("../models/blog-model");
 var quick_note_model_1 = require("../models/quick-note-model");
 var Markdown = require("markdown-it");
+var Debug = require("debug");
+var debug = Debug('yuedun:article');
 var md = Markdown();
 var route_1 = require("../utils/route");
 var settings = require("../settings");
@@ -51,8 +53,8 @@ var Routes = (function () {
                     resolve(docs);
                 });
             }),
-            latestTop(),
-            visitedTop(),
+            latestTop,
+            visitedTop,
             new Promise(function (resolve, reject) {
                 blog_model_1.default.count(condition, function (err, count) {
                     resolve(count);
@@ -76,8 +78,8 @@ var Routes = (function () {
     ;
     Routes.blogDetail = function (req, res) {
         Promise.all([
-            latestTop(),
-            visitedTop()
+            latestTop,
+            visitedTop
         ]).then(function (_a) {
             var result1 = _a[0], result2 = _a[1];
             var ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
@@ -126,8 +128,8 @@ var Routes = (function () {
                     resolve(list);
                 });
             }),
-            latestTop(),
-            visitedTop()
+            latestTop,
+            visitedTop
         ]).then(function (_a) {
             var result1 = _a[0], result2 = _a[1], result3 = _a[2];
             res.render('catalog', {
@@ -146,8 +148,8 @@ var Routes = (function () {
                     resolve(list);
                 });
             }),
-            latestTop(),
-            visitedTop()
+            latestTop,
+            visitedTop
         ]).then(function (_a) {
             var result1 = _a[0], result2 = _a[1];
             res.render('weibo', {
@@ -165,8 +167,8 @@ var Routes = (function () {
                     resolve(list);
                 });
             }),
-            latestTop(),
-            visitedTop()
+            latestTop,
+            visitedTop
         ]).then(function (_a) {
             var result1 = _a[0], result2 = _a[1];
             res.render('about', {
@@ -190,7 +192,7 @@ var Routes = (function () {
     };
     ;
     Routes.resume = function (req, res) {
-        console.log("*****resume:" + moment().format("YYYY-MM-DD HH:ss:mm"));
+        debug("*****resume:" + moment().format("YYYY-MM-DD HH:ss:mm"));
         res.render("resume", {});
     };
     ;
@@ -201,8 +203,8 @@ var Routes = (function () {
                     resolve(list);
                 });
             }),
-            latestTop(),
-            visitedTop(),
+            latestTop,
+            visitedTop,
             new Promise(function (resolve, reject) {
                 quick_note_model_1.default.find(null, null, {
                     sort: { '_id': -1 }
@@ -272,23 +274,7 @@ __decorate([
     })
 ], Routes, "quicknote", null);
 exports.default = Routes;
-var latestTop = function () {
-    return new Promise(function (resolve, reject) {
-        var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
-        blog_model_1.default.find({ 'status': 1, createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }, function (err, docs2) {
-            if (err)
-                reject(err.message);
-            resolve(docs2);
-        });
-    });
-};
-var visitedTop = function () {
-    return new Promise(function (resolve, reject) {
-        blog_model_1.default.find({ 'status': 1 }, null, { sort: { 'pv': -1 }, limit: 5 }, function (err, docs3) {
-            if (err)
-                reject(err.message);
-            resolve(docs3);
-        });
-    });
-};
+var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
+var latestTop = blog_model_1.default.find({ 'status': 1, createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }).exec();
+var visitedTop = blog_model_1.default.find({ 'status': 1 }, null, { sort: { 'pv': -1 }, limit: 5 }).exec();
 //# sourceMappingURL=article-router.js.map

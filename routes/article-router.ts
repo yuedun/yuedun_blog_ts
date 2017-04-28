@@ -5,6 +5,8 @@ import * as moment from 'moment';
 import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
 import { default as QuickNote } from '../models/quick-note-model';
 import * as Markdown from 'markdown-it';
+import * as Debug from 'debug';
+var debug = Debug('yuedun:article');
 var md = Markdown();
 import { route } from '../utils/route';
 import * as settings from '../settings';
@@ -48,9 +50,9 @@ export default class Routes {
                 });
             }),
             //最新列表
-            latestTop(),
+            latestTop,
             //浏览量排行
-            visitedTop(),
+            visitedTop,
             new Promise((resolve, reject) => {
                 Blog.count(condition, function (err: any, count) {
                     resolve(count);
@@ -80,8 +82,8 @@ export default class Routes {
     })
     static blogDetail(req: Request, res: Response) {
         Promise.all([
-            latestTop(),
-            visitedTop()
+            latestTop,
+            visitedTop
         ]).then(([result1, result2]) => {
             var ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
             var blogId = req.params.id;
@@ -130,8 +132,8 @@ export default class Routes {
                     resolve(list);
                 })
             }),
-            latestTop(),
-            visitedTop()
+            latestTop,
+            visitedTop
         ]).then(([result1, result2, result3]) => {
             res.render('catalog', {
                 config: config,
@@ -153,8 +155,8 @@ export default class Routes {
                     resolve(list);
                 })
             }),
-            latestTop(),
-            visitedTop()
+            latestTop,
+            visitedTop
         ]).then(([result1, result2]) => {
             res.render('weibo', {
                 config: config,
@@ -175,8 +177,8 @@ export default class Routes {
                     resolve(list);
                 })
             }),
-            latestTop(),
-            visitedTop()
+            latestTop,
+            visitedTop
         ]).then(([result1, result2]) => {
             res.render('about', {
                 config: config,
@@ -208,7 +210,7 @@ export default class Routes {
         method: "get"
     })
     static resume(req: Request, res: Response) {
-        console.log("*****resume:" + moment().format("YYYY-MM-DD HH:ss:mm"));
+        debug("*****resume:" + moment().format("YYYY-MM-DD HH:ss:mm"));
         res.render("resume", {});
     };
 
@@ -224,8 +226,8 @@ export default class Routes {
                     resolve(list);
                 })
             }),
-            latestTop(),
-            visitedTop(),
+            latestTop,
+            visitedTop,
             new Promise((resolve, reject) => {
                 QuickNote.find(null, null, {
                     sort: { '_id': -1 }
@@ -244,21 +246,8 @@ export default class Routes {
     };
 }
 //最近新建
-var latestTop = function () {
-    return new Promise((resolve, reject) => {
-        var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
-        Blog.find({ 'status': 1, createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }, function (err: any, docs2) {
-            if (err) reject(err.message);
-            resolve(docs2);
-        });
-    });
-}
+var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
+var latestTop = Blog.find({ 'status': 1, createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }).exec();
+
 //访问最多
-var visitedTop = function () {
-    return new Promise((resolve, reject) => {
-        Blog.find({ 'status': 1 }, null, { sort: { 'pv': -1 }, limit: 5 }, function (err: any, docs3) {
-            if (err) reject(err.message);
-            resolve(docs3);
-        });
-    });
-}
+var visitedTop = Blog.find({ 'status': 1 }, null, { sort: { 'pv': -1 }, limit: 5 }).exec();

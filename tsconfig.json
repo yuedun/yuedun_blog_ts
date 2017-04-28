@@ -2,6 +2,9 @@
     "compilerOptions": {
         "module": "commonjs", //模块化规范
         "target": "es5", //生成js版本
+        "lib": [
+            "es2015"
+        ],
         "noImplicitAny": false, //隐式返回any报错
         "noImplicitReturns": false,//函数没有返回值提示
         "noFallthroughCasesInSwitch": true,//switch没有break提示

@@ -24,6 +24,15 @@ var route_1 = require("../utils/route");
 var Routes = (function () {
     function Routes() {
     }
+    Routes.home = function (req, res) {
+        var user = req.session.user;
+        if (user != null) {
+            res.render('admin/home', { title: '后台管理首页', user: user });
+        }
+        else {
+            res.render('admin/login', { title: '用户登录' });
+        }
+    };
     Routes.login = function (req, res) {
         res.render('admin/login', {});
     };
@@ -49,15 +58,6 @@ var Routes = (function () {
             }
         });
     };
-    Routes.home = function (req, res) {
-        var user = req.session.user;
-        if (user != null) {
-            res.render('admin/home', { title: '后台管理首页', user: user });
-        }
-        else {
-            res.render('admin/login', { title: '用户登录' });
-        }
-    };
     Routes.newArticleUi = function (req, res) {
         var token = qiniu.uptoken('hopefully');
         category_model_1.default.find({}, function (err, docs) {
@@ -81,31 +81,24 @@ var Routes = (function () {
             pv: 0,
             ismd: req.body.ismd
         });
-        category_model_1.default.findOne({ cateName: req.body.category }, function (err, doc) {
-            if (doc) {
-                blog.save(function (e, docs, numberAffected) {
-                    if (e)
-                        res.send(e.message);
-                    res.redirect('/admin/blogList?success=1');
-                });
-            }
-            else {
+        category_model_1.default.findOne({ cateName: req.body.category })
+            .then(function (category) {
+            if (!category) {
                 var category = new category_model_1.default({
                     cateName: req.body.category,
                     state: true,
                     createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
                 });
-                category.save(function (e, docs, numberAffected) {
-                    if (e)
-                        res.send(e.message);
-                    console.log("新增分类成功");
-                });
-                blog.save(function (e, docs, numberAffected) {
-                    if (e)
-                        res.send(e.message);
-                    res.redirect('/admin/blogList?success=1');
-                });
+                return category.save();
             }
+            else {
+                return category;
+            }
+        }).then(function (category) {
+            return blog.save();
+        }).then(function () {
+            console.log(">>>>>>>>>>>>");
+            res.redirect('/admin/blogList?success=1');
         });
     };
     Routes.newArticleMd = function (req, res) {
@@ -378,6 +371,12 @@ var Routes = (function () {
 }());
 __decorate([
     route_1.adminRoute({
+        path: "/",
+        method: "get"
+    })
+], Routes, "home", null);
+__decorate([
+    route_1.adminRoute({
         path: "/login",
         method: "get"
     })
@@ -388,12 +387,6 @@ __decorate([
         method: "post"
     })
 ], Routes, "doLogin", null);
-__decorate([
-    route_1.adminRoute({
-        path: "/home",
-        method: "get"
-    })
-], Routes, "home", null);
 __decorate([
     route_1.adminRoute({
         path: "/newArticleUi",

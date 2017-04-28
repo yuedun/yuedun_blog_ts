@@ -28,7 +28,7 @@ export default class RouteRegister {
             var RouteClass = apiModule.default;
             
             if (RouteClass && RouteRegister.__DecoratedRouters.length > 0) {
-                this.registerRouters()
+                // this.registerRouters()
                 //new RouteRegister类的时候就执行
             }
         }

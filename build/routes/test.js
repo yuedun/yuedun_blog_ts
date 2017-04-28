@@ -1,5 +1,7 @@
 var path = require('path');
-console.log('dir:', __dirname + __filename, '\n');
-console.log('process.cwd():', process.cwd());
-console.log(path.relative('/home/huo/zmwork/yuedun_ts/routes', 'test.js'));
+var debug = require('debug')('yuedun:test');
+debug("test.ts文件输出");
+debug('dir:', __dirname + __filename, '\n');
+debug('process.cwd():', process.cwd());
+debug(path.relative('/home/huo/zmwork/yuedun_ts/routes', 'test.js'));
 //# sourceMappingURL=test.js.map

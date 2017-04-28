@@ -15,7 +15,7 @@ connection.getConnect();
 var settins = require("./settings");
 var mongodb = settins.mongodb;
 (require('./utils/cron'))();
-var viewerLog_1 = require("./utils/viewerLog");
+var viewer_log_1 = require("./utils/viewer-log");
 var route_register_1 = require("./utils/route-register");
 var app = express();
 exports.app = app;
@@ -43,10 +43,11 @@ app.use(session({
 }));
 app.use('/*', function (req, res, next) {
     if (req.originalUrl.indexOf('/admin') === -1) {
-        viewerLog_1.default(req);
+        viewer_log_1.default(req);
     }
     next();
 });
+routeRegister.registerRouters();
 app.use('/admin', function (req, res, next) {
     if (req.cookies['autologin']) {
         next();

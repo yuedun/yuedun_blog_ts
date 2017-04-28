@@ -16,7 +16,25 @@ import { default as PvModel } from '../models/viewer-log-model';
 import { adminRoute as route } from '../utils/route';
 
 export default class Routes {
-    /**   success0未修改，1成功   **/
+    /**
+     * success0未修改，1成功
+     * 
+    **/
+    
+    /*进入后台主界面 */
+    @route({
+        path: "/",
+        method: "get"
+    })
+    static home(req: Request, res: Response) {
+        var user = req.session.user;
+        if (user != null) {
+            res.render('admin/home', { title: '后台管理首页', user: user });
+        } else {
+            res.render('admin/login', { title: '用户登录' });
+        }
+    }
+
     /* 后台登陆 */
     @route({
         path: "/login",
@@ -33,14 +51,14 @@ export default class Routes {
     })
     static doLogin(req: Request, res: Response) {
         console.log(JSON.stringify(req.body));
-        
+
         var object = req.body;
         var user = {
             username: object.username,
             password: object.password
         }
         User.findOne(user, function (err, obj) {
-            if (obj || process.env.NODE_ENV==='development') {
+            if (obj || process.env.NODE_ENV === 'development') {
                 req.session.user = user;
                 if (object.remeber) {
                     res.cookie('autologin', 1, {
@@ -54,19 +72,6 @@ export default class Routes {
         });
     }
 
-    /*进入后台主界面 */
-    @route({
-        path: "/home",
-        method: "get"
-    })
-    static home(req: Request, res: Response) {
-        var user = req.session.user;
-        if (user != null) {
-            res.render('admin/home', { title: '后台管理首页', user: user });
-        } else {
-            res.render('admin/login', { title: '用户登录' });
-        }
-    }
     /**
      * 跳转到新建文章页面
      */
@@ -104,28 +109,25 @@ export default class Routes {
             pv: 0,//浏览次数，可以在浏览时添加
             ismd: req.body.ismd
         });
-        Category.findOne({ cateName: req.body.category }, function (err, doc) {
-            if (doc) {
-                blog.save(function (e, docs, numberAffected) {
-                    if (e) res.send(e.message);
-                    res.redirect('/admin/blogList?success=1');
-                });
-            } else {
-                var category = new Category({
-                    cateName: req.body.category,
-                    state: true,
-                    createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
-                });
-                category.save(function (e, docs, numberAffected) {
-                    if (e) res.send(e.message);
-                    console.log("新增分类成功");
-                });
-                blog.save(function (e, docs, numberAffected) {
-                    if (e) res.send(e.message);
-                    res.redirect('/admin/blogList?success=1');
-                });
-            }
-        });
+        Category.findOne({ cateName: req.body.category })
+            .then(category => {
+                if (!category) {
+                    var category = new Category({
+                        cateName: req.body.category,
+                        state: true,
+                        createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
+                    });
+                    return category.save();
+                } else {
+                    return category;
+                }
+            }).then(category => {
+                return blog.save();
+            }).then(() => {
+                console.log(">>>>>>>>>>>>");
+
+                res.redirect('/admin/blogList?success=1');
+            })
     }
     /**
      * 跳转到新建文章页面-markdown方式
@@ -536,6 +538,7 @@ export default class Routes {
                 });
             },
             function (callback) {
+                //模糊查询"%text%"
                 PvModel.count({ createdAt: { $regex: today, $options: 'i' } }, function (err, count) {
                     callback(err, count)
                 });

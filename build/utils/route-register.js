@@ -20,7 +20,6 @@ var RouteRegister = (function () {
                 .replace(this.jsExtRegex, '');
             var RouteClass = apiModule.default;
             if (RouteClass && RouteRegister.__DecoratedRouters.length > 0) {
-                this.registerRouters();
             }
         }
     }

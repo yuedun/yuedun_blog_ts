@@ -15,7 +15,7 @@ connection.getConnect();//执行其中的方法。另外还有mongoose对象，�
 import * as settins from './settings';
 var mongodb = settins.mongodb;
 (require('./utils/cron'))();//定时任务
-import { default as pvLog } from './utils/viewerLog';//访问日志
+import { default as pvLog } from './utils/viewer-log';//访问日志
 import RouteRegister from './utils/route-register';
 var app = express();
 const routeRegister = new RouteRegister(app, "routes");
@@ -55,7 +55,7 @@ app.use('/*', function (req, res, next) {
     next();
 });
 
-// routeRegister.registerRouters();
+routeRegister.registerRouters();
 
 /**
  * 后台动态显示用户登录状态
