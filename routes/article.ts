@@ -18,7 +18,7 @@ export default class Routes {
         path: "/",
         method: "get"
     })
-    static index(req: Request, res: Response) {
+    static index(req: Request, res: Response): Promise.Thenable<any> {
         var pageIndex = 0;
         var pageSize = 10;
         pageIndex = req.query.pageIndex ? Number(req.query.pageIndex) : pageIndex;
@@ -31,7 +31,7 @@ export default class Routes {
         if (category != "" && category != null) {
             condition.category = category;
         }
-        Promise.all([
+        return Promise.all([
             new Promise(function (resolve, reject) {
                 Blog.find(condition, null, {
                     sort: { '_id': -1 },
@@ -59,7 +59,7 @@ export default class Routes {
                 })
             })
         ]).then(([result1, result2, result3, result4]: [Array<BlogInstance>, Array<BlogInstance>, Array<BlogInstance>, number]) => {
-            res.render('index', {
+            return {
                 config: config,
                 blogList: result1,
                 newList: result2,
@@ -69,7 +69,7 @@ export default class Routes {
                 pageSize: pageSize,
                 pageCount: result1.length,
                 category: category
-            });
+            };
         })
     };
 
@@ -80,8 +80,8 @@ export default class Routes {
         path: "/blogdetail/:id",
         method: "get"
     })
-    static blogDetail(req: Request, res: Response) {
-        Promise.all([
+    static blogDetail(req: Request, res: Response): Promise.Thenable<any> {
+        return Promise.all([
             latestTop,
             visitedTop
         ]).then(([result1, result2]) => {
@@ -94,12 +94,12 @@ export default class Routes {
                     if (doc.ismd) {
                         doc.content = md.render(doc.content);
                     }
-                    res.render('blogdetail', {
+                    return {
                         config: config,
                         newList: result1,
                         topList: result2,
                         blog: doc
-                    });
+                    };
                 });
             } else {
                 Blog.findByIdAndUpdate(req.params.id, {
@@ -110,12 +110,12 @@ export default class Routes {
                         doc.content = md.render(doc.content);
                     }
                     res.cookie('visitor' + blogId, visitor, { maxAge: 1000 * 60 * 60 * 8, httpOnly: true });
-                    res.render('blogdetail', {
+                    return {
                         config: config,
                         newList: result1,
                         topList: result2,
                         blog: doc
-                    });
+                    };
                 });
             }
         })
@@ -125,8 +125,8 @@ export default class Routes {
         path: "/catalog",
         method: "get"
     })
-    static catalog(req: Request, res: Response) {
-        Promise.all([
+    static catalog(req: Request, res: Response): Promise.Thenable<any> {
+        return Promise.all([
             new Promise((resolve, reject) => {
                 Blog.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err: any, list) {
                     resolve(list);
@@ -135,12 +135,12 @@ export default class Routes {
             latestTop,
             visitedTop
         ]).then(([result1, result2, result3]) => {
-            res.render('catalog', {
+            return {
                 config: config,
                 catalog: result1,
                 newList: result2,
                 topList: result3
-            });
+            };
         })
     };
     /* 我的微博 */
@@ -148,8 +148,8 @@ export default class Routes {
         path: "/weibo",
         method: "get"
     })
-    static weibo(req: Request, res: Response) {
-        Promise.all([
+    static weibo(req: Request, res: Response): Promise.Thenable<any> {
+        return Promise.all([
             new Promise((resolve, reject) => {
                 Blog.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err: any, list) {
                     resolve(list);
@@ -158,11 +158,11 @@ export default class Routes {
             latestTop,
             visitedTop
         ]).then(([result1, result2]) => {
-            res.render('weibo', {
+            return {
                 config: config,
                 newList: result1,
                 topList: result2
-            });
+            };
         })
     };
     /* 关于我 */
@@ -170,8 +170,8 @@ export default class Routes {
         path: "/about",
         method: "get"
     })
-    static about(req: Request, res: Response) {
-        Promise.all([
+    static about(req: Request, res: Response): Promise.Thenable<any> {
+        return Promise.all([
             new Promise((resolve, reject) => {
                 Blog.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err: any, list) {
                     resolve(list);
@@ -180,11 +180,11 @@ export default class Routes {
             latestTop,
             visitedTop
         ]).then(([result1, result2]) => {
-            res.render('about', {
+            return {
                 config: config,
                 newList: result1,
                 topList: result2
-            });
+            };
         })
     };
 
@@ -193,9 +193,9 @@ export default class Routes {
         path: "/gallery",
         method: "get"
     })
-    static gallery(req: Request, res: Response) {
+    static gallery(req: Request, res: Response): Promise.Thenable<any> {
         if (req.query.pass === settings.gallery_pass) {
-            res.render("gallery", settings.LEACLOUD);
+            return Promise.resolve(settings.LEACLOUD);
         } else {
             res.render('error', {
                 message: "您无权限访问！",
@@ -209,9 +209,9 @@ export default class Routes {
         path: "/resume",
         method: "get"
     })
-    static resume(req: Request, res: Response) {
+    static resume(req: Request, res: Response): Promise.Thenable<any> {
         debug("*****resume:" + moment().format("YYYY-MM-DD HH:ss:mm"));
-        res.render("resume", {});
+        return null;
     };
 
     //速记本
@@ -219,8 +219,8 @@ export default class Routes {
         path: "/quicknote",
         method: "get"
     })
-    static quicknote(req: Request, res: Response) {
-        Promise.all([
+    static quicknote(req: Request, res: Response): Promise.Thenable<any> {
+        return Promise.all([
             new Promise((resolve, reject) => {
                 Blog.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err: any, list) {
                     resolve(list);
@@ -236,12 +236,12 @@ export default class Routes {
                 });
             })
         ]).then(([result1, result2, result3]) => {
-            res.render('quicknote', {
+            return {
                 config: config,
                 newList: result1,
                 topList: result2,
                 quickNoteList: result3
-            });
+            };
         })
     };
 }

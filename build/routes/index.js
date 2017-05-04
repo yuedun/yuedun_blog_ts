@@ -22,13 +22,13 @@ var Routes = (function () {
     return Routes;
 }());
 __decorate([
-    route_1.newRoute({
+    route_1.route({
         path: "/",
         method: "get"
     })
 ], Routes, "default", null);
 __decorate([
-    route_1.newRoute({
+    route_1.route({
         path: "/index",
         method: "get"
     })

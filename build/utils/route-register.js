@@ -9,7 +9,8 @@ var cwd = process.cwd();
 var RouteRegister = (function () {
     function RouteRegister(app, module) {
         this.jsExtRegex = /\.js$/;
-        this.router = router;
+        this.htmlExtRegex = /\.html$/;
+        this.adminHtmlPath = "admin";
         this.app = app;
         var routerFileDir = Path.resolve(cwd, module);
         var routeFiles = IO.listFiles(routerFileDir, this.jsExtRegex);
@@ -29,10 +30,8 @@ var RouteRegister = (function () {
         }
     }
     RouteRegister.prototype.attach = function (basePath, route) {
-        console.log("basePath:", basePath);
-        console.log("route:", route);
+        var _this = this;
         var expressMethod = this.app[route.method];
-        console.log("expressMethod:", expressMethod);
         var methodName = route.name;
         var methodPath = route.path;
         var path;
@@ -41,25 +40,18 @@ var RouteRegister = (function () {
             new Promise(function (resolve, reject) {
                 return route.handler.call(route.target, req, res)
                     .then(function (data) {
-                    res.send(data);
+                    if (basePath === "/admin") {
+                        var html = _this.adminHtmlPath + "/" + methodName;
+                        res.render(html, data);
+                    }
+                    else {
+                        res.render(methodName, data);
+                    }
                 });
             });
         });
     };
-    RouteRegister.prototype.registerRouters = function () {
-        var _this = this;
-        var _loop_1 = function (config, controller) {
-            var controllers = Array.isArray(controller) ? controller : [controller];
-            controllers.forEach(function (controller) { return _this.router[config.method](config.path, controller); });
-        };
-        for (var _i = 0, _a = RouteRegister.__DecoratedRouters; _i < _a.length; _i++) {
-            var _b = _a[_i], config = _b[0], controller = _b[1];
-            _loop_1(config, controller);
-        }
-        this.app.use(this.router);
-    };
     return RouteRegister;
 }());
-RouteRegister.__DecoratedRouters = [];
 exports.default = RouteRegister;
 //# sourceMappingURL=route-register.js.map

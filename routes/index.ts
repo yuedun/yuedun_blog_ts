@@ -1,7 +1,7 @@
 import * as express from 'express';
 import * as Promise from 'bluebird';
 import { Request, Response } from 'express';
-import { newRoute as route } from '../utils/route';
+import { route } from '../utils/route';
 
 export default class Routes {
 

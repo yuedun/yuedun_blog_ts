@@ -13,25 +13,25 @@ import * as Markdown from 'markdown-it';
 var md = Markdown();
 var area = require('../area');
 import { default as PvModel } from '../models/viewer-log-model';
-import { adminRoute as route } from '../utils/route';
+import { route } from '../utils/route';
 
 export default class Routes {
     /**
      * success0未修改，1成功
      * 
     **/
-    
+
     /*进入后台主界面 */
     @route({
         path: "/",
         method: "get"
     })
-    static home(req: Request, res: Response) {
-        var user = req.session.user;
+    static home(req: Request, res: Response): Promise.Thenable<any> {
+        var user = req.session ? req.session.user : {};
         if (user != null) {
-            res.render('admin/home', { title: '后台管理首页', user: user });
+            return Promise.resolve({ title: '后台管理首页', user: user });
         } else {
-            res.render('admin/login', { title: '用户登录' });
+            return Promise.resolve({ title: '用户登录' });
         }
     }
 
@@ -40,8 +40,8 @@ export default class Routes {
         path: "/login",
         method: "get"
     })
-    static login(req: Request, res: Response) {
-        res.render('admin/login', {});
+    static login(req: Request, res: Response): Promise.Thenable<any> {
+        return Promise.resolve({});
     }
 
     //登陆
@@ -49,9 +49,7 @@ export default class Routes {
         path: "/doLogin",
         method: "post"
     })
-    static doLogin(req: Request, res: Response) {
-        console.log(JSON.stringify(req.body));
-
+    static doLogin(req: Request, res: Response): void {
         var object = req.body;
         var user = {
             username: object.username,
@@ -79,12 +77,12 @@ export default class Routes {
         path: "/newArticleUi",
         method: "get"
     })
-    static newArticleUi(req: Request, res: Response) {
+    static newArticleUi(req: Request, res: Response): Promise.Thenable<any> {
         var token = qiniu.uptoken('hopefully');
-        Category.find({}, function (err, docs) {
-            if (err) res.send(err.message);
-            res.render('admin/newarticle', { success: 0, categories: docs, token: token });
-        });
+        return Category.find({})
+            .then(catotory => {
+                return Promise.resolve({ success: 0, categories: catotory, token: token });
+            })
     }
     /**
      * 新建文章
@@ -94,7 +92,7 @@ export default class Routes {
         path: "/newArticle",
         method: "post"
     })
-    static newArticle(req: Request, res: Response) {
+    static newArticle(req: Request, res: Response): Promise.Thenable<any> {
         var content = req.body.content;
         var blog = new Blog({
             title: req.body.title,//标题
@@ -109,7 +107,7 @@ export default class Routes {
             pv: 0,//浏览次数，可以在浏览时添加
             ismd: req.body.ismd
         });
-        Category.findOne({ cateName: req.body.category })
+        return Category.findOne({ cateName: req.body.category })
             .then(category => {
                 if (!category) {
                     var category = new Category({
@@ -136,12 +134,12 @@ export default class Routes {
         path: "/newArticleMd",
         method: "get"
     })
-    static newArticleMd(req: Request, res: Response) {
+    static newArticleMd(req: Request, res: Response): Promise.Thenable<any> {
         var token = qiniu.uptoken('hopefully');
-        Category.find({}, function (err, docs) {
-            if (err) res.send(err.message);
-            res.render('admin/newarticlemd', { success: 0, categories: docs, token: token });
-        });
+        return Category.find({})
+            .then(catogory => {
+                return Promise.resolve({ success: 0, categories: catogory, token: token });
+            });
     }
 
     /**
@@ -151,29 +149,26 @@ export default class Routes {
         path: "/blogList",
         method: "get"
     })
-    static blogList(req: Request, res: Response) {
-        var user = req.session.user;
+    static blogList(req: Request, res: Response): Promise.Thenable<any> {
+        var user = req.session ? req.session.user : null;
         var success = req.query.success || 0;
         var pageIndex = 1;
         var pageSize = 10;
         pageIndex = req.query.pageIndex ? req.query.pageIndex : pageIndex;
         pageSize = req.query.pageSize ? req.query.pageSize : pageSize;
-        Blog.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize }, function (err, docs) {
-            if (err) {
-                res.send(err.message);
-                return;
-            }
-            docs.forEach(function (item, index) {
-                if (item.content) {
-                    if (item.ismd) {
-                        item.content = md.render(item.content).replace(/<\/?.+?>/g, "").substring(0, 300);
-                    } else {
-                        item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
-                    }
-                };
-            });
-            res.render('admin/bloglist', { success: success, blogList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length });
-        });
+        return Blog.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize })
+            .then(docs => {
+                docs.forEach(function (item, index) {
+                    if (item.content) {
+                        if (item.ismd) {
+                            item.content = md.render(item.content).replace(/<\/?.+?>/g, "").substring(0, 300);
+                        } else {
+                            item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
+                        }
+                    };
+                });
+                res.render('admin/bloglist', { success: success, blogList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length });
+            })
     }
     /**
      * 查看单篇博客内容
@@ -182,15 +177,15 @@ export default class Routes {
         path: "/blogDetail/:id",
         method: "get"
     })
-    static blogDetail(req: Request, res: Response) {
+    static blogDetail(req: Request, res: Response): Promise.Thenable<any> {
         var user = req.session.user;
-        Blog.findById(req.params.id, function (err, doc) {
-            if (err) res.send(err.message);
-            if (doc.ismd) {
-                doc.content = md.render(doc.content);
-            }
-            res.render('admin/blogdetail', { blog: doc, user: user });
-        });
+        return Blog.findById(req.params.id)
+            .then(doc => {
+                if (doc.ismd) {
+                    doc.content = md.render(doc.content);
+                }
+                return Promise.resolve({ blog: doc, user: user });
+            })
     }
     /**
      * 删除文章
@@ -199,11 +194,12 @@ export default class Routes {
         path: "/deleteBlog/:id",
         method: "delete"
     })
-    static deleteBlog(req: Request, res: Response) {
+    static deleteBlog(req: Request, res: Response): Promise.Thenable<any> {
         var user = req.session.user;
-        Blog.findByIdAndRemove(req.params.id, function (err) {
-            res.redirect('/admin/blogList');
-        });
+        return Blog.findByIdAndRemove(req.params.id)
+            .then(doc => {
+                res.redirect('/admin/blogList');
+            })
     }
     /**
      * 跳转到修改文章
@@ -212,7 +208,7 @@ export default class Routes {
         path: "/toEditArticle/:id",
         method: "get"
     })
-    static toEditArticle(req: Request, res: Response) {
+    static toEditArticle(req: Request, res: Response): void {
         var token = qiniu.uptoken('hopefully');
         let getBlogById = new Promise((resolve, reject) => {
             Blog.findById(req.params.id, function (err, doc) {
@@ -243,7 +239,7 @@ export default class Routes {
         path: "/editArticle/:id",
         method: "get"
     })
-    static editArticle(req: Request, res: Response) {
+    static editArticle(req: Request, res: Response): void {
         var content = req.body.content;
         Blog.findByIdAndUpdate(req.params.id, {
             $set:
@@ -267,7 +263,7 @@ export default class Routes {
         path: "/category",
         method: "get"
     })
-    static category(req: Request, res: Response) {
+    static category(req: Request, res: Response): void {
         Category.find({}, function (err, docs) {
             if (err) res.send(err.message);
             res.render('admin/category', { user: req.session.user, cates: docs });
@@ -278,7 +274,7 @@ export default class Routes {
         path: "/addCategory",
         method: "post"
     })
-    static addCategory(req: Request, res: Response) {
+    static addCategory(req: Request, res: Response): void {
         var category = new Category();
         category.cateName = req.body.cateName;
         category.state = true;
@@ -295,7 +291,7 @@ export default class Routes {
         path: "/deleteCate/:id",
         method: "get"
     })
-    static deleteCate(req: Request, res: Response) {
+    static deleteCate(req: Request, res: Response): void {
         var user = req.session.user;
         Category.findByIdAndRemove(req.params.id, function (err) {
             res.redirect('/admin/category');
@@ -307,7 +303,7 @@ export default class Routes {
         path: "/addUserUi",
         method: "get"
     })
-    static addUserUi(req: Request, res: Response) {
+    static addUserUi(req: Request, res: Response): void {
         res.render('admin/adduser', { success: 0, flag: 0, user: req.session.user });
     }
 
@@ -318,7 +314,7 @@ export default class Routes {
         path: "/addUser",
         method: "post"
     })
-    static addUser(req: Request, res: Response) {
+    static addUser(req: Request, res: Response): void {
         var password = req.body.password;
         var user = new User({
             username: req.body.username,
@@ -340,7 +336,7 @@ export default class Routes {
         path: "/viewUser",
         method: "get"
     })
-    static viewUser(req: Request, res: Response) {
+    static viewUser(req: Request, res: Response): void {
         User.find({}, null, function (err, docs) {
             if (err) res.send(err.message);
             res.render('admin/viewuser', { users: docs, user: req.session.user });
@@ -353,7 +349,7 @@ export default class Routes {
         path: "/toModifyUser/:userId",
         method: "get"
     })
-    static toModifyUser(req: Request, res: Response) {
+    static toModifyUser(req: Request, res: Response): void {
         User.findById(req.params.userId, function (err, doc) {
             if (err) res.send(err.message);
             res.render('admin/modifyuser', {
@@ -371,7 +367,7 @@ export default class Routes {
         path: "/modifyUser/:userId",
         method: "post"
     })
-    static modifyUser(req: Request, res: Response) {
+    static modifyUser(req: Request, res: Response): void {
         User.findByIdAndUpdate(req.params.userId, {
             $set:
             {
@@ -392,7 +388,7 @@ export default class Routes {
         path: "/deleteUser/:userI",
         method: "get"
     })
-    static deleteUser(req: Request, res: Response) {
+    static deleteUser(req: Request, res: Response): void {
         User.remove({ _id: req.params.userId }, function (err) {
             res.redirect('/admin/viewUser');
         });
@@ -403,7 +399,7 @@ export default class Routes {
         path: "/logout",
         method: "get"
     })
-    static logout(req: Request, res: Response) {
+    static logout(req: Request, res: Response): void {
         req.session.user = null;
         res.clearCookie("autologin");
         res.redirect('/admin/login');
@@ -413,7 +409,7 @@ export default class Routes {
         path: "/test",
         method: "get"
     })
-    static test(req: Request, res: Response) {
+    static test(req: Request, res: Response): void {
         res.render('admin/menu', {});
     }
 
@@ -422,7 +418,7 @@ export default class Routes {
         path: "/addWeatherUser",
         method: "get"
     })
-    static addWeatherUserUi(req: Request, res: Response) {
+    static addWeatherUserUi(req: Request, res: Response): void {
         res.render('admin/addweatheruser', { success: 0, flag: 0, user: req.session.user });
     }
     /**
@@ -432,7 +428,7 @@ export default class Routes {
         path: "/addWeatherUser",
         method: "post"
     })
-    static addWeatherUser(req: Request, res: Response) {
+    static addWeatherUser(req: Request, res: Response): void {
         var args = req.body;
         // var areaObjs = JSON.parse(area);
         var areaId = _.result(_.find(area, { 'NAMECN': args.city }), 'AREAID');
@@ -457,7 +453,7 @@ export default class Routes {
         path: "/weatherUserList",
         method: "get"
     })
-    static weatherUserList(req: Request, res: Response) {
+    static weatherUserList(req: Request, res: Response): void {
         WeatherUser.find({}, null, function (err, docs) {
             if (err) res.send(err.message);
             res.render('admin/weatherUser', { wusers: docs, user: req.session.user });
@@ -471,7 +467,7 @@ export default class Routes {
         path: "/delWeatherUser/:userId",
         method: "get"
     })
-    static delWeatherUser(req: Request, res: Response) {
+    static delWeatherUser(req: Request, res: Response): void {
         WeatherUser.remove({ _id: req.params.userId }, function (err) {
             res.redirect('/admin/weatherUserList');
         });
@@ -483,7 +479,7 @@ export default class Routes {
         path: "/quicknote",
         method: "get"
     })
-    static quicknote(req: Request, res: Response) {
+    static quicknote(req: Request, res: Response): void {
         var quicknote = new QuickNote({
             content: req.body.content,
             state: true,//可用/停用
@@ -501,7 +497,7 @@ export default class Routes {
         path: "/quickNoteList",
         method: "get"
     })
-    static quickNoteList(req: Request, res: Response) {
+    static quickNoteList(req: Request, res: Response): void {
         var user = req.session.user;
         var success = req.query.success || 0;
         var pageIndex = 1;
@@ -529,7 +525,7 @@ export default class Routes {
         path: "/readCount",
         method: "get"
     })
-    static readCount(req: Request, res: Response) {
+    static readCount(req: Request, res: Response): void {
         var today = Moment().format('YYYY-MM-DD');
         Async.parallel([
             function (callback) {
