@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
 var Moment = require("moment");
-var Async = require("async");
 var Promise = require("bluebird");
 var user_model_1 = require("../models/user-model");
 var blog_model_1 = require("../models/blog-model");
@@ -24,26 +23,26 @@ var route_1 = require("../utils/route");
 var Routes = (function () {
     function Routes() {
     }
-    Routes.home = function (req, res) {
-        var user = req.session.user;
+    Routes.index = function (req, res) {
+        var user = req.session ? req.session.user : {};
         if (user != null) {
-            res.render('admin/home', { title: '后台管理首页', user: user });
+            return Promise.resolve({ title: '后台管理首页', user: user });
         }
         else {
-            res.render('admin/login', { title: '用户登录' });
+            return Promise.resolve({ title: '用户登录' });
         }
     };
     Routes.login = function (req, res) {
-        res.render('admin/login', {});
+        return Promise.resolve({});
     };
     Routes.doLogin = function (req, res) {
-        console.log(JSON.stringify(req.body));
         var object = req.body;
         var user = {
             username: object.username,
             password: object.password
         };
-        user_model_1.default.findOne(user, function (err, obj) {
+        return user_model_1.default.findOne(user)
+            .then(function (obj) {
             if (obj || process.env.NODE_ENV === 'development') {
                 req.session.user = user;
                 if (object.remeber) {
@@ -52,18 +51,19 @@ var Routes = (function () {
                     });
                 }
                 res.redirect('/admin/blogList');
+                return;
             }
             else {
                 res.redirect('/admin/login');
+                return;
             }
         });
     };
     Routes.newArticleUi = function (req, res) {
         var token = qiniu.uptoken('hopefully');
-        category_model_1.default.find({}, function (err, docs) {
-            if (err)
-                res.send(err.message);
-            res.render('admin/newarticle', { success: 0, categories: docs, token: token });
+        return category_model_1.default.find({})
+            .then(function (catotory) {
+            return { success: 0, categories: catotory, token: token };
         });
     };
     Routes.newArticle = function (req, res) {
@@ -81,7 +81,7 @@ var Routes = (function () {
             pv: 0,
             ismd: req.body.ismd
         });
-        category_model_1.default.findOne({ cateName: req.body.category })
+        return category_model_1.default.findOne({ cateName: req.body.category })
             .then(function (category) {
             if (!category) {
                 var category = new category_model_1.default({
@@ -103,24 +103,20 @@ var Routes = (function () {
     };
     Routes.newArticleMd = function (req, res) {
         var token = qiniu.uptoken('hopefully');
-        category_model_1.default.find({}, function (err, docs) {
-            if (err)
-                res.send(err.message);
-            res.render('admin/newarticlemd', { success: 0, categories: docs, token: token });
+        return category_model_1.default.find({})
+            .then(function (catogory) {
+            return { success: 0, categories: catogory, token: token };
         });
     };
     Routes.blogList = function (req, res) {
-        var user = req.session.user;
+        var user = req.session ? req.session.user : null;
         var success = req.query.success || 0;
         var pageIndex = 1;
         var pageSize = 10;
         pageIndex = req.query.pageIndex ? req.query.pageIndex : pageIndex;
         pageSize = req.query.pageSize ? req.query.pageSize : pageSize;
-        blog_model_1.default.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize }, function (err, docs) {
-            if (err) {
-                res.send(err.message);
-                return;
-            }
+        return blog_model_1.default.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize })
+            .then(function (docs) {
             docs.forEach(function (item, index) {
                 if (item.content) {
                     if (item.ismd) {
@@ -132,42 +128,30 @@ var Routes = (function () {
                 }
                 ;
             });
-            res.render('admin/bloglist', { success: success, blogList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length });
+            return { success: success, blogList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length };
         });
     };
     Routes.blogDetail = function (req, res) {
         var user = req.session.user;
-        blog_model_1.default.findById(req.params.id, function (err, doc) {
-            if (err)
-                res.send(err.message);
+        return blog_model_1.default.findById(req.params.id)
+            .then(function (doc) {
             if (doc.ismd) {
                 doc.content = md.render(doc.content);
             }
-            res.render('admin/blogdetail', { blog: doc, user: user });
+            return { blog: doc, user: user };
         });
     };
     Routes.deleteBlog = function (req, res) {
         var user = req.session.user;
-        blog_model_1.default.findByIdAndRemove(req.params.id, function (err) {
+        return blog_model_1.default.findByIdAndRemove(req.params.id)
+            .then(function (doc) {
             res.redirect('/admin/blogList');
         });
     };
     Routes.toEditArticle = function (req, res) {
         var token = qiniu.uptoken('hopefully');
-        var getBlogById = new Promise(function (resolve, reject) {
-            blog_model_1.default.findById(req.params.id, function (err, doc) {
-                if (err)
-                    reject(err);
-                resolve(doc);
-            });
-        });
-        var getCategory = new Promise(function (resolve, reject) {
-            category_model_1.default.find({}, function (err, docs) {
-                if (err)
-                    reject(err);
-                resolve(docs);
-            });
-        });
+        var getBlogById = blog_model_1.default.findById(req.params.id);
+        var getCategory = category_model_1.default.find({});
         Promise.all([getBlogById, getCategory])
             .then(function (_a) {
             var blogObj = _a[0], categories = _a[1];
@@ -221,7 +205,7 @@ var Routes = (function () {
         });
     };
     Routes.addUserUi = function (req, res) {
-        res.render('admin/adduser', { success: 0, flag: 0, user: req.session.user });
+        return Promise.resolve({ success: 0, flag: 0, user: req.session.user });
     };
     Routes.addUser = function (req, res) {
         var password = req.body.password;
@@ -280,9 +264,7 @@ var Routes = (function () {
         req.session.user = null;
         res.clearCookie("autologin");
         res.redirect('/admin/login');
-    };
-    Routes.test = function (req, res) {
-        res.render('admin/menu', {});
+        return;
     };
     Routes.addWeatherUserUi = function (req, res) {
         res.render('admin/addweatheruser', { success: 0, flag: 0, user: req.session.user });
@@ -306,16 +288,16 @@ var Routes = (function () {
         });
     };
     Routes.weatherUserList = function (req, res) {
-        weather_user_model_1.default.find({}, null, function (err, docs) {
-            if (err)
-                res.send(err.message);
-            res.render('admin/weatherUser', { wusers: docs, user: req.session.user });
+        return weather_user_model_1.default.find({}, null)
+            .then(function (docs) {
+            return { wusers: docs, user: req.session.user };
         });
     };
     Routes.delWeatherUser = function (req, res) {
-        weather_user_model_1.default.remove({ _id: req.params.userId }, function (err) {
+        return Promise.resolve(weather_user_model_1.default.remove({ _id: req.params.userId }))
+            .then(function (d) {
             res.redirect('/admin/weatherUserList');
-        });
+        }).value();
     };
     Routes.quicknote = function (req, res) {
         var quicknote = new quick_note_model_1.default({
@@ -323,9 +305,8 @@ var Routes = (function () {
             state: true,
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
         });
-        quicknote.save(function (e, docs, numberAffected) {
-            if (e)
-                res.send(e.message);
+        return quicknote.save()
+            .then(function (data) {
             res.redirect('/admin/quickNoteList');
         });
     };
@@ -352,196 +333,128 @@ var Routes = (function () {
     };
     Routes.readCount = function (req, res) {
         var today = Moment().format('YYYY-MM-DD');
-        Async.parallel([
-            function (callback) {
-                blog_model_1.default.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }, function (err, doc) {
-                    callback(err, doc[0].pvCount);
-                });
-            },
-            function (callback) {
-                viewer_log_model_1.default.count({ createdAt: { $regex: today, $options: 'i' } }, function (err, count) {
-                    callback(err, count);
-                });
-            }
-        ], function (err, result) {
-            res.render('admin/readcount', { readCount: result[0], todayRead: result[1] });
+        return Promise.all([
+            blog_model_1.default.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),
+            viewer_log_model_1.default.count({ createdAt: { $regex: today, $options: 'i' } })
+        ]).then(function (_a) {
+            var result1 = _a[0], result2 = _a[1];
+            return { readCount: result1[0].pvCount, todayRead: result2 };
         });
     };
     return Routes;
 }());
 __decorate([
-    route_1.adminRoute({
-        path: "/",
-        method: "get"
-    })
-], Routes, "home", null);
+    route_1.route({})
+], Routes, "index", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/login",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "login", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/doLogin",
+    route_1.route({
         method: "post"
     })
 ], Routes, "doLogin", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/newArticleUi",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "newArticleUi", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/newArticle",
+    route_1.route({
         method: "post"
     })
 ], Routes, "newArticle", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/newArticleMd",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "newArticleMd", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/blogList",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "blogList", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/blogDetail/:id",
-        method: "get"
+    route_1.route({
+        path: ":id"
     })
 ], Routes, "blogDetail", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/deleteBlog/:id",
-        method: "delete"
+    route_1.route({
+        path: ":id"
     })
 ], Routes, "deleteBlog", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/toEditArticle/:id",
-        method: "get"
+    route_1.route({
+        path: ":id"
     })
 ], Routes, "toEditArticle", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/editArticle/:id",
-        method: "get"
+    route_1.route({
+        path: ":id"
     })
 ], Routes, "editArticle", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/category",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "category", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/addCategory",
+    route_1.route({
         method: "post"
     })
 ], Routes, "addCategory", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/deleteCate/:id",
-        method: "get"
+    route_1.route({
+        path: ":id"
     })
 ], Routes, "deleteCate", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/addUserUi",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "addUserUi", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/addUser",
+    route_1.route({
         method: "post"
     })
 ], Routes, "addUser", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/viewUser",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "viewUser", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/toModifyUser/:userId",
-        method: "get"
+    route_1.route({
+        path: ":userId"
     })
 ], Routes, "toModifyUser", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/modifyUser/:userId",
+    route_1.route({
+        path: ":userId",
         method: "post"
     })
 ], Routes, "modifyUser", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/deleteUser/:userI",
-        method: "get"
+    route_1.route({
+        path: ":userId"
     })
 ], Routes, "deleteUser", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/logout",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "logout", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/test",
-        method: "get"
-    })
-], Routes, "test", null);
-__decorate([
-    route_1.adminRoute({
-        path: "/addWeatherUser",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "addWeatherUserUi", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/addWeatherUser",
+    route_1.route({
         method: "post"
     })
 ], Routes, "addWeatherUser", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/weatherUserList",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "weatherUserList", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/delWeatherUser/:userId",
-        method: "get"
+    route_1.route({
+        path: ":userId"
     })
 ], Routes, "delWeatherUser", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/quicknote",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "quicknote", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/quickNoteList",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "quickNoteList", null);
 __decorate([
-    route_1.adminRoute({
-        path: "/readCount",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "readCount", null);
 exports.default = Routes;
-//# sourceMappingURL=admin-router.js.map
+//# sourceMappingURL=admin.js.map

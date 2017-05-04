@@ -5,7 +5,7 @@ var path = require("path");
 var favicon = require("serve-favicon");
 var logger = require("morgan");
 var cookieParser = require("cookie-parser");
-var bodyParser = require("body-parser");
+var bodyParser = require('body-parser');
 var ejs = require("ejs");
 var session = require("express-session");
 var mongoStore = require("connect-mongo");
@@ -19,7 +19,6 @@ var viewer_log_1 = require("./utils/viewer-log");
 var route_register_1 = require("./utils/route-register");
 var app = express();
 exports.app = app;
-var routeRegister = new route_register_1.default(app, "routes");
 var store = new MongoStore({
     mongooseConnection: connection.mongoose.connection
 });
@@ -47,7 +46,6 @@ app.use('/*', function (req, res, next) {
     }
     next();
 });
-routeRegister.registerRouters();
 app.use('/admin', function (req, res, next) {
     if (req.cookies['autologin']) {
         next();
@@ -64,6 +62,7 @@ app.use('/admin', function (req, res, next) {
         next();
     }
 });
+var routeRegister = new route_register_1.default(app, "routes");
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
     next(err);

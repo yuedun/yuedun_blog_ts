@@ -7,4 +7,4 @@ weixin.get('/weixin/validateToken', function (req, res) {
     interfaceWX.validateToken(req, res);
 });
 module.exports = weixin;
-//# sourceMappingURL=weixinAction.js.map
+//# sourceMappingURL=weixin.js.map

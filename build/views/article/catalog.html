@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="zh-cmn">
+	<meta charset="UTF-8">
+	<title>博客目录</title>
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+	<meta name="keywords" content="霍潘,月盾">
+	<meta name="description" content="霍潘的技术博客，工作经验分享，记录">
+	<link rel="stylesheet" href="/stylesheets/style.css" />
+</head>
+
+<body>
+	<% include header.html %>
+	<section>
+		<div class="container">
+			<h3 class="header">博客目录</h3>
+			<section class="blog_section">
+				<ul class="catelog">
+					<% catalog.forEach(function(item, index){%>
+					<li><a href="/blogdetail/<%= item.id%>"><%= item.title%></a><span title="阅读数">(<%= item.pv%>)<time title="创建时间"><%= item.createDate.substring(0, 10)%></time></span></li>
+					<%})%>
+				</ul>
+			</section>
+			<% include asider.html %>
+			<div class="clear"></div>
+		</div>
+	</section>
+	<% include footer.html %>
+	<script src="/javascripts/silder.js"></script>
+</body>
+
+</html>
