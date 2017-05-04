@@ -544,4 +544,4 @@ __decorate([
     })
 ], Routes, "readCount", null);
 exports.default = Routes;
-//# sourceMappingURL=admin-router.js.map
+//# sourceMappingURL=admin.js.map

@@ -1,6 +1,7 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
 var express = require("express");
+var Promise = require("bluebird");
 var Path = require("path");
 var IO = require("./Io");
 var router = express.Router();
@@ -13,16 +14,38 @@ var RouteRegister = (function () {
         var routerFileDir = Path.resolve(cwd, module);
         var routeFiles = IO.listFiles(routerFileDir, this.jsExtRegex);
         for (var _i = 0, routeFiles_1 = routeFiles; _i < routeFiles_1.length; _i++) {
-            var apiFile = routeFiles_1[_i];
-            var apiModule = require(apiFile);
-            var basePath = '/' + Path.relative(routerFileDir, apiFile)
+            var routeFile = routeFiles_1[_i];
+            var routeModule = require(routeFile);
+            var basePath = '/' + Path.relative(routerFileDir, routeFile)
                 .replace(/\\/g, '/')
                 .replace(this.jsExtRegex, '');
-            var RouteClass = apiModule.default;
-            if (RouteClass && RouteRegister.__DecoratedRouters.length > 0) {
+            var RouteClass = routeModule.default;
+            if (RouteClass && RouteClass.methods) {
+                for (var _a = 0, _b = RouteClass.methods; _a < _b.length; _a++) {
+                    var route = _b[_a];
+                    this.attach(basePath, route);
+                }
             }
         }
     }
+    RouteRegister.prototype.attach = function (basePath, route) {
+        console.log("basePath:", basePath);
+        console.log("route:", route);
+        var expressMethod = this.app[route.method];
+        console.log("expressMethod:", expressMethod);
+        var methodName = route.name;
+        var methodPath = route.path;
+        var path;
+        path = basePath + methodPath;
+        expressMethod.call(this.app, path, function (req, res) {
+            new Promise(function (resolve, reject) {
+                return route.handler.call(route.target, req, res)
+                    .then(function (data) {
+                    res.send(data);
+                });
+            });
+        });
+    };
     RouteRegister.prototype.registerRouters = function () {
         var _this = this;
         var _loop_1 = function (config, controller) {
@@ -34,8 +57,6 @@ var RouteRegister = (function () {
             _loop_1(config, controller);
         }
         this.app.use(this.router);
-    };
-    RouteRegister.prototype.attach = function () {
     };
     return RouteRegister;
 }());

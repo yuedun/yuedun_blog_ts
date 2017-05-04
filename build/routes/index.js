@@ -6,41 +6,32 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+var Promise = require("bluebird");
 var route_1 = require("../utils/route");
 var Routes = (function () {
     function Routes() {
     }
-    Routes.default = function (req, res, next) {
+    Routes.default = function (req) {
         console.log(">>>>>>>>>>>>>default");
-        res.send(">>>>>>>>>>>>>>>>>>>>>>>>default");
+        return Promise.resolve(">>>>>>>>>>>>>>>>>>>>>>>>default");
     };
     Routes.index = function (req, res, next) {
         console.log(">>>>>>>>>>>>>index");
         res.send(">>>>>>>>>>>>>>>>>>>>>>>>index");
     };
-    Routes.home = function (req, res, next) {
-        console.log(">>>>>>>>>>>>>home");
-        res.send(">>>>>>>>>>>>>>>>>>>>>>>>home");
-    };
     return Routes;
 }());
 __decorate([
-    route_1.route({
+    route_1.newRoute({
         path: "/",
         method: "get"
     })
 ], Routes, "default", null);
 __decorate([
-    route_1.route({
+    route_1.newRoute({
         path: "/index",
         method: "get"
     })
 ], Routes, "index", null);
-__decorate([
-    route_1.route({
-        path: "/home",
-        method: "get"
-    })
-], Routes, "home", null);
-exports.Routes = Routes;
+exports.default = Routes;
 //# sourceMappingURL=index.js.map

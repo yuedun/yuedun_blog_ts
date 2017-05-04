@@ -22,6 +22,7 @@
     ],
     "exclude": [
         // 默认排除node_modules
+        "node_modules",// node7.8.0，typescript2.3.2下需要配置
         "settings-sample.ts"
     ]    
 }

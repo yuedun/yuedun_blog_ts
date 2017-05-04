@@ -39,7 +39,7 @@
     "@types/moment": "^2.13.0",
     "@types/mongoose": "^4.6.1",
     "@types/node": "^7.0.13",
-    "express-generator": "^4.13.1",
+    "source-map-support": "^0.4.15",
     "typescript": "^2.2.2"
   }
 }
