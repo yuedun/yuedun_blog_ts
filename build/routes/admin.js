@@ -8,7 +8,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
 var Moment = require("moment");
-var Async = require("async");
 var Promise = require("bluebird");
 var user_model_1 = require("../models/user-model");
 var blog_model_1 = require("../models/blog-model");
@@ -42,7 +41,8 @@ var Routes = (function () {
             username: object.username,
             password: object.password
         };
-        user_model_1.default.findOne(user, function (err, obj) {
+        return user_model_1.default.findOne(user)
+            .then(function (obj) {
             if (obj || process.env.NODE_ENV === 'development') {
                 req.session.user = user;
                 if (object.remeber) {
@@ -51,9 +51,11 @@ var Routes = (function () {
                     });
                 }
                 res.redirect('/admin/blogList');
+                return;
             }
             else {
                 res.redirect('/admin/login');
+                return;
             }
         });
     };
@@ -274,6 +276,7 @@ var Routes = (function () {
         req.session.user = null;
         res.clearCookie("autologin");
         res.redirect('/admin/login');
+        return;
     };
     Routes.test = function (req, res) {
         res.render('admin/menu', {});
@@ -346,19 +349,12 @@ var Routes = (function () {
     };
     Routes.readCount = function (req, res) {
         var today = Moment().format('YYYY-MM-DD');
-        Async.parallel([
-            function (callback) {
-                blog_model_1.default.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }, function (err, doc) {
-                    callback(err, doc[0].pvCount);
-                });
-            },
-            function (callback) {
-                viewer_log_model_1.default.count({ createdAt: { $regex: today, $options: 'i' } }, function (err, count) {
-                    callback(err, count);
-                });
-            }
-        ], function (err, result) {
-            res.render('admin/readcount', { readCount: result[0], todayRead: result[1] });
+        return Promise.all([
+            blog_model_1.default.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),
+            viewer_log_model_1.default.count({ createdAt: { $regex: today, $options: 'i' } })
+        ]).then(function (_a) {
+            var result1 = _a[0], result2 = _a[1];
+            return { readCount: result1[0].pvCount, todayRead: result2 };
         });
     };
     return Routes;

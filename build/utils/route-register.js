@@ -11,6 +11,7 @@ var RouteRegister = (function () {
         this.jsExtRegex = /\.js$/;
         this.htmlExtRegex = /\.html$/;
         this.adminHtmlPath = "admin";
+        this.articleHtmlPath = "article";
         this.app = app;
         var routerFileDir = Path.resolve(cwd, module);
         var routeFiles = IO.listFiles(routerFileDir, this.jsExtRegex);
@@ -38,16 +39,20 @@ var RouteRegister = (function () {
         path = basePath + methodPath;
         expressMethod.call(this.app, path, function (req, res) {
             new Promise(function (resolve, reject) {
-                return route.handler.call(route.target, req, res)
-                    .then(function (data) {
-                    if (basePath === "/admin") {
-                        var html = _this.adminHtmlPath + "/" + methodName;
-                        res.render(html, data);
-                    }
-                    else {
-                        res.render(methodName, data);
-                    }
-                });
+                resolve("权限验证通过");
+            }).then(function (data) {
+                return route.handler.call(route.target, req, res);
+            }).then(function (data) {
+                if (!data)
+                    return;
+                if (basePath === "/admin") {
+                    var html = _this.adminHtmlPath + "/" + methodName;
+                    res.render(html, data);
+                }
+                else {
+                    var html = _this.articleHtmlPath + "/" + methodName;
+                    res.render(html, data);
+                }
             });
         });
     };

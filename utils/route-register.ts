@@ -24,6 +24,7 @@ export default class RouteRegister {
     private jsExtRegex = /\.js$/;
     private htmlExtRegex = /\.html$/;
     private adminHtmlPath = "admin";
+    private articleHtmlPath = "article";
     /**
      * 路由注册
      * @param app 
@@ -56,18 +57,30 @@ export default class RouteRegister {
         let path: string;
 
         path = basePath + methodPath;
-
+        /**
+         * 每个路由都会构造出一个app.get或app.post这样的函数
+         * 然后调用这个函数，传递地址和回调函数
+         */
         expressMethod.call(this.app, path, (req: Request, res: Response) => {
             new Promise((resolve, reject) => {
-                return route.handler.call(route.target, req, res)
-                    .then(data => {
-                        if (basePath === "/admin") {
-                            let html = this.adminHtmlPath + "/" + methodName;
-                            res.render(html, data);
-                        } else {
-                            res.render(methodName, data);
-                        }
-                    })
+                //可以做一些预处理
+                resolve("权限验证通过");
+            }).then(data => {
+                //获取到数据可以做一些后续补充处理
+                return route.handler.call(route.target, req, res);
+            }).then(data => {
+                if(!data) return;//没有返回数据，一般是redirect跳转了，不需要往下执行。也可以返回需要重定向的地址，在此统一处理
+                // if(typeof data == "string"){
+                //     res.redirect(data);
+                //     return;
+                // }
+                if (basePath === "/admin") {
+                    let html = this.adminHtmlPath + "/" + methodName;
+                    res.render(html, data);
+                } else {
+                    let html = this.articleHtmlPath + "/" + methodName;
+                    res.render(html, data);
+                }
             })
         })
     }

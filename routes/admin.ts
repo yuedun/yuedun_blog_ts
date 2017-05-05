@@ -49,13 +49,14 @@ export default class Routes {
         path: "/doLogin",
         method: "post"
     })
-    static doLogin(req: Request, res: Response): void {
+    static doLogin(req: Request, res: Response): any {
         var object = req.body;
         var user = {
             username: object.username,
             password: object.password
         }
-        User.findOne(user, function (err, obj) {
+        return User.findOne(user)
+        .then(obj=>{
             if (obj || process.env.NODE_ENV === 'development') {
                 req.session.user = user;
                 if (object.remeber) {
@@ -63,11 +64,13 @@ export default class Routes {
                         expires: new Date(Date.now() + 864000000)//10天
                     });
                 }
-                res.redirect('/admin/blogList');
+                res.redirect('/admin/blogList')
+                return
             } else {
-                res.redirect('/admin/login');
+                res.redirect('/admin/login')
+                return
             }
-        });
+        })
     }
 
     /**
@@ -403,6 +406,7 @@ export default class Routes {
         req.session.user = null;
         res.clearCookie("autologin");
         res.redirect('/admin/login');
+        return;
     }
     /*  测试路由  */
     @route({
@@ -525,22 +529,13 @@ export default class Routes {
         path: "/readCount",
         method: "get"
     })
-    static readCount(req: Request, res: Response): void {
+    static readCount(req: Request, res: Response): Promise.Thenable<any> {
         var today = Moment().format('YYYY-MM-DD');
-        Async.parallel([
-            function (callback) {
-                Blog.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }, function (err: any, doc: any) {
-                    callback(err, doc[0].pvCount);
-                });
-            },
-            function (callback) {
-                //模糊查询"%text%"
-                PvModel.count({ createdAt: { $regex: today, $options: 'i' } }, function (err, count) {
-                    callback(err, count)
-                });
-            }
-        ], function (err, result) {
-            res.render('admin/readcount', { readCount: result[0], todayRead: result[1] });
+        return Promise.all<any, number>([
+            Blog.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),
+            PvModel.count({ createdAt: { $regex: today, $options: 'i' } })//模糊查询"%text%"
+        ]).then(([result1, result2])=>{
+            return { readCount: result1[0].pvCount, todayRead: result2 }
         })
     }
 }
