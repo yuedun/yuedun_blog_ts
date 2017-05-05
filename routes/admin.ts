@@ -195,7 +195,7 @@ export default class Routes {
      */
     @route({
         path: "/deleteBlog/:id",
-        method: "delete"
+        method: "get"
     })
     static deleteBlog(req: Request, res: Response): Promise.Thenable<any> {
         var user = req.session.user;

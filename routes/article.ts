@@ -24,50 +24,36 @@ export default class Routes {
         pageIndex = req.query.pageIndex ? Number(req.query.pageIndex) : pageIndex;
         pageSize = req.query.pageSize ? Number(req.query.pageSize) : pageSize;
         var category = req.query.category;
-        var condition = {
-            status: 1,
-            category: ''
+        var condition: any = {
+            status: 1
         }
-        if (category != "" && category != null) {
+        if (category) {
             condition.category = category;
         }
         return Promise.all([
-            new Promise(function (resolve, reject) {
-                Blog.find(condition, null, {
-                    sort: { '_id': -1 },
-                    skip: pageIndex * pageSize,
-                    limit: pageSize
-                }, function (err: any, docs) {
-                    if (err) reject(err.message);
-                    docs.forEach(function (item, index) {
-                        if (item.ismd) {
-                            item.content = md.render(item.content).replace(/<\/?.+?>/g, "").substring(0, 300);
-                        } else {
-                            item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
-                        }
-                    });
-                    resolve(docs);
-                });
-            }),
+            Blog.find(condition, null, { sort: { '_id': -1 }, skip: pageIndex * pageSize, limit: pageSize }),
             //最新列表
             latestTop,
             //浏览量排行
             visitedTop,
-            new Promise((resolve, reject) => {
-                Blog.count(condition, function (err: any, count) {
-                    resolve(count);
-                })
-            })
-        ]).then(([result1, result2, result3, result4]: [Array<BlogInstance>, Array<BlogInstance>, Array<BlogInstance>, number]) => {
+            Blog.count(condition)
+        ]).then(([docs, result2, result3, result4]: [Array<BlogInstance>, Array<BlogInstance>, Array<BlogInstance>, number]) => {
+            docs.forEach(function (item, index) {
+                if (item.ismd) {
+                    item.content = md.render(item.content).replace(/<\/?.+?>/g, "").substring(0, 300);
+                } else {
+                    item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
+                }
+            });
             return {
                 config: config,
-                blogList: result1,
+                blogList: docs,
                 newList: result2,
                 topList: result3,
                 pageIndex: req.query.pageIndex ? req.query.pageIndex : pageIndex,
                 totalIndex: result4,
                 pageSize: pageSize,
-                pageCount: result1.length,
+                pageCount: docs.length,
                 category: category
             };
         })
@@ -81,44 +67,31 @@ export default class Routes {
         method: "get"
     })
     static blogDetail(req: Request, res: Response): Promise.Thenable<any> {
+        let blogId = req.params.id;
+        let ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        let visitor = ip + blogId;
+        let blogPromise: Promise.Thenable<BlogInstance>;
+        if (req.cookies[visitor + blogId]) {
+            blogPromise = Blog.findById(req.params.id);
+        } else {
+            blogPromise = Blog.findByIdAndUpdate(req.params.id, { $inc: { pv: 1 } })
+        }
         return Promise.all([
             latestTop,
-            visitedTop
-        ]).then(([result1, result2]) => {
-            var ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-            var blogId = req.params.id;
-            var visitor = ip + blogId;
-            if (req.cookies[visitor + blogId]) {
-                Blog.findById(req.params.id, function (err: any, doc) {
-                    if (err) res.send(err.message);
-                    if (doc.ismd) {
-                        doc.content = md.render(doc.content);
-                    }
-                    return {
-                        config: config,
-                        newList: result1,
-                        topList: result2,
-                        blog: doc
-                    };
-                });
-            } else {
-                Blog.findByIdAndUpdate(req.params.id, {
-                    $inc: { pv: 1 }
-                }, function (err: any, doc) {
-                    if (err) res.send(err.message);
-                    if (doc.ismd) {
-                        doc.content = md.render(doc.content);
-                    }
-                    res.cookie('visitor' + blogId, visitor, { maxAge: 1000 * 60 * 60 * 8, httpOnly: true });
-                    return {
-                        config: config,
-                        newList: result1,
-                        topList: result2,
-                        blog: doc
-                    };
-                });
+            visitedTop,
+            blogPromise
+        ]).then(([result1, result2, doc]) => {
+            if (doc.ismd) {
+                doc.content = md.render(doc.content);
             }
-        })
+            res.cookie('visitor' + blogId, visitor, { maxAge: 1000 * 60 * 60 * 8, httpOnly: true });
+            return {
+                config: config,
+                newList: result1,
+                topList: result2,
+                blog: doc
+            };
+        });
     };
     /* 博客目录 */
     @route({
@@ -127,11 +100,7 @@ export default class Routes {
     })
     static catalog(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
-            new Promise((resolve, reject) => {
-                Blog.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err: any, list) {
-                    resolve(list);
-                })
-            }),
+            Blog.find({ status: 1 }, 'title createDate pv', { sort: { createDate: -1 } }),
             latestTop,
             visitedTop
         ]).then(([result1, result2, result3]) => {
@@ -150,11 +119,7 @@ export default class Routes {
     })
     static weibo(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
-            new Promise((resolve, reject) => {
-                Blog.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err: any, list) {
-                    resolve(list);
-                })
-            }),
+            Blog.find({status:1}, 'title createDate pv', { sort: { createDate: -1 } }),
             latestTop,
             visitedTop
         ]).then(([result1, result2]) => {
@@ -172,11 +137,7 @@ export default class Routes {
     })
     static about(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
-            new Promise((resolve, reject) => {
-                Blog.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err: any, list) {
-                    resolve(list);
-                })
-            }),
+            Blog.find({status:1}, 'title createDate pv', { sort: { createDate: -1 } }),
             latestTop,
             visitedTop
         ]).then(([result1, result2]) => {
@@ -221,20 +182,10 @@ export default class Routes {
     })
     static quicknote(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
-            new Promise((resolve, reject) => {
-                Blog.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err: any, list) {
-                    resolve(list);
-                })
-            }),
+            Blog.find({status:1}, 'title createDate pv', { sort: { createDate: -1 } }),
             latestTop,
             visitedTop,
-            new Promise((resolve, reject) => {
-                QuickNote.find(null, null, {
-                    sort: { '_id': -1 }
-                }, function (err: any, docs) {
-                    resolve(docs);
-                });
-            })
+            QuickNote.find(null, null, {sort: { '_id': -1 }})
         ]).then(([result1, result2, result3]) => {
             return {
                 config: config,

@@ -56,7 +56,11 @@ export default class RouteRegister {
         let methodPath = route.path;
         let path: string;
 
-        path = basePath + methodPath;
+        if (basePath === "/article") {
+            path = methodPath;
+        } else {
+            path = basePath + methodPath;
+        }
         /**
          * 每个路由都会构造出一个app.get或app.post这样的函数
          * 然后调用这个函数，传递地址和回调函数
@@ -69,7 +73,7 @@ export default class RouteRegister {
                 //获取到数据可以做一些后续补充处理
                 return route.handler.call(route.target, req, res);
             }).then(data => {
-                if(!data) return;//没有返回数据，一般是redirect跳转了，不需要往下执行。也可以返回需要重定向的地址，在此统一处理
+                if (!data) return;//没有返回数据，一般是redirect跳转了，不需要往下执行。也可以返回需要重定向的地址，在此统一处理
                 // if(typeof data == "string"){
                 //     res.redirect(data);
                 //     return;

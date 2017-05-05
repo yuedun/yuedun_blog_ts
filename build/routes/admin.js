@@ -410,7 +410,7 @@ __decorate([
 __decorate([
     route_1.route({
         path: "/deleteBlog/:id",
-        method: "delete"
+        method: "get"
     })
 ], Routes, "deleteBlog", null);
 __decorate([

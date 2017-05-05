@@ -36,7 +36,12 @@ var RouteRegister = (function () {
         var methodName = route.name;
         var methodPath = route.path;
         var path;
-        path = basePath + methodPath;
+        if (basePath === "/article") {
+            path = methodPath;
+        }
+        else {
+            path = basePath + methodPath;
+        }
         expressMethod.call(this.app, path, function (req, res) {
             new Promise(function (resolve, reject) {
                 resolve("权限验证通过");

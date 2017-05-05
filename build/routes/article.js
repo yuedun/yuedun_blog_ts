@@ -27,107 +27,73 @@ var Routes = (function () {
         pageSize = req.query.pageSize ? Number(req.query.pageSize) : pageSize;
         var category = req.query.category;
         var condition = {
-            status: 1,
-            category: ''
+            status: 1
         };
-        if (category != "" && category != null) {
+        if (category) {
             condition.category = category;
         }
         return Promise.all([
-            new Promise(function (resolve, reject) {
-                blog_model_1.default.find(condition, null, {
-                    sort: { '_id': -1 },
-                    skip: pageIndex * pageSize,
-                    limit: pageSize
-                }, function (err, docs) {
-                    if (err)
-                        reject(err.message);
-                    docs.forEach(function (item, index) {
-                        if (item.ismd) {
-                            item.content = md.render(item.content).replace(/<\/?.+?>/g, "").substring(0, 300);
-                        }
-                        else {
-                            item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
-                        }
-                    });
-                    resolve(docs);
-                });
-            }),
+            blog_model_1.default.find(condition, null, { sort: { '_id': -1 }, skip: pageIndex * pageSize, limit: pageSize }),
             latestTop,
             visitedTop,
-            new Promise(function (resolve, reject) {
-                blog_model_1.default.count(condition, function (err, count) {
-                    resolve(count);
-                });
-            })
+            blog_model_1.default.count(condition)
         ]).then(function (_a) {
-            var result1 = _a[0], result2 = _a[1], result3 = _a[2], result4 = _a[3];
+            var docs = _a[0], result2 = _a[1], result3 = _a[2], result4 = _a[3];
+            docs.forEach(function (item, index) {
+                if (item.ismd) {
+                    item.content = md.render(item.content).replace(/<\/?.+?>/g, "").substring(0, 300);
+                }
+                else {
+                    item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
+                }
+            });
             return {
                 config: config,
-                blogList: result1,
+                blogList: docs,
                 newList: result2,
                 topList: result3,
                 pageIndex: req.query.pageIndex ? req.query.pageIndex : pageIndex,
                 totalIndex: result4,
                 pageSize: pageSize,
-                pageCount: result1.length,
+                pageCount: docs.length,
                 category: category
             };
         });
     };
     ;
     Routes.blogDetail = function (req, res) {
+        var blogId = req.params.id;
+        var ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
+        var visitor = ip + blogId;
+        var blogPromise;
+        if (req.cookies[visitor + blogId]) {
+            blogPromise = blog_model_1.default.findById(req.params.id);
+        }
+        else {
+            blogPromise = blog_model_1.default.findByIdAndUpdate(req.params.id, { $inc: { pv: 1 } });
+        }
         return Promise.all([
             latestTop,
-            visitedTop
+            visitedTop,
+            blogPromise
         ]).then(function (_a) {
-            var result1 = _a[0], result2 = _a[1];
-            var ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-            var blogId = req.params.id;
-            var visitor = ip + blogId;
-            if (req.cookies[visitor + blogId]) {
-                blog_model_1.default.findById(req.params.id, function (err, doc) {
-                    if (err)
-                        res.send(err.message);
-                    if (doc.ismd) {
-                        doc.content = md.render(doc.content);
-                    }
-                    return {
-                        config: config,
-                        newList: result1,
-                        topList: result2,
-                        blog: doc
-                    };
-                });
+            var result1 = _a[0], result2 = _a[1], doc = _a[2];
+            if (doc.ismd) {
+                doc.content = md.render(doc.content);
             }
-            else {
-                blog_model_1.default.findByIdAndUpdate(req.params.id, {
-                    $inc: { pv: 1 }
-                }, function (err, doc) {
-                    if (err)
-                        res.send(err.message);
-                    if (doc.ismd) {
-                        doc.content = md.render(doc.content);
-                    }
-                    res.cookie('visitor' + blogId, visitor, { maxAge: 1000 * 60 * 60 * 8, httpOnly: true });
-                    return {
-                        config: config,
-                        newList: result1,
-                        topList: result2,
-                        blog: doc
-                    };
-                });
-            }
+            res.cookie('visitor' + blogId, visitor, { maxAge: 1000 * 60 * 60 * 8, httpOnly: true });
+            return {
+                config: config,
+                newList: result1,
+                topList: result2,
+                blog: doc
+            };
         });
     };
     ;
     Routes.catalog = function (req, res) {
         return Promise.all([
-            new Promise(function (resolve, reject) {
-                blog_model_1.default.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err, list) {
-                    resolve(list);
-                });
-            }),
+            blog_model_1.default.find({ status: 1 }, 'title createDate pv', { sort: { createDate: -1 } }),
             latestTop,
             visitedTop
         ]).then(function (_a) {
@@ -143,11 +109,7 @@ var Routes = (function () {
     ;
     Routes.weibo = function (req, res) {
         return Promise.all([
-            new Promise(function (resolve, reject) {
-                blog_model_1.default.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err, list) {
-                    resolve(list);
-                });
-            }),
+            blog_model_1.default.find({ status: 1 }, 'title createDate pv', { sort: { createDate: -1 } }),
             latestTop,
             visitedTop
         ]).then(function (_a) {
@@ -162,11 +124,7 @@ var Routes = (function () {
     ;
     Routes.about = function (req, res) {
         return Promise.all([
-            new Promise(function (resolve, reject) {
-                blog_model_1.default.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err, list) {
-                    resolve(list);
-                });
-            }),
+            blog_model_1.default.find({ status: 1 }, 'title createDate pv', { sort: { createDate: -1 } }),
             latestTop,
             visitedTop
         ]).then(function (_a) {
@@ -198,20 +156,10 @@ var Routes = (function () {
     ;
     Routes.quicknote = function (req, res) {
         return Promise.all([
-            new Promise(function (resolve, reject) {
-                blog_model_1.default.find({}, 'title createDate pv', { sort: { createDate: -1 } }, function (err, list) {
-                    resolve(list);
-                });
-            }),
+            blog_model_1.default.find({ status: 1 }, 'title createDate pv', { sort: { createDate: -1 } }),
             latestTop,
             visitedTop,
-            new Promise(function (resolve, reject) {
-                quick_note_model_1.default.find(null, null, {
-                    sort: { '_id': -1 }
-                }, function (err, docs) {
-                    resolve(docs);
-                });
-            })
+            quick_note_model_1.default.find(null, null, { sort: { '_id': -1 } })
         ]).then(function (_a) {
             var result1 = _a[0], result2 = _a[1], result3 = _a[2];
             return {
