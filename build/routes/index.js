@@ -7,31 +7,40 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Promise = require("bluebird");
+var blog_model_1 = require("../models/blog-model");
 var route_1 = require("../utils/route");
 var Routes = (function () {
     function Routes() {
     }
-    Routes.default = function (req) {
+    Routes.index = function (req) {
         console.log(">>>>>>>>>>>>>default");
-        return Promise.resolve(">>>>>>>>>>>>>>>>>>>>>>>>default");
+        return blog_model_1.default.findOne()
+            .then(function (data) {
+            console.log(JSON.stringify(data));
+            return data;
+        });
     };
-    Routes.index = function (req, res, next) {
+    Routes.test1 = function (req, res, next) {
         console.log(">>>>>>>>>>>>>index");
-        res.send(">>>>>>>>>>>>>>>>>>>>>>>>index");
+        return Promise.resolve(">>>>>>>>>>>>index");
+    };
+    Routes.test2 = function (req) {
+        console.log(">>>>>>>>>>>>>index");
+        return Promise.resolve(">>>>>>>>>>>>index");
     };
     return Routes;
 }());
 __decorate([
     route_1.route({
         path: "/",
-        method: "get"
-    })
-], Routes, "default", null);
-__decorate([
-    route_1.route({
-        path: "/index",
-        method: "get"
+        json: true
     })
 ], Routes, "index", null);
+__decorate([
+    route_1.route({})
+], Routes, "test1", null);
+__decorate([
+    route_1.route({})
+], Routes, "test2", null);
 exports.default = Routes;
 //# sourceMappingURL=index.js.map

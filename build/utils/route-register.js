@@ -34,7 +34,7 @@ var RouteRegister = (function () {
         var _this = this;
         var expressMethod = this.app[route.method];
         var methodName = route.name;
-        var methodPath = route.path;
+        var methodPath = route.path ? route.path : ("/" + methodName);
         var path;
         if (basePath === "/article") {
             path = methodPath;
@@ -50,6 +50,10 @@ var RouteRegister = (function () {
             }).then(function (data) {
                 if (!data)
                     return;
+                if (route.json) {
+                    res.json(data);
+                    return;
+                }
                 if (basePath === "/admin") {
                     var html = _this.adminHtmlPath + "/" + methodName;
                     res.render(html, data);

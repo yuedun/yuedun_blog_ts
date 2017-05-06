@@ -15,6 +15,7 @@ export interface RouteInfo {
     handler: Function;
     path: string;
     method: string;
+    json: boolean;
 }
 interface ROUTE {
     methods?: RouteInfo[];
@@ -53,7 +54,7 @@ export default class RouteRegister {
     private attach(basePath: string, route: RouteInfo): void {
         var expressMethod: Function = (<any>this.app)[route.method];
         let methodName = route.name;
-        let methodPath = route.path;
+        let methodPath = route.path? route.path: ("/" + methodName);
         let path: string;
 
         if (basePath === "/article") {
@@ -78,6 +79,10 @@ export default class RouteRegister {
                 //     res.redirect(data);
                 //     return;
                 // }
+                if(route.json){
+                    res.json(data);
+                    return;
+                }
                 if (basePath === "/admin") {
                     let html = this.adminHtmlPath + "/" + methodName;
                     res.render(html, data);

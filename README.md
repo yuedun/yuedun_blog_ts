@@ -90,13 +90,42 @@ typings相关文档[https://github.com/typings/typings](https://github.com/typin
 
 # mongoose promise化
 由于程序的多次迭代更新，当中使用了原生回调，`async.js`库，`bluebird`库，最终使用`async await`，`async await`的使用还是离不开promise，所以需要结合使用。
-首先需要将mongoose查询promise化，其实mongoose本身带有promise库，但是新版本中开始启用，建议使用第三方promise库，本程序使用typescript开发，所以主要说明如何在typescript中将mongoose promise化，原生nodejs方法参考[mongoose promise](http://mongoosejs.com/docs/promises.html)。
-在路径`node_modules/@types`下新建`promise-blubird.d.ts`的文件，在`@types/mongoose/index.d.ts`中加入`/// <reference types="promise-blubird" />`
-然后配置
+首先需要将mongoose查询promise化，其实mongoose本身带有promise库，所以既可以使用回调的方式也可以使用promise的方式。但是最新版本建议使用第三方promise库，否则会在控制台打印出警告信息：
+> Mongoose: mpromise (mongoose's default promise library) is deprecated, plug in your own promise library instead: http://mongoosejs.com/docs/promises.html
+
+本程序使用typescript开发，所以主要说明如何在typescript中将mongoose promise化，（原生nodejs方法参考[mongoose promise](http://mongoosejs.com/docs/promises.html)）。
+
+
+~~使用bluebird的promise方法：在路径`node_modules/@types`下新建`promise-blubird.d.ts`的文件，~~
+```
+import * as Bluebird from 'bluebird';
+
+declare module 'mongoose' {
+  type Promise<T> = Bluebird<T>;
+}
+```
+~~在`@types/mongoose/index.d.ts`中加入`/// <reference types="promise-blubird" />`~~
+```
+/// <reference types="mongodb" />
+/// <reference types="node" />
+/// <reference types="promise-blubird" />
+```
+
+在连接数据库的配置中将mongoose的`Promise`替换为bluebird
 ```
 import * as mongoose from 'mongoose';
 import * as Promise from 'bluebird';
 (<any>mongoose).Promise = Promise;//使用bluebird代替mongoose自身的promise
+import * as settings from '../settings';
+var mongodbConfig = settings.mongodb;
+
+var host = mongodbConfig.host,
+    port = mongodbConfig.port,
+    username = mongodbConfig.uid,
+    password = mongodbConfig.pwd,
+    dbName = mongodbConfig.db,
+    url = "mongodb://" + username + ":" + password + "@" + host + ":" + port + "/" + dbName;
+
 ```
 这样就可以直接使用then形式的写法了。
 ```
