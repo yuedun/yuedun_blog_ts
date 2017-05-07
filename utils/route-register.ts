@@ -54,14 +54,45 @@ export default class RouteRegister {
     private attach(basePath: string, route: RouteInfo): void {
         var expressMethod: Function = (<any>this.app)[route.method];
         let methodName = route.name;
-        let methodPath = route.path? route.path: ("/" + methodName);
+        let methodPath = route.path;//? route.path: ("/" + methodName);
         let path: string;
-
+        //面向用户端地址兼容以前的地址，特别处理
         if (basePath === "/article") {
-            path = methodPath;
+            //没有配置path的情况
+            if (!methodPath) {
+                //方法名为index则为首页
+                if (methodName == "index") {
+                    path = "/";
+                } else {
+                    path = "/" + methodName;
+                }
+            } else if (typeof methodPath === 'string') {
+                if (methodPath.charAt(0) != '/') {//例如：/index/:id则path只需配置为:id
+                    path = '/' + methodName + '/' + methodPath;
+                } else {
+                    //自定义path，例如：/a/b/c，不需要符合/article/about这种规则。如果指定了path则以path为最终路由
+                    path = methodPath;
+                }
+            }
         } else {
-            path = basePath + methodPath;
+            //下面的匹配方式更符合自动路由
+            if (!methodPath) {
+                //方法名为index则为首页
+                if (methodName == "index") {
+                    path = basePath;
+                } else {
+                    path = basePath + "/" + methodName;
+                }
+            } else if (typeof methodPath === 'string') {
+                if (methodPath.charAt(0) != '/') {//例如：/index/:id则path只需配置为:id
+                    path = basePath + '/' + methodPath;
+                } else {
+                    //自定义path，例如：/a/b/c，不需要符合/article/about这种规则
+                    path = methodPath;
+                }
+            }
         }
+
         /**
          * 每个路由都会构造出一个app.get或app.post这样的函数
          * 然后调用这个函数，传递地址和回调函数
@@ -79,7 +110,7 @@ export default class RouteRegister {
                 //     res.redirect(data);
                 //     return;
                 // }
-                if(route.json){
+                if (route.json) {
                     res.json(data);
                     return;
                 }

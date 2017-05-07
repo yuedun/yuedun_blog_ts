@@ -61,7 +61,7 @@ var Routes = (function () {
         });
     };
     ;
-    Routes.blogDetail = function (req, res) {
+    Routes.blogdetail = function (req, res) {
         var blogId = req.params.id;
         var ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         var visitor = ip + blogId;
@@ -156,7 +156,6 @@ var Routes = (function () {
     ;
     Routes.quicknote = function (req, res) {
         return Promise.all([
-            blog_model_1.default.find({ status: 1 }, 'title createDate pv', { sort: { createDate: -1 } }),
             latestTop,
             visitedTop,
             quick_note_model_1.default.find(null, null, { sort: { '_id': -1 } })
@@ -175,51 +174,31 @@ var Routes = (function () {
 }());
 __decorate([
     route_1.route({
-        path: "/",
-        method: "get"
+        path: "/"
     })
 ], Routes, "index", null);
 __decorate([
     route_1.route({
-        path: "/blogdetail/:id",
-        method: "get"
+        path: ":id"
     })
-], Routes, "blogDetail", null);
+], Routes, "blogdetail", null);
 __decorate([
-    route_1.route({
-        path: "/catalog",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "catalog", null);
 __decorate([
-    route_1.route({
-        path: "/weibo",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "weibo", null);
 __decorate([
-    route_1.route({
-        path: "/about",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "about", null);
 __decorate([
-    route_1.route({
-        path: "/gallery",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "gallery", null);
 __decorate([
-    route_1.route({
-        path: "/resume",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "resume", null);
 __decorate([
-    route_1.route({
-        path: "/quicknote",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "quicknote", null);
 exports.default = Routes;
 var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");

@@ -63,7 +63,7 @@ var Routes = (function () {
         var token = qiniu.uptoken('hopefully');
         return category_model_1.default.find({})
             .then(function (catotory) {
-            return Promise.resolve({ success: 0, categories: catotory, token: token });
+            return { success: 0, categories: catotory, token: token };
         });
     };
     Routes.newArticle = function (req, res) {
@@ -105,7 +105,7 @@ var Routes = (function () {
         var token = qiniu.uptoken('hopefully');
         return category_model_1.default.find({})
             .then(function (catogory) {
-            return Promise.resolve({ success: 0, categories: catogory, token: token });
+            return { success: 0, categories: catogory, token: token };
         });
     };
     Routes.blogList = function (req, res) {
@@ -138,7 +138,7 @@ var Routes = (function () {
             if (doc.ismd) {
                 doc.content = md.render(doc.content);
             }
-            return Promise.resolve({ blog: doc, user: user });
+            return { blog: doc, user: user };
         });
     };
     Routes.deleteBlog = function (req, res) {
@@ -150,20 +150,8 @@ var Routes = (function () {
     };
     Routes.toEditArticle = function (req, res) {
         var token = qiniu.uptoken('hopefully');
-        var getBlogById = new Promise(function (resolve, reject) {
-            blog_model_1.default.findById(req.params.id, function (err, doc) {
-                if (err)
-                    reject(err);
-                resolve(doc);
-            });
-        });
-        var getCategory = new Promise(function (resolve, reject) {
-            category_model_1.default.find({}, function (err, docs) {
-                if (err)
-                    reject(err);
-                resolve(docs);
-            });
-        });
+        var getBlogById = blog_model_1.default.findById(req.params.id);
+        var getCategory = category_model_1.default.find({});
         Promise.all([getBlogById, getCategory])
             .then(function (_a) {
             var blogObj = _a[0], categories = _a[1];
@@ -217,7 +205,7 @@ var Routes = (function () {
         });
     };
     Routes.addUserUi = function (req, res) {
-        res.render('admin/adduser', { success: 0, flag: 0, user: req.session.user });
+        return Promise.resolve({ success: 0, flag: 0, user: req.session.user });
     };
     Routes.addUser = function (req, res) {
         var password = req.body.password;
@@ -278,9 +266,6 @@ var Routes = (function () {
         res.redirect('/admin/login');
         return;
     };
-    Routes.test = function (req, res) {
-        res.render('admin/menu', {});
-    };
     Routes.addWeatherUserUi = function (req, res) {
         res.render('admin/addweatheruser', { success: 0, flag: 0, user: req.session.user });
     };
@@ -303,16 +288,16 @@ var Routes = (function () {
         });
     };
     Routes.weatherUserList = function (req, res) {
-        weather_user_model_1.default.find({}, null, function (err, docs) {
-            if (err)
-                res.send(err.message);
-            res.render('admin/weatherUser', { wusers: docs, user: req.session.user });
+        return weather_user_model_1.default.find({}, null)
+            .then(function (docs) {
+            return { wusers: docs, user: req.session.user };
         });
     };
     Routes.delWeatherUser = function (req, res) {
-        weather_user_model_1.default.remove({ _id: req.params.userId }, function (err) {
+        return Promise.resolve(weather_user_model_1.default.remove({ _id: req.params.userId }))
+            .then(function (d) {
             res.redirect('/admin/weatherUserList');
-        });
+        }).value();
     };
     Routes.quicknote = function (req, res) {
         var quicknote = new quick_note_model_1.default({
@@ -320,9 +305,8 @@ var Routes = (function () {
             state: true,
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
         });
-        quicknote.save(function (e, docs, numberAffected) {
-            if (e)
-                res.send(e.message);
+        return quicknote.save()
+            .then(function (data) {
             res.redirect('/admin/quickNoteList');
         });
     };
@@ -360,40 +344,26 @@ var Routes = (function () {
     return Routes;
 }());
 __decorate([
-    route_1.route({
-        path: "/",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "home", null);
 __decorate([
-    route_1.route({
-        path: "/login",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "login", null);
 __decorate([
     route_1.route({
-        path: "/doLogin",
         method: "post"
     })
 ], Routes, "doLogin", null);
 __decorate([
-    route_1.route({
-        path: "/newArticleUi",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "newArticleUi", null);
 __decorate([
     route_1.route({
-        path: "/newArticle",
         method: "post"
     })
 ], Routes, "newArticle", null);
 __decorate([
-    route_1.route({
-        path: "/newArticleMd",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "newArticleMd", null);
 __decorate([
     route_1.route({
@@ -403,135 +373,91 @@ __decorate([
 ], Routes, "blogList", null);
 __decorate([
     route_1.route({
-        path: "/blogDetail/:id",
-        method: "get"
+        path: ":id"
     })
 ], Routes, "blogDetail", null);
 __decorate([
     route_1.route({
-        path: "/deleteBlog/:id",
-        method: "get"
+        path: ":id"
     })
 ], Routes, "deleteBlog", null);
 __decorate([
     route_1.route({
-        path: "/toEditArticle/:id",
-        method: "get"
+        path: ":id"
     })
 ], Routes, "toEditArticle", null);
 __decorate([
     route_1.route({
-        path: "/editArticle/:id",
-        method: "get"
+        path: ":id"
     })
 ], Routes, "editArticle", null);
 __decorate([
-    route_1.route({
-        path: "/category",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "category", null);
 __decorate([
     route_1.route({
-        path: "/addCategory",
         method: "post"
     })
 ], Routes, "addCategory", null);
 __decorate([
     route_1.route({
-        path: "/deleteCate/:id",
-        method: "get"
+        path: ":id"
     })
 ], Routes, "deleteCate", null);
 __decorate([
-    route_1.route({
-        path: "/addUserUi",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "addUserUi", null);
 __decorate([
     route_1.route({
-        path: "/addUser",
         method: "post"
     })
 ], Routes, "addUser", null);
 __decorate([
-    route_1.route({
-        path: "/viewUser",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "viewUser", null);
 __decorate([
     route_1.route({
-        path: "/toModifyUser/:userId",
-        method: "get"
+        path: ":userId"
     })
 ], Routes, "toModifyUser", null);
 __decorate([
     route_1.route({
-        path: "/modifyUser/:userId",
+        path: ":userId",
         method: "post"
     })
 ], Routes, "modifyUser", null);
 __decorate([
     route_1.route({
-        path: "/deleteUser/:userI",
-        method: "get"
+        path: ":userId"
     })
 ], Routes, "deleteUser", null);
 __decorate([
-    route_1.route({
-        path: "/logout",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "logout", null);
 __decorate([
-    route_1.route({
-        path: "/test",
-        method: "get"
-    })
-], Routes, "test", null);
-__decorate([
-    route_1.route({
-        path: "/addWeatherUser",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "addWeatherUserUi", null);
 __decorate([
     route_1.route({
-        path: "/addWeatherUser",
         method: "post"
     })
 ], Routes, "addWeatherUser", null);
 __decorate([
-    route_1.route({
-        path: "/weatherUserList",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "weatherUserList", null);
 __decorate([
     route_1.route({
-        path: "/delWeatherUser/:userId",
-        method: "get"
+        path: ":userId"
     })
 ], Routes, "delWeatherUser", null);
 __decorate([
-    route_1.route({
-        path: "/quicknote",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "quicknote", null);
 __decorate([
-    route_1.route({
-        path: "/quickNoteList",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "quickNoteList", null);
 __decorate([
-    route_1.route({
-        path: "/readCount",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "readCount", null);
 exports.default = Routes;
 //# sourceMappingURL=admin.js.map

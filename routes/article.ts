@@ -15,8 +15,7 @@ var config = settings.blog_config;
 export default class Routes {
     /* 首页 */
     @route({
-        path: "/",
-        method: "get"
+        path: "/"
     })
     static index(req: Request, res: Response): Promise.Thenable<any> {
         var pageIndex = 0;
@@ -63,10 +62,9 @@ export default class Routes {
      * 获取博客详情，并且浏览数+1,同一ip2小时内浏览多次不增加浏览次数
      */
     @route({
-        path: "/blogdetail/:id",
-        method: "get"
+        path: ":id"
     })
-    static blogDetail(req: Request, res: Response): Promise.Thenable<any> {
+    static blogdetail(req: Request, res: Response): Promise.Thenable<any> {
         let blogId = req.params.id;
         let ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
         let visitor = ip + blogId;
@@ -95,8 +93,7 @@ export default class Routes {
     };
     /* 博客目录 */
     @route({
-        path: "/catalog",
-        method: "get"
+        
     })
     static catalog(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
@@ -114,8 +111,7 @@ export default class Routes {
     };
     /* 我的微博 */
     @route({
-        path: "/weibo",
-        method: "get"
+        
     })
     static weibo(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
@@ -132,8 +128,7 @@ export default class Routes {
     };
     /* 关于我 */
     @route({
-        path: "/about",
-        method: "get"
+        
     })
     static about(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
@@ -151,8 +146,7 @@ export default class Routes {
 
     //婚纱
     @route({
-        path: "/gallery",
-        method: "get"
+        
     })
     static gallery(req: Request, res: Response): Promise.Thenable<any> {
         if (req.query.pass === settings.gallery_pass) {
@@ -167,8 +161,7 @@ export default class Routes {
 
     //简历
     @route({
-        path: "/resume",
-        method: "get"
+        
     })
     static resume(req: Request, res: Response): Promise.Thenable<any> {
         debug("*****resume:" + moment().format("YYYY-MM-DD HH:ss:mm"));
@@ -177,12 +170,10 @@ export default class Routes {
 
     //速记本
     @route({
-        path: "/quicknote",
-        method: "get"
+        
     })
     static quicknote(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
-            Blog.find({status:1}, 'title createDate pv', { sort: { createDate: -1 } }),
             latestTop,
             visitedTop,
             QuickNote.find(null, null, {sort: { '_id': -1 }})

@@ -34,13 +34,43 @@ var RouteRegister = (function () {
         var _this = this;
         var expressMethod = this.app[route.method];
         var methodName = route.name;
-        var methodPath = route.path ? route.path : ("/" + methodName);
+        var methodPath = route.path;
         var path;
         if (basePath === "/article") {
-            path = methodPath;
+            if (!methodPath) {
+                if (methodName == "index") {
+                    path = "/";
+                }
+                else {
+                    path = "/" + methodName;
+                }
+            }
+            else if (typeof methodPath === 'string') {
+                if (methodPath.charAt(0) != '/') {
+                    path = '/' + methodName + '/' + methodPath;
+                }
+                else {
+                    path = methodPath;
+                }
+            }
         }
         else {
-            path = basePath + methodPath;
+            if (!methodPath) {
+                if (methodName == "index") {
+                    path = basePath;
+                }
+                else {
+                    path = basePath + "/" + methodName;
+                }
+            }
+            else if (typeof methodPath === 'string') {
+                if (methodPath.charAt(0) != '/') {
+                    path = basePath + '/' + methodPath;
+                }
+                else {
+                    path = methodPath;
+                }
+            }
         }
         expressMethod.call(this.app, path, function (req, res) {
             new Promise(function (resolve, reject) {

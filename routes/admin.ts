@@ -1,7 +1,6 @@
 import * as _ from 'lodash';
 import { Request, Response } from 'express';
 import * as Moment from 'moment';//日期格式化组件
-import * as Async from 'async';
 import * as Promise from 'bluebird';
 import { default as User } from '../models/user-model';
 import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
@@ -23,8 +22,7 @@ export default class Routes {
 
     /*进入后台主界面 */
     @route({
-        path: "/",
-        method: "get"
+        
     })
     static home(req: Request, res: Response): Promise.Thenable<any> {
         var user = req.session ? req.session.user : {};
@@ -37,8 +35,7 @@ export default class Routes {
 
     /* 后台登陆 */
     @route({
-        path: "/login",
-        method: "get"
+        
     })
     static login(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.resolve({});
@@ -46,7 +43,6 @@ export default class Routes {
 
     //登陆
     @route({
-        path: "/doLogin",
         method: "post"
     })
     static doLogin(req: Request, res: Response): any {
@@ -77,14 +73,13 @@ export default class Routes {
      * 跳转到新建文章页面
      */
     @route({
-        path: "/newArticleUi",
-        method: "get"
+        
     })
     static newArticleUi(req: Request, res: Response): Promise.Thenable<any> {
         var token = qiniu.uptoken('hopefully');
         return Category.find({})
             .then(catotory => {
-                return Promise.resolve({ success: 0, categories: catotory, token: token });
+                return { success: 0, categories: catotory, token: token };
             })
     }
     /**
@@ -92,7 +87,6 @@ export default class Routes {
      * success代表新建成功时提示
      */
     @route({
-        path: "/newArticle",
         method: "post"
     })
     static newArticle(req: Request, res: Response): Promise.Thenable<any> {
@@ -126,7 +120,6 @@ export default class Routes {
                 return blog.save();
             }).then(() => {
                 console.log(">>>>>>>>>>>>");
-
                 res.redirect('/admin/blogList?success=1');
             })
     }
@@ -134,14 +127,13 @@ export default class Routes {
      * 跳转到新建文章页面-markdown方式
      */
     @route({
-        path: "/newArticleMd",
-        method: "get"
+        
     })
     static newArticleMd(req: Request, res: Response): Promise.Thenable<any> {
         var token = qiniu.uptoken('hopefully');
         return Category.find({})
             .then(catogory => {
-                return Promise.resolve({ success: 0, categories: catogory, token: token });
+                return { success: 0, categories: catogory, token: token };
             });
     }
 
@@ -177,8 +169,7 @@ export default class Routes {
      * 查看单篇博客内容
      */
     @route({
-        path: "/blogDetail/:id",
-        method: "get"
+        path: ":id"
     })
     static blogDetail(req: Request, res: Response): Promise.Thenable<any> {
         var user = req.session.user;
@@ -187,15 +178,14 @@ export default class Routes {
                 if (doc.ismd) {
                     doc.content = md.render(doc.content);
                 }
-                return Promise.resolve({ blog: doc, user: user });
+                return { blog: doc, user: user };
             })
     }
     /**
      * 删除文章
      */
     @route({
-        path: "/deleteBlog/:id",
-        method: "get"
+        path: ":id"
     })
     static deleteBlog(req: Request, res: Response): Promise.Thenable<any> {
         var user = req.session.user;
@@ -208,23 +198,12 @@ export default class Routes {
      * 跳转到修改文章
     /* 使用async方式修改文章 */
     @route({
-        path: "/toEditArticle/:id",
-        method: "get"
+        path: ":id"
     })
     static toEditArticle(req: Request, res: Response): void {
         var token = qiniu.uptoken('hopefully');
-        let getBlogById = new Promise((resolve, reject) => {
-            Blog.findById(req.params.id, function (err, doc) {
-                if (err) reject(err);
-                resolve(doc);
-            });
-        })
-        let getCategory = new Promise((resolve, reject) => {
-            Category.find({}, function (err, docs) {
-                if (err) reject(err);
-                resolve(docs);
-            });
-        })
+        let getBlogById = Blog.findById(req.params.id);
+        let getCategory = Category.find({})
 
         Promise.all([getBlogById, getCategory])
             .then(([blogObj, categories]: [BlogInstance, CategoryInstance[]]) => {
@@ -239,8 +218,7 @@ export default class Routes {
      * 修改操作
      */
     @route({
-        path: "/editArticle/:id",
-        method: "get"
+        path: ":id"
     })
     static editArticle(req: Request, res: Response): void {
         var content = req.body.content;
@@ -263,8 +241,7 @@ export default class Routes {
      * 分类
      */
     @route({
-        path: "/category",
-        method: "get"
+        
     })
     static category(req: Request, res: Response): void {
         Category.find({}, function (err, docs) {
@@ -274,7 +251,6 @@ export default class Routes {
     }
 
     @route({
-        path: "/addCategory",
         method: "post"
     })
     static addCategory(req: Request, res: Response): void {
@@ -291,8 +267,7 @@ export default class Routes {
      * 删除分类
      */
     @route({
-        path: "/deleteCate/:id",
-        method: "get"
+        path: ":id"
     })
     static deleteCate(req: Request, res: Response): void {
         var user = req.session.user;
@@ -303,18 +278,16 @@ export default class Routes {
 
     //添加用户界面
     @route({
-        path: "/addUserUi",
-        method: "get"
+        
     })
-    static addUserUi(req: Request, res: Response): void {
-        res.render('admin/adduser', { success: 0, flag: 0, user: req.session.user });
+    static addUserUi(req: Request, res: Response): Promise.Thenable<any> {
+        return Promise.resolve( { success: 0, flag: 0, user: req.session.user });
     }
 
     /**
      * 新增用户
      */
     @route({
-        path: "/addUser",
         method: "post"
     })
     static addUser(req: Request, res: Response): void {
@@ -336,8 +309,7 @@ export default class Routes {
      * 查看用户列表
      */
     @route({
-        path: "/viewUser",
-        method: "get"
+        
     })
     static viewUser(req: Request, res: Response): void {
         User.find({}, null, function (err, docs) {
@@ -349,8 +321,7 @@ export default class Routes {
      * 跳转到修改页面success:0未成功1成功flag:0添加1修改
      */
     @route({
-        path: "/toModifyUser/:userId",
-        method: "get"
+        path: ":userId"
     })
     static toModifyUser(req: Request, res: Response): void {
         User.findById(req.params.userId, function (err, doc) {
@@ -367,7 +338,7 @@ export default class Routes {
      * findByIdAndUpdate的callback函数有两个参数1错误信息，2修改后的对象
      */
     @route({
-        path: "/modifyUser/:userId",
+        path: ":userId",
         method: "post"
     })
     static modifyUser(req: Request, res: Response): void {
@@ -388,8 +359,7 @@ export default class Routes {
      *删除用户
      */
     @route({
-        path: "/deleteUser/:userI",
-        method: "get"
+        path: ":userId"
     })
     static deleteUser(req: Request, res: Response): void {
         User.remove({ _id: req.params.userId }, function (err) {
@@ -399,8 +369,7 @@ export default class Routes {
     }
     /*  登出  */
     @route({
-        path: "/logout",
-        method: "get"
+        
     })
     static logout(req: Request, res: Response): void {
         req.session.user = null;
@@ -408,19 +377,10 @@ export default class Routes {
         res.redirect('/admin/login');
         return;
     }
-    /*  测试路由  */
-    @route({
-        path: "/test",
-        method: "get"
-    })
-    static test(req: Request, res: Response): void {
-        res.render('admin/menu', {});
-    }
 
     //添加用户界面
     @route({
-        path: "/addWeatherUser",
-        method: "get"
+        
     })
     static addWeatherUserUi(req: Request, res: Response): void {
         res.render('admin/addweatheruser', { success: 0, flag: 0, user: req.session.user });
@@ -429,7 +389,6 @@ export default class Routes {
      * 新增天气预报用户weatherUserList
      */
     @route({
-        path: "/addWeatherUser",
         method: "post"
     })
     static addWeatherUser(req: Request, res: Response): void {
@@ -454,52 +413,49 @@ export default class Routes {
      * 查看天气用户列表
      */
     @route({
-        path: "/weatherUserList",
-        method: "get"
+        
     })
-    static weatherUserList(req: Request, res: Response): void {
-        WeatherUser.find({}, null, function (err, docs) {
-            if (err) res.send(err.message);
-            res.render('admin/weatherUser', { wusers: docs, user: req.session.user });
-        });
+    static weatherUserList(req: Request, res: Response): Promise.Thenable<any> {
+        return WeatherUser.find({}, null)
+        .then(docs =>{
+            return { wusers: docs, user: req.session.user }
+        })
     }
 
     /*
      *删除天气用户
      */
     @route({
-        path: "/delWeatherUser/:userId",
-        method: "get"
+        path: ":userId"
     })
     static delWeatherUser(req: Request, res: Response): void {
-        WeatherUser.remove({ _id: req.params.userId }, function (err) {
+        return Promise.resolve(WeatherUser.remove({ _id: req.params.userId }))
+        .then(d=>{
             res.redirect('/admin/weatherUserList');
-        });
+        }).value()
     }
     /**
      * 新增速记
      */
     @route({
-        path: "/quicknote",
-        method: "get"
+        
     })
-    static quicknote(req: Request, res: Response): void {
+    static quicknote(req: Request, res: Response): Promise.Thenable<void> {
         var quicknote = new QuickNote({
             content: req.body.content,
             state: true,//可用/停用
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
         });
-        quicknote.save(function (e, docs, numberAffected) {
-            if (e) res.send(e.message);
+        return quicknote.save()
+        .then(data=>{
             res.redirect('/admin/quickNoteList');
-        });
+        })
     }
     /*
      * 速记列表
      */
     @route({
-        path: "/quickNoteList",
-        method: "get"
+        
     })
     static quickNoteList(req: Request, res: Response): void {
         var user = req.session.user;
@@ -526,8 +482,7 @@ export default class Routes {
      * 访问统计
      */
     @route({
-        path: "/readCount",
-        method: "get"
+        
     })
     static readCount(req: Request, res: Response): Promise.Thenable<any> {
         var today = Moment().format('YYYY-MM-DD');
