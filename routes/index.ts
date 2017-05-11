@@ -7,26 +7,22 @@ import { route } from '../utils/route';
 export default class Routes {
 
     @route({
-        path: "/",
         json: true
     })
     static index(req: Request): Promise.Thenable<any> {
-        console.log(">>>>>>>>>>>>>default");
         return Blog.findOne()
-        .then(data=>{
-            console.log(JSON.stringify(data))
-            return data;
-        })
-        // return Promise.resolve(">>>>>>>>>>>>>>>>>>>>>>>>default");
+            .then(data => {
+                console.log(JSON.stringify(data))
+                return data;
+            });
     }
 
     @route({
-        
+        json: true
     })
     static test1(req: Request, res: Response, next: Function): any {
-        console.log(">>>>>>>>>>>>>index");
-        // res.send(">>>>>>>>>>>>>>>>>>>>>>>>index")
-        return Promise.resolve(">>>>>>>>>>>>index")
+        console.log(">>>>>>>>>>>>>test1");
+        return Promise.resolve(">>>>>>>>>>>>test")
     }
 
     /**
@@ -36,7 +32,7 @@ export default class Routes {
      * @param next 
      */
     @route({
-        
+
     })
     static test2(req: Request): any {
         console.log(">>>>>>>>>>>>>index");

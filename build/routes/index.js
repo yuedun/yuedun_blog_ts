@@ -13,7 +13,6 @@ var Routes = (function () {
     function Routes() {
     }
     Routes.index = function (req) {
-        console.log(">>>>>>>>>>>>>default");
         return blog_model_1.default.findOne()
             .then(function (data) {
             console.log(JSON.stringify(data));
@@ -21,8 +20,8 @@ var Routes = (function () {
         });
     };
     Routes.test1 = function (req, res, next) {
-        console.log(">>>>>>>>>>>>>index");
-        return Promise.resolve(">>>>>>>>>>>>index");
+        console.log(">>>>>>>>>>>>>test1");
+        return Promise.resolve(">>>>>>>>>>>>test");
     };
     Routes.test2 = function (req) {
         console.log(">>>>>>>>>>>>>index");
@@ -32,12 +31,13 @@ var Routes = (function () {
 }());
 __decorate([
     route_1.route({
-        path: "/",
         json: true
     })
 ], Routes, "index", null);
 __decorate([
-    route_1.route({})
+    route_1.route({
+        json: true
+    })
 ], Routes, "test1", null);
 __decorate([
     route_1.route({})
