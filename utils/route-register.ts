@@ -85,7 +85,7 @@ export default class RouteRegister {
                 }
             } else if (typeof methodPath === 'string') {
                 if (methodPath.charAt(0) != '/') {//例如：/index/:id则path只需配置为:id
-                    path = basePath + '/' + methodPath;
+                    path = '/' + methodName + '/' + methodPath;
                 } else {
                     //自定义path，例如：/a/b/c，不需要符合/article/about这种规则
                     path = methodPath;
