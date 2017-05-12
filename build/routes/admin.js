@@ -23,7 +23,7 @@ var route_1 = require("../utils/route");
 var Routes = (function () {
     function Routes() {
     }
-    Routes.home = function (req, res) {
+    Routes.index = function (req, res) {
         var user = req.session ? req.session.user : {};
         if (user != null) {
             return Promise.resolve({ title: '后台管理首页', user: user });
@@ -128,7 +128,7 @@ var Routes = (function () {
                 }
                 ;
             });
-            res.render('admin/bloglist', { success: success, blogList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length });
+            return { success: success, blogList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length };
         });
     };
     Routes.blogDetail = function (req, res) {
@@ -345,7 +345,7 @@ var Routes = (function () {
 }());
 __decorate([
     route_1.route({})
-], Routes, "home", null);
+], Routes, "index", null);
 __decorate([
     route_1.route({})
 ], Routes, "login", null);
@@ -366,10 +366,7 @@ __decorate([
     route_1.route({})
 ], Routes, "newArticleMd", null);
 __decorate([
-    route_1.route({
-        path: "/blogList",
-        method: "get"
-    })
+    route_1.route({})
 ], Routes, "blogList", null);
 __decorate([
     route_1.route({

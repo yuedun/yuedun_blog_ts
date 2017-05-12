@@ -16,6 +16,7 @@ export var BlogSchema: Schema = new Schema({
 });
 
 export interface IBlog extends Document {
+    // id在document中存在
     title: string,//标题
     createDate: string,//发表时间
     updateTime: string,//修改时间

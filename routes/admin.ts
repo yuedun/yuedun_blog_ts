@@ -24,7 +24,7 @@ export default class Routes {
     @route({
         
     })
-    static home(req: Request, res: Response): Promise.Thenable<any> {
+    static index(req: Request, res: Response): Promise.Thenable<any> {
         var user = req.session ? req.session.user : {};
         if (user != null) {
             return Promise.resolve({ title: '后台管理首页', user: user });
@@ -141,8 +141,7 @@ export default class Routes {
      *文章列表
      */
     @route({
-        path: "/blogList",
-        method: "get"
+        
     })
     static blogList(req: Request, res: Response): Promise.Thenable<any> {
         var user = req.session ? req.session.user : null;
@@ -162,7 +161,7 @@ export default class Routes {
                         }
                     };
                 });
-                res.render('admin/bloglist', { success: success, blogList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length });
+                return { success: success, blogList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length };
             })
     }
     /**
