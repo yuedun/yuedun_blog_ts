@@ -133,3 +133,15 @@ Category.findOne({ cateName: req.body.category })
     .then(category => {
         //....
     })
+
+# 一个命令行窗口实现同时编译ts和重启node服务
+利用`npm scripts`来实现：
+```
+"scripts": {
+    "tsc": "tsc -w",
+    "serve": "cd ./build & nodemon ./bin/www.js",
+    "start": "parallelshell \"npm run tsc\" \"npm run serve\""
+  }
+```
+前提条件是同时安装了`typescript`,`nodemon`,`parallelshell`,其中`concurrently`也可以实现和`parallelshell`一样的功能。
+开启一个shell窗口，执行命令`npm start`即可
