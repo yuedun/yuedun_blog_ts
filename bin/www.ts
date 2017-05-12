@@ -6,7 +6,8 @@
 import 'source-map-support/register';
 import { app } from '../app';
 import * as Debug from 'debug';
-var debug = Debug('yuedun:www');
+var debug = Debug('yuedun:www');//参数是什么(模块名)就会输出哪个模块的内容，如果Debug('http')就会输出http模块中的debug输出。设置DEBUG=*会输出不必要模块的内容，
+//所以最好加一个前缀来输出指定部分内容
 import * as http from 'http';
 
 /**

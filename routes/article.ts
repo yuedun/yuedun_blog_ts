@@ -165,7 +165,7 @@ export default class Routes {
     })
     static resume(req: Request, res: Response): Promise.Thenable<any> {
         debug("*****resume:" + moment().format("YYYY-MM-DD HH:ss:mm"));
-        return null;
+        return Promise.resolve({});
     };
 
     //速记本

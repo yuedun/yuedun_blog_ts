@@ -151,7 +151,7 @@ var Routes = (function () {
     ;
     Routes.resume = function (req, res) {
         debug("*****resume:" + moment().format("YYYY-MM-DD HH:ss:mm"));
-        return null;
+        return Promise.resolve({});
     };
     ;
     Routes.quicknote = function (req, res) {

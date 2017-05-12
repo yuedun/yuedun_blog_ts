@@ -133,6 +133,7 @@ Category.findOne({ cateName: req.body.category })
     .then(category => {
         //....
     })
+```
 
 # 一个命令行窗口实现同时编译ts和重启node服务
 利用`npm scripts`来实现：
@@ -143,5 +144,11 @@ Category.findOne({ cateName: req.body.category })
     "start": "parallelshell \"npm run tsc\" \"npm run serve\""
   }
 ```
-前提条件是同时安装了`typescript`,`nodemon`,`parallelshell`,其中`concurrently`也可以实现和`parallelshell`一样的功能。
-开启一个shell窗口，执行命令`npm start`即可
+前提条件是同时安装了`typescript`，`nodemon`，`parallelshell`，其中`concurrently`也可以实现和`parallelshell`一样的功能。
+开启一个shell窗口，执行命令`npm start`即可.
+
+# debug模块的使用方法
+```
+var debug =require("debug")("yuedun:www");
+```
+参数是什么(模块名)就会输出哪个模块的内容，如果Debug('http')就会输出http模块中的debug输出。设置DEBUG=*会输出所有模块的内容，所以最好加一个前缀来输出指定部分内容，比如自定义模块就传参`yuedun:www`冒号后面为文件名就会输出该文件下的debug
