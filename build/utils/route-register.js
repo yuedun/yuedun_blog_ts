@@ -65,7 +65,7 @@ var RouteRegister = (function () {
             }
             else if (typeof methodPath === 'string') {
                 if (methodPath.charAt(0) != '/') {
-                    path = '/' + methodName + '/' + methodPath;
+                    path = basePath + '/' + methodName + '/' + methodPath;
                 }
                 else {
                     path = methodPath;

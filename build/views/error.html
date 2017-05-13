@@ -1,13 +1,42 @@
 <!doctype html>
 <html lang="zh-cn">
+
 <head>
 	<meta charset="UTF-8">
-	<meta http-equiv="refresh" content="5;url=/">
-	<title>错误页面</title>
+	<title>页面找不到</title>
+	<style>
+		p>a {
+			margin: 0 10px;
+		}
+	</style>
+	<script>
+		var i = 10;
+		var a = setInterval(function () {
+			i--;
+			var sec = document.querySelector("#sec")
+			sec.innerHTML = i;
+			console.log(i);
+			if (i == 0) {
+				location.href = "/";
+			}
+		}, 1000);
+		function cancel() {
+			clearTimeout(a);
+		}
+	</script>
 </head>
+
 <body>
-	<h1><%= message %></h1>
-	<h2><%= error.status %></<h2></h2>
-	<p>5秒后自动跳转到首页</p>
+	<h1>
+		<%= message %>
+	</h1>
+	<h2>
+		<%= error.status %>
+	</h2>
+	<p>
+		<span><b id="sec">10</b>秒后自动跳转到首页</span>
+		<a href="/">立即跳转</a><a href="javascript:void(0)" onclick="cancel()">取消</a>
+	</p>
 </body>
+
 </html>

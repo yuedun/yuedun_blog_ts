@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "tsc": "tsc -w",
-    "serve": "cd ./build & set DEBUG=yuedun:* & nodemon ./bin/www.js",
+    "serve": "set NODE_ENV=development& set DEBUG=yuedun:*& cd ./build & nodemon ./bin/www.js",
     "start": "parallelshell \"npm run tsc\" \"npm run serve\""
   },
   "dependencies": {

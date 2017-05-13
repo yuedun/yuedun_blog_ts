@@ -1,6 +1,6 @@
 var path = require('path');
 var debug = require('debug')('yuedun:test');
-// debug("test.ts文件输出");
+debug("process.env.NODE_ENV", process.env.NODE_ENV);
 
 // debug('dir:',__dirname+__filename,'\n');
 // debug('process.cwd():',process.cwd());

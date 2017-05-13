@@ -199,17 +199,19 @@ export default class Routes {
     @route({
         path: ":id"
     })
-    static toEditArticle(req: Request, res: Response): void {
+    static toEditArticle(req: Request, res: Response): Promise.Thenable<void> {
         var token = qiniu.uptoken('hopefully');
         let getBlogById = Blog.findById(req.params.id);
-        let getCategory = Category.find({})
+        let getCategory = Category.find({});
 
-        Promise.all([getBlogById, getCategory])
+        return Promise.all([getBlogById, getCategory])
             .then(([blogObj, categories]: [BlogInstance, CategoryInstance[]]) => {
                 if (blogObj.ismd) {
                     res.render('admin/editarticlemd', { success: 0, blog: blogObj, categories: categories, token: token });
+                    return;
                 } else {
                     res.render('admin/editarticle', { success: 0, blog: blogObj, categories: categories, token: token });
+                    return;
                 }
             })
     }
@@ -280,16 +282,17 @@ export default class Routes {
         
     })
     static addUserUi(req: Request, res: Response): Promise.Thenable<any> {
-        return Promise.resolve( { success: 0, flag: 0, user: req.session.user });
+        return Promise.resolve( { success: 0, flag: 0 });
     }
 
     /**
      * 新增用户
      */
     @route({
-        method: "post"
+        method: "post",
+        json: true
     })
-    static addUser(req: Request, res: Response): void {
+    static addUser(req: Request, res: Response): Promise.Thenable<any> {
         var password = req.body.password;
         var user = new User({
             username: req.body.username,
@@ -299,10 +302,10 @@ export default class Routes {
             state: true,//可用/停用
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
         });
-        user.save(function (e, docs, numberAffected) {
-            if (e) res.send(e.message);
-            res.render('admin/adduser', { success: 1, user: req.session.user });
-        });
+        return user.save()
+        .then(()=>{
+            return { success: 1 }
+        })
     }
     /**
      * 查看用户列表
@@ -313,7 +316,7 @@ export default class Routes {
     static viewUser(req: Request, res: Response): void {
         User.find({}, null, function (err, docs) {
             if (err) res.send(err.message);
-            res.render('admin/viewuser', { users: docs, user: req.session.user });
+            res.render('admin/viewuser', { users: docs });
         });
     }
     /**
@@ -377,12 +380,12 @@ export default class Routes {
         return;
     }
 
-    //添加用户界面
+    //添加天气用户界面
     @route({
         
     })
-    static addWeatherUserUi(req: Request, res: Response): void {
-        res.render('admin/addweatheruser', { success: 0, flag: 0, user: req.session.user });
+    static addWeatherUserUi(req: Request, res: Response): Promise.Thenable<any> {
+        return Promise.resolve({ success: 0, flag: 0 });
     }
     /**
      * 新增天气预报用户weatherUserList
@@ -405,7 +408,7 @@ export default class Routes {
         });
         weathUser.save(function (e, docs, numberAffected) {
             if (e) res.send(e.message);
-            res.render('admin/addweatheruser', { success: 1, user: req.session.user });
+            res.render('admin/addweatheruser', { success: 1 });
         });
     }
     /**
@@ -417,7 +420,7 @@ export default class Routes {
     static weatherUserList(req: Request, res: Response): Promise.Thenable<any> {
         return WeatherUser.find({}, null)
         .then(docs =>{
-            return { wusers: docs, user: req.session.user }
+            return { wusers: docs }
         })
     }
 
@@ -437,7 +440,7 @@ export default class Routes {
      * 新增速记
      */
     @route({
-        
+        method: "post"
     })
     static quicknote(req: Request, res: Response): Promise.Thenable<void> {
         var quicknote = new QuickNote({
