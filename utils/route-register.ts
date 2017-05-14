@@ -105,7 +105,10 @@ export default class RouteRegister {
                 //获取到数据可以做一些后续补充处理
                 return route.handler.call(route.target, req, res);
             }).then(data => {
-                if (!data) return;//没有返回数据，一般是redirect跳转了，不需要往下执行。也可以返回需要重定向的地址，在此统一处理
+                if (!data) {
+                    console.warn("没有数据返回，或许是路由中重定向或render")
+                    return;
+                }//没有返回数据，一般是redirect跳转了，不需要往下执行。也可以返回需要重定向的地址，在此统一处理
                 // if(typeof data == "string"){
                 //     res.redirect(data);
                 //     return;
@@ -121,6 +124,8 @@ export default class RouteRegister {
                     let html = this.articleHtmlPath + "/" + methodName;
                     res.render(html, data);
                 }
+            }).catch((err: Error)=>{
+                console.error(err);
             })
         })
     }

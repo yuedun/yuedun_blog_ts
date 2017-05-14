@@ -596,6 +596,7 @@ padding: 0 10px;
 color: #666;
 text-shadow: 0 1px 0 #fff;
 cursor: pointer;
+margin-bottom: 10px;
 }
 
 input[type=submit]:hover {
@@ -704,7 +705,6 @@ fieldset input[type=text] {
 -moz-border-radius: 5px;
 border-radius: 5px;
 border: 1px solid #BBBBBB;
-height: 33px;
 color: #666666;
 -webkit-box-shadow: inset 0 2px 2px #ccc, 0 1px 0 #fff;
 -moz-box-shadow: inset 0 2px 2px #ccc, 0 1px 0 #fff;
@@ -770,8 +770,8 @@ padding: 5px 0;
 
 .submit_link select {
 width: 150px;
+height: 30px;
 border: 1px solid #bbb;
-height: 20px;
 color: #666666;
 }
 
@@ -814,7 +814,7 @@ line-height: 150%;
 /* Alerts */
 
 #main h4.alert_info {
-display: block;
+display: none;
 width: 95%;
 margin: 20px 3% 0 3%;
 margin-top: 20px;

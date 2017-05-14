@@ -9,23 +9,15 @@
 	<link rel="stylesheet" href="/vendors/uploader/webuploader.css" />
 </head>
 <body>
-<header id="header">
-    <hgroup>
-        <h1 class="site_title"><a href="/admin/home">Website Admin</a></h1>
-        <h2 class="section_title">后台管理系统</h2>
-        <div class="btn_view_site"><a href="/">View Site</a></div>
-    </hgroup>
-</header>
+<% include header.html %>
 <!-- end of header bar -->
 <!--导入菜单-->
 <% include menu.html %>
 <section id="main" class="column">
-    <%if(success==1){%>
     <h4 class="alert_info">创建成功。</h4>
-    <%}%>
     <div class="clear"></div>
     <article class="module width_full">
-        <form action="/admin/newArticle" method="post">
+        <form action="" method="post" onsubmit="return false">
             <header><h3>新建博客</h3></header>
             <div class="module_content">
                 <fieldset>
@@ -57,7 +49,6 @@
                         <option value="1">发布</option>
                     </select>
                     <input type="submit" value="Publish" class="alt_btn">
-                    <input type="reset" value="Reset">
                 </div>
             </footer>
             <input type="hidden" name="qntoken" value="<%=token%>">
@@ -79,5 +70,24 @@
 			editor.render();
 		}
 	</script>
+    <script type="text/javascript">
+        $(function () {
+            $(".alt_btn").click(function () {
+                var title = $('input[name=title]').val();
+                var content = $('textarea[name=content]').val();
+                var category = $('input[name=category]').val();
+                var tags = $('input[name=tags]').val();
+                $.post('/admin/newArticle', {
+                    titile: title,
+                    content: content,
+                    category: category,
+                    tags: tags
+                }, function (data) {
+                    alert("ok")
+                    $('.alert_info').css('display','block');
+                })
+            })
+        })
+    </script>
 </body>
 </html>

@@ -6,19 +6,14 @@
     <title>新增用户</title>
 
     <link rel="stylesheet" href="/stylesheets/layout.css" type="text/css" media="screen" />
-    <!--
-    <link rel="stylesheet" href="/stylesheets/ie.css" type="text/css" media="screen" />
-    -->
-    <!--<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>-->
-
     <script src="http://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
     <script type="text/javascript">
         $(function () {
             $(".alt_btn").click(function () {
-                var nickname = $('nickname').val();
-                var username = $('username').val();
-                var password = $('password').val();
-                var repeatpassword = $('repeatpassword').val();
+                var nickname = $('#nickname').val();
+                var username = $('#username').val();
+                var password = $('#password').val();
+                var repeatpassword = $('#repeatpassword').val();
                 if (password != repeatpassword) {
                     alert("密码不正确");
                     return;
@@ -37,15 +32,7 @@
 
 <body>
 
-    <header id="header">
-        <hgroup>
-            <h1 class="site_title"><a href="/admin/home">Website Admin</a></h1>
-
-            <h2 class="section_title">后台管理系统</h2>
-
-            <div class="btn_view_site"><a href="/" target="_blank">View Site</a></div>
-        </hgroup>
-    </header>
+    <% include header.html %>
     <!-- end of header bar -->
     <!--导入菜单-->
     <% include menu.html %>

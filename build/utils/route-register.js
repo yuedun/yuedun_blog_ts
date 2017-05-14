@@ -78,8 +78,10 @@ var RouteRegister = (function () {
             }).then(function (data) {
                 return route.handler.call(route.target, req, res);
             }).then(function (data) {
-                if (!data)
+                if (!data) {
+                    console.warn("没有数据返回，或许是路由中重定向或render");
                     return;
+                }
                 if (route.json) {
                     res.json(data);
                     return;
@@ -92,6 +94,8 @@ var RouteRegister = (function () {
                     var html = _this.articleHtmlPath + "/" + methodName;
                     res.render(html, data);
                 }
+            }).catch(function (err) {
+                console.error(err);
             });
         });
     };

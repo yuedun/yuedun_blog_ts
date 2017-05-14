@@ -67,25 +67,26 @@ var Routes = (function () {
         });
     };
     Routes.newArticle = function (req, res) {
-        var content = req.body.content;
+        var args = req.body;
         var blog = new blog_model_1.default({
-            title: req.body.title,
+            title: args.title,
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss'),
-            content: content,
-            status: req.body.status,
+            content: args.content,
+            status: args.status,
             comments: [],
             commentCount: 0,
-            category: req.body.category,
+            category: args.category,
             top: 0,
-            tags: req.body.tags,
+            tags: args.tags,
             pv: 0,
-            ismd: req.body.ismd
+            ismd: args.ismd
         });
-        return category_model_1.default.findOne({ cateName: req.body.category })
+        console.log(JSON.stringify(blog));
+        return category_model_1.default.findOne({ cateName: args.category })
             .then(function (category) {
             if (!category) {
                 var category = new category_model_1.default({
-                    cateName: req.body.category,
+                    cateName: args.category,
                     state: true,
                     createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
                 });
@@ -97,8 +98,8 @@ var Routes = (function () {
         }).then(function (category) {
             return blog.save();
         }).then(function () {
-            console.log(">>>>>>>>>>>>");
-            res.redirect('/admin/blogList?success=1');
+            console.log(">>>>>>>>>>>>success");
+            return { success: 1 };
         });
     };
     Routes.newArticleMd = function (req, res) {
@@ -183,10 +184,9 @@ var Routes = (function () {
         });
     };
     Routes.category = function (req, res) {
-        category_model_1.default.find({}, function (err, docs) {
-            if (err)
-                res.send(err.message);
-            res.render('admin/category', { user: req.session.user, cates: docs });
+        return category_model_1.default.find({})
+            .then(function (docs) {
+            return { cates: docs };
         });
     };
     Routes.addCategory = function (req, res) {
@@ -360,7 +360,8 @@ __decorate([
 ], Routes, "newArticleUi", null);
 __decorate([
     route_1.route({
-        method: "post"
+        method: "post",
+        json: true
     })
 ], Routes, "newArticle", null);
 __decorate([

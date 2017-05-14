@@ -87,28 +87,31 @@ export default class Routes {
      * success代表新建成功时提示
      */
     @route({
-        method: "post"
+        method: "post",
+        json: true
     })
     static newArticle(req: Request, res: Response): Promise.Thenable<any> {
-        var content = req.body.content;
+        var args = req.body;
         var blog = new Blog({
-            title: req.body.title,//标题
+            title: args.title,//标题
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss'),//发表时间
-            content: content, //内容
-            status: req.body.status,//发布，草稿，
+            content: args.content, //内容
+            status: args.status,//发布，草稿，
             comments: [],//评论，可以在评论时添加
             commentCount: 0,
-            category: req.body.category,//分类
+            category: args.category,//分类
             top: 0,//置顶
-            tags: req.body.tags,//标签
+            tags: args.tags,//标签
             pv: 0,//浏览次数，可以在浏览时添加
-            ismd: req.body.ismd
+            ismd: args.ismd
         });
-        return Category.findOne({ cateName: req.body.category })
+        console.log(JSON.stringify(blog));
+        
+        return Category.findOne({ cateName: args.category })
             .then(category => {
                 if (!category) {
                     var category = new Category({
-                        cateName: req.body.category,
+                        cateName: args.category,
                         state: true,
                         createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
                     });
@@ -119,8 +122,8 @@ export default class Routes {
             }).then(category => {
                 return blog.save();
             }).then(() => {
-                console.log(">>>>>>>>>>>>");
-                res.redirect('/admin/blogList?success=1');
+                console.log(">>>>>>>>>>>>success");
+                return {success: 1};
             })
     }
     /**
@@ -244,10 +247,10 @@ export default class Routes {
     @route({
         
     })
-    static category(req: Request, res: Response): void {
-        Category.find({}, function (err, docs) {
-            if (err) res.send(err.message);
-            res.render('admin/category', { user: req.session.user, cates: docs });
+    static category(req: Request, res: Response): Promise.Thenable<any> {
+        return Category.find({})
+        .then(docs=>{
+            return { cates: docs }
         });
     }
 
