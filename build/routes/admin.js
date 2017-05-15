@@ -59,14 +59,14 @@ var Routes = (function () {
             }
         });
     };
-    Routes.newArticleUi = function (req, res) {
+    Routes.newArticle = function (req, res) {
         var token = qiniu.uptoken('hopefully');
         return category_model_1.default.find({})
             .then(function (catotory) {
             return { success: 0, categories: catotory, token: token };
         });
     };
-    Routes.newArticle = function (req, res) {
+    Routes.createArticle = function (req, res) {
         var args = req.body;
         var blog = new blog_model_1.default({
             title: args.title,
@@ -267,10 +267,10 @@ var Routes = (function () {
         res.redirect('/admin/login');
         return;
     };
-    Routes.addWeatherUserUi = function (req, res) {
+    Routes.addWeatherUser = function (req, res) {
         return Promise.resolve({ success: 0, flag: 0 });
     };
-    Routes.addWeatherUser = function (req, res) {
+    Routes.createWeatherUser = function (req, res) {
         var args = req.body;
         var areaId = _.result(_.find(area, { 'NAMECN': args.city }), 'AREAID');
         var weathUser = new weather_user_model_1.default({
@@ -342,6 +342,9 @@ var Routes = (function () {
             return { readCount: result1[0].pvCount, todayRead: result2 };
         });
     };
+    Routes.mdTest = function (req) {
+        return Promise.resolve({});
+    };
     return Routes;
 }());
 __decorate([
@@ -357,13 +360,13 @@ __decorate([
 ], Routes, "doLogin", null);
 __decorate([
     route_1.route({})
-], Routes, "newArticleUi", null);
+], Routes, "newArticle", null);
 __decorate([
     route_1.route({
         method: "post",
         json: true
     })
-], Routes, "newArticle", null);
+], Routes, "createArticle", null);
 __decorate([
     route_1.route({})
 ], Routes, "newArticleMd", null);
@@ -436,12 +439,12 @@ __decorate([
 ], Routes, "logout", null);
 __decorate([
     route_1.route({})
-], Routes, "addWeatherUserUi", null);
+], Routes, "addWeatherUser", null);
 __decorate([
     route_1.route({
         method: "post"
     })
-], Routes, "addWeatherUser", null);
+], Routes, "createWeatherUser", null);
 __decorate([
     route_1.route({})
 ], Routes, "weatherUserList", null);
@@ -461,5 +464,8 @@ __decorate([
 __decorate([
     route_1.route({})
 ], Routes, "readCount", null);
+__decorate([
+    route_1.route({})
+], Routes, "mdTest", null);
 exports.default = Routes;
 //# sourceMappingURL=admin.js.map

@@ -1,67 +1,81 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-cn">
 <head>
     <meta charset="utf-8"/>
     <title>新建文章</title>
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
     <link rel="stylesheet" href="/stylesheets/layout.css" type="text/css" media="screen"/>
     <script src="/vendors/ckeditor/ckeditor.js"></script> 
 </head>
 <body>
-<% include header.html %>
-<!-- end of header bar -->
-
-<!--导入菜单-->
-<% include menu.html %>
-<section id="main" class="column">
-    <%if(success==1){%>
-    <h4 class="alert_info">创建成功。</h4>
-    <%}%>
-    <div class="clear"></div>
-    <article class="module width_full">
-        <form action="/admin/newArticle" method="post">
-            <header><h3>Post New Article</h3></header>
-            <div class="module_content">
-                <fieldset>
-                    <label>标题：</label>
-                    <input type="text" name="title" id="title_color" required>
-                </fieldset>
-                <fieldset>
-                    <textarea rows="50" name="content" id="content" required></textarea>
-                    <script>
-                        // Replace the <textarea id="editor1"> with a CKEditor
-                        // instance, using default configuration.
-                        CKEDITOR.replace('content');
-                    </script>
-                </fieldset>
-                <fieldset>
-                    <!-- to make two field float next to one another, adjust values accordingly -->
-                    <label>分类：</label>
-                    <input class="input-large" type="text" list="catelist" name="category">
-                    <datalist id="catelist">
-                        <% categories.forEach(function(cate){%>
-                        <option><%= cate.cateName%></option>
-                        <% });%>
-                    </datalist>
-                    <label>标签：</label>
-                    <input type="text" name="tags">
-                </fieldset>
-                <div class="clear"></div>
-            </div>
-            <footer>
-                <div class="submit_link">
-                    <select name="status" class="input-small">
-                        <option value="-1">草稿</option>
-                        <option value="1">发布</option>
-                    </select>
-                    <input type="submit" value="Publish" class="alt_btn">
-                    <input type="reset" value="Reset">
+    <% include header.html %>
+    <!-- end of header bar -->
+    <!--导入菜单-->
+    <% include menu.html %>
+    <section id="main" class="column">
+        <h4 class="alert_info">新建成功。</h4>
+        <div class="clear"></div>
+        <article class="module width_full">
+            <form action="" method="post" onsubmit="return false">
+                <header><h3>新建博客</h3></header>
+                <div class="module_content">
+                    <fieldset>
+                        <label>标题：</label>
+                        <input type="text" value="" name="title">
+                    </fieldset>
+                    <fieldset>
+                        <textarea rows="20" id="content" name="content"></textarea>
+                        <script>
+                            // Replace the <textarea id="editor1"> with a CKEditor
+                            // instance, using default configuration.
+                            CKEDITOR.replace('content');
+                        </script>
+                    </fieldset>
+                    <fieldset>
+                        <label>分类</label>
+                        <select name="category">
+                            <% categories.forEach(function(cate){%>
+                            <option><%= cate.cateName%></option>
+                            <% })%>
+                        </select>
+                        <label for="tags">标签</label>
+                        <input type="text" value="" id="tags" name="tags">
+                    </fieldset>
+                    <div class="clear"></div>
                 </div>
-            </footer>
-        </form>
-    </article>
-    <!-- end of post new article -->
-    <div class="spacer"></div>
-</section>
+                <footer>
+                    <div class="submit_link">
+                        <select name="status">
+                            <option value="-1">草稿</option>
+                            <option value="1" selected>发布</option>
+                        </select>
+                        <input type="submit" value="Publish" class="alt_btn">
+                    </div>
+                </footer>
+            </form>
+        </article>
+        <!-- end of post new article -->
+        <div class="spacer"></div>
+    </section>
     <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $(".alt_btn").click(function () {
+                var title = $('input[name=title]').val();
+                var content = $('textarea[name=content]').val();
+                var category = $('input[name=category]').val();
+                var tags = $('input[name=tags]').val();
+                $.post('/admin/createArticle', {
+                    title: title,
+                    content: content,
+                    category: category,
+                    tags: tags
+                }, function (data) {
+                    alert("ok")
+                    $('.alert_info').css('display','block');
+                })
+            })
+        })
+    </script>
 </body>
 </html>

@@ -1,5 +1,6 @@
-import * as express from 'express';
 import * as Promise from 'bluebird';
+import * as Debug from 'debug';
+var debug = Debug('yuedun:index');
 import { Request, Response } from 'express';
 import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
 import { route } from '../utils/route';

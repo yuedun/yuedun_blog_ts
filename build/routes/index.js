@@ -7,6 +7,8 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Promise = require("bluebird");
+var Debug = require("debug");
+var debug = Debug('yuedun:index');
 var blog_model_1 = require("../models/blog-model");
 var route_1 = require("../utils/route");
 var Routes = (function () {

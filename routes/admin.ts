@@ -22,7 +22,7 @@ export default class Routes {
 
     /*进入后台主界面 */
     @route({
-        
+
     })
     static index(req: Request, res: Response): Promise.Thenable<any> {
         var user = req.session ? req.session.user : {};
@@ -35,7 +35,7 @@ export default class Routes {
 
     /* 后台登陆 */
     @route({
-        
+
     })
     static login(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.resolve({});
@@ -52,30 +52,30 @@ export default class Routes {
             password: object.password
         }
         return User.findOne(user)
-        .then(obj=>{
-            if (obj || process.env.NODE_ENV === 'development') {
-                req.session.user = user;
-                if (object.remeber) {
-                    res.cookie('autologin', 1, {
-                        expires: new Date(Date.now() + 864000000)//10天
-                    });
+            .then(obj => {
+                if (obj || process.env.NODE_ENV === 'development') {
+                    req.session.user = user;
+                    if (object.remeber) {
+                        res.cookie('autologin', 1, {
+                            expires: new Date(Date.now() + 864000000)//10天
+                        });
+                    }
+                    res.redirect('/admin/blogList')
+                    return
+                } else {
+                    res.redirect('/admin/login')
+                    return
                 }
-                res.redirect('/admin/blogList')
-                return
-            } else {
-                res.redirect('/admin/login')
-                return
-            }
-        })
+            })
     }
 
     /**
      * 跳转到新建文章页面
      */
     @route({
-        
+
     })
-    static newArticleUi(req: Request, res: Response): Promise.Thenable<any> {
+    static newArticle(req: Request, res: Response): Promise.Thenable<any> {
         var token = qiniu.uptoken('hopefully');
         return Category.find({})
             .then(catotory => {
@@ -90,7 +90,7 @@ export default class Routes {
         method: "post",
         json: true
     })
-    static newArticle(req: Request, res: Response): Promise.Thenable<any> {
+    static createArticle(req: Request, res: Response): Promise.Thenable<any> {
         var args = req.body;
         var blog = new Blog({
             title: args.title,//标题
@@ -106,7 +106,7 @@ export default class Routes {
             ismd: args.ismd
         });
         console.log(JSON.stringify(blog));
-        
+
         return Category.findOne({ cateName: args.category })
             .then(category => {
                 if (!category) {
@@ -123,14 +123,14 @@ export default class Routes {
                 return blog.save();
             }).then(() => {
                 console.log(">>>>>>>>>>>>success");
-                return {success: 1};
+                return { success: 1 };
             })
     }
     /**
      * 跳转到新建文章页面-markdown方式
      */
     @route({
-        
+
     })
     static newArticleMd(req: Request, res: Response): Promise.Thenable<any> {
         var token = qiniu.uptoken('hopefully');
@@ -144,7 +144,7 @@ export default class Routes {
      *文章列表
      */
     @route({
-        
+
     })
     static blogList(req: Request, res: Response): Promise.Thenable<any> {
         var user = req.session ? req.session.user : null;
@@ -245,13 +245,13 @@ export default class Routes {
      * 分类
      */
     @route({
-        
+
     })
     static category(req: Request, res: Response): Promise.Thenable<any> {
         return Category.find({})
-        .then(docs=>{
-            return { cates: docs }
-        });
+            .then(docs => {
+                return { cates: docs }
+            });
     }
 
     @route({
@@ -282,10 +282,10 @@ export default class Routes {
 
     //添加用户界面
     @route({
-        
+
     })
     static addUserUi(req: Request, res: Response): Promise.Thenable<any> {
-        return Promise.resolve( { success: 0, flag: 0 });
+        return Promise.resolve({ success: 0, flag: 0 });
     }
 
     /**
@@ -306,15 +306,15 @@ export default class Routes {
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
         });
         return user.save()
-        .then(()=>{
-            return { success: 1 }
-        })
+            .then(() => {
+                return { success: 1 }
+            })
     }
     /**
      * 查看用户列表
      */
     @route({
-        
+
     })
     static viewUser(req: Request, res: Response): void {
         User.find({}, null, function (err, docs) {
@@ -374,7 +374,7 @@ export default class Routes {
     }
     /*  登出  */
     @route({
-        
+
     })
     static logout(req: Request, res: Response): void {
         req.session.user = null;
@@ -385,9 +385,9 @@ export default class Routes {
 
     //添加天气用户界面
     @route({
-        
+
     })
-    static addWeatherUserUi(req: Request, res: Response): Promise.Thenable<any> {
+    static addWeatherUser(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.resolve({ success: 0, flag: 0 });
     }
     /**
@@ -396,7 +396,7 @@ export default class Routes {
     @route({
         method: "post"
     })
-    static addWeatherUser(req: Request, res: Response): void {
+    static createWeatherUser(req: Request, res: Response): void {
         var args = req.body;
         // var areaObjs = JSON.parse(area);
         var areaId = _.result(_.find(area, { 'NAMECN': args.city }), 'AREAID');
@@ -418,13 +418,13 @@ export default class Routes {
      * 查看天气用户列表
      */
     @route({
-        
+
     })
     static weatherUserList(req: Request, res: Response): Promise.Thenable<any> {
         return WeatherUser.find({}, null)
-        .then(docs =>{
-            return { wusers: docs }
-        })
+            .then(docs => {
+                return { wusers: docs }
+            })
     }
 
     /*
@@ -435,9 +435,9 @@ export default class Routes {
     })
     static delWeatherUser(req: Request, res: Response): void {
         return Promise.resolve(WeatherUser.remove({ _id: req.params.userId }))
-        .then(d=>{
-            res.redirect('/admin/weatherUserList');
-        }).value()
+            .then(d => {
+                res.redirect('/admin/weatherUserList');
+            }).value()
     }
     /**
      * 新增速记
@@ -452,15 +452,15 @@ export default class Routes {
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
         });
         return quicknote.save()
-        .then(data=>{
-            res.redirect('/admin/quickNoteList');
-        })
+            .then(data => {
+                res.redirect('/admin/quickNoteList');
+            })
     }
     /*
      * 速记列表
      */
     @route({
-        
+
     })
     static quickNoteList(req: Request, res: Response): void {
         var user = req.session.user;
@@ -487,16 +487,23 @@ export default class Routes {
      * 访问统计
      */
     @route({
-        
+
     })
     static readCount(req: Request, res: Response): Promise.Thenable<any> {
         var today = Moment().format('YYYY-MM-DD');
         return Promise.all<any, number>([
             Blog.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),
             PvModel.count({ createdAt: { $regex: today, $options: 'i' } })//模糊查询"%text%"
-        ]).then(([result1, result2])=>{
+        ]).then(([result1, result2]) => {
             return { readCount: result1[0].pvCount, todayRead: result2 }
         })
+    }
+
+    @route({
+
+    })
+    static mdTest(req: Request): Promise.Thenable<any> {
+        return Promise.resolve({})
     }
 }
 

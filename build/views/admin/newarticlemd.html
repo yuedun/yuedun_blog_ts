@@ -1,93 +1,141 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="zh-cn">
+
 <head>
-    <meta charset="utf-8"/>
+    <meta charset="utf-8" />
     <title>新建文章</title>
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
-    <link rel="stylesheet" href="/stylesheets/layout.css" type="text/css" media="screen"/>
-	<link rel="stylesheet" href="/stylesheets/editor.css" />
-	<link rel="stylesheet" href="/vendors/uploader/webuploader.css" />
+    <link rel="stylesheet" href="/stylesheets/layout.css" type="text/css" media="screen" />
+    <link rel="stylesheet" href="/vendors/editor.md-master/css/editormd.css" />
+    <link rel="stylesheet" href="/vendors/uploader/webuploader.css" />
 </head>
+
 <body>
-<% include header.html %>
-<!-- end of header bar -->
-<!--导入菜单-->
-<% include menu.html %>
-<section id="main" class="column">
-    <h4 class="alert_info">创建成功。</h4>
-    <div class="clear"></div>
-    <article class="module width_full">
-        <form action="" method="post" onsubmit="return false">
-            <header><h3>新建博客</h3></header>
-            <div class="module_content">
-                <fieldset>
-                    <label>标题：</label>
-                    <input type="text" name="title" id="title_color" required>
-                </fieldset>
-                <fieldset>
-                    <textarea rows="25" name="content" id="content"></textarea>
-                </fieldset>
-                <fieldset>
-                    <!-- to make two field float next to one another, adjust values accordingly -->
-                    <label>Category</label>
-                    <input class="input-large" type="text" list="catelist" name="category">
-                    <datalist id="catelist">
-                        <% categories.forEach(function(cate){%>
-                        <option><%= cate.cateName%></option>
-                        <% });%>
-                    </datalist>
-                    <label>Tags</label>
-                    <input type="text" name="tags">
-                    <input type="hidden" name="ismd" value="1">
-                </fieldset>
-                <div class="clear"></div>
-            </div>
-            <footer>
-                <div class="submit_link">
-                    <select name="status">
-                        <option value="-1">草稿</option>
-                        <option value="1">发布</option>
-                    </select>
-                    <input type="submit" value="Publish" class="alt_btn">
+    <% include header.html %>
+    <!-- end of header bar -->
+    <!--导入菜单-->
+    <% include menu.html %>
+    <section id="main" class="column">
+        <h4 class="alert_info">新建成功。</h4>
+        <div class="clear"></div>
+        <article class="module width_full">
+            <form action="" method="post" onsubmit="return false">
+                <header>
+                    <h3>新建博客</h3>
+                </header>
+                <div class="module_content">
+                    <fieldset>
+                        <label>标题：</label>
+                        <input type="text" name="title" id="title_color" required>
+                    </fieldset>
+                    <fieldset>
+                        <div id="test-editormd">
+                            <textarea style="display:none;" name="content">
+                        [TOC]
+                        #### Disabled options
+
+                        - TeX (Based on KaTeX);
+                        - Emoji;
+                        - Task lists;
+                        - HTML tags decode;
+                        - Flowchart and Sequence Diagram;
+
+                        #### Editor.md directory
+
+                            editor.md/
+                                    lib/
+                                    css/
+                                    scss/
+                                    tests/
+                                    fonts/
+                                    images/
+                                    plugins/
+                                    examples/
+                                    languages/     
+                                    editormd.js
+                                    ...
+
+                        ```html
+                        &lt;!-- English --&gt;
+                        &lt;script src="../dist/js/languages/en.js"&gt;&lt;/script&gt;
+
+                        &lt;!-- 繁體中文 --&gt;
+                        &lt;script src="../dist/js/languages/zh-tw.js"&gt;&lt;/script&gt;
+                        ```
+                    </textarea>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <!-- to make two field float next to one another, adjust values accordingly -->
+                        <label>Category</label>
+                        <input class="input-large" type="text" list="catelist" name="category">
+                        <datalist id="catelist">
+                            <% categories.forEach(function(cate){%>
+                            <option><%= cate.cateName%></option>
+                            <% });%>
+                        </datalist>
+                        <label>Tags</label>
+                        <input type="text" name="tags">
+                        <input type="hidden" name="ismd" value="1">
+                    </fieldset>
+                    <div class="clear"></div>
                 </div>
-            </footer>
-            <input type="hidden" name="qntoken" value="<%=token%>">
-        </form>
-    </article>
-    <!-- end of post new article -->
-    <div class="spacer"></div>
-</section>
+                <footer>
+                    <div class="submit_link">
+                        <select name="status">
+                    <option value="-1">草稿</option>
+                    <option value="1" selected>发布</option>
+                </select>
+                        <input type="submit" value="Publish" class="alt_btn">
+                    </div>
+                </footer>
+                <input type="hidden" name="qntoken" value="<%=token%>">
+            </form>
+        </article>
+        <!-- end of post new article -->
+        <div class="spacer"></div>
+    </section>
     <script src="http://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-	<script type="text/javascript" src="/javascripts/editor.js"></script>
-	<script type="text/javascript" src="/javascripts/marked.js"></script>
+    <script src="/vendors/editor.md-master/editormd.min.js"></script>
     <script type="text/javascript" src="/vendors/uploader/webuploader.min.js"></script>
     <script type="text/javascript" src="/javascripts/bootstrap.min.js"></script>
-	<script src="/javascripts/ext.js"></script>
-	<script>
-		window.onload = function () {
-			// body...
-			var editor = new Editor()
-			editor.render();
-		}
-	</script>
     <script type="text/javascript">
+        var testEditor;
         $(function () {
+            testEditor = editormd("test-editormd", {
+                width: "90%",
+                height: 640,
+                syncScrolling: "single",
+                path: "/vendors/editor.md-master/lib/"
+            });
+
+            /*
+            // or
+            testEditor = editormd({
+                id      : "test-editormd",
+                width   : "90%",
+                height  : 640,
+                path    : "../lib/"
+            });
+            */
             $(".alt_btn").click(function () {
                 var title = $('input[name=title]').val();
                 var content = $('textarea[name=content]').val();
+                console.log("content:", content);
                 var category = $('input[name=category]').val();
                 var tags = $('input[name=tags]').val();
-                $.post('/admin/newArticle', {
-                    titile: title,
+                $.post('/admin/createArticle', {
+                    title: title,
                     content: content,
                     category: category,
                     tags: tags
                 }, function (data) {
                     alert("ok")
-                    $('.alert_info').css('display','block');
+                    $('.alert_info').css('display', 'block');
                 })
             })
-        })
+        });
     </script>
 </body>
+
 </html>
