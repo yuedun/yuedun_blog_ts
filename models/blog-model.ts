@@ -5,10 +5,19 @@ export var BlogSchema: Schema = new Schema({
     createDate: String,//发表时间
     updateTime: String,//修改时间
     content: String, //内容
-    status: String,//发布，草稿，
+    status: {
+        type: Number,
+        default: 1
+    },//发布，草稿，
     comments: [],//评论
-    commentCount: Number,//评论数
-    category: String,//分类
+    commentCount: {
+        type: Number,
+        default: 0
+    },//评论数
+    category: {
+        type: String,
+        default: ''
+    },//分类
     top: Number,//置顶
     tags: String,//标签
     pv: Number,//访问量,
