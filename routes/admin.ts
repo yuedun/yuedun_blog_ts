@@ -82,6 +82,7 @@ export default class Routes {
                 return { success: 0, categories: catotory, token: token };
             })
     }
+    
     /**
      * 新建文章页面-markdown方式
      */
@@ -181,7 +182,7 @@ export default class Routes {
     }
     /**
      * 跳转到修改文章
-    /* 使用async方式修改文章 */
+     */
     @route({
         path: ":id"
     })
@@ -192,13 +193,7 @@ export default class Routes {
 
         return Promise.all([getBlogById, getCategory])
             .then(([blogObj, categories]: [BlogInstance, CategoryInstance[]]) => {
-                if (blogObj.ismd) {
-                    res.render('admin/editarticlemd', { success: 0, blog: blogObj, categories: categories, token: token });
-                    return;
-                } else {
-                    res.render('admin/editarticle', { success: 0, blog: blogObj, categories: categories, token: token });
-                    return;
-                }
+                return { blog: blogObj, categories: categories }
             })
     }
     /**
@@ -368,7 +363,6 @@ export default class Routes {
         User.remove({ _id: req.params.userId }, function (err) {
             res.redirect('/admin/viewUser');
         });
-
     }
     /*  登出  */
     @route({
@@ -389,12 +383,12 @@ export default class Routes {
         return Promise.resolve({ success: 0, flag: 0 });
     }
     /**
-     * 新增天气预报用户weatherUserList
+     * 新增天气预报用户
      */
     @route({
         method: "post"
     })
-    static createWeatherUser(req: Request, res: Response): void {
+    static createWeatherUser(req: Request, res: Response): Promise.Thenable<any> {
         var args = req.body;
         // var areaObjs = JSON.parse(area);
         var areaId = _.result(_.find(area, { 'NAMECN': args.city }), 'AREAID');
@@ -407,10 +401,10 @@ export default class Routes {
             status: 1,//1可用/0停用
             createAt: Moment().format('YYYY-MM-DD HH:mm:ss'),
         });
-        weathUser.save(function (e, docs, numberAffected) {
-            if (e) res.send(e.message);
-            res.render('admin/addweatheruser', { success: 1 });
-        });
+        return weathUser.save()
+        .then(data=>{
+            res.redirect('/admin/weatherUserList');
+        })
     }
     /**
      * 查看天气用户列表
@@ -453,6 +447,35 @@ export default class Routes {
             .then(data => {
                 res.redirect('/admin/quickNoteList');
             })
+    }
+    /**
+     * 修改速记
+     */
+    @route({
+        method: "post",
+        path: ":id"
+    })
+    static updateQuickNote(req: Request, res: Response): Promise.Thenable<any> {
+        return QuickNote.findByIdAndUpdate(req.params.id, {
+            $set:
+            {
+                content: req.body.content,
+                updateDate: Moment().format('YYYY-MM-DD HH:mm:ss')
+            }
+        }).then(() => {
+            return { success: 1 }
+        })
+    }
+    /*
+     *删除note
+     */
+    @route({
+        path: ":id"
+    })
+    static deleteNote(req: Request, res: Response): void {
+        QuickNote.remove({ _id: req.params.id }, function (err) {
+            res.redirect('/admin/quickNoteList');
+        });
     }
     /*
      * 速记列表
