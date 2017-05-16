@@ -140,24 +140,16 @@ var Routes = (function () {
             return { blog: doc, user: user };
         });
     };
-    Routes.toEditArticle = function (req, res) {
-        var token = qiniu.uptoken('hopefully');
+    Routes.editArticleMd = function (req, res) {
         var getBlogById = blog_model_1.default.findById(req.params.id);
         var getCategory = category_model_1.default.find({});
         return Promise.all([getBlogById, getCategory])
             .then(function (_a) {
             var blogObj = _a[0], categories = _a[1];
-            if (blogObj.ismd) {
-                res.render('admin/editarticlemd', { success: 0, blog: blogObj, categories: categories, token: token });
-                return;
-            }
-            else {
-                res.render('admin/editarticle', { success: 0, blog: blogObj, categories: categories, token: token });
-                return;
-            }
+            return { blog: blogObj, categories: categories };
         });
     };
-    Routes.editArticle = function (req, res) {
+    Routes.updateArticle = function (req, res) {
         var args = req.body;
         return blog_model_1.default.findByIdAndUpdate(req.params.id, {
             $set: {
@@ -278,10 +270,9 @@ var Routes = (function () {
             status: 1,
             createAt: Moment().format('YYYY-MM-DD HH:mm:ss'),
         });
-        weathUser.save(function (e, docs, numberAffected) {
-            if (e)
-                res.send(e.message);
-            res.render('admin/addweatheruser', { success: 1 });
+        return weathUser.save()
+            .then(function (data) {
+            res.redirect('/admin/weatherUserList');
         });
     };
     Routes.weatherUserList = function (req, res) {
@@ -304,6 +295,21 @@ var Routes = (function () {
         });
         return quicknote.save()
             .then(function (data) {
+            res.redirect('/admin/quickNoteList');
+        });
+    };
+    Routes.updateQuickNote = function (req, res) {
+        return quick_note_model_1.default.findByIdAndUpdate(req.params.id, {
+            $set: {
+                content: req.body.content,
+                updateDate: Moment().format('YYYY-MM-DD HH:mm:ss')
+            }
+        }).then(function () {
+            return { success: 1 };
+        });
+    };
+    Routes.deleteNote = function (req, res) {
+        quick_note_model_1.default.remove({ _id: req.params.id }, function (err) {
             res.redirect('/admin/quickNoteList');
         });
     };
@@ -378,14 +384,14 @@ __decorate([
     route_1.route({
         path: ":id"
     })
-], Routes, "toEditArticle", null);
+], Routes, "editArticleMd", null);
 __decorate([
     route_1.route({
         path: ":id",
         method: "post",
         json: true
     })
-], Routes, "editArticle", null);
+], Routes, "updateArticle", null);
 __decorate([
     route_1.route({
         path: ":id"
@@ -456,6 +462,17 @@ __decorate([
         method: "post"
     })
 ], Routes, "quicknote", null);
+__decorate([
+    route_1.route({
+        method: "post",
+        path: ":id"
+    })
+], Routes, "updateQuickNote", null);
+__decorate([
+    route_1.route({
+        path: ":id"
+    })
+], Routes, "deleteNote", null);
 __decorate([
     route_1.route({})
 ], Routes, "quickNoteList", null);

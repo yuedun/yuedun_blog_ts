@@ -57,7 +57,6 @@
                         <input type="submit" value="Publish" class="alt_btn">
                     </div>
                 </footer>
-                <input type="hidden" name="qntoken" value="<%=token%>">
             </form>
         </article>
         <!-- end of post new article -->
@@ -94,7 +93,7 @@
                 var category = $('input[name=category]').val();
                 var tags = $('input[name=tags]').val();
                 var id = "<%= blog.id%>";
-                $.post('/admin/editArticle/' + id, {
+                $.post('/admin/updateArticle/' + id, {
                     id: id,
                     title: title,
                     content: content,
