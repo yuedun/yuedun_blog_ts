@@ -7,10 +7,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Promise = require("bluebird");
+var formidable = require("formidable");
 var Debug = require("debug");
 var debug = Debug('yuedun:index');
 var blog_model_1 = require("../models/blog-model");
+var qiniu_1 = require("../utils/qiniu");
 var route_1 = require("../utils/route");
+var settings_1 = require("../settings");
 var Routes = (function () {
     function Routes() {
     }
@@ -21,13 +24,33 @@ var Routes = (function () {
             return data;
         });
     };
-    Routes.test1 = function (req, res, next) {
-        console.log(">>>>>>>>>>>>>test1");
-        return Promise.resolve(">>>>>>>>>>>>test");
-    };
-    Routes.test2 = function (req) {
-        console.log(">>>>>>>>>>>>>index");
-        return Promise.resolve(">>>>>>>>>>>>index");
+    Routes.uploadImg = function (req, res, next) {
+        console.log(">>>>>>>>>>>>>upload");
+        var token = qiniu_1.uptoken(settings_1.qiniuConfig.bucketName);
+        var form = new formidable.IncomingForm();
+        return new Promise(function (resolve, reject) {
+            form.parse(req, function (err, fields, files) {
+                if (!err) {
+                    resolve(files);
+                }
+                else {
+                    reject(err);
+                }
+            });
+        }).then(function (files) {
+            var file = files['editormd-image-file'].path;
+            var suffix = file.substr(file.lastIndexOf("."));
+            var file_name = files['editormd-image-file'].name;
+            return qiniu_1.uploadFile(file, file_name, token)
+                .then(function (data) {
+                console.log(JSON.stringify(data));
+                return Promise.resolve({
+                    success: 1,
+                    message: "",
+                    url: settings_1.qiniuConfig.url + data.key
+                });
+            });
+        });
     };
     return Routes;
 }());
@@ -38,11 +61,9 @@ __decorate([
 ], Routes, "index", null);
 __decorate([
     route_1.route({
+        method: "post",
         json: true
     })
-], Routes, "test1", null);
-__decorate([
-    route_1.route({})
-], Routes, "test2", null);
+], Routes, "uploadImg", null);
 exports.default = Routes;
 //# sourceMappingURL=index.js.map

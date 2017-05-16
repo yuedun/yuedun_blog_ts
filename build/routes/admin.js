@@ -66,6 +66,13 @@ var Routes = (function () {
             return { success: 0, categories: catotory, token: token };
         });
     };
+    Routes.newArticleMd = function (req, res) {
+        var token = qiniu.uptoken('hopefully');
+        return category_model_1.default.find({})
+            .then(function (catogory) {
+            return { success: 0, categories: catogory, token: token };
+        });
+    };
     Routes.createArticle = function (req, res) {
         var args = req.body;
         var blog = new blog_model_1.default({
@@ -81,7 +88,6 @@ var Routes = (function () {
             pv: 0,
             ismd: args.ismd
         });
-        console.log(JSON.stringify(blog));
         return category_model_1.default.findOne({ cateName: args.category })
             .then(function (category) {
             if (!category) {
@@ -98,15 +104,7 @@ var Routes = (function () {
         }).then(function (category) {
             return blog.save();
         }).then(function () {
-            console.log(">>>>>>>>>>>>success");
             return { success: 1 };
-        });
-    };
-    Routes.newArticleMd = function (req, res) {
-        var token = qiniu.uptoken('hopefully');
-        return category_model_1.default.find({})
-            .then(function (catogory) {
-            return { success: 0, categories: catogory, token: token };
         });
     };
     Routes.blogList = function (req, res) {
@@ -142,13 +140,6 @@ var Routes = (function () {
             return { blog: doc, user: user };
         });
     };
-    Routes.deleteBlog = function (req, res) {
-        var user = req.session.user;
-        return blog_model_1.default.findByIdAndRemove(req.params.id)
-            .then(function (doc) {
-            res.redirect('/admin/blogList');
-        });
-    };
     Routes.toEditArticle = function (req, res) {
         var token = qiniu.uptoken('hopefully');
         var getBlogById = blog_model_1.default.findById(req.params.id);
@@ -167,20 +158,25 @@ var Routes = (function () {
         });
     };
     Routes.editArticle = function (req, res) {
-        var content = req.body.content;
-        blog_model_1.default.findByIdAndUpdate(req.params.id, {
+        var args = req.body;
+        return blog_model_1.default.findByIdAndUpdate(req.params.id, {
             $set: {
-                title: req.body.title,
-                content: content,
-                category: req.body.category,
-                tags: req.body.tags,
-                status: req.body.status,
+                title: args.title,
+                content: args.content,
+                category: args.category,
+                tags: args.tags,
+                status: args.status,
                 updateTime: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
-        }, function (err, doc) {
-            if (err)
-                res.send(err.message);
-            res.redirect('/admin/blogDetail/' + req.params.id);
+        }).then(function () {
+            return { success: 1 };
+        });
+    };
+    Routes.deleteBlog = function (req, res) {
+        var user = req.session.user;
+        return blog_model_1.default.findByIdAndRemove(req.params.id)
+            .then(function (doc) {
+            res.redirect('/admin/blogList');
         });
     };
     Routes.category = function (req, res) {
@@ -362,14 +358,14 @@ __decorate([
     route_1.route({})
 ], Routes, "newArticle", null);
 __decorate([
+    route_1.route({})
+], Routes, "newArticleMd", null);
+__decorate([
     route_1.route({
         method: "post",
         json: true
     })
 ], Routes, "createArticle", null);
-__decorate([
-    route_1.route({})
-], Routes, "newArticleMd", null);
 __decorate([
     route_1.route({})
 ], Routes, "blogList", null);
@@ -382,17 +378,19 @@ __decorate([
     route_1.route({
         path: ":id"
     })
-], Routes, "deleteBlog", null);
-__decorate([
-    route_1.route({
-        path: ":id"
-    })
 ], Routes, "toEditArticle", null);
 __decorate([
     route_1.route({
-        path: ":id"
+        path: ":id",
+        method: "post",
+        json: true
     })
 ], Routes, "editArticle", null);
+__decorate([
+    route_1.route({
+        path: ":id"
+    })
+], Routes, "deleteBlog", null);
 __decorate([
     route_1.route({})
 ], Routes, "category", null);

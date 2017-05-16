@@ -42,7 +42,8 @@ exports.blog_config = {
     current_job:'nodejs。'
 };
 //七牛key
-exports.qiniuKey = {
+exports.qiniuConfig = {
+    url: 'http://hopefully.qiniudn.com/',
     bucketName: 'xxx',
     accessKey: '6CG6fskhgir---',
     secretKey: 'NxeiNiysdog---'

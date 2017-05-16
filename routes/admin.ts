@@ -70,7 +70,7 @@ export default class Routes {
     }
 
     /**
-     * 跳转到新建文章页面
+     * 新建文章页面
      */
     @route({
 
@@ -81,6 +81,19 @@ export default class Routes {
             .then(catotory => {
                 return { success: 0, categories: catotory, token: token };
             })
+    }
+    /**
+     * 新建文章页面-markdown方式
+     */
+    @route({
+
+    })
+    static newArticleMd(req: Request, res: Response): Promise.Thenable<any> {
+        var token = qiniu.uptoken('hopefully');
+        return Category.find({})
+            .then(catogory => {
+                return { success: 0, categories: catogory, token: token };
+            });
     }
     /**
      * 新建文章
@@ -105,8 +118,6 @@ export default class Routes {
             pv: 0,//浏览次数，可以在浏览时添加
             ismd: args.ismd
         });
-        console.log(JSON.stringify(blog));
-
         return Category.findOne({ cateName: args.category })
             .then(category => {
                 if (!category) {
@@ -122,24 +133,9 @@ export default class Routes {
             }).then(category => {
                 return blog.save();
             }).then(() => {
-                console.log(">>>>>>>>>>>>success");
                 return { success: 1 };
             })
     }
-    /**
-     * 跳转到新建文章页面-markdown方式
-     */
-    @route({
-
-    })
-    static newArticleMd(req: Request, res: Response): Promise.Thenable<any> {
-        var token = qiniu.uptoken('hopefully');
-        return Category.find({})
-            .then(catogory => {
-                return { success: 0, categories: catogory, token: token };
-            });
-    }
-
     /**
      *文章列表
      */
@@ -184,19 +180,6 @@ export default class Routes {
             })
     }
     /**
-     * 删除文章
-     */
-    @route({
-        path: ":id"
-    })
-    static deleteBlog(req: Request, res: Response): Promise.Thenable<any> {
-        var user = req.session.user;
-        return Blog.findByIdAndRemove(req.params.id)
-            .then(doc => {
-                res.redirect('/admin/blogList');
-            })
-    }
-    /**
      * 跳转到修改文章
     /* 使用async方式修改文章 */
     @route({
@@ -222,25 +205,40 @@ export default class Routes {
      * 修改操作
      */
     @route({
-        path: ":id"
+        path: ":id",
+        method: "post",
+        json: true
     })
-    static editArticle(req: Request, res: Response): void {
-        var content = req.body.content;
-        Blog.findByIdAndUpdate(req.params.id, {
-            $set:
-            {
-                title: req.body.title,
-                content: content,
-                category: req.body.category,
-                tags: req.body.tags,
-                status: req.body.status,
+    static editArticle(req: Request, res: Response): Promise.Thenable<any> {
+        var args = req.body;
+        return Blog.findByIdAndUpdate(req.params.id, {
+            $set: {
+                title: args.title,
+                content: args.content,
+                category: args.category,
+                tags: args.tags,
+                status: args.status,
                 updateTime: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
-        }, function (err, doc) {
-            if (err) res.send(err.message);
-            res.redirect('/admin/blogDetail/' + req.params.id);
-        });
+        }).then(() => {
+            return { success: 1 }
+        })
     }
+
+    /**
+     * 删除文章
+     */
+    @route({
+        path: ":id"
+    })
+    static deleteBlog(req: Request, res: Response): Promise.Thenable<any> {
+        var user = req.session.user;
+        return Blog.findByIdAndRemove(req.params.id)
+            .then(doc => {
+                res.redirect('/admin/blogList');
+            })
+    }
+
     /**
      * 分类
      */
