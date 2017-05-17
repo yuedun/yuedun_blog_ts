@@ -31,19 +31,17 @@ var Routes = (function () {
         return new Promise(function (resolve, reject) {
             form.parse(req, function (err, fields, files) {
                 if (!err) {
-                    resolve(files);
+                    resolve(files['editormd-image-file']);
                 }
                 else {
                     reject(err);
                 }
             });
         }).then(function (files) {
-            var file = files['editormd-image-file'].path;
-            var suffix = file.substr(file.lastIndexOf("."));
-            var file_name = files['editormd-image-file'].name;
+            var file = files.path;
+            var file_name = files.name;
             return qiniu_1.uploadFile(file, file_name, token)
                 .then(function (data) {
-                console.log(JSON.stringify(data));
                 return Promise.resolve({
                     success: 1,
                     message: "",

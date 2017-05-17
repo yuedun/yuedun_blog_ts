@@ -140,8 +140,7 @@ var Routes = (function () {
             return { blog: doc, user: user };
         });
     };
-    Routes.toEditArticle = function (req, res) {
-        var token = qiniu.uptoken('hopefully');
+    Routes.editArticleMd = function (req, res) {
         var getBlogById = blog_model_1.default.findById(req.params.id);
         var getCategory = category_model_1.default.find({});
         return Promise.all([getBlogById, getCategory])
@@ -150,7 +149,7 @@ var Routes = (function () {
             return { blog: blogObj, categories: categories };
         });
     };
-    Routes.editArticle = function (req, res) {
+    Routes.updateArticle = function (req, res) {
         var args = req.body;
         return blog_model_1.default.findByIdAndUpdate(req.params.id, {
             $set: {
@@ -385,14 +384,14 @@ __decorate([
     route_1.route({
         path: ":id"
     })
-], Routes, "toEditArticle", null);
+], Routes, "editArticleMd", null);
 __decorate([
     route_1.route({
         path: ":id",
         method: "post",
         json: true
     })
-], Routes, "editArticle", null);
+], Routes, "updateArticle", null);
 __decorate([
     route_1.route({
         path: ":id"

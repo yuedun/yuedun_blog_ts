@@ -181,13 +181,13 @@ export default class Routes {
             })
     }
     /**
+     * 暂时约定edit跳转到编辑页面，update作修改操作
      * 跳转到修改文章
      */
     @route({
         path: ":id"
     })
-    static toEditArticle(req: Request, res: Response): Promise.Thenable<void> {
-        var token = qiniu.uptoken('hopefully');
+    static editArticleMd(req: Request, res: Response): Promise.Thenable<any> {
         let getBlogById = Blog.findById(req.params.id);
         let getCategory = Category.find({});
 
@@ -204,7 +204,7 @@ export default class Routes {
         method: "post",
         json: true
     })
-    static editArticle(req: Request, res: Response): Promise.Thenable<any> {
+    static updateArticle(req: Request, res: Response): Promise.Thenable<any> {
         var args = req.body;
         return Blog.findByIdAndUpdate(req.params.id, {
             $set: {
