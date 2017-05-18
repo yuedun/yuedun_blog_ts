@@ -86,12 +86,14 @@ var cronMap = new Array();
 cronMap.push(WeatherCron);
 cronMap.push(ReqCron);
 module.exports = function () {
-    cronMap.forEach(function (Cron, key) {
-        var rule = new schedule.RecurrenceRule();
-        var cronObj = new Cron();
-        rule.hour = cronObj.h_rule;
-        rule.minute = cronObj.m_rule;
-        schedule.scheduleJob(rule, cronObj.cron);
-    });
+    if (process.env.ENV !== "development") {
+        cronMap.forEach(function (Cron, key) {
+            var rule = new schedule.RecurrenceRule();
+            var cronObj = new Cron();
+            rule.hour = cronObj.h_rule;
+            rule.minute = cronObj.m_rule;
+            schedule.scheduleJob(rule, cronObj.cron);
+        });
+    }
 };
 //# sourceMappingURL=cron.js.map
