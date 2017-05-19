@@ -18,7 +18,7 @@ var Routes = (function () {
     function Routes() {
     }
     Routes.index = function (req) {
-        return blog_model_1.default.findOne()
+        return blog_model_1.default.find({ status: 1 }, null, { sort: { '_id': -1 }, skip: 0, limit: 2 })
             .then(function (data) {
             console.log(JSON.stringify(data));
             return data;

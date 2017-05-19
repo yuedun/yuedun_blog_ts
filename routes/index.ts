@@ -15,7 +15,7 @@ export default class Routes {
         json: true
     })
     static index(req: Request): Promise.Thenable<any> {
-        return Blog.findOne()
+        return Blog.find({status: 1}, null, { sort: { '_id': -1 }, skip: 0, limit: 2 })
             .then(data => {
                 console.log(JSON.stringify(data))
                 return data;

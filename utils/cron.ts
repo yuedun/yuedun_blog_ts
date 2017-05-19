@@ -98,7 +98,9 @@ cronMap.push(ReqCron);
 
 //定时任务
 module.exports = function () {
-    if (process.env.ENV !== "development") {
+    if (process.env.ENV == "production") {
+        console.log(">>>>>>>>>>cron", process.env.ENV);
+        
         cronMap.forEach(function (Cron, key) {
             let rule = new schedule.RecurrenceRule();
             let cronObj = new Cron();

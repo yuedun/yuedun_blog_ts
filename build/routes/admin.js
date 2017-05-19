@@ -79,7 +79,7 @@ var Routes = (function () {
             title: args.title,
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss'),
             content: args.content,
-            status: args.status,
+            status: parseInt(args.status),
             comments: [],
             commentCount: 0,
             category: args.category,
@@ -157,7 +157,7 @@ var Routes = (function () {
                 content: args.content,
                 category: args.category,
                 tags: args.tags,
-                status: args.status,
+                status: parseInt(args.status),
                 updateTime: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
         }).then(function () {

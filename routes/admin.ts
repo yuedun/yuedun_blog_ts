@@ -110,7 +110,7 @@ export default class Routes {
             title: args.title,//标题
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss'),//发表时间
             content: args.content, //内容
-            status: args.status,//发布，草稿，
+            status: parseInt(args.status),//发布，草稿，
             comments: [],//评论，可以在评论时添加
             commentCount: 0,
             category: args.category,//分类
@@ -212,7 +212,7 @@ export default class Routes {
                 content: args.content,
                 category: args.category,
                 tags: args.tags,
-                status: args.status,
+                status: parseInt(args.status),
                 updateTime: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
         }).then(() => {
