@@ -42,12 +42,17 @@ var Routes = (function () {
             var file_name = files.name;
             return qiniu_1.uploadFile(file, file_name, token)
                 .then(function (data) {
-                return Promise.resolve({
+                return {
                     success: 1,
-                    message: "",
+                    message: "上传成功",
                     url: settings_1.qiniuConfig.url + data.key
-                });
+                };
             });
+        }).catch(function (err) {
+            return {
+                success: 0,
+                message: err,
+            };
         });
     };
     return Routes;
