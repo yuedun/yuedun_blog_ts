@@ -109,7 +109,6 @@ var Routes = (function () {
     ;
     Routes.weibo = function (req, res) {
         return Promise.all([
-            blog_model_1.default.find({ status: 1 }, 'title createDate pv', { sort: { createDate: -1 } }),
             latestTop,
             visitedTop
         ]).then(function (_a) {
@@ -124,7 +123,6 @@ var Routes = (function () {
     ;
     Routes.about = function (req, res) {
         return Promise.all([
-            blog_model_1.default.find({ status: 1 }, 'title createDate pv', { sort: { createDate: -1 } }),
             latestTop,
             visitedTop
         ]).then(function (_a) {
@@ -202,6 +200,6 @@ __decorate([
 ], Routes, "quicknote", null);
 exports.default = Routes;
 var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
-var latestTop = blog_model_1.default.find({ 'status': 1, createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }).exec();
-var visitedTop = blog_model_1.default.find({ 'status': 1 }, null, { sort: { 'pv': -1 }, limit: 5 }).exec();
+var latestTop = blog_model_1.default.find({ 'status': "1", createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }).exec();
+var visitedTop = blog_model_1.default.find({ 'status': "1" }, null, { sort: { 'pv': -1 }, limit: 5 }).exec();
 //# sourceMappingURL=article.js.map

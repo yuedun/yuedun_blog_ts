@@ -18,7 +18,7 @@ var Routes = (function () {
     function Routes() {
     }
     Routes.index = function (req) {
-        return blog_model_1.default.findOne()
+        return blog_model_1.default.find({ status: 1 }, null, { sort: { '_id': -1 }, skip: 0, limit: 2 })
             .then(function (data) {
             console.log(JSON.stringify(data));
             return data;
@@ -42,12 +42,17 @@ var Routes = (function () {
             var file_name = files.name;
             return qiniu_1.uploadFile(file, file_name, token)
                 .then(function (data) {
-                return Promise.resolve({
+                return {
                     success: 1,
-                    message: "",
+                    message: "上传成功",
                     url: settings_1.qiniuConfig.url + data.key
-                });
+                };
             });
+        }).catch(function (err) {
+            return {
+                success: 0,
+                message: err,
+            };
         });
     };
     return Routes;

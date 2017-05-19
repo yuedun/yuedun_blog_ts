@@ -98,11 +98,15 @@ cronMap.push(ReqCron);
 
 //定时任务
 module.exports = function () {
-    cronMap.forEach(function (Cron, key) {
-        let rule = new schedule.RecurrenceRule();
-        let cronObj = new Cron();
-        rule.hour = cronObj.h_rule;
-        rule.minute = cronObj.m_rule;
-        schedule.scheduleJob(rule, cronObj.cron);
-    });
+    if (process.env.ENV == "production") {
+        console.log(">>>>>>>>>>cron", process.env.ENV);
+        
+        cronMap.forEach(function (Cron, key) {
+            let rule = new schedule.RecurrenceRule();
+            let cronObj = new Cron();
+            rule.hour = cronObj.h_rule;
+            rule.minute = cronObj.m_rule;
+            schedule.scheduleJob(rule, cronObj.cron);
+        });
+    }
 }

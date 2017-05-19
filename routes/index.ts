@@ -15,7 +15,7 @@ export default class Routes {
         json: true
     })
     static index(req: Request): Promise.Thenable<any> {
-        return Blog.findOne()
+        return Blog.find({ status: 1 }, null, { sort: { '_id': -1 }, skip: 0, limit: 2 })
             .then(data => {
                 console.log(JSON.stringify(data))
                 return data;
@@ -47,12 +47,17 @@ export default class Routes {
             let file_name = files.name;
             return uploadFile(file, file_name, token)
                 .then(data => {
-                    return Promise.resolve({
+                    return {
                         success: 1,           // 0 表示上传失败，1 表示上传成功
-                        message: "",//提示的信息，上传成功或上传失败及错误信息等。
+                        message: "上传成功",//提示的信息，上传成功或上传失败及错误信息等。
                         url: qiniuConfig.url + data.key        // 上传成功时才返回
-                    })
+                    }
                 })
+        }).catch(err => {
+            return {
+                success: 0,           // 0 表示上传失败，1 表示上传成功
+                message: err,//提示的信息，上传成功或上传失败及错误信息等。
+            }
         })
     }
 }

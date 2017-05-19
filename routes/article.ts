@@ -93,7 +93,7 @@ export default class Routes {
     };
     /* 博客目录 */
     @route({
-        
+
     })
     static catalog(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
@@ -111,11 +111,10 @@ export default class Routes {
     };
     /* 我的微博 */
     @route({
-        
+
     })
     static weibo(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
-            Blog.find({status:1}, 'title createDate pv', { sort: { createDate: -1 } }),
             latestTop,
             visitedTop
         ]).then(([result1, result2]) => {
@@ -128,11 +127,10 @@ export default class Routes {
     };
     /* 关于我 */
     @route({
-        
+
     })
     static about(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
-            Blog.find({status:1}, 'title createDate pv', { sort: { createDate: -1 } }),
             latestTop,
             visitedTop
         ]).then(([result1, result2]) => {
@@ -146,7 +144,7 @@ export default class Routes {
 
     //婚纱
     @route({
-        
+
     })
     static gallery(req: Request, res: Response): Promise.Thenable<any> {
         if (req.query.pass === settings.gallery_pass) {
@@ -161,7 +159,7 @@ export default class Routes {
 
     //简历
     @route({
-        
+
     })
     static resume(req: Request, res: Response): Promise.Thenable<any> {
         debug("*****resume:" + moment().format("YYYY-MM-DD HH:ss:mm"));
@@ -170,13 +168,13 @@ export default class Routes {
 
     //速记本
     @route({
-        
+
     })
     static quicknote(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
             latestTop,
             visitedTop,
-            QuickNote.find(null, null, {sort: { '_id': -1 }})
+            QuickNote.find(null, null, { sort: { '_id': -1 } })
         ]).then(([result1, result2, result3]) => {
             return {
                 config: config,
@@ -189,7 +187,7 @@ export default class Routes {
 }
 //最近新建
 var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
-var latestTop = Blog.find({ 'status': 1, createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }).exec();
+var latestTop = Blog.find({ 'status': "1", createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }).exec();
 
 //访问最多
-var visitedTop = Blog.find({ 'status': 1 }, null, { sort: { 'pv': -1 }, limit: 5 }).exec();
+var visitedTop = Blog.find({ 'status': "1" }, null, { sort: { 'pv': -1 }, limit: 5 }).exec();

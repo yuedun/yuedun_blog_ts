@@ -79,7 +79,7 @@ var Routes = (function () {
             title: args.title,
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss'),
             content: args.content,
-            status: args.status,
+            status: parseInt(args.status),
             comments: [],
             commentCount: 0,
             category: args.category,
@@ -157,7 +157,7 @@ var Routes = (function () {
                 content: args.content,
                 category: args.category,
                 tags: args.tags,
-                status: args.status,
+                status: parseInt(args.status),
                 updateTime: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
         }).then(function () {
@@ -216,14 +216,14 @@ var Routes = (function () {
         user_model_1.default.find({}, null, function (err, docs) {
             if (err)
                 res.send(err.message);
-            res.render('admin/viewuser', { users: docs });
+            res.render('admin/viewUser', { users: docs });
         });
     };
     Routes.toModifyUser = function (req, res) {
         user_model_1.default.findById(req.params.userId, function (err, doc) {
             if (err)
                 res.send(err.message);
-            res.render('admin/modifyuser', {
+            res.render('admin/modifyUser', {
                 user: doc,
                 success: 0,
                 flag: 1
@@ -343,9 +343,6 @@ var Routes = (function () {
             var result1 = _a[0], result2 = _a[1];
             return { readCount: result1[0].pvCount, todayRead: result2 };
         });
-    };
-    Routes.mdTest = function (req) {
-        return Promise.resolve({});
     };
     return Routes;
 }());
@@ -479,8 +476,5 @@ __decorate([
 __decorate([
     route_1.route({})
 ], Routes, "readCount", null);
-__decorate([
-    route_1.route({})
-], Routes, "mdTest", null);
 exports.default = Routes;
 //# sourceMappingURL=admin.js.map

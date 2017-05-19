@@ -110,7 +110,7 @@ export default class Routes {
             title: args.title,//标题
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss'),//发表时间
             content: args.content, //内容
-            status: args.status,//发布，草稿，
+            status: parseInt(args.status),//发布，草稿，
             comments: [],//评论，可以在评论时添加
             commentCount: 0,
             category: args.category,//分类
@@ -212,7 +212,7 @@ export default class Routes {
                 content: args.content,
                 category: args.category,
                 tags: args.tags,
-                status: args.status,
+                status: parseInt(args.status),
                 updateTime: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
         }).then(() => {
@@ -312,7 +312,7 @@ export default class Routes {
     static viewUser(req: Request, res: Response): void {
         User.find({}, null, function (err, docs) {
             if (err) res.send(err.message);
-            res.render('admin/viewuser', { users: docs });
+            res.render('admin/viewUser', { users: docs });
         });
     }
     /**
@@ -324,7 +324,7 @@ export default class Routes {
     static toModifyUser(req: Request, res: Response): void {
         User.findById(req.params.userId, function (err, doc) {
             if (err) res.send(err.message);
-            res.render('admin/modifyuser', {
+            res.render('admin/modifyUser', {
                 user: doc,
                 success: 0,
                 flag: 1
@@ -518,13 +518,6 @@ export default class Routes {
         ]).then(([result1, result2]) => {
             return { readCount: result1[0].pvCount, todayRead: result2 }
         })
-    }
-
-    @route({
-
-    })
-    static mdTest(req: Request): Promise.Thenable<any> {
-        return Promise.resolve({})
     }
 }
 
