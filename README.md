@@ -128,7 +128,7 @@ var host = mongodbConfig.host,
 
 ```
 这样就可以直接使用then形式的写法了。
-```
+```JavaScript
 Category.findOne({ cateName: req.body.category })
     .then(category => {
         //....
@@ -152,3 +152,22 @@ Category.findOne({ cateName: req.body.category })
 var debug =require("debug")("yuedun:www");
 ```
 参数是什么(模块名)就会输出哪个模块的内容，如果Debug('http')就会输出http模块中的debug输出。设置DEBUG=*会输出所有模块的内容，所以最好加一个前缀来输出指定部分内容，比如自定义模块就传参`yuedun:www`冒号后面为文件名就会输出该文件下的debug
+
+# 自动添加createdAt和updatedAt字段
+```javascript
+import {Document, model, Model, Schema} from 'mongoose';
+
+export var TestSchema: Schema = new Schema({
+    title: String,
+}, {timestamps: true});
+
+export interface ITest extends Document {
+    title: string;
+    createdAt: Date;
+    updatedAt: Date
+}
+var TestModel: Model<ITest> = model<ITest>('Test', TestSchema);
+
+export default TestModel;
+```
+设置`{timestamps: true}`即可

@@ -5,6 +5,7 @@ import * as Debug from 'debug';
 var debug = Debug('yuedun:index');
 import { Request, Response } from 'express';
 import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
+import { default as Test, ITest as TestInstance } from '../models/test-model';
 import { uploadFile, uptoken } from '../utils/qiniu';
 import { route } from '../utils/route';
 import { qiniuConfig } from '../settings';
@@ -12,14 +13,34 @@ import { qiniuConfig } from '../settings';
 export default class Routes {
 
     @route({
-        json: true
+        json: true,
+        method: 'post'
     })
     static index(req: Request): Promise.Thenable<any> {
-        return Blog.find({ status: 1 }, null, { sort: { '_id': -1 }, skip: 0, limit: 2 })
-            .then(data => {
-                console.log(JSON.stringify(data))
-                return data;
-            });
+        var args = req.body;
+        var test = new Test({
+            title: args.title
+        });
+        return test.save()
+        .then(data=>{
+            console.log(moment(data.createdAt).format('YYYY-MM-DD HH:mm:SS'))
+            return data;
+        })
+    }
+    @route({
+        json: true,
+        method: 'post'
+    })
+    static update(req: Request): Promise.Thenable<any> {
+        var args = req.body;
+        return Test.findByIdAndUpdate('591ff41af777182524f7f2d8', {
+            $set: {
+                title: args.title
+            }
+        }).then(data=>{
+            console.log(data)
+            return data;
+        })
     }
 
     @route({

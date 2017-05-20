@@ -7,10 +7,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Promise = require("bluebird");
+var moment = require("moment");
 var formidable = require("formidable");
 var Debug = require("debug");
 var debug = Debug('yuedun:index');
-var blog_model_1 = require("../models/blog-model");
+var test_model_1 = require("../models/test-model");
 var qiniu_1 = require("../utils/qiniu");
 var route_1 = require("../utils/route");
 var settings_1 = require("../settings");
@@ -18,9 +19,24 @@ var Routes = (function () {
     function Routes() {
     }
     Routes.index = function (req) {
-        return blog_model_1.default.find({ status: 1 }, null, { sort: { '_id': -1 }, skip: 0, limit: 2 })
+        var args = req.body;
+        var test = new test_model_1.default({
+            title: args.title
+        });
+        return test.save()
             .then(function (data) {
-            console.log(JSON.stringify(data));
+            console.log(moment(data.createdAt).format('YYYY-MM-DD HH:mm:SS'));
+            return data;
+        });
+    };
+    Routes.update = function (req) {
+        var args = req.body;
+        return test_model_1.default.findByIdAndUpdate('591ff41af777182524f7f2d8', {
+            $set: {
+                title: args.title
+            }
+        }).then(function (data) {
+            console.log(data);
             return data;
         });
     };
@@ -59,9 +75,16 @@ var Routes = (function () {
 }());
 __decorate([
     route_1.route({
-        json: true
+        json: true,
+        method: 'post'
     })
 ], Routes, "index", null);
+__decorate([
+    route_1.route({
+        json: true,
+        method: 'post'
+    })
+], Routes, "update", null);
 __decorate([
     route_1.route({
         method: "post",
