@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var qiniu = require('qiniu');
-var settings = require("../settings");
-var secret_key = settings.qiniuKey;
-qiniu.conf.ACCESS_KEY = secret_key.accessKey;
-qiniu.conf.SECRET_KEY = secret_key.secretKey;
+var Promise = require("bluebird");
+var settings_1 = require("../settings");
+qiniu.conf.ACCESS_KEY = settings_1.qiniuConfig.accessKey;
+qiniu.conf.SECRET_KEY = settings_1.qiniuConfig.secretKey;
 exports.uptoken = function (bucketName, callbackUrl, callbackBody) {
     var putPolicy = new qiniu.rs.PutPolicy(bucketName);
     putPolicy.getFlags(putPolicy);
@@ -26,15 +26,23 @@ exports.uploadBuf = function (body, key, uptoken) {
         }
     });
 };
-exports.uploadFile = function (localFile, key, uptoken) {
+exports.uploadFile = function (localFile, key, uptoken, callback) {
     var extra = new qiniu.io.PutExtra();
-    qiniu.io.putFile(uptoken, key, localFile, extra, function (err, ret) {
-        if (!err) {
-            console.log(ret.key, ret.hash);
-        }
-        else {
-            console.log(err);
-        }
+    return new Promise(function (resolve, reject) {
+        qiniu.io.putFile(uptoken, key, localFile, extra, function (err, ret) {
+            if (!err) {
+                console.log(ret.key, ret.hash);
+                resolve({ key: ret.key, hash: ret.hash });
+                callback && callback(null, ret);
+                return;
+            }
+            else {
+                console.log(err);
+                reject(err);
+                callback && callback(err);
+                return;
+            }
+        });
     });
 };
 //# sourceMappingURL=qiniu.js.map

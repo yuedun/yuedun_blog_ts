@@ -1,7 +1,9 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 exports.mongoose = mongoose;
+var Promise = require("bluebird");
+mongoose.Promise = Promise;
 var settings = require("../settings");
 var mongodbConfig = settings.mongodb;
 var host = mongodbConfig.host, port = mongodbConfig.port, username = mongodbConfig.uid, password = mongodbConfig.pwd, dbName = mongodbConfig.db, url = "mongodb://" + username + ":" + password + "@" + host + ":" + port + "/" + dbName;

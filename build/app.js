@@ -5,7 +5,7 @@ var path = require("path");
 var favicon = require("serve-favicon");
 var logger = require("morgan");
 var cookieParser = require("cookie-parser");
-var bodyParser = require("body-parser");
+var bodyParser = require('body-parser');
 var ejs = require("ejs");
 var session = require("express-session");
 var mongoStore = require("connect-mongo");
@@ -15,11 +15,10 @@ connection.getConnect();
 var settins = require("./settings");
 var mongodb = settins.mongodb;
 (require('./utils/cron'))();
-var viewerLog_1 = require("./utils/viewerLog");
+var viewer_log_1 = require("./utils/viewer-log");
 var route_register_1 = require("./utils/route-register");
 var app = express();
 exports.app = app;
-var routeRegister = new route_register_1.default(app, "routes");
 var store = new MongoStore({
     mongooseConnection: connection.mongoose.connection
 });
@@ -43,7 +42,7 @@ app.use(session({
 }));
 app.use('/*', function (req, res, next) {
     if (req.originalUrl.indexOf('/admin') === -1) {
-        viewerLog_1.default(req);
+        viewer_log_1.default(req);
     }
     next();
 });
@@ -63,12 +62,14 @@ app.use('/admin', function (req, res, next) {
         next();
     }
 });
+var routeRegister = new route_register_1.default(app, "routes");
 app.use(function (req, res, next) {
     var err = new Error('Not Found');
     next(err);
 });
 if (app.get('env') === 'development') {
     app.use(function (err, req, res, next) {
+        console.error(err);
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,

@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8"/>
+    <title>文章详情</title>
+    <link rel="stylesheet" href="/stylesheets/layout.css" type="text/css" media="screen"/>
+</head>
+<body>
+<% include header.html %>
+<!-- end of header bar -->
+<!--导入菜单-->
+<% include menu.html %>
+<section id="main" class="column">
+    <h4 class="alert_info">Welcome to the free MediaLoot admin panel template, this could be an informative
+        message.</h4>
+    <article class="module width_full">
+        <header><h3>文章详情</h3></header>
+        <div class="module_content">
+            <h1><%= blog.title%></h1>
+            <p><%- blog.content%></p>
+            <p class="autor">
+                <span>发表时间：<%= blog.createDate%></span>
+                <span>分类【<a href=""><%= blog.category%></a>】</span>
+                <span>浏览(<a href=""><%= blog.pv%></a>)</span>
+                <span>评论(<a href=""><%= blog.commentCount%></a>)</span>
+                <span><a href="/admin/editArticleMd/<%= blog._id%>" name="update">修改</a></span>
+                <span><a href="javascript:void(0);" id="<%= blog._id%>" name="del">删除</a></span>
+            </p>
+        </div>
+    </article>
+    <!-- end of styles article -->
+    <div class="spacer"></div>
+</section>
+    <script src="http://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            //删除文章
+            $("[name='del']").click(function () {
+                if (confirm("确定删除此文章吗？")) {
+                    location.href = "/admin/deleteBlog/" + this.id;
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

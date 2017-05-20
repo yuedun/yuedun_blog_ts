@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8"/>
+    <title>新增天气预报用户</title>
+    <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
+    <link rel="stylesheet" href="/stylesheets/layout.css" type="text/css" media="screen"/>
+    <script src="http://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+        });
+    </script>
+
+</head>
+
+
+<body>
+
+<% include header.html %>
+<!-- end of header bar -->
+<!--导入菜单-->
+<% include menu.html %>
+<section id="main" class="column">
+    <% if(success==1){%>
+    <h4 class="alert_success">添加成功！</h4>
+    <% }%>
+    <div class="clear"></div>
+
+    <article class="module width_full">
+        <form action="/admin/createWeatherUser" method="post">
+            <header><h3>添加天气预报用户</h3></header>
+            <div class="module_content">
+                <fieldset style="width:48%; float:left;">
+                    <label>用户名</label>
+                    <input type="text" id="username" name="username" style="width:80%;">
+                    <label>手机号</label>
+                    <input type="text" id="mobile" name="mobile" style="width:80%;">
+                    <label>城市</label>
+                    <input type="text" id="city" name="city" style="width:80%;">
+                </fieldset>
+                <div class="clear"></div>
+            </div>
+            <footer>
+                <div class="submit_link">
+                    <input type="submit" value="保存" class="alt_btn">
+                </div>
+            </footer>
+        </form>
+    </article>
+    <!-- end of post new article -->
+    <div class="spacer"></div>
+</section>
+
+</body>
+
+</html>

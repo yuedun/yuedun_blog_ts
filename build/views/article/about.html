@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="zh-cmn">
+	<meta charset="UTF-8">
+	<title>关于我</title>
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+	<meta name="keywords" content="霍潘,月盾">
+	<meta name="description" content="霍潘的技术博客，工作经验分享，记录">
+	<link rel="stylesheet" href="/stylesheets/style.css" />
+</head>
+
+<body>
+	<% include header.html %>
+	<section>
+		<div class="container">
+			<h3 class="header">关于我</h3>
+			<section class="blog_section">
+				<div class="about">
+					<div>
+						<h3>关于我</h3>
+						<p>网名：<%=config.nickname%></p>
+						<p>工作地：<%=config.addr%></p>
+						<p>电话：<a id="mobile" class="myinfo" href="javascript:void(0)">点击获取</a></p>
+						<p>邮箱：<a id="email" class="myinfo" href="javascript:void(0)">点击获取</a></p>
+						<h3>目前工作</h3>
+						<p><%=config.job%></p>
+						<h3>关于博客</h3>
+						<p><%=config.resume%></p>
+						<p>域 名：<a href="http://www.hopefully.wang" target="_blank">www.hopefully.wang</a> 创建于2014年10月
+							<br> 域名未正式备案，借助新浪SAE可以绑定域名自动转发到百度云二级域名。
+						</p>
+						<p>服务器：BAE
+							<br> 博客使用nodejs开发，express框架，mongodb数据库
+						</p>
+						<p>QQ：438473005
+							<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=438473005&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:438473005:52" alt="点击这里给我发消息" title="点击这里给我发消息" /></a>
+						</p>
+					</div>
+				</div>
+			</section>
+			<% include asider.html %>
+			<div class="clear"></div>
+		</div>
+	</section>
+	<% include footer.html %>
+	<script src="/javascripts/silder.js"></script>
+	<script>
+		//获取手机
+		!function () {
+			var telObj = document.querySelector("#mobile");
+			var mobileObj = document.querySelector("#email");
+			if (telObj) {
+				telObj.addEventListener("click", function () {
+					this.innerText = "18701897527";
+				})
+				mobileObj.addEventListener("click", function () {
+					this.innerText = "huo.win.n@gmail.com";
+				})
+			}
+		}()
+	</script>
+</body>
+
+</html>

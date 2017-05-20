@@ -2,12 +2,12 @@
  * Created by huopanpan on 2014/10/22.
  */
 var qiniu = require('qiniu');
-import * as settings from '../settings';
-var secret_key = settings.qiniuKey;
+import * as Promise from 'bluebird';
+import { qiniuConfig } from '../settings';
 
 // @gist init
-qiniu.conf.ACCESS_KEY = secret_key.accessKey;
-qiniu.conf.SECRET_KEY = secret_key.secretKey;
+qiniu.conf.ACCESS_KEY = qiniuConfig.accessKey;
+qiniu.conf.SECRET_KEY = qiniuConfig.secretKey;
 // @endgist
 
 // @gist uptoken获取token
@@ -58,22 +58,27 @@ export var uploadBuf = function (body: any, key: string, uptoken: string) {
  * @param key
  * @param uptoken
  */
-export var uploadFile = function (localFile: string, key: string, uptoken: string) {
+export var uploadFile = function (localFile: string, key: string, uptoken: string, callback?: Function): Promise.Thenable<any> {
     var extra = new qiniu.io.PutExtra();
     //extra.params = params;
     //extra.mimeType = mimeType;
     //extra.crc32 = crc32;
     //extra.checkCrc = checkCrc;
-
-    qiniu.io.putFile(uptoken, key, localFile, extra, function (err: any, ret: any) {
-        if (!err) {
-            // 上传成功， 处理返回值
-            console.log(ret.key, ret.hash);
-            // ret.key & ret.hash
-        } else {
-            // 上传失败， 处理返回代码
-            console.log(err);
-            // http://developer.qiniu.com/docs/v6/api/reference/codes.html
-        }
-    });
+    return new Promise((resolve, reject) => {
+        qiniu.io.putFile(uptoken, key, localFile, extra, function (err: any, ret: any) {
+            if (!err) {
+                // 上传成功， 处理返回值
+                console.log(ret.key, ret.hash);
+                resolve({ key: ret.key, hash: ret.hash });
+                callback && callback(null, ret); return;
+                // ret.key & ret.hash
+            } else {
+                // 上传失败， 处理返回代码
+                console.log(err);
+                reject(err);
+                callback && callback(err); return;
+                // http://developer.qiniu.com/docs/v6/api/reference/codes.html
+            }
+        });
+    })
 }

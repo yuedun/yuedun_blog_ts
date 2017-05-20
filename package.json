@@ -4,7 +4,9 @@
   "description": "关于dependencies符号的解释：1.version 必须完全和version一致   2.>version 必须比version大 3.>=version 同上  4.<version 同上  5.<=version 同上  6.~version 大约一样  7. 1.2.x 1.2.0, 1.2.1, 等，但不包括1.3.0  8.^1.2.1大于1.2.1小于2.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www"
+    "tsc": "tsc -w",
+    "serve": "set NODE_ENV=development& set DEBUG=yuedun:*& cd ./build & nodemon ./bin/www.js",
+    "start": "parallelshell \"npm run tsc\" \"npm run serve\""
   },
   "dependencies": {
     "async": "^0.9.2",
@@ -17,7 +19,7 @@
     "ejs": "^2.5.2",
     "express": "^4.13.3",
     "express-session": "^1.12.0",
-    "formidable": "^1.0.15",
+    "formidable": "^1.1.1",
     "lodash": "^4.16.1",
     "markdown-it": "^6.1.1",
     "moment": "^2.17.0",
@@ -28,6 +30,7 @@
     "qiniu": "^6.1.6",
     "serve-favicon": "^2.4.2",
     "session": "^0.1.0",
+    "source-map-support": "^0.4.15",
     "utility": "^1.5.0"
   },
   "devDependencies": {
@@ -35,11 +38,13 @@
     "@types/bluebird": "^3.0.36",
     "@types/ejs": "^2.3.33",
     "@types/express-session": "0.0.32",
+    "@types/formidable": "^1.0.29",
     "@types/lodash": "^4.14.40",
     "@types/moment": "^2.13.0",
     "@types/mongoose": "^4.6.1",
     "@types/node": "^7.0.13",
-    "express-generator": "^4.13.1",
+    "parallelshell": "^2.0.0",
+    "source-map-support": "^0.4.15",
     "typescript": "^2.2.2"
   }
 }

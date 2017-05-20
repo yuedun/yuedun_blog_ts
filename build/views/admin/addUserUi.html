@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <title>新增用户</title>
+
+    <link rel="stylesheet" href="/stylesheets/layout.css" type="text/css" media="screen" />
+    <script src="http://cdn.bootcss.com/jquery/2.1.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $(".alt_btn").click(function () {
+                var nickname = $('#nickname').val();
+                var username = $('#username').val();
+                var password = $('#password').val();
+                var repeatpassword = $('#repeatpassword').val();
+                if (password != repeatpassword) {
+                    alert("密码不正确");
+                    return;
+                }
+                $.post('/admin/addUser', {
+                    nickname: nickname,
+                    username: username,
+                    password: password
+                }, function (data) {
+                    alert(JSON.stringify(data));
+                })
+            })
+        })
+    </script>
+</head>
+
+<body>
+
+    <% include header.html %>
+    <!-- end of header bar -->
+    <!--导入菜单-->
+    <% include menu.html %>
+        <section id="main" class="column">
+            <% if(success==1){%>
+                <h4 class="alert_success">添加成功！</h4>
+                <% }%>
+                    <div class="clear"></div>
+
+                    <article class="module width_full">
+                        <form action="" method="post" onsubmit="return false">
+                            <header>
+                                <h3>添加用户</h3>
+                            </header>
+                            <div class="module_content">
+                                <fieldset>
+                                    <div class="feildgroup">
+                                        <label>昵称</label>
+                                        <input type="text" id="nickname" name="nickname" />
+                                    </div>
+                                    <div class="feildgroup">
+                                        <label>用户名</label>
+                                        <input type="text" id="username" name="username">
+                                    </div>
+                                    <div class="feildgroup">
+                                        <label>密码</label>
+                                        <input type="text" id="password" name="password">
+                                    </div>
+                                    <div class="feildgroup">
+                                        <label>重复密码</label>
+                                        <input type="text" id="repeatpassword" name="repeatpassword">
+                                    </div>
+                                </fieldset>
+                                <div class="clear"></div>
+                            </div>
+                            <footer>
+                                <div class="submit_link">
+                                    <input type="submit" value="保存" class="alt_btn">
+                                    <input type="reset" value="重置">
+                                </div>
+                            </footer>
+                        </form>
+                    </article>
+                    <!-- end of post new article -->
+                    <div class="spacer"></div>
+        </section>
+
+</body>
+
+</html>

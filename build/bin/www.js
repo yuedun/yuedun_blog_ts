@@ -4,7 +4,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 require("source-map-support/register");
 var app_1 = require("../app");
 var Debug = require("debug");
-var debug = Debug('yuedun');
+var debug = Debug('yuedun:www');
 var http = require("http");
 var port = normalizePort(process.env.PORT || '3000');
 app_1.app.set('port', port);

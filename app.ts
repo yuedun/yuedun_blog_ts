@@ -5,7 +5,8 @@ import * as http from 'http';
 import * as favicon from 'serve-favicon';//图标组件由static-favicon改为serve-favicon
 import * as logger from 'morgan';//此模块及以下部分模块由express分离出来
 import * as cookieParser from 'cookie-parser';
-import * as bodyParser from 'body-parser';
+// import * as bodyParser from 'body-parser';
+var bodyParser = require('body-parser')
 import * as ejs from 'ejs';
 import * as session from 'express-session';
 import * as mongoStore from 'connect-mongo';
@@ -15,10 +16,9 @@ connection.getConnect();//执行其中的方法。另外还有mongoose对象，�
 import * as settins from './settings';
 var mongodb = settins.mongodb;
 (require('./utils/cron'))();//定时任务
-import { default as pvLog } from './utils/viewerLog';//访问日志
+import { default as pvLog } from './utils/viewer-log';//访问日志
 import RouteRegister from './utils/route-register';
 var app = express();
-const routeRegister = new RouteRegister(app, "routes");
 var store = new MongoStore({
     // //    url:"mongodb://"+mongodb.uid+":"+mongodb.pwd+"@"+mongodb.host+":"+mongodb.port+"/"+mongodb.db,
     // interval: 60000, // expiration check worker run interval in millisec (default: 60000)
@@ -55,8 +55,6 @@ app.use('/*', function (req, res, next) {
     next();
 });
 
-// routeRegister.registerRouters();
-
 /**
  * 后台动态显示用户登录状态
  * 前台放在前面不进行验证
@@ -78,6 +76,8 @@ app.use('/admin', function (req, res, next) {
         next();
     }
 });
+//需要方法body-parser后面，否则无法解析post提交的body内容
+const routeRegister = new RouteRegister(app, "routes");
 // catch 404 and forward to error handler
 // this middleware will be executed for every request to the app
 //加next每个请求都会经过，不加next所有请求不会通过，没有交给下一个路由
@@ -94,6 +94,7 @@ app.use(function (req, res, next) {
 // will print stacktrace
 if (app.get('env') === 'development') {
     app.use(function (err: any, req: Request, res: Response, next: Function) {
+        console.error(err);
         res.status(err.status || 500);
         res.render('error', {
             message: err.message,

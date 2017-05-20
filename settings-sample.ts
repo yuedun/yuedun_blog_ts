@@ -1,17 +1,17 @@
 /**
  * Created by huopanpan on 2014/5/26.
  */
-exports.mongodb = {
-    cookieSecret: 'node-demo',
+export var mongodb = {
+    cookieSecret: 'node-blog',
     db: 'blogs',
-    port: '8908',
+    port: '27017',//8908
     uid: 'admin' || process.env.BAE_ENV_AK,
     pwd: 'admin' || process.env.BAE_ENV_SK,
-    host: 'localhost:27017'
+    host: 'localhost'
 };
 
 //建周短信账户
-exports.SMS_ACCOUNT = {
+export var SMS_ACCOUNT = {
     account: 'xxx',
     password: 'xxx',
     signature: '【hp】',
@@ -19,10 +19,10 @@ exports.SMS_ACCOUNT = {
 };
 
 //环境云key http://www.envicloud.cn/
-exports.weather_key = "sdf==";
+export var weather_key = "sdf==";
 
 //主机配置
-exports.host = "localhost:3000";
+export var host = "localhost:3000";
 
 export var gallery_pass = "123";//婚纱照访问密码，格式：gallery/123
 //leacloud
@@ -31,7 +31,7 @@ export var LEACLOUD = {
     appKey: ''
 };
 //博客信息，个人基本信息配置
-exports.blog_config = {
+export var blog_config = {
     nickname:'月盾',
     job:'NodeJs',
     addr:'上海',
@@ -42,7 +42,8 @@ exports.blog_config = {
     current_job:'nodejs。'
 };
 //七牛key
-exports.qiniuKey = {
+export var qiniuConfig = {
+    url: 'http://hopefully.qiniudn.com/',
     bucketName: 'xxx',
     accessKey: '6CG6fskhgir---',
     secretKey: 'NxeiNiysdog---'

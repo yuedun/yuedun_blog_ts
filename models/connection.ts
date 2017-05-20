@@ -5,7 +5,9 @@
  *  连接到mongodb
  *  使用mongoose而非mongodb中间件
  **/
-var mongoose = require('mongoose');
+import * as mongoose from 'mongoose';
+import * as Promise from 'bluebird';
+(<any>mongoose).Promise = Promise;//使用bluebird代替mongoose自身的promise
 import * as settings from '../settings';
 var mongodbConfig = settings.mongodb;
 

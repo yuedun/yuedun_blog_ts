@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8"/>
+    <title>访问量</title>
+
+    <link rel="stylesheet" href="/stylesheets/layout.css" type="text/css" media="screen"/>
+</head>
+
+
+<body>
+<% include header.html %>
+<!-- end of header bar -->
+<!--导入菜单-->
+<% include menu.html %>
+<section id="main" class="column">
+
+<h4 class="alert_info">Welcome to the free MediaLoot admin panel template, this could be an informative message.</h4>
+
+<article class="module width_full">
+    <header><h3>Stats</h3></header>
+    <div class="module_content">
+        <article class="stats_overview">
+            <div class="overview_previous">
+                <p class="overview_day">总访问</p>
+
+                <p class="overview_count"><%=readCount%></p>
+
+                <p class="overview_type">访问</p>
+            </div>
+            <div class="overview_previous">
+                <p class="overview_day">今日</p>
+
+                <p class="overview_count"><%=todayRead%></p>
+
+                <p class="overview_type">总访问</p>
+
+                <p class="overview_count">0</p>
+
+                <p class="overview_type">访问最多</p>
+            </div>
+        </article>
+        <div class="clear"></div>
+    </div>
+</article>
+<div class="spacer"></div>
+</section>
+</body>
+
+</html>
