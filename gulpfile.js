@@ -1,6 +1,3 @@
-/**
- * 
- */
 var gulp = require('gulp');
 
 /**
@@ -14,9 +11,12 @@ var gulp = require('gulp');
 // 	});
 // });
 gulp.task('watch', function(){
+	var destPath = '';//company
+	if(process.env.USERNAME == 'huo'){
+		destPath = 'F:/workspace/appidtfiwa15f0f/routes/';//home
+	}
 	gulp.watch(['build/routes/*.js'], function(event){
-        console.log(">>>>>>", event.path);
 		gulp.src('./build/routes/*.js')//.src(['./build/**/*', '!./build/**/*.map', '!./build/public/**/*', '!./build/bin/', '!./build/settings.*'])
-		.pipe(gulp.dest('E:/workspace/bce/routes/'))
+		.pipe(gulp.dest(destPath))
 	});
 })

@@ -67,9 +67,9 @@ export default class Routes {
     static blogdetail(req: Request, res: Response): Promise.Thenable<any> {
         let blogId = req.params.id;
         let ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-        let visitor = ip + blogId;
+        let visited = ip + blogId;
         let blogPromise: Promise.Thenable<BlogInstance>;
-        if (req.cookies[visitor + blogId]) {
+        if (req.cookies['visited' + blogId]) {
             blogPromise = Blog.findById(req.params.id);
         } else {
             blogPromise = Blog.findByIdAndUpdate(req.params.id, { $inc: { pv: 1 } })
@@ -82,7 +82,7 @@ export default class Routes {
             if (doc.ismd) {
                 doc.content = md.render(doc.content);
             }
-            res.cookie('visitor' + blogId, visitor, { maxAge: 1000 * 60 * 60 * 8, httpOnly: true });
+            res.cookie('visited' + blogId, visited, { maxAge: 1000 * 60 * 60 * 8, httpOnly: true });
             return {
                 config: config,
                 newList: result1,
