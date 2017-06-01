@@ -11,7 +11,7 @@ var gulp = require('gulp');
 // 	});
 // });
 gulp.task('watch', function(){
-	var destPath = '';//company
+	var destPath = 'E:/workspace/bce/routes/';//company
 	if(process.env.USERNAME == 'huo'){
 		destPath = 'F:/workspace/appidtfiwa15f0f/routes/';//home
 	}

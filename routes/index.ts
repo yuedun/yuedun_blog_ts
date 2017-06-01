@@ -11,6 +11,9 @@ import { qiniuConfig } from '../settings';
 
 export default class Routes {
 
+    /**
+     * 测试路由
+     */
     @route({
         json: true
     })
@@ -22,6 +25,9 @@ export default class Routes {
             });
     }
 
+    /**
+     * 上传图片，有用，勿删
+     */
     @route({
         method: "post",
         json: true
