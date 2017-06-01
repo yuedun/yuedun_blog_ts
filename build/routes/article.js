@@ -64,9 +64,9 @@ var Routes = (function () {
     Routes.blogdetail = function (req, res) {
         var blogId = req.params.id;
         var ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-        var visitor = ip + blogId;
+        var visited = ip + blogId;
         var blogPromise;
-        if (req.cookies[visitor + blogId]) {
+        if (req.cookies['visited' + blogId]) {
             blogPromise = blog_model_1.default.findById(req.params.id);
         }
         else {
@@ -81,7 +81,7 @@ var Routes = (function () {
             if (doc.ismd) {
                 doc.content = md.render(doc.content);
             }
-            res.cookie('visitor' + blogId, visitor, { maxAge: 1000 * 60 * 60 * 8, httpOnly: true });
+            res.cookie('visited' + blogId, visited, { maxAge: 1000 * 60 * 60 * 8, httpOnly: true });
             return {
                 config: config,
                 newList: result1,
