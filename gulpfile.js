@@ -19,4 +19,6 @@ gulp.task('watch', function(){
 		gulp.src('./build/routes/*.js')//.src(['./build/**/*', '!./build/**/*.map', '!./build/public/**/*', '!./build/bin/', '!./build/settings.*'])
 		.pipe(gulp.dest(destPath))
 	});
-})
+});
+
+gulp.task('default', ['watch']);
