@@ -35,7 +35,7 @@ a {
     margin-top:-1px;
     overflow:hidden;
 }
-header h2{
+header h1{
     padding: 20px 0px 0px 80px;
 }
 header p{
@@ -87,9 +87,13 @@ section .header{
 .blog_title{
     margin-top: 10px;
     line-height: 25px;
+    font-size: 21px;
 }
 .blog_content{
     margin-bottom: 20px;
+}
+.blog_detail_content{
+    margin-top: 35px;
 }
 .blog_content p{
     line-height: 25px;
@@ -192,7 +196,7 @@ aside ul{padding-left: 18px;}
 @media screen and (max-width:768px) {
     /*手机屏幕下整体结构*/
     .container{width: 100%}
-    aside, header h2,header p{ display: none }
+    aside, header h1,header p{ display: none }
     nav ul{padding: 0 2px;background-color: #FFF}
     nav ul li{ display: block; height: auto; line-height: 40px; text-align: center; background: #FFF;}
     nav ul li a { display: block; background: #572C82;; margin-bottom: 2px;font-size: 16px;padding: 0; }

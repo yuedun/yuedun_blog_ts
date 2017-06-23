@@ -18,9 +18,9 @@
 			<section class="blog_section">
 				<% blogList.forEach(function(blog){%>
 				<article class="blogs">
-					<h3 class="blog_title">
+					<h1 class="blog_title">
 						<a href="/blogdetail/<%= blog._id%>"><%= blog.title%></a>
-					</h3>
+					</h1>
 					<div class="blog_content">
 						<p>
 							<%- blog.content%>
