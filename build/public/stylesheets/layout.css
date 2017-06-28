@@ -831,3 +831,6 @@ fieldset textarea:focus {
 #title_color {
 	color:green;
 }
+.resumevalue:focus{
+	background-color: #E0E0E3;
+}
