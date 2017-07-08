@@ -55,18 +55,18 @@ var Routes = (function () {
             };
         });
     };
-    __decorate([
-        route_1.route({
-            json: true
-        })
-    ], Routes, "index", null);
-    __decorate([
-        route_1.route({
-            method: "post",
-            json: true
-        })
-    ], Routes, "uploadImg", null);
     return Routes;
 }());
+__decorate([
+    route_1.route({
+        json: true
+    })
+], Routes, "index", null);
+__decorate([
+    route_1.route({
+        method: "post",
+        json: true
+    })
+], Routes, "uploadImg", null);
 exports.default = Routes;
 //# sourceMappingURL=index.js.map
