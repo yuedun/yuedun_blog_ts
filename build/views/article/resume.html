@@ -1,658 +1,702 @@
 <!DOCTYPE HTML>
 <html>
+
 <head>
-<meta http-equiv="X-UA-Compatible" content="IE=10;IE=9;IE=8;IE=7;IE=EDGE">
-<meta http-equiv="Cache-Control" content="no-siteapp" />
-<link rel="alternate" media="handheld" href="#" />
-<meta charset="utf-8">
-<title>node.js中高级开发工程师</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=10;IE=9;IE=8;IE=7;IE=EDGE">
+	<meta http-equiv="Cache-Control" content="no-siteapp" />
+	<style type="text/css">
+		body{margin: 0;padding: 0;font: 14px/22px "微软雅黑","宋体",Arial;color: #333;word-wrap: break-word;}
+		.clearfixs:before,.clearfixs:after{content:"";display:table;}
+		.clearfixs:after{display:block;clear:both;}
+		.clearfixs{*zoom:1;}
+		a:hover{color:#00b88d;}
+		h1, h2, h3, h4, h5 {
+		font-weight: normal;
+		}
+		/* 为创建在线简历 */
+		.dn{display:none;}
+		.mr_created input,.mr_created textarea{font-size:14px;}
+		.mr_uncreate *,.mr_created *{margin:0;padding:0;}
+		.mr_created #mr_mr_head *,.mr_created .mr_myresume_r *{list-style:none;}
+		.mr_created #mr_mr_head{margin-bottom:0;}
+		.mr_created .mr_baseinfo{border-bottom:none;border-bottom-right-radius:0px;border-bottom-left-radius:0px;}
+		.mr_created .mr_infoed{margin-bottom:0px;}
+		.mr_myresume_l{float:left;width:702px;margin-bottom:20px;}
+		#mr_mr_head{margin-bottom:22px;}
+		.mr_created #mr_mr_head{margin-bottom:0;}
+		.mr_created #mr_mr_head *,.mr_created .mr_myresume_r *{list-style:none;}
+		.mr_top_bg{position:relative;height:135px;background:url(http://www.lagou.com/images/myresume/head_bg.jpg);z-index:2;}
+		.mr_top_bg *{position:absolute;width:128px;height:128px;top:42px;left:287px;}  
+		.mr_top_bg .opa{top:0px;left:0;width:100%;height:170px;z-index:2;}
+		.mr_baseinfo{position:relative;min-height:118px;padding:56px 0 10px 0;background-color: #fafafa;border:1px solid #f2f2f2;border-bottom-right-radius:3px;border-bottom-left-radius:3px;}
+		.mr_left_bg,.mr_right_bg{position:absolute;background: url(http://www.lagou.com/images/myresume/top_bg.png) no-repeat;width:12px;height:34px;top:76px;}
+		.mr_left_bg{left:-1px;background-position:0 0;}
+		.mr_right_bg{right:-2px;background-position:-40px 0;}
+		.mr_w604{width:604px;margin:0 auto;}
+		.mr_p_name{height:40px;line-height:38px;margin-bottom:8px;}
+		.mr_name{display:block;height:40px;width:468px;margin:0 auto;line-height:40px;font-size:30px;color:#333;text-align:center;}
+		.mr_intro{display:block;color:#333;text-align:center;margin:0 auto;}
+		.mr_p_introduce .mr_intro{font-size:16px;width:468px;line-height:26px;}
+		/* 未创建在线 基本信息 */
+		.mr_myresume_l input{margin:0;}
+		.mr_p_info{position:relative;color:#666;padding:5px 0 7px 0;}
+		.mr_p_info .info_t{text-align:center;margin-bottom:8px;}
+		.mr_p_info .info_b{text-align:center;}
+		.mr_p_info .mobile{margin-right:18px;}
+		.mr_p_info .mobile i{width:12px;height:14px;background-position:-131px -70px;}
+		.mr_p_info .email i{width:14px;height:10px;background-position:-150px -73px;}
+		.form_wrap{position:relative;cursor:pointer;width:396px;height:46px;border:1px solid #f1f3e9;background-color:#fff;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;margin-bottom:9px;}
+		/*已创建在线简历 jason 2014/9/8*/
+		.mr_p_introduce{min-height:34px;line-height:32px;margin-bottom:4px;}
+		.sns_area .mr_sns_m{position:relative;width:534px;margin-bottom:16px;}
+		.mr_add_sns{position:relative;}
+		.mr_add_sns em{color:#afafa9;}
+		.sns_add{cursor:pointer;}
+		.mr_sns_m i{position:absolute;left:-43px;top:7px;width:30px;height:30px;background:url(http://www.lagou.com/images/myresume/sns_bg.png) no-repeat;}
+		.mr_sns_m .mr_button{width:467px;padding:0 0 0 17px;border:none;}
+		.mr_sns_m em{position:absolute;width:20px;height:20px;right:10px;top:13px;}
+		.mr_sns_m .mr_ok{background:url(http://www.lagou.com/images/myresume/icons_mr.png) -4px -46px no-repeat;}
+		#expectJob .mr_moudle_content{padding-bottom:25px;}
+		/*在线简历页面主内容区域*/
+		.mr_myresume_l .mr_content{padding-top:26px;background-color: #fafafa;border: 1px solid #f2f2f2;border-bottom:2px solid #f2f2f2;border-top:none;border-bottom-right-radius: 3px;border-bottom-left-radius: 3px;}
+		.mr_moudle_head{margin-bottom:23px;}
+		#customBlock .mr_moudle_head{margin-bottom:33px;}
+		.mr_moudle_head .mr_head_l{float:left;}
+		.mr_moudle_head .mr_head_r{float:right;margin-top:3px;cursor:pointer;}
+		.mr_title span{vertical-align:middle;display:inline-block;}
+		.mr_title .mr_title_l{width:230px;height:0;border-top:1px solid #ededed;}
+		.mr_title .mr_title_c{font-size:18px;padding:6px 24px;text-align:center;background-color:#eee;-moz-border-radius:26px;-webkit-border-radius:26px;border-radius:26px;margin:0 13px;}
+		.mr_title .mr_title_r{width:152px;height:0;border-top:1px solid #ededed;}
+		.mr_moudle_head .mr_head_r *{vertical-align:middle;}
+		.mr_moudle_head .mr_head_r em{font-size:16px;color:#00b88d;}
+		.mr_moudle_head .mr_head_r i{display: inline-block;width: 15px;height: 15px;background: url(http://www.lagou.com/images/myresume/icons_mr.png) -5px -69px no-repeat;margin-right:6px;}
+		.mr_moudle_content{padding-bottom:21px;color:#555;font-size:14px;} /* 块  margin-bottom 48*/
+		.mr_moudle_content .mr_content_l{float:left;max-width: 445px;}
+		.mr_moudle_content .mr_content_r{float:right;}
+		.mr_content_l .l1{float:left;margin-right:10px;}
+		.mr_content_l .l2{position: relative;float: left;padding-top: 10px;max-width: 380px;}
+		#workExperience .mr_content_l .l2,#educationalBackground .mr_content_l .l2{padding-top:4px;}
+		.mr_content_l .l2 a.projectTitle{/* position:relative; */font-size:16px;color:#555;text-decoration:none}
+		.mr_content_l .l2 a.projectTitle:hover{color:#00b88d}
+		.mr_content_l .l2 a.nourl{cursor:default;}
+		.mr_content_l .l2 a.nourl:hover{color:#555;}
+		.mr_content_l .l2 p{color:#999;}
+		.mr_content_l .l2 a.projectTitle span{position:absolute;top:14px;right:-18px;width:12px;height:12px;background:url(http://www.lagou.com/images/myresume/icons_mr.png) -95px -197px no-repeat;}
+		.mr_content_l .l1 img{width:46px;height:46px;border:2px solid #eee;}
+		.mr_content_l .l2 h4{font-size:16px;}
+		.mr_content_l .l2 span{color:#999;display:block;}
+		.mr_c_r_t{text-align:right;margin:5px 0 2px 0;*margin-top:8px;float:none;}
+		.mr_content_r span{color:#999;}
+		.mr_content_m{padding:14px 0 0 0px;*padding-left:1px;color:#555;}
+		.mb46{margin-bottom:46px;}
+		.mr_jobe_list{padding-bottom:44px;}
+		/* #educationalBackground .mr_moudle_content{padding-bottom:15px;} */
+		.mr_wo_show{padding:13px 18px 46px 42px;background-color:#00b88d;margin-bottom:38px;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;}
+		.mr_wo_show p{line-height:26px;color:#fff;}
+		.mr_self_site{color:#fff;margin-bottom:8px;font-size:24px;}
+		.mr_self_sitelink {font-weight:bold;text-decoration:none;/* display:inline-block;width:558px; */word-break:break-all;color: #fff;}
+		.mr_self_sitelink:hover{color:#fff;}
+		.mr_wo_show .mr_c_r_t em{color:#50f9d2;}
+		.mr_wo_show .mr_c_r_t i{background:url(http://www.lagou.com/images/myresume/icons_mr.png) -131px -115px no-repeat;}
+		.wh43{width:100%;}
+		.mr_work_upload .l2 span{display:inline-block;}
+		.mr_wu_con .mr_work_title{margin:0 6px;}
+		.mr_wu_show{margin-bottom:20px;}
+		.mr_wu_show .mr_c_r_t{padding-top:4px;}
+		.mr_wu_con .l2 span{color:#333;}
+		.mr_wu_show .mr_wu_con_m{color:#555;}
+		.mr_self_l{position:relative;height:81px;}
+		#selfDescription .mr_head_r i,#expectJob .mr_head_r i,#skillsAssess .mr_head_r i,#customBlock .mr_head_r i{display: inline-block;width: 15px;height: 15px;background: url(http://www.lagou.com/images/myresume/icons_mr.png) -53px -6px no-repeat;margin-right: 7px;}
+		.mr_self_l img{position:absolute;left:4px;width:73px;height:73px;top:8px;}
+		.mr_self_l i{position:absolute;z-index:2;width:81px;height:81px;background:url(http://www.lagou.com/images/myresume/mr_txs.png) no-repeat;} 
+		.mr_moudle_content .mr_self_l{float:left;width:100px;padding-top:5px;}
+		.mr_moudle_content .mr_self_r{float:left;width:504px;color:#555;line-height:26px;}
+		#selfDescription .mr_moudle_content{padding-bottom:48px;}
+		#expectJob .expectjob_list{position:relative;}
+		#expectJob .mr_job_des i{position:absolute;width:32px;height:31px;background:url(http://www.lagou.com/images/myresume/icons_mr.png) no-repeat;}
+		#expectJob .mr_moudle_content .mr_job_t{left:0;top:1px;background-position:-160px -110px;}
+		#expectJob .mr_moudle_content .mr_job_b{right:0;bottom:5px;background-position:-160px -153px;}
+		.mr_moudle_content .mr_job_info{text-align:center;padding-left:28px;}
+		.mr_job_info{color:#555;}
+		.mr_job_info li{list-style:none;float:left;text-align:left;height:24px;line-height:24px;overflow:hidden;white-space:nowrap;text-overflow: ellipsis;}
+		.mr_name_li{width:188px;}
+		.mr_jobtype_li{width:128px;}
+		.mr_city_li{width:124px;}
+		.mr_sns .sns10 span{min-width:56px;}
+		.mr_jobrange_li{width:94px;}
+		.mr_job_info i{display:inline-block;margin-right:10px;background:url(http://www.lagou.com/images/myresume/icons_mr.png) no-repeat;}
+		.mr_name_li i{width:9px;height:19px;background-position:-97px -220px;}
+		.mr_jobtype_li i{width:17px;height:17px;background-position:-93px -247px;}
+		.mr_city_li i{width:14px;height:17px;background-position:-93px -273px;}
+		.mr_jobrange_li i{width:18px;height:18px;background-position:-92px -294px;}
+		.mr_job_info li *{vertical-align:middle;}
+		.mr_job_info li{overflow:hidden;white-space:nowrap;text-overflow: ellipsis;}
+
+		.mr_job_info p .mr_333{color:#333;}
+		.expectjob_list .mr_job_des {position:relative;margin-top:28px;padding:15px 38px 25px 50px;}.mr_moudle_content .mr_job_info{text-align:center;}
+		.mr_job_info{color:#555;}
+		.mr_job_info p .mr_333{color:#333;}
+		.expectjob_list .clearfixs li{font-size:16px;}
+
+		#skillsAssess{padding-bottom:12px;}
+		.mr_skill_con{padding-left:16px;margin-bottom:14px;position:relative;}
+		.mr_skill_con span{vertical-align:middle;display:inline-block;}
+		.mr_skill_con .mr_skill_name{width:90px;height:22px;text-align:right;margin-right:13px;word-wrap:break-word;white-space:nowrap;overflow:hidden;text-overflow: ellipsis;}
+		/* .mr_skill_con .mr_skill_name:after{
+		content:"...";
+		} */
+		.mr_skill_con .mr_skill_plan{position:relative;width:410px;height:8px;border-radius:4px;background-color:#eee;margin-right:21px;overflow:hidden;}
+		.mr_skill_plan em{position:absolute;left:0;top:0;display:inline-block;height:8px;background-color:#00b88d;border-radius:4px;overflow:hidden;}
+		.mr_skill_con .mr_skill_delete{width:13px;height:13px;background:url(http://www.lagou.com/images/myresume/skill_delete.png) center top no-repeat;cursor:pointer;}
+		.mr_moudle_content .mr_skill_add{padding-left:125px;*padding-left:104px;color:#999999;font-size:16px;}
+		.mr_skill_add span{display:inline-block;width:88px;text-indent:22px;background:url(http://www.lagou.com/images/myresume/skill_add.png) left 3px no-repeat;cursor:pointer;}
+		#customBlock{padding-bottom:30px;}
+		#customBlock .mr_title{position:relative;}
+		.mr_title .cust_title{position:absolute;top:-4px;left: 50%;padding:0 13px;background-color:#FAFAFA;}
+		#customBlock #width604{width:604px;}
+		#customBlock .mr_line_tl{width:528px;height: 0;border-top: 1px solid #ededed;}
+		.cust_title span{padding:6px 24px;text-align: center;font-size: 18px;background-color: #eee;-moz-border-radius: 26px;-webkit-border-radius: 26px;border-radius: 26px;}
+		#customBlock .mr_prolink .mr_btn{width:484px;}
+		.mr_skill_con .mr_skill_circle{display:inline-block;width:20px;height:19px;position:absolute;left:122px;top:3px;background:url(http://www.lagou.com/images/myresume/skill_circle.png) no-repeat center top;}
+		.mr_skill_circle em{display:inline-block;width:29px;height:23px;position:absolute;right: -4px;top: -22px;text-align: center;line-height:18px;padding: 0px;color: #ffffff;background:url(http://www.lagou.com/images/myresume/skill_img.png) center top no-repeat;font-size:10px;}
+
+
+		/****一句话介绍****/
+		.mrcenter{margin:0 auto 20px auto; float:none;}
+
+		/*创建在线简历   基本信息样式*/
+		.mr_infoed{margin-bottom:63px;}
+		.mr_created .mr_infoed{margin-bottom:0px;}
+		.mr_p_info .shenfen{margin-right:10px;}
+		.mr_p_info .shenfen i{width:14px;height:12px;background-position:-90px -72px;}
+		.mr_p_info .base_info i{width:13px;height:13px;background-position:-111px -70px;}
+		.mr_p_info .base_info em{margin-right:12px;}
+		.mr_p_info .base_info em.mr0{margin:0;}
+		#workExperience .mr_content_m{padding:4px 0 1px 0;}
+		#workExperience .list_show{padding-bottom:6px;}
+		#workExperience .mr_moudle_content{padding-bottom:0;}
+		#educationalBackground .mb46{margin-bottom:0;}
+		#educationalBackground .mr_moudle_content{padding-bottom:5px;}
+		#projectExperience .mr_content_m{padding-top:8px;}
+		#projectExperience .mr_jobe_list{padding-bottom:32px;}
+		#projectExperience .mr_moudle_content{padding-bottom:18px;}
+		.mr_sns a{position:relative;display:inline-block;width:30px;background:none;height:30px;margin:0 8px;}
+		.mr_sns a span{position:absolute;min-width:28px;display:none;top:-29px;left:50%;height:20px;line-height:20px;line-height:18px\9;color:#fff;text-align:center;background-color:#666660;padding:0 10px;-moz-border-radius:10px;-webkit-border-radius:10px;border-radius:10px;}
+		.mr_sns a em{position:absolute; top:20px;left:50%;margin-left:-4px;font-size:0px; height:0; width:0; border-width:4px 4px 0; border-style:solid dashed; border-color:#666 transparent transparent;overflow: hidden;-webkit-transition:all 0.4s ease 0s;-moz-transition:all 0.4s ease 0s;-o-transition:all 0.4s ease 0s;transition:all 0.4s ease 0s;}
+		.mr_sns .sns6 {background: url(//www.lgstatic.com/www/static/mycenter/modules/common/img/sns_bg_58434d7.png) -263px -5px no-repeat;}
+		.mr_sns .sns10 {background: url(//www.lgstatic.com/www/static/mycenter/modules/common/img/sns_bg_58434d7.png) -469px -5px no-repeat;}
+		.mr_infoed .mr_sns{text-align:center;padding-top:20px;}
+		#projectExperience .mr_content_l .l2{padding-top:4px;}
+		.mr_ope .mr_delete{position:relative;cursor:pointer;float:right;font-size:16px;color:#ff685e;margin-top:13px;}
+		.mr_ope{padding-top:34px;}
+		.mr_ope .mr_save,.mr_ope .mr_cancel{padding:12px 18px;font-size:16px;vertical-align:middle;}
+		.mr_cancel{color:#00b88d;}
+		/*底部求职者职场状态*/
+		.mr_self_state{position:relative;height:94px;background-color:#f6f6f6;color:#555;font-size:14px;text-align: center;}
+		.mr_self_state *{list-style:none;}
+		.mr_self_state .form_wrap{position:absolute;top:50%;left:50%;margin:-24px 0 0 -135px;border:1px solid #eaeced;width:270px;}
+		.mr_down_tip i, .mr_down_tip em {position: absolute;background: none;border: 8px solid #e7e7e7;border-color:#e7e7e7 transparent transparent;display: block;font-size: 0px;height: 0;width: 0;}
+		.mr_down_tip i{right:2px;bottom:-16px;}
+		.mr_down_tip em{right:12px;bottom:-15px;border-color:#fff transparent transparent;;}
+		.mr_down_tip li{height:38px;line-height:38px;}
+		.mr_down_tip li a{display:block;text-align:center;}
+		.mr_down_tip li.active a{background-color:#00b88d;color:#fff;}
+		.mr_sns_m .mr_no{background:url(http://www.lagou.com/images/myresume/icons_mr.png) -28px -46px no-repeat;}
+		.mr_sns_m .sns_del{position:absolute;width:16px;height:16px;right:-30px;top:15px;background:url(http://www.lagou.com/images/myresume/icons_mr.png) -57px -49px no-repeat;}
+		.mr_add_sns{position:relative;}
+		.m_portrait{width:100%;height:135px;position:relative;z-index:2;background:url(http://www.lagou.com/images/myresume/head_bg.jpg) no-repeat;}
+		.m_portrait .opa{position:absolute;}
+		.mr_wo_preview ol,.mr_wu_con_m ol,.mr_self_r ol,.mr_expjob_content ol,.mr_wo_preview ul,.mr_wu_con_m ul,.mr_self_r ul,.mr_expjob_content ul{padding-left:19px;}
+		.olpf ol,.olpf ul{padding-left:19px;}
+		.mr_wo_preview {color:#fff;}
+		.mr_preview .mr_title .mr_title_r{width:228px;}
+		.resume_status {background: #f6f6f6;border: none!important;text-align: center;margin: -12px 0 0 -135px!important;cursor: default;}
+		.m_portrait div {
+			width:200px;
+			height:132px;
+			position:absolute;
+			left:41%;
+			top:39px;
+			z-index:100;
+		}
+		</style>
+	<meta charset="utf-8">
+	<title>node.js高级开发工程师</title>
 </head>
+
 <body>
-<div id="body">
-    <div id="container">
-<style type="text/css">
-body{margin: 0;padding: 0;font: 14px/22px "微软雅黑","宋体",Arial;color: #333;word-wrap: break-word;}
-.clearfixs:before,.clearfixs:after{content:"";display:table;}
-.clearfixs:after{display:block;clear:both;}
-.clearfixs{*zoom:1;}
-a:hover{color:#00b88d;}
-h1, h2, h3, h4, h5 {
-font-weight: normal;
-}
-/* 为创建在线简历 */
-.dn{display:none;}
-.mr_created input,.mr_created textarea{font-size:14px;}
-.mr_uncreate *,.mr_created *{margin:0;padding:0;}
-.mr_created #mr_mr_head *,.mr_created .mr_myresume_r *{list-style:none;}
-.mr_created #mr_mr_head{margin-bottom:0;}
-.mr_created .mr_baseinfo{border-bottom:none;border-bottom-right-radius:0px;border-bottom-left-radius:0px;}
-.mr_created .mr_infoed{margin-bottom:0px;}
-.mr_myresume_l{float:left;width:702px;margin-bottom:20px;}
-#mr_mr_head{margin-bottom:22px;}
-.mr_created #mr_mr_head{margin-bottom:0;}
-.mr_created #mr_mr_head *,.mr_created .mr_myresume_r *{list-style:none;}
-.mr_top_bg{position:relative;height:135px;background:url(http://www.lagou.com/images/myresume/head_bg.jpg);z-index:2;}
-.mr_top_bg *{position:absolute;width:128px;height:128px;top:42px;left:287px;}  
-.mr_top_bg .opa{top:0px;left:0;width:100%;height:170px;z-index:2;}
-.mr_baseinfo{position:relative;min-height:118px;padding:56px 0 10px 0;background-color: #fafafa;border:1px solid #f2f2f2;border-bottom-right-radius:3px;border-bottom-left-radius:3px;}
-.mr_left_bg,.mr_right_bg{position:absolute;background: url(http://www.lagou.com/images/myresume/top_bg.png) no-repeat;width:12px;height:34px;top:76px;}
-.mr_left_bg{left:-1px;background-position:0 0;}
-.mr_right_bg{right:-2px;background-position:-40px 0;}
-.mr_w604{width:604px;margin:0 auto;}
-.mr_p_name{height:40px;line-height:38px;margin-bottom:8px;}
-.mr_name{display:block;height:40px;width:468px;margin:0 auto;line-height:40px;font-size:30px;color:#333;text-align:center;}
-.mr_intro{display:block;color:#333;text-align:center;margin:0 auto;}
-.mr_p_introduce .mr_intro{font-size:16px;width:468px;line-height:26px;}
-/* 未创建在线 基本信息 */
-.mr_myresume_l input{margin:0;}
-.mr_p_info{position:relative;color:#666;padding:5px 0 7px 0;}
-.mr_p_info .info_t{text-align:center;margin-bottom:8px;}
-.mr_p_info .info_b{text-align:center;}
-.mr_p_info .mobile{margin-right:18px;}
-.mr_p_info .mobile i{width:12px;height:14px;background-position:-131px -70px;}
-.mr_p_info .email i{width:14px;height:10px;background-position:-150px -73px;}
-.form_wrap{position:relative;cursor:pointer;width:396px;height:46px;border:1px solid #f1f3e9;background-color:#fff;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;margin-bottom:9px;}
-/*已创建在线简历 jason 2014/9/8*/
-.mr_p_introduce{min-height:34px;line-height:32px;margin-bottom:4px;}
-.sns_area .mr_sns_m{position:relative;width:534px;margin-bottom:16px;}
-.mr_add_sns{position:relative;}
-.mr_add_sns em{color:#afafa9;}
-.sns_add{cursor:pointer;}
-.mr_sns_m i{position:absolute;left:-43px;top:7px;width:30px;height:30px;background:url(http://www.lagou.com/images/myresume/sns_bg.png) no-repeat;}
-.mr_sns_m .mr_button{width:467px;padding:0 0 0 17px;border:none;}
-.mr_sns_m em{position:absolute;width:20px;height:20px;right:10px;top:13px;}
-.mr_sns_m .mr_ok{background:url(http://www.lagou.com/images/myresume/icons_mr.png) -4px -46px no-repeat;}
-#expectJob .mr_moudle_content{padding-bottom:25px;}
-/*在线简历页面主内容区域*/
-.mr_myresume_l .mr_content{padding-top:26px;background-color: #fafafa;border: 1px solid #f2f2f2;border-bottom:2px solid #f2f2f2;border-top:none;border-bottom-right-radius: 3px;border-bottom-left-radius: 3px;}
-.mr_moudle_head{margin-bottom:23px;}
-#customBlock .mr_moudle_head{margin-bottom:33px;}
-.mr_moudle_head .mr_head_l{float:left;}
-.mr_moudle_head .mr_head_r{float:right;margin-top:3px;cursor:pointer;}
-.mr_title span{vertical-align:middle;display:inline-block;}
-.mr_title .mr_title_l{width:230px;height:0;border-top:1px solid #ededed;}
-.mr_title .mr_title_c{font-size:18px;padding:6px 24px;text-align:center;background-color:#eee;-moz-border-radius:26px;-webkit-border-radius:26px;border-radius:26px;margin:0 13px;}
-.mr_title .mr_title_r{width:152px;height:0;border-top:1px solid #ededed;}
-.mr_moudle_head .mr_head_r *{vertical-align:middle;}
-.mr_moudle_head .mr_head_r em{font-size:16px;color:#00b88d;}
-.mr_moudle_head .mr_head_r i{display: inline-block;width: 15px;height: 15px;background: url(http://www.lagou.com/images/myresume/icons_mr.png) -5px -69px no-repeat;margin-right:6px;}
-.mr_moudle_content{padding-bottom:21px;color:#555;font-size:14px;} /* 块  margin-bottom 48*/
-.mr_moudle_content .mr_content_l{float:left;max-width: 445px;}
-.mr_moudle_content .mr_content_r{float:right;}
-.mr_content_l .l1{float:left;margin-right:10px;}
-.mr_content_l .l2{position: relative;float: left;padding-top: 10px;max-width: 380px;}
-#workExperience .mr_content_l .l2,#educationalBackground .mr_content_l .l2{padding-top:4px;}
-.mr_content_l .l2 a.projectTitle{/* position:relative; */font-size:16px;color:#555;text-decoration:none}
-.mr_content_l .l2 a.projectTitle:hover{color:#00b88d}
-.mr_content_l .l2 a.nourl{cursor:default;}
-.mr_content_l .l2 a.nourl:hover{color:#555;}
-.mr_content_l .l2 p{color:#999;}
-.mr_content_l .l2 a.projectTitle span{position:absolute;top:14px;right:-18px;width:12px;height:12px;background:url(http://www.lagou.com/images/myresume/icons_mr.png) -95px -197px no-repeat;}
-.mr_content_l .l1 img{width:46px;height:46px;border:2px solid #eee;}
-.mr_content_l .l2 h4{font-size:16px;}
-.mr_content_l .l2 span{color:#999;display:block;}
-.mr_c_r_t{text-align:right;margin:5px 0 2px 0;*margin-top:8px;float:none;}
-.mr_content_r span{color:#999;}
-.mr_content_m{padding:14px 0 0 0px;*padding-left:1px;color:#555;}
-.mb46{margin-bottom:46px;}
-.mr_jobe_list{padding-bottom:44px;}
-/* #educationalBackground .mr_moudle_content{padding-bottom:15px;} */
-.mr_wo_show{padding:13px 18px 46px 42px;background-color:#00b88d;margin-bottom:38px;-moz-border-radius:3px;-webkit-border-radius:3px;border-radius:3px;}
-.mr_wo_show p{line-height:26px;color:#fff;}
-.mr_self_site{color:#fff;margin-bottom:8px;font-size:24px;}
-.mr_self_sitelink {font-weight:bold;text-decoration:none;/* display:inline-block;width:558px; */word-break:break-all;color: #fff;}
-.mr_self_sitelink:hover{color:#fff;}
-.mr_wo_show .mr_c_r_t em{color:#50f9d2;}
-.mr_wo_show .mr_c_r_t i{background:url(http://www.lagou.com/images/myresume/icons_mr.png) -131px -115px no-repeat;}
-.wh43{width:100%;}
-.mr_work_upload .l2 span{display:inline-block;}
-.mr_wu_con .mr_work_title{margin:0 6px;}
-.mr_wu_show{margin-bottom:20px;}
-.mr_wu_show .mr_c_r_t{padding-top:4px;}
-.mr_wu_con .l2 span{color:#333;}
-.mr_wu_show .mr_wu_con_m{color:#555;}
-.mr_self_l{position:relative;height:81px;}
-#selfDescription .mr_head_r i,#expectJob .mr_head_r i,#skillsAssess .mr_head_r i,#customBlock .mr_head_r i{display: inline-block;width: 15px;height: 15px;background: url(http://www.lagou.com/images/myresume/icons_mr.png) -53px -6px no-repeat;margin-right: 7px;}
-.mr_self_l img{position:absolute;left:4px;width:73px;height:73px;top:8px;}
-.mr_self_l i{position:absolute;z-index:2;width:81px;height:81px;background:url(http://www.lagou.com/images/myresume/mr_txs.png) no-repeat;} 
-.mr_moudle_content .mr_self_l{float:left;width:100px;padding-top:5px;}
-.mr_moudle_content .mr_self_r{float:left;width:504px;color:#555;line-height:26px;}
-#selfDescription .mr_moudle_content{padding-bottom:48px;}
-#expectJob .expectjob_list{position:relative;}
-#expectJob .mr_job_des i{position:absolute;width:32px;height:31px;background:url(http://www.lagou.com/images/myresume/icons_mr.png) no-repeat;}
-#expectJob .mr_moudle_content .mr_job_t{left:0;top:1px;background-position:-160px -110px;}
-#expectJob .mr_moudle_content .mr_job_b{right:0;bottom:5px;background-position:-160px -153px;}
-.mr_moudle_content .mr_job_info{text-align:center;padding-left:28px;}
-.mr_job_info{color:#555;}
-.mr_job_info li{list-style:none;float:left;text-align:left;height:24px;line-height:24px;overflow:hidden;white-space:nowrap;text-overflow: ellipsis;}
-.mr_name_li{width:188px;}
-.mr_jobtype_li{width:128px;}
-.mr_city_li{width:124px;}
-.mr_sns .sns10 span{min-width:56px;}
-.mr_jobrange_li{width:94px;}
-.mr_job_info i{display:inline-block;margin-right:10px;background:url(http://www.lagou.com/images/myresume/icons_mr.png) no-repeat;}
-.mr_name_li i{width:9px;height:19px;background-position:-97px -220px;}
-.mr_jobtype_li i{width:17px;height:17px;background-position:-93px -247px;}
-.mr_city_li i{width:14px;height:17px;background-position:-93px -273px;}
-.mr_jobrange_li i{width:18px;height:18px;background-position:-92px -294px;}
-.mr_job_info li *{vertical-align:middle;}
-.mr_job_info li{overflow:hidden;white-space:nowrap;text-overflow: ellipsis;}
-
-.mr_job_info p .mr_333{color:#333;}
-.expectjob_list .mr_job_des {position:relative;margin-top:28px;padding:15px 38px 25px 50px;}.mr_moudle_content .mr_job_info{text-align:center;}
-.mr_job_info{color:#555;}
-.mr_job_info p .mr_333{color:#333;}
-.expectjob_list .clearfixs li{font-size:16px;}
-
-#skillsAssess{padding-bottom:12px;}
-.mr_skill_con{padding-left:16px;margin-bottom:14px;position:relative;}
-.mr_skill_con span{vertical-align:middle;display:inline-block;}
-.mr_skill_con .mr_skill_name{width:90px;height:22px;text-align:right;margin-right:13px;word-wrap:break-word;white-space:nowrap;overflow:hidden;text-overflow: ellipsis;}
-/* .mr_skill_con .mr_skill_name:after{
-content:"...";
-} */
-.mr_skill_con .mr_skill_plan{position:relative;width:410px;height:8px;border-radius:4px;background-color:#eee;margin-right:21px;overflow:hidden;}
-.mr_skill_plan em{position:absolute;left:0;top:0;display:inline-block;height:8px;background-color:#00b88d;border-radius:4px;overflow:hidden;}
-.mr_skill_con .mr_skill_delete{width:13px;height:13px;background:url(http://www.lagou.com/images/myresume/skill_delete.png) center top no-repeat;cursor:pointer;}
-.mr_moudle_content .mr_skill_add{padding-left:125px;*padding-left:104px;color:#999999;font-size:16px;}
-.mr_skill_add span{display:inline-block;width:88px;text-indent:22px;background:url(http://www.lagou.com/images/myresume/skill_add.png) left 3px no-repeat;cursor:pointer;}
-#customBlock{padding-bottom:30px;}
-#customBlock .mr_title{position:relative;}
-.mr_title .cust_title{position:absolute;top:-4px;left: 50%;padding:0 13px;background-color:#FAFAFA;}
-#customBlock #width604{width:604px;}
-#customBlock .mr_line_tl{width:528px;height: 0;border-top: 1px solid #ededed;}
-.cust_title span{padding:6px 24px;text-align: center;font-size: 18px;background-color: #eee;-moz-border-radius: 26px;-webkit-border-radius: 26px;border-radius: 26px;}
-#customBlock .mr_prolink .mr_btn{width:484px;}
-.mr_skill_con .mr_skill_circle{display:inline-block;width:20px;height:19px;position:absolute;left:122px;top:3px;background:url(http://www.lagou.com/images/myresume/skill_circle.png) no-repeat center top;}
-.mr_skill_circle em{display:inline-block;width:29px;height:23px;position:absolute;right: -4px;top: -22px;text-align: center;line-height:18px;padding: 0px;color: #ffffff;background:url(http://www.lagou.com/images/myresume/skill_img.png) center top no-repeat;font-size:10px;}
-
-
-/****一句话介绍****/
-.mrcenter{margin:0 auto 20px auto; float:none;}
-
-/*创建在线简历   基本信息样式*/
-.mr_infoed{margin-bottom:63px;}
-.mr_created .mr_infoed{margin-bottom:0px;}
-.mr_p_info .shenfen{margin-right:10px;}
-.mr_p_info .shenfen i{width:14px;height:12px;background-position:-90px -72px;}
-.mr_p_info .base_info{}
-.mr_p_info .base_info i{width:13px;height:13px;background-position:-111px -70px;}
-.mr_p_info .base_info em{margin-right:12px;}
-.mr_p_info .base_info em.mr0{margin:0;}
-#workExperience .mr_content_m{padding:4px 0 1px 0;}
-#workExperience .list_show{padding-bottom:6px;}
-#workExperience .mr_moudle_content{padding-bottom:0;}
-#educationalBackground .mb46{margin-bottom:0;}
-#educationalBackground .mr_moudle_content{padding-bottom:5px;}
-#projectExperience .mr_content_m{padding-top:8px;}
-#projectExperience .mr_jobe_list{padding-bottom:32px;}
-#projectExperience .mr_moudle_content{padding-bottom:18px;}
-.mr_sns a{position:relative;display:inline-block;width:30px;background:none;height:30px;margin:0 8px;}
-.mr_sns a span{position:absolute;min-width:28px;display:none;top:-29px;left:50%;height:20px;line-height:20px;line-height:18px\9;color:#fff;text-align:center;background-color:#666660;padding:0 10px;-moz-border-radius:10px;-webkit-border-radius:10px;border-radius:10px;}
-.mr_sns a em{position:absolute; top:20px;left:50%;margin-left:-4px;font-size:0px; height:0; width:0; border-width:4px 4px 0; border-style:solid dashed; border-color:#666 transparent transparent;overflow: hidden;-webkit-transition:all 0.4s ease 0s;-moz-transition:all 0.4s ease 0s;-o-transition:all 0.4s ease 0s;transition:all 0.4s ease 0s;}
-.mr_infoed .mr_sns{text-align:center;padding-top:20px;}
-#projectExperience .mr_content_l .l2{padding-top:4px;}
-.mr_ope .mr_delete{position:relative;cursor:pointer;float:right;font-size:16px;color:#ff685e;margin-top:13px;}
-.mr_ope{padding-top:34px;}
-.mr_ope .mr_save,.mr_ope .mr_cancel{padding:12px 18px;font-size:16px;vertical-align:middle;}
-.mr_cancel{color:#00b88d;}
-/*底部求职者职场状态*/
-.mr_self_state{position:relative;height:94px;background-color:#f6f6f6;color:#555;font-size:14px;text-align: center;}
-.mr_self_state *{list-style:none;}
-.mr_self_state .form_wrap{position:absolute;top:50%;left:50%;margin:-24px 0 0 -135px;border:1px solid #eaeced;width:270px;}
-.mr_down_tip i, .mr_down_tip em {position: absolute;background: none;border: 8px solid #e7e7e7;border-color:#e7e7e7 transparent transparent;display: block;font-size: 0px;height: 0;width: 0;}
-.mr_down_tip i{right:2px;bottom:-16px;}
-.mr_down_tip em{right:12px;bottom:-15px;border-color:#fff transparent transparent;;}
-.mr_down_tip li{height:38px;line-height:38px;}
-.mr_down_tip li a{display:block;text-align:center;}
-.mr_down_tip li.active a{background-color:#00b88d;color:#fff;}
-.mr_sns_m .mr_no{background:url(http://www.lagou.com/images/myresume/icons_mr.png) -28px -46px no-repeat;}
-.mr_sns_m .sns_del{position:absolute;width:16px;height:16px;right:-30px;top:15px;background:url(http://www.lagou.com/images/myresume/icons_mr.png) -57px -49px no-repeat;}
-.mr_add_sns{position:relative;}
-.m_portrait{width:100%;height:135px;position:relative;z-index:2;background:url(http://www.lagou.com/images/myresume/head_bg.jpg) no-repeat;}
-.m_portrait .opa{position:absolute;}
-.mr_wo_preview ol,.mr_wu_con_m ol,.mr_self_r ol,.mr_expjob_content ol,.mr_wo_preview ul,.mr_wu_con_m ul,.mr_self_r ul,.mr_expjob_content ul{padding-left:19px;}
-.olpf ol,.olpf ul{padding-left:19px;}
-.mr_wo_preview {color:#fff;}
-.mr_preview .mr_title .mr_title_r{width:228px;}
-.resume_status {background: #f6f6f6;border: none!important;text-align: center;margin: -12px 0 0 -135px!important;cursor: default;}
-.m_portrait div {
-	/* background: url(http://www.lagou.com/images/profile_cover.png) no-repeat;
-	width: 120px;
-	height: 120px;
-	position: absolute;
-	z-index: 5; */
-	width:200px;
-	height:132px;
-	position:absolute;
-	left:41%;
-	top:39px;
-	z-index:100;
-}
-</style>
-	<div class="clearfixs mr_created mr_preview">
-		<div class="mr_myresume_l mrcenter">
-			<div id="mr_mr_head">
-				<div class="m_portrait mr_top_bg">
-					<img src="http://www.lagou.com//images/myresume/tou.png" class="opa" alt="" />
-					<img src="http://www.lagou.com/image1/M00/05/1C/Cgo8PFTUdqeAJKW_AAc1YkdLyak154.jpg" width="120" height="120" alt="" />
-				</div>
-				<div class="mr_baseinfo">
-					<i class="mr_left_bg"></i>
-					<i class="mr_right_bg"></i>
-					<div class="mr_p_name mr_w604 clearfixs">
-						<span class="mr_name">霍潘潘</span>
-					</div>
-					<div class="mr_p_introduce mr_w604 clearfixs">
-						<span class="mr_intro">良好的判断力来源于经验,而经验则来自失败的教训</span>
-					</div>
-					<div class="mr_p_info mr_infoed mr_w604 clearfixs">		
-						<div class="info_t">
-							<!--  需要加判断 -->
-							<!-- 用户有工作经历没有教育经历 -->
-								<!-- 如果用户选择的身份是教育经历 -->
+	<div id="body">
+		<div id="container">
+			<div class="clearfixs mr_created mr_preview">
+				<div class="mr_myresume_l mrcenter">
+					<div id="mr_mr_head">
+						<div class="m_portrait mr_top_bg">
+							<img src="http://www.lagou.com//images/myresume/tou.png" class="opa" alt="" />
+							<img src="http://www.lagou.com/image1/M00/05/1C/Cgo8PFTUdqeAJKW_AAc1YkdLyak154.jpg" width="120" height="120" alt="" />
+						</div>
+						<div class="mr_baseinfo">
+							<i class="mr_left_bg"></i>
+							<i class="mr_right_bg"></i>
+							<div class="mr_p_name mr_w604 clearfixs">
+								<span class="mr_name">霍潘潘</span>
+							</div>
+							<div class="mr_p_introduce mr_w604 clearfixs">
+								<span class="mr_intro">良好的判断力来源于经验,而经验则来自失败的教训</span>
+							</div>
+							<div class="mr_p_info mr_infoed mr_w604 clearfixs">
+								<div class="info_t">
 									<span class="shenfen">
 										<i></i>
 										全栈工程师 · 上海罗馥缇电子商务有限公司
 									</span>
-								<!-- 否则根据用户是否是应届毕业生区分用户的身份 -->
-						</div>						
-						<div class="info_t">
-							<span class="base_info"><i></i>男&nbsp;&nbsp;&nbsp;25岁&nbsp;&nbsp;&nbsp;大专
+								</div>
+								<div class="info_t">
+									<span class="base_info"><i></i>男&nbsp;&nbsp;&nbsp;25岁&nbsp;&nbsp;&nbsp;大专
 							<span class="job_span">&nbsp;4年工作经验</span><span class="birth_span dn">1990.02年出生</span>&nbsp;&nbsp;&nbsp;上海</span>
-						</div>
-						<div class="info_b">
-							<span class="mobile"><i></i>18701897527</span>&nbsp;&nbsp;
-							<span class="email"><i></i>huo.win.n@gmail.com</span>
-						</div>
-						<div class="mr_sns">
-						<!--   -------------------社交账号     -----------------       -->
-							<a href="https://github.com/yuedun" target="_blank" data-sns="6" data-site="https://github.com/yuedun"><span><em></em></span></a>
-							<a href="http://weibo.com/huopan/" target="_blank" data-sns="10" data-site="http://weibo.com/huopan/"><span><em></em></span></a>
-						</div>
-					</div>	
-				</div>
-			</div>	
-			<!--                  工作经历                                                 -->
-			<div class="mr_content">
-				<div class="mr_w604">
-					<div id="workExperience">
-						<div>
-							<div class="mr_moudle_head clearfixs">
-								<div class="mr_head_l">
-									<div class="mr_title">
-										<span class="mr_title_l"></span><span class="mr_title_c"> 工作经历  </span><span class="mr_title_r"></span>
-									</div>
+								</div>
+								<div class="info_b">
+									<span class="mobile"><i></i>18701897527</span>&nbsp;&nbsp;
+									<span class="email"><i></i>huo.win.n@gmail.com</span>
+								</div>
+								<div class="mr_sns">
+									<!--   -------------------社交账号     -----------------       -->
+									<a href="https://github.com/yuedun" target="_blank" class="sns6" data-site="https://github.com/yuedun"><span><em>dslkghfd</em></span></a>
+									<a href="http://weibo.com/huopan/" target="_blank" class="sns10" data-site="http://weibo.com/huopan/"><span><em>的苏格拉底</em></span></a>
 								</div>
 							</div>
-							<div class="mr_moudle_content">
-							<div class="list_show">
-								<div class="mr_jobe_list">
-								<div class="clearfixs">
-									<div class="mr_content_l">
-										<div class="l2">
-											<h4>上海罗馥缇电子商务有限公司</h4>
-											<span>全栈工程师</span>
-										</div>
-									</div>
-									<div class="mr_content_r">
-										<span>2014.12 -- 2015.12</span>
-									</div>							
-								</div>
-								
-								<div class="mr_content_m olpf">
-									<p>带领团队进行APP接口开发，后台管理系统开发，数据库设计，服务器管理，以及各种营销活动页面开发（微信公众号）</p>
-								</div>	
-								</div>
-							</div>
-							</div>						
 						</div>
 					</div>
-					
-					<div id="educationalBackground">
-						<div>
-							<div class="mr_moudle_head clearfixs">
-								<div class="mr_head_l">
-									<div class="mr_title">
-										<span class="mr_title_l"></span><span class="mr_title_c">教育经历</span><span class="mr_title_r"></span>
-									</div>
-								</div>
-								<!-- <div class="mr_head_r">
-									<i></i><em>添加</em>
-								</div> -->
-							</div>
-							<div class="mr_moudle_content">
-							<div class="list_show">	
-								<div class="clearfixs mb46 mr_jobe_list">
-									<div class="mr_content_l">
-										<div class="l2">
-											<h4>咸阳职业技术学院</h4>
-											<span>大专 · 计算机应用技术</span>
+					<!--  工作经历  -->
+					<div class="mr_content">
+						<div class="mr_w604">
+							<div id="workExperience">
+								<div>
+									<div class="mr_moudle_head clearfixs">
+										<div class="mr_head_l">
+											<div class="mr_title">
+												<span class="mr_title_l"></span><span class="mr_title_c"> 工作经历  </span><span class="mr_title_r"></span>
+											</div>
 										</div>
 									</div>
-									<div class="mr_content_r">
-										<span>2012年毕业</span>
-									</div>							
-								</div>
-							</div>
-							</div>						
-						</div>
-					</div>	
-					
-					<div id="projectExperience">
-						<div>
-							<div class="mr_moudle_head clearfixs">
-								<div class="mr_head_l">
-									<div class="mr_title">
-										<span class="mr_title_l"></span><span class="mr_title_c">项目经验</span><span class="mr_title_r"></span>
-									</div>
-								</div>
-							</div>
-							<div class="mr_moudle_content" id="projectList">
-								<div class="mr_jobe_list">
-								<div class="clearfixs">
-									<div class="mr_content_l">
-										<div class="l2">
-											<a class="projectTitle nourl">云大夫</a>
-											<p>负责开发云大夫管理系统的前端部分</p>
+									<div class="mr_moudle_content">
+										<div class="list_show">
+											<div class="mr_jobe_list">
+												<div class="clearfixs">
+													<div class="mr_content_l">
+														<div class="l2">
+															<h4>掌门1对1</h4>
+															<span>Nodejs资深工程师</span>
+														</div>
+													</div>
+													<div class="mr_content_r">
+														<span>2016.3 -- 至今</span>
+													</div>
+												</div>
+
+												<div class="mr_content_m olpf">
+													<p>
+														<ul>
+														<li>开发管理平台新需求</li>
+														<li>解决历史遗留bug</li>
+														<li>帮助销售、老师解决日常数据问题</li>
+														</ul>
+														整体负责了40%以上的项目模块
+													</p>
+												</div>
+											</div>
 										</div>
 									</div>
-									
-									<div class="mr_content_r">
-										<span>2015.12 -- 2016.03</span>
-									</div>							
-								</div>
-								<div class="mr_content_m olpf">
-									<p>该项目为中小型民营医院互联网化的管理服务，并配有挂号，叫号等服务，降低企业运营成本。项目使用bootstrap，vuejs，webpack开发云大夫管理系统的前端部分，与后端node.js开发的restful api实现了前后端分离的SPA单页应用。</p>
-								</div>	
-								</div>	
-								<div class="mr_jobe_list">
-								<div class="clearfixs">
-									<div class="mr_content_l">
-										<div class="l2">
-											<a class="projectTitle nourl">韩豆APP（韩豆咖派）</a>
-											<p>项目搭建，数据库设计，服务器管理</p>
+									<div class="mr_moudle_content">
+										<div class="list_show">
+											<div class="mr_jobe_list">
+												<div class="clearfixs">
+													<div class="mr_content_l">
+														<div class="l2">
+															<h4>上海罗馥缇电子商务有限公司</h4>
+															<span>全栈工程师</span>
+														</div>
+													</div>
+													<div class="mr_content_r">
+														<span>2014.12 -- 2015.12</span>
+													</div>
+												</div>
+
+												<div class="mr_content_m olpf">
+													<p>带领团队进行APP接口开发，后台管理系统开发，数据库设计，服务器管理，以及各种营销活动页面开发（微信公众号）</p>
+												</div>
+											</div>
 										</div>
-									</div>
-									
-									<div class="mr_content_r">
-										<span>2014.12 -- 2015.12</span>
-									</div>							
-								</div>
-								<div class="mr_content_m olpf">
-									<p>韩豆是一款面向韩粉的追星软件，为应对用户看帖时大量数据请求和营销活动要求决定由Java改为Nodejs开发，使用redis缓存首页数据减少数据库压力。项目在短内时间开发完成，并在稳定性和响应速度方面表现良好。项目中应用的技术：Expressjs，sequelize，async，redis。数据库为MySQL</p>
-								</div>	
-								</div>	
-								<div class="mr_jobe_list">
-								<div class="clearfixs">
-									<div class="mr_content_l">
-										<div class="l2">
-											<a class="projectTitle nourl">管理者驾驶舱与BI</a>
-											<p>Java高级开发工程师</p>
-										</div>
-									</div>
-									
-									<div class="mr_content_r">
-										<span>2014.02 -- 2015.12</span>
-									</div>							
-								</div>
-								<div class="mr_content_m olpf">
-									<p>本系统为公司管理层人员开发，用于实时监控业务数据变化，尤其是双11期间大数据变化监控。BI方面主要进行数据报表迁移。</p>
-<p>我负责管理者驾驶舱部分web端和APP后台接口开发，数据迁移，在linux上部署项目等工作</p>
-<p>&nbsp; 使用技术：</p>
-<p>&nbsp; 后台使用struts2, ibits, spring,&nbsp;quartz任务调度，数据库：Oracle，PostgreSQL。前端页面主要使用jQuery，jqGrid异步显示数据</p>
-								</div>	
-								</div>	
-								<div class="mr_jobe_list">
-								<div class="clearfixs">
-									<div class="mr_content_l">
-										<div class="l2">
-											<a class="projectTitle nourl">供应链系统</a>
-											<p>Java开发工程师</p>
-										</div>
-									</div>
-									
-									<div class="mr_content_r">
-										<span>2013.10 -- 2014.02</span>
-									</div>							
-								</div>
-								<div class="mr_content_m olpf">
-									<p>通过对信息流，物流，资金流的控制，从采购原材料开始，制成中间产品以及最终产品，最后由销售网络把产品送到消费者手中的将供应商，制造商，分销商，零售商，直到最终用户连成一个整体的功能网链结构。</p>
-<p>我负责后台接口开发</p>
-<p>使用技术：此项目前台用QT开发，后台用springMVC,jdbc,spring开发。数据库为PostgreSQL</p>
-								</div>	
-								</div>	
-								<div class="mr_jobe_list">
-								<div class="clearfixs">
-									<div class="mr_content_l">
-										<div class="l2">
-											<a class="projectTitle nourl">代理商系统</a>
-											<p>java中级开发工程师</p>
-										</div>
-									</div>
-									
-									<div class="mr_content_r">
-										<span>2013.07 -- 2013.11</span>
-									</div>							
-								</div>
-								<div class="mr_content_m olpf">
-									<p>项目分为两部分：后台管理用于公司内部与代理商之间产品交易通道；前台是代理商管理产品出售，门店管理，客户管理等。</p>
-<p>我负责整个系统版本升级</p>
-<p>项目使用技术：springMVC，jdbcTemplete，spring等技术，使用sql server数据库</p>
-								</div>	
-								</div>	
-								<div class="mr_jobe_list">
-								<div class="clearfixs">
-									<div class="mr_content_l">
-										<div class="l2">
-											<a class="projectTitle nourl">中石油可视化资料管理系统</a>
-											<p>java开发工程师</p>
-										</div>
-									</div>
-									
-									<div class="mr_content_r">
-										<span>2012.10 -- 2013.05</span>
-									</div>							
-								</div>
-								<div class="mr_content_m olpf">
-									为中石油测井分公司所开发的系统。目前图纸及派工单人为手动操作管理，在生产现场极为不便。为此开发的系统前台使用flex开发，为适用于触摸屏电脑操作，以及防止图纸泄漏。后台使用java和jsp,ajax开发，重点部分为对图纸的上传加密管理，派工单派发。数据库使用Mysql。
-								</div>	
-								</div>	
-								<div class="mr_jobe_list">
-								<div class="clearfixs">
-									<div class="mr_content_l">
-										<div class="l2">
-											<a class="projectTitle nourl">电子商务网站&amp;&amp;创新项目管理</a>
-											<p>java开发工程师</p>
-										</div>
-									</div>
-									
-									<div class="mr_content_r">
-										<span>2012.04 -- 2012.10</span>
-									</div>							
-								</div>
-								<div class="mr_content_m olpf">
-									企业电子商务网站开发与创新项目管理系统。主要功能如“专业情报”的提供；电子商务类如“企业大全”的交互；技术探索类如专题、专家博客等的展示。管理系统主要实现对大学毕业创新设计的管理，包含资料上传，数据表导出。使用java和jsp,ajax开发,数据库使用Oracle。
-								</div>	
-								</div>	
-								<div class="mr_jobe_list">
-								<div class="clearfixs">
-									<div class="mr_content_l">
-										<div class="l2">
-											<a class="projectTitle nourl">教务管理系统</a>
-											<p>java开发工程师</p>
-										</div>
-									</div>
-									
-									<div class="mr_content_r">
-										<span>2011.09 -- 2012.03</span>
-									</div>							
-								</div>
-								<div class="mr_content_m olpf">
-									麟游中学教务管理系统，主要实现了学生信息，教师信息，课程，考试，成绩等
-								</div>	
-								</div>	
-							</div>						
-						</div>
-					</div>
-					<!--                 作品展示                                                -->
-					<div id="worksShow">
-						<div>
-							<div class="mr_moudle_head clearfixs">
-								<div class="mr_head_l">
-									<div class="mr_title">
-										<span class="mr_title_l"></span><span class="mr_title_c">作品展示</span><span class="mr_title_r"></span>
 									</div>
 								</div>
 							</div>
-							<div class="mr_moudle_content">
-								<div class="mr_work_online">
-									<div class="mr_wo_show">
-										<div>
-											<div class="mr_c_r_t">
-												&nbsp;
-											</div>	
+
+							<div id="projectExperience">
+								<div>
+									<div class="mr_moudle_head clearfixs">
+										<div class="mr_head_l">
+											<div class="mr_title">
+												<span class="mr_title_l"></span><span class="mr_title_c">项目经验</span><span class="mr_title_r"></span>
+											</div>
 										</div>
-										<div class="mr_self_site">
-                                            <a class="mr_self_sitelink" href="https://github.com/yuedun" target="_blank">https://github.com/yuedun</a>
+									</div>
+									<div class="mr_moudle_content" id="projectList">
+										<div class="mr_jobe_list">
+											<div class="clearfixs">
+												<div class="mr_content_l">
+													<div class="l2">
+														<a class="projectTitle nourl">掌门管理平台——Nodejs项目</a>
+														<p>负责开发开发维护掌门管理后台</p>
+													</div>
+												</div>
+												<div class="mr_content_r">
+													<span>2016.3 -- 至今</span>
+												</div>
+											</div>
+											<div class="mr_content_m olpf">
+												<p>掌门管理平台是以nodejs为基础，使用typescript开发。目前有3人开发维护了80%的后台业务。支撑着每月千万元的销售业绩（最高单月1亿）。项目包含：
+													<ul>
+														<li>教务工作站</li>
+													<li>销售工作站</li>
+													<li>市场工作站</li>
+													<li>学生、老师工作站</li>
+													<li>数据报表服务</li>
+													<li>用户管理和其他工具</li>
+													</ul>是掌门最核心的项目之一。</p>
+											</div>
 										</div>
-										<div class="mr_wo_preview olpf"><p> </p>
-<p>我的github，包括了博客程序和公司项目</p>
-<p> </p></div>
-									</div>																
-								</div>
-								<div class="mr_work_online">
-									<div class="mr_wo_show">
-										<div>
-											<div class="mr_c_r_t">
-												&nbsp;
-											</div>	
+										<div class="mr_jobe_list">
+											<div class="clearfixs">
+												<div class="mr_content_l">
+													<div class="l2">
+														<a class="projectTitle nourl">云大夫管理系统——前端Vue.js项目</a>
+														<p>负责开发云大夫管理系统的前端部分</p>
+													</div>
+												</div>
+												<div class="mr_content_r">
+													<span>2015.12 -- 2016.03</span>
+												</div>
+											</div>
+											<div class="mr_content_m olpf">
+												<p>该项目为中小型民营医院互联网化的管理服务，并配有挂号，叫号等服务，降低企业运营成本。项目使用bootstrap，vuejs，webpack开发云大夫管理系统的前端部分，与后端node.js开发的restful api实现了前后端分离的SPA单页应用。</p>
+											</div>
 										</div>
-										<div class="mr_self_site">
-                                            <a class="mr_self_sitelink" href="http://yuedun.duapp.com" target="_blank">http://yuedun.duapp.com</a>
+										<div class="mr_jobe_list">
+											<div class="clearfixs">
+												<div class="mr_content_l">
+													<div class="l2">
+														<a class="projectTitle nourl">韩豆咖派APP——Nodejs项目</a>
+														<p>项目搭建，数据库设计，服务器管理</p>
+													</div>
+												</div>
+												<div class="mr_content_r">
+													<span>2014.12 -- 2015.12</span>
+												</div>
+											</div>
+											<div class="mr_content_m olpf">
+												<p>韩豆是一款面向韩粉的追星软件，为应对用户看帖时大量数据请求和营销活动要求决定由Java改为Nodejs开发，使用redis缓存首页数据减少数据库压力。项目在短内时间开发完成，并在稳定性和响应速度方面表现良好。项目中应用的技术：Expressjs，sequelize，async，redis。数据库为MySQL</p>
+											</div>
 										</div>
-										<div class="mr_wo_preview olpf"><p>个人博客,使用Node.js，mongodb搭建，部署于百度云平台</p></div>
-									</div>																
-								</div>
-								
-							</div>	
-						</div>
-					</div>	
-					<!--               自我描述                                             -->
-					<div id="selfDescription">
-						<div>
-							<div class="mr_moudle_head clearfixs">
-								<div class="mr_head_l">
-									<div class="mr_title">
-										<span class="mr_title_l"></span><span class="mr_title_c">自我描述</span><span class="mr_title_r"></span>
+										<div class="mr_jobe_list">
+											<div class="clearfixs">
+												<div class="mr_content_l">
+													<div class="l2">
+														<a class="projectTitle nourl">管理者驾驶舱与BI</a>
+														<p>Java高级开发工程师</p>
+													</div>
+												</div>
+
+												<div class="mr_content_r">
+													<span>2014.02 -- 2015.12</span>
+												</div>
+											</div>
+											<div class="mr_content_m olpf">
+												<p>本系统为公司管理层人员开发，用于实时监控业务数据变化，尤其是双11期间大数据变化监控。BI方面主要进行数据报表迁移。</p>
+												<p>我负责管理者驾驶舱部分web端和APP后台接口开发，数据迁移，在linux上部署项目等工作</p>
+												<p>&nbsp; 使用技术：</p>
+												<p>&nbsp; 后台使用struts2, ibits, spring,&nbsp;quartz任务调度，数据库：Oracle，PostgreSQL。前端页面主要使用jQuery，jqGrid异步显示数据</p>
+											</div>
+										</div>
+										<div class="mr_jobe_list">
+											<div class="clearfixs">
+												<div class="mr_content_l">
+													<div class="l2">
+														<a class="projectTitle nourl">供应链系统</a>
+														<p>Java开发工程师</p>
+													</div>
+												</div>
+
+												<div class="mr_content_r">
+													<span>2013.10 -- 2014.02</span>
+												</div>
+											</div>
+											<div class="mr_content_m olpf">
+												<p>通过对信息流，物流，资金流的控制，从采购原材料开始，制成中间产品以及最终产品，最后由销售网络把产品送到消费者手中的将供应商，制造商，分销商，零售商，直到最终用户连成一个整体的功能网链结构。</p>
+												<p>我负责后台接口开发</p>
+												<p>使用技术：此项目前台用QT开发，后台用springMVC,jdbc,spring开发。数据库为PostgreSQL</p>
+											</div>
+										</div>
+										<div class="mr_jobe_list">
+											<div class="clearfixs">
+												<div class="mr_content_l">
+													<div class="l2">
+														<a class="projectTitle nourl">代理商系统</a>
+														<p>java中级开发工程师</p>
+													</div>
+												</div>
+
+												<div class="mr_content_r">
+													<span>2013.07 -- 2013.11</span>
+												</div>
+											</div>
+											<div class="mr_content_m olpf">
+												<p>项目分为两部分：后台管理用于公司内部与代理商之间产品交易通道；前台是代理商管理产品出售，门店管理，客户管理等。</p>
+												<p>我负责整个系统版本升级</p>
+												<p>项目使用技术：springMVC，jdbcTemplete，spring等技术，使用sql server数据库</p>
+											</div>
+										</div>
+										<div class="mr_jobe_list">
+											<div class="clearfixs">
+												<div class="mr_content_l">
+													<div class="l2">
+														<a class="projectTitle nourl">中石油可视化资料管理系统</a>
+														<p>java开发工程师</p>
+													</div>
+												</div>
+
+												<div class="mr_content_r">
+													<span>2012.10 -- 2013.05</span>
+												</div>
+											</div>
+											<div class="mr_content_m olpf">
+												为中石油测井分公司所开发的系统。目前图纸及派工单人为手动操作管理，在生产现场极为不便。为此开发的系统前台使用flex开发，为适用于触摸屏电脑操作，以及防止图纸泄漏。后台使用java和jsp,ajax开发，重点部分为对图纸的上传加密管理，派工单派发。数据库使用Mysql。
+											</div>
+										</div>
+										<div class="mr_jobe_list">
+											<div class="clearfixs">
+												<div class="mr_content_l">
+													<div class="l2">
+														<a class="projectTitle nourl">电子商务网站&amp;&amp;创新项目管理</a>
+														<p>java开发工程师</p>
+													</div>
+												</div>
+
+												<div class="mr_content_r">
+													<span>2012.04 -- 2012.10</span>
+												</div>
+											</div>
+											<div class="mr_content_m olpf">
+												企业电子商务网站开发与创新项目管理系统。主要功能如“专业情报”的提供；电子商务类如“企业大全”的交互；技术探索类如专题、专家博客等的展示。管理系统主要实现对大学毕业创新设计的管理，包含资料上传，数据表导出。使用java和jsp,ajax开发,数据库使用Oracle。
+											</div>
+										</div>
+										<div class="mr_jobe_list">
+											<div class="clearfixs">
+												<div class="mr_content_l">
+													<div class="l2">
+														<a class="projectTitle nourl">教务管理系统</a>
+														<p>java开发工程师</p>
+													</div>
+												</div>
+
+												<div class="mr_content_r">
+													<span>2011.09 -- 2012.03</span>
+												</div>
+											</div>
+											<div class="mr_content_m olpf">
+												麟游中学教务管理系统，主要实现了学生信息，教师信息，课程，考试，成绩等
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
-							<div class="mr_moudle_content clearfixs">
-								<div class="mr_self_l">
-									<!-- 自我描述头像为基本信息页面上传的头像，稍后和后台确认这个 -->
-									<i></i>
-									<img src="http://www.lagou.com/image1/M00/05/1C/Cgo8PFTUdqeAJKW_AAc1YkdLyak154.jpg" alt="霍潘潘"/>
-								</div>	
-								<div class="mr_self_r">
-									<p> </p>
-<p>工作至今，参与过10多个项目，有很强的学习能力，工作中解决过众多难题。熟练使用Java，Node.js开发服务端，能够使用HTML5，CSS3开发前端。多次负责项目主要开发任务，具备了独立管理项目的能力。上一公司带领4人开发移动项目，负责项目进度监督，数据库设计和服务器管理，并且不断学习新技术投入项目中来提高开发效率。</p>
-<p> </p> 								
-								</div>														
-							</div>						
-						</div>
-					</div>					
-					<!--                   期望工作                                                  -->
-					<div id="expectJob">
-						<div>
-						<div class="mr_moudle_head clearfixs mr_w604">
-							<div class="mr_head_l">
-								<div class="mr_title">
-									<span class="mr_title_l"></span><span class="mr_title_c">期望工作</span><span class="mr_title_r"></span>
-								</div>
-							</div>
-						</div>
-						<div class="mr_moudle_content clearfixs mr_w604">
-							<div class="expectjob_list">
-								<input id="expHideId" type="hidden" value="$!expectJobses.id" />
-								<div class="mr_job_info" data-id="$!expectJobses.id">
-									<ul class="clearfixs">
-										<li class="mr_name_li" ><i></i><span class="mr_job_name" title="Nodejs高级开发工程师">Nodejs高级开发工程师</span></li>
-										<li class="mr_jobtype_li"> <i></i><span class="mr_job_type" title="$!expectJobses.positionType">全职</span></li>
-										<li class="mr_city_li"> <i></i><span class="mr_job_adr" title="$!expectJobses.city">上海</span></li>
-										<li class="mr_jobrange_li" ><i></i><span class="mr_job_range" title="$!expectJobses.salarys">15k-25k</span></li>
-									</ul>
-								</div>	
-							</div>
-						</div>						
-					</div>
-					</div>
-					
-					<div id="skillsAssess">
-						<div>
-							<div class="mr_moudle_head clearfixs">
-								<div class="mr_head_l">
-									<div class="mr_title">
-										<span class="mr_title_l"></span><span class="mr_title_c">技能评价</span><span class="mr_title_r"></span>
+
+							<div id="educationalBackground">
+								<div>
+									<div class="mr_moudle_head clearfixs">
+										<div class="mr_head_l">
+											<div class="mr_title">
+												<span class="mr_title_l"></span><span class="mr_title_c">教育经历</span><span class="mr_title_r"></span>
+											</div>
+										</div>
+									</div>
+									<div class="mr_moudle_content">
+										<div class="list_show">
+											<div class="clearfixs mb46 mr_jobe_list">
+												<div class="mr_content_l">
+													<div class="l2">
+														<h4>咸阳职业技术学院</h4>
+														<span>大专 · 计算机应用技术</span>
+													</div>
+												</div>
+												<div class="mr_content_r">
+													<span>2012年毕业</span>
+												</div>
+											</div>
+										</div>
 									</div>
 								</div>
 							</div>
-							<div class="mr_moudle_content">
-								<div class="mr_skill_con">
-									<span class="mr_skill_name" title="HTML5,CSS3">HTML5,CSS3</span>
-									<span class="mr_skill_plan" data-skillLevel = "62">
+
+							<!--                 作品展示                                                -->
+							<div id="worksShow">
+								<div>
+									<div class="mr_moudle_head clearfixs">
+										<div class="mr_head_l">
+											<div class="mr_title">
+												<span class="mr_title_l"></span><span class="mr_title_c">作品展示</span><span class="mr_title_r"></span>
+											</div>
+										</div>
+									</div>
+									<div class="mr_moudle_content">
+										<div class="mr_work_online">
+											<div class="mr_wo_show">
+												<div>
+													<div class="mr_c_r_t">
+														&nbsp;
+													</div>
+												</div>
+												<div class="mr_self_site">
+													<a class="mr_self_sitelink" href="https://github.com/yuedun" target="_blank">https://github.com/yuedun</a>
+												</div>
+												<div class="mr_wo_preview olpf">
+													<p> </p>
+													<p>我的github，包括了博客程序和公司项目</p>
+													<p> </p>
+												</div>
+											</div>
+										</div>
+										<div class="mr_work_online">
+											<div class="mr_wo_show">
+												<div>
+													<div class="mr_c_r_t">
+														&nbsp;
+													</div>
+												</div>
+												<div class="mr_self_site">
+													<a class="mr_self_sitelink" href="http://yuedun.duapp.com" target="_blank">http://yuedun.duapp.com</a>
+												</div>
+												<div class="mr_wo_preview olpf">
+													<p>个人博客,使用Node.js，mongodb搭建，部署于百度云平台</p>
+												</div>
+											</div>
+										</div>
+
+									</div>
+								</div>
+							</div>
+							<!--               自我描述                                             -->
+							<div id="selfDescription">
+								<div>
+									<div class="mr_moudle_head clearfixs">
+										<div class="mr_head_l">
+											<div class="mr_title">
+												<span class="mr_title_l"></span><span class="mr_title_c">自我描述</span><span class="mr_title_r"></span>
+											</div>
+										</div>
+									</div>
+									<div class="mr_moudle_content clearfixs">
+										<div class="mr_self_l">
+											<!-- 自我描述头像为基本信息页面上传的头像，稍后和后台确认这个 -->
+											<i></i>
+											<img src="http://www.lagou.com/image1/M00/05/1C/Cgo8PFTUdqeAJKW_AAc1YkdLyak154.jpg" alt="霍潘潘" />
+										</div>
+										<div class="mr_self_r">
+											<p> </p>
+											<p>工作至今，参与过10多个项目，有很强的学习能力，工作中解决过众多难题。目前在Node.js方面有架构服务的能力，熟练使用HTML5，CSS3开发前端工程。多次负责项目主要开发任务，具备了独立管理项目的能力。曾为公司建立了后台管理和api项目并在两个月上线了一款全新APP。在目前公司的KPI制度下没有都能超额完成任务。</p>
+											<p> </p>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!--                   期望工作                                                  -->
+							<div id="expectJob">
+								<div>
+									<div class="mr_moudle_head clearfixs mr_w604">
+										<div class="mr_head_l">
+											<div class="mr_title">
+												<span class="mr_title_l"></span><span class="mr_title_c">期望工作</span><span class="mr_title_r"></span>
+											</div>
+										</div>
+									</div>
+									<div class="mr_moudle_content clearfixs mr_w604">
+										<div class="expectjob_list">
+											<input id="expHideId" type="hidden" value="$!expectJobses.id" />
+											<div class="mr_job_info" data-id="$!expectJobses.id">
+												<ul class="clearfixs">
+													<li class="mr_name_li"><i></i><span class="mr_job_name" title="Nodejs高级开发工程师">Nodejs高级开发工程师</span></li>
+													<li class="mr_jobtype_li"> <i></i><span class="mr_job_type" title="$!expectJobses.positionType">全职</span></li>
+													<li class="mr_city_li"> <i></i><span class="mr_job_adr" title="$!expectJobses.city">上海</span></li>
+													<li class="mr_jobrange_li"><i></i><span class="mr_job_range" title="$!expectJobses.salarys">15k-25k</span></li>
+												</ul>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+
+							<div id="skillsAssess">
+								<div>
+									<div class="mr_moudle_head clearfixs">
+										<div class="mr_head_l">
+											<div class="mr_title">
+												<span class="mr_title_l"></span><span class="mr_title_c">技能评价</span><span class="mr_title_r"></span>
+											</div>
+										</div>
+									</div>
+									<div class="mr_moudle_content">
+										<div class="mr_skill_con">
+											<span class="mr_skill_name" title="HTML5,CSS3">HTML5,CSS3</span>
+											<span class="mr_skill_plan" data-skillLevel="62">
 									 <em style="width: 62%"></em>
 									</span>
-									<span class="mr_skill_level">精通</span>
-								</div>	
-								<div class="mr_skill_con">
-									<span class="mr_skill_name" title="MySql">MySql</span>
-									<span class="mr_skill_plan" data-skillLevel = "78">
+											<span class="mr_skill_level">精通</span>
+										</div>
+										<div class="mr_skill_con">
+											<span class="mr_skill_name" title="MySql">MySql</span>
+											<span class="mr_skill_plan" data-skillLevel="78">
 									 <em style="width: 78%"></em>
 									</span>
-									<span class="mr_skill_level">精通</span>
-								</div>	
-								<div class="mr_skill_con">
-									<span class="mr_skill_name" title="Node.js">Node.js</span>
-									<span class="mr_skill_plan" data-skillLevel = "79">
+											<span class="mr_skill_level">精通</span>
+										</div>
+										<div class="mr_skill_con">
+											<span class="mr_skill_name" title="Node.js">Node.js</span>
+											<span class="mr_skill_plan" data-skillLevel="79">
 									 <em style="width: 79%"></em>
 									</span>
-									<span class="mr_skill_level">精通</span>
-								</div>	
-								<div class="mr_skill_con">
-									<span class="mr_skill_name" title="Linux">Linux</span>
-									<span class="mr_skill_plan" data-skillLevel = "46">
+											<span class="mr_skill_level">精通</span>
+										</div>
+										<div class="mr_skill_con">
+											<span class="mr_skill_name" title="Linux">Linux</span>
+											<span class="mr_skill_plan" data-skillLevel="46">
 									 <em style="width: 46%"></em>
 									</span>
-									<span class="mr_skill_level">掌握</span>
-								</div>	
-								<div class="mr_skill_con">
-									<span class="mr_skill_name" title="MongoDB">MongoDB</span>
-									<span class="mr_skill_plan" data-skillLevel = "20">
+											<span class="mr_skill_level">掌握</span>
+										</div>
+										<div class="mr_skill_con">
+											<span class="mr_skill_name" title="MongoDB">MongoDB</span>
+											<span class="mr_skill_plan" data-skillLevel="20">
 									 <em style="width: 20%"></em>
 									</span>
-									<span class="mr_skill_level">熟悉</span>
-								</div>	
-							</div>						
+											<span class="mr_skill_level">熟悉</span>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
-					</div>	
-					
-					<!--               自定义模块                                           -->
-																			
-				</div><!-- end  mr_w604 -->
-				
-				<div class="mr_self_state">
-   	 				<div class="form_wrap mr_self_s resume_status">
-						·&nbsp;我目前已离职，可快速到岗&nbsp;·				   	 				
-	   	 			</div>
+						<div class="mr_self_state">
+							<div class="form_wrap mr_self_s resume_status">
+								·&nbsp;我目前已离职，可快速到岗&nbsp;·
+							</div>
+						</div>
+					</div>
 				</div>
-			</div>	
-		  </div>
-	    </div> 
-	  </div><!-- end #container -->
-	</div><!-- end #body -->
+			</div>
+		</div>
+		<!-- end #container -->
+	</div>
+	<!-- end #body -->
 	<script>
-	
+
 	</script>
 </body>
+
 </html>
