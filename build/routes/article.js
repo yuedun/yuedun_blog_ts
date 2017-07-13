@@ -9,6 +9,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var Promise = require("bluebird");
 var moment = require("moment");
 var blog_model_1 = require("../models/blog-model");
+var about_model_1 = require("../models/about-model");
 var quick_note_model_1 = require("../models/quick-note-model");
 var Markdown = require("markdown-it");
 var Debug = require("debug");
@@ -16,7 +17,6 @@ var debug = Debug('yuedun:article');
 var md = Markdown();
 var route_1 = require("../utils/route");
 var settings = require("../settings");
-var config = settings.blog_config;
 var Routes = (function () {
     function Routes() {
     }
@@ -48,7 +48,6 @@ var Routes = (function () {
                 }
             });
             return {
-                config: config,
                 blogList: docs,
                 newList: result2,
                 topList: result3,
@@ -83,7 +82,6 @@ var Routes = (function () {
             }
             res.cookie('visited' + blogId, visited, { maxAge: 1000 * 60 * 60 * 8, httpOnly: true });
             return {
-                config: config,
                 newList: result1,
                 topList: result2,
                 blog: doc
@@ -99,7 +97,6 @@ var Routes = (function () {
         ]).then(function (_a) {
             var result1 = _a[0], result2 = _a[1], result3 = _a[2];
             return {
-                config: config,
                 catalog: result1,
                 newList: result2,
                 topList: result3
@@ -114,7 +111,6 @@ var Routes = (function () {
         ]).then(function (_a) {
             var result1 = _a[0], result2 = _a[1];
             return {
-                config: config,
                 newList: result1,
                 topList: result2
             };
@@ -124,13 +120,26 @@ var Routes = (function () {
     Routes.about = function (req, res) {
         return Promise.all([
             latestTop,
-            visitedTop
+            visitedTop,
+            about_model_1.default.findOne()
         ]).then(function (_a) {
-            var result1 = _a[0], result2 = _a[1];
+            var result1 = _a[0], result2 = _a[1], result3 = _a[2];
+            var resume = new about_model_1.default({
+                nickname: "",
+                job: "",
+                addr: "",
+                tel: "",
+                email: "",
+                resume: "",
+                other: ""
+            });
+            if (!result3) {
+                result3 = resume;
+            }
             return {
-                config: config,
+                config: result3,
                 newList: result1,
-                topList: result2
+                topList: result2,
             };
         });
     };
@@ -160,7 +169,6 @@ var Routes = (function () {
         ]).then(function (_a) {
             var result1 = _a[0], result2 = _a[1], result3 = _a[2];
             return {
-                config: config,
                 newList: result1,
                 topList: result2,
                 quickNoteList: result3
@@ -168,36 +176,36 @@ var Routes = (function () {
         });
     };
     ;
+    __decorate([
+        route_1.route({
+            path: "/"
+        })
+    ], Routes, "index", null);
+    __decorate([
+        route_1.route({
+            path: ":id"
+        })
+    ], Routes, "blogdetail", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "catalog", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "weibo", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "about", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "gallery", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "resume", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "quicknote", null);
     return Routes;
 }());
-__decorate([
-    route_1.route({
-        path: "/"
-    })
-], Routes, "index", null);
-__decorate([
-    route_1.route({
-        path: ":id"
-    })
-], Routes, "blogdetail", null);
-__decorate([
-    route_1.route({})
-], Routes, "catalog", null);
-__decorate([
-    route_1.route({})
-], Routes, "weibo", null);
-__decorate([
-    route_1.route({})
-], Routes, "about", null);
-__decorate([
-    route_1.route({})
-], Routes, "gallery", null);
-__decorate([
-    route_1.route({})
-], Routes, "resume", null);
-__decorate([
-    route_1.route({})
-], Routes, "quicknote", null);
 exports.default = Routes;
 var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
 var latestTop = blog_model_1.default.find({ 'status': "1", createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }).exec();

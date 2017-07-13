@@ -3,6 +3,7 @@ import { Request, Response } from 'express';
 import * as Promise from 'bluebird';
 import * as moment from 'moment';
 import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
+import { default as Resume, IResume as ResumeInstance } from '../models/about-model';
 import { default as QuickNote } from '../models/quick-note-model';
 import * as Markdown from 'markdown-it';
 import * as Debug from 'debug';
@@ -10,7 +11,6 @@ var debug = Debug('yuedun:article');
 var md = Markdown();
 import { route } from '../utils/route';
 import * as settings from '../settings';
-var config = settings.blog_config;
 
 export default class Routes {
     /* 首页 */
@@ -45,7 +45,6 @@ export default class Routes {
                 }
             });
             return {
-                config: config,
                 blogList: docs,
                 newList: result2,
                 topList: result3,
@@ -84,7 +83,6 @@ export default class Routes {
             }
             res.cookie('visited' + blogId, visited, { maxAge: 1000 * 60 * 60 * 8, httpOnly: true });
             return {
-                config: config,
                 newList: result1,
                 topList: result2,
                 blog: doc
@@ -102,7 +100,6 @@ export default class Routes {
             visitedTop
         ]).then(([result1, result2, result3]) => {
             return {
-                config: config,
                 catalog: result1,
                 newList: result2,
                 topList: result3
@@ -119,7 +116,6 @@ export default class Routes {
             visitedTop
         ]).then(([result1, result2]) => {
             return {
-                config: config,
                 newList: result1,
                 topList: result2
             };
@@ -132,12 +128,25 @@ export default class Routes {
     static about(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
             latestTop,
-            visitedTop
-        ]).then(([result1, result2]) => {
+            visitedTop,
+            Resume.findOne()
+        ]).then(([result1, result2, result3]) => {
+            var resume = new Resume({
+                nickname: "",
+                job: "",
+                addr: "",
+                tel: "",
+                email: "",
+                resume: "",
+                other: ""
+            })
+            if (!result3) {
+                result3 = resume;
+            }
             return {
-                config: config,
+                config: result3,
                 newList: result1,
-                topList: result2
+                topList: result2,
             };
         })
     };
@@ -177,7 +186,6 @@ export default class Routes {
             QuickNote.find(null, null, { sort: { '_id': -1 } })
         ]).then(([result1, result2, result3]) => {
             return {
-                config: config,
                 newList: result1,
                 topList: result2,
                 quickNoteList: result3

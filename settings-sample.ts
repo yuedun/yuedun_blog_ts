@@ -30,17 +30,7 @@ export var LEACLOUD = {
     appId: '',
     appKey: ''
 };
-//博客信息，个人基本信息配置
-export var blog_config = {
-    nickname:'月盾',
-    job:'NodeJs',
-    addr:'上海',
-    tel:'1870****527',
-    email:'huo.win.n@gmail.com',
 
-    resume:'本博客即由nodejs开发。虽然很多人对js这么语言表现出不屑的态度，但它的确是一门优秀的语言，不论在前端还是服务端都有它的身影，并且有不俗的表现。',
-    current_job:'nodejs。'
-};
 //七牛key
 export var qiniuConfig = {
     url: 'http://hopefully.qiniudn.com/',

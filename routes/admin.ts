@@ -7,6 +7,7 @@ import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
 import { default as QuickNote } from '../models/quick-note-model';
 import { default as Category, ICategory as CategoryInstance } from '../models/category-model';
 import { default as WeatherUser } from '../models/weather-user-model';
+import { default as Resume, IResume as ResumeInstance } from '../models/about-model';
 import * as qiniu from '../utils/qiniu';
 import * as Markdown from 'markdown-it';
 var md = Markdown();
@@ -82,7 +83,7 @@ export default class Routes {
                 return { success: 0, categories: catotory, token: token };
             })
     }
-    
+
     /**
      * 新建文章页面-markdown方式
      */
@@ -402,9 +403,9 @@ export default class Routes {
             createAt: Moment().format('YYYY-MM-DD HH:mm:ss'),
         });
         return weathUser.save()
-        .then(data=>{
-            res.redirect('/admin/weatherUserList');
-        })
+            .then(data => {
+                res.redirect('/admin/weatherUserList');
+            })
     }
     /**
      * 查看天气用户列表
@@ -517,6 +518,50 @@ export default class Routes {
             PvModel.count({ createdAt: { $regex: today, $options: 'i' } })//模糊查询"%text%"
         ]).then(([result1, result2]) => {
             return { readCount: result1[0].pvCount, todayRead: result2 }
+        })
+    }
+    /**
+     * 关于我配置
+     */
+    @route({
+
+    })
+    static aboutConfig(req: Request, res: Response): Promise.Thenable<any> {
+        let arr: { key: string; value: Object }[] = [];
+        return Promise.resolve(Resume.findOne())
+            .then(resume => {
+                if (!resume) {
+                    var r = new Resume({
+                        nickname: "待修改",
+                        job: "待修改",
+                        addr: "待修改",
+                        tel: "待修改",
+                        email: "待修改",
+                        resume: "待修改",
+                        other: "待修改"
+                    })
+                    return r.save();
+                } else {
+                    return resume;
+                }
+            }).then(resume => {
+                return { resume: resume.toObject() }
+            })
+    }
+    /**
+     * 修改关于我配置
+     */
+    @route({
+        method: "post",
+        json: true
+    })
+    static updateAboutConfig(req: Request, res: Response): Promise.Thenable<any> {
+        var args = req.body;
+        console.log(args);
+
+        return Resume.findOneAndUpdate(null, args)
+        .then(() => {
+            return { success: 1 }
         })
     }
 }

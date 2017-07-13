@@ -188,6 +188,7 @@ aside#sidebar {
 	display:block;
 	width:100%;
 	height:2px;
+	margin: 9px 0;
 }
 /* Search */
 
@@ -323,11 +324,7 @@ aside#sidebar {
 #sidebar a:hover {
 	text-decoration:underline;
 }
-#sidebar footer {
-	margin-top:20%;
-}
 /* Main Content */
-
 
 section#main {
 	width:77%;
@@ -643,18 +640,18 @@ input[type=submit].btn_post_message:hover {
 	overflow-y:scroll;
 }
 /* New/Edit Article Module */
-
+article .article_form{
+	margin-bottom: 0;
+}
 fieldset {
 	-webkit-border-radius:5px;
 	-moz-border-radius:5px;
 	border-radius:5px;
 	background:#F6F6F6;
 	border:1px solid #ccc;
-	padding:1% 0%;
 	margin:10px 0;
 }
 fieldset label {
-	height:33px;
 	line-height:25px;
 	text-shadow:0 1px 0 #fff;
 	font-weight:bold;
@@ -675,7 +672,7 @@ fieldset input[type=text] {
 	padding-left:10px;
 	background-position:10px 6px;
 	width:30%;
-	height:25px;
+	margin-top: 10px;
 }
 fieldset select {
 	-webkit-border-radius:5px;
@@ -833,4 +830,7 @@ fieldset textarea:focus {
 /*标题颜色*/
 #title_color {
 	color:green;
+}
+.resumevalue:focus{
+	background-color: #E0E0E3;
 }

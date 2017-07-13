@@ -18,9 +18,9 @@
 			<section class="blog_section">
 				<% blogList.forEach(function(blog){%>
 				<article class="blogs">
-					<h3 class="blog_title">
+					<h1 class="blog_title">
 						<a href="/blogdetail/<%= blog._id%>"><%= blog.title%></a>
-					</h3>
+					</h1>
 					<div class="blog_content">
 						<p>
 							<%- blog.content%>
@@ -44,7 +44,7 @@
 		</div>
 	</section>
 	<% include footer.html %>
-	<script src="/javascripts/jquery-1.11.1.min.js"></script>
+	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script src="/javascripts/silder.js"></script>
 	<script src="/javascripts/jquery.pagination.js"></script>
 	<script type="text/javascript">

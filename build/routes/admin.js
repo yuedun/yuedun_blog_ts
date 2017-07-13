@@ -14,6 +14,7 @@ var blog_model_1 = require("../models/blog-model");
 var quick_note_model_1 = require("../models/quick-note-model");
 var category_model_1 = require("../models/category-model");
 var weather_user_model_1 = require("../models/weather-user-model");
+var about_model_1 = require("../models/about-model");
 var qiniu = require("../utils/qiniu");
 var Markdown = require("markdown-it");
 var md = Markdown();
@@ -344,137 +345,177 @@ var Routes = (function () {
             return { readCount: result1[0].pvCount, todayRead: result2 };
         });
     };
+    Routes.aboutConfig = function (req, res) {
+        var arr = [];
+        return Promise.resolve(about_model_1.default.findOne())
+            .then(function (resume) {
+            if (!resume) {
+                var r = new about_model_1.default({
+                    nickname: "待修改",
+                    job: "待修改",
+                    addr: "待修改",
+                    tel: "待修改",
+                    email: "待修改",
+                    resume: "待修改",
+                    other: "待修改"
+                });
+                return r.save();
+            }
+            else {
+                return resume;
+            }
+        }).then(function (resume) {
+            return { resume: resume.toObject() };
+        });
+    };
+    Routes.updateAboutConfig = function (req, res) {
+        var args = req.body;
+        console.log(args);
+        return about_model_1.default.findOneAndUpdate(null, args)
+            .then(function () {
+            return { success: 1 };
+        });
+    };
+    __decorate([
+        route_1.route({})
+    ], Routes, "index", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "login", null);
+    __decorate([
+        route_1.route({
+            method: "post"
+        })
+    ], Routes, "doLogin", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "newArticle", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "newArticleMd", null);
+    __decorate([
+        route_1.route({
+            method: "post",
+            json: true
+        })
+    ], Routes, "createArticle", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "blogList", null);
+    __decorate([
+        route_1.route({
+            path: ":id"
+        })
+    ], Routes, "blogDetail", null);
+    __decorate([
+        route_1.route({
+            path: ":id"
+        })
+    ], Routes, "editArticleMd", null);
+    __decorate([
+        route_1.route({
+            path: ":id",
+            method: "post",
+            json: true
+        })
+    ], Routes, "updateArticle", null);
+    __decorate([
+        route_1.route({
+            path: ":id"
+        })
+    ], Routes, "deleteBlog", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "category", null);
+    __decorate([
+        route_1.route({
+            method: "post"
+        })
+    ], Routes, "addCategory", null);
+    __decorate([
+        route_1.route({
+            path: ":id"
+        })
+    ], Routes, "deleteCate", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "addUserUi", null);
+    __decorate([
+        route_1.route({
+            method: "post",
+            json: true
+        })
+    ], Routes, "addUser", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "viewUser", null);
+    __decorate([
+        route_1.route({
+            path: ":userId"
+        })
+    ], Routes, "toModifyUser", null);
+    __decorate([
+        route_1.route({
+            path: ":userId",
+            method: "post"
+        })
+    ], Routes, "modifyUser", null);
+    __decorate([
+        route_1.route({
+            path: ":userId"
+        })
+    ], Routes, "deleteUser", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "logout", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "addWeatherUser", null);
+    __decorate([
+        route_1.route({
+            method: "post"
+        })
+    ], Routes, "createWeatherUser", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "weatherUserList", null);
+    __decorate([
+        route_1.route({
+            path: ":userId"
+        })
+    ], Routes, "delWeatherUser", null);
+    __decorate([
+        route_1.route({
+            method: "post"
+        })
+    ], Routes, "quicknote", null);
+    __decorate([
+        route_1.route({
+            method: "post",
+            path: ":id"
+        })
+    ], Routes, "updateQuickNote", null);
+    __decorate([
+        route_1.route({
+            path: ":id"
+        })
+    ], Routes, "deleteNote", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "quickNoteList", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "readCount", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "aboutConfig", null);
+    __decorate([
+        route_1.route({
+            method: "post",
+            json: true
+        })
+    ], Routes, "updateAboutConfig", null);
     return Routes;
 }());
-__decorate([
-    route_1.route({})
-], Routes, "index", null);
-__decorate([
-    route_1.route({})
-], Routes, "login", null);
-__decorate([
-    route_1.route({
-        method: "post"
-    })
-], Routes, "doLogin", null);
-__decorate([
-    route_1.route({})
-], Routes, "newArticle", null);
-__decorate([
-    route_1.route({})
-], Routes, "newArticleMd", null);
-__decorate([
-    route_1.route({
-        method: "post",
-        json: true
-    })
-], Routes, "createArticle", null);
-__decorate([
-    route_1.route({})
-], Routes, "blogList", null);
-__decorate([
-    route_1.route({
-        path: ":id"
-    })
-], Routes, "blogDetail", null);
-__decorate([
-    route_1.route({
-        path: ":id"
-    })
-], Routes, "editArticleMd", null);
-__decorate([
-    route_1.route({
-        path: ":id",
-        method: "post",
-        json: true
-    })
-], Routes, "updateArticle", null);
-__decorate([
-    route_1.route({
-        path: ":id"
-    })
-], Routes, "deleteBlog", null);
-__decorate([
-    route_1.route({})
-], Routes, "category", null);
-__decorate([
-    route_1.route({
-        method: "post"
-    })
-], Routes, "addCategory", null);
-__decorate([
-    route_1.route({
-        path: ":id"
-    })
-], Routes, "deleteCate", null);
-__decorate([
-    route_1.route({})
-], Routes, "addUserUi", null);
-__decorate([
-    route_1.route({
-        method: "post",
-        json: true
-    })
-], Routes, "addUser", null);
-__decorate([
-    route_1.route({})
-], Routes, "viewUser", null);
-__decorate([
-    route_1.route({
-        path: ":userId"
-    })
-], Routes, "toModifyUser", null);
-__decorate([
-    route_1.route({
-        path: ":userId",
-        method: "post"
-    })
-], Routes, "modifyUser", null);
-__decorate([
-    route_1.route({
-        path: ":userId"
-    })
-], Routes, "deleteUser", null);
-__decorate([
-    route_1.route({})
-], Routes, "logout", null);
-__decorate([
-    route_1.route({})
-], Routes, "addWeatherUser", null);
-__decorate([
-    route_1.route({
-        method: "post"
-    })
-], Routes, "createWeatherUser", null);
-__decorate([
-    route_1.route({})
-], Routes, "weatherUserList", null);
-__decorate([
-    route_1.route({
-        path: ":userId"
-    })
-], Routes, "delWeatherUser", null);
-__decorate([
-    route_1.route({
-        method: "post"
-    })
-], Routes, "quicknote", null);
-__decorate([
-    route_1.route({
-        method: "post",
-        path: ":id"
-    })
-], Routes, "updateQuickNote", null);
-__decorate([
-    route_1.route({
-        path: ":id"
-    })
-], Routes, "deleteNote", null);
-__decorate([
-    route_1.route({})
-], Routes, "quickNoteList", null);
-__decorate([
-    route_1.route({})
-], Routes, "readCount", null);
 exports.default = Routes;
 //# sourceMappingURL=admin.js.map

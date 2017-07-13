@@ -17,10 +17,10 @@
 			<h3 class="header">文章详情</h3>
 			<section class="blog_section">
 				<article class="blogs">
-					<h2 class="blog_title">
+					<h1 class="blog_title">
 						<%= blog.title%>
-					</h2>
-					<div class="blog_content">
+					</h1>
+					<div class="blog_content blog_detail_content">
 						<p>
 							<%- blog.content%>
 						</p>
@@ -31,6 +31,14 @@
 						</div>
 						<div class="conments">
 							<!--评论-->
+							<div id="SOHUCS" sid="<%=blog._id%>"></div>
+							<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
+							<script type="text/javascript">
+							window.changyan.api.config({
+								appid: 'cyt3jJvEt',
+								conf: 'prod_a624b3b54fee0783e886929e85225a64'
+							});
+							</script>
 						</div>
 					</footer>
 				</article>
