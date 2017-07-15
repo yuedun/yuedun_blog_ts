@@ -54,25 +54,25 @@ var Routes = (function () {
     Routes.sms = function (req, res) {
         res.render('sms', { code: "" });
     };
+    __decorate([
+        route_1.route({
+            path: "/sendmsg",
+            method: "get"
+        })
+    ], Routes, "sendmsg", null);
+    __decorate([
+        route_1.route({
+            path: "/balance",
+            method: "get"
+        })
+    ], Routes, "balance", null);
+    __decorate([
+        route_1.route({
+            path: "/sms",
+            method: "get"
+        })
+    ], Routes, "sms", null);
     return Routes;
 }());
-__decorate([
-    route_1.route({
-        path: "/sendmsg",
-        method: "get"
-    })
-], Routes, "sendmsg", null);
-__decorate([
-    route_1.route({
-        path: "/balance",
-        method: "get"
-    })
-], Routes, "balance", null);
-__decorate([
-    route_1.route({
-        path: "/sms",
-        method: "get"
-    })
-], Routes, "sms", null);
 exports.Routes = Routes;
 //# sourceMappingURL=message.js.map

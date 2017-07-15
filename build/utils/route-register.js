@@ -82,6 +82,13 @@ var RouteRegister = (function () {
                     console.warn("没有数据返回，或许是路由中重定向或render");
                     return;
                 }
+                if (data instanceof Error) {
+                    res.render('error', {
+                        message: data.message,
+                        error: {}
+                    });
+                    return;
+                }
                 if (route.json) {
                     res.json(data);
                     return;
@@ -96,6 +103,10 @@ var RouteRegister = (function () {
                 }
             }).catch(function (err) {
                 console.error(err);
+                res.render('error', {
+                    message: err.message,
+                    error: {}
+                });
             });
         });
     };
