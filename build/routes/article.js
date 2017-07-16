@@ -176,36 +176,36 @@ var Routes = (function () {
         });
     };
     ;
+    __decorate([
+        route_1.route({
+            path: "/"
+        })
+    ], Routes, "index", null);
+    __decorate([
+        route_1.route({
+            path: ":id"
+        })
+    ], Routes, "blogdetail", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "catalog", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "weibo", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "about", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "gallery", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "resume", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "quicknote", null);
     return Routes;
 }());
-__decorate([
-    route_1.route({
-        path: "/"
-    })
-], Routes, "index", null);
-__decorate([
-    route_1.route({
-        path: ":id"
-    })
-], Routes, "blogdetail", null);
-__decorate([
-    route_1.route({})
-], Routes, "catalog", null);
-__decorate([
-    route_1.route({})
-], Routes, "weibo", null);
-__decorate([
-    route_1.route({})
-], Routes, "about", null);
-__decorate([
-    route_1.route({})
-], Routes, "gallery", null);
-__decorate([
-    route_1.route({})
-], Routes, "resume", null);
-__decorate([
-    route_1.route({})
-], Routes, "quicknote", null);
 exports.default = Routes;
 var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
 var latestTop = blog_model_1.default.find({ 'status': "1", createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }).exec();

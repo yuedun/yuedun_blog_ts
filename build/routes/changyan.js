@@ -25,13 +25,13 @@ var Routes = (function () {
         return Promise.resolve(comment.save());
     };
     ;
+    __decorate([
+        route_1.route({
+            method: "post",
+            json: true
+        })
+    ], Routes, "changyanCallback", null);
     return Routes;
 }());
-__decorate([
-    route_1.route({
-        method: "post",
-        json: true
-    })
-], Routes, "changyanCallback", null);
 exports.default = Routes;
 //# sourceMappingURL=changyan.js.map

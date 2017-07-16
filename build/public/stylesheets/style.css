@@ -8,8 +8,7 @@
 body, div, h1, h2, h3, h4, h5, h6{
     margin: 0px;
     padding: 0px;
-    background: #fdfdfd;
-    font-family: "Lucida Grande", Lucida Sans Unicode, Hiragino Sans GB, WenQuanYi Micro Hei, Verdana, Aril, sans-serif;
+    font-family: "Microsoft Yahei","Lato","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Verdana,Tahoma,sans-serif;
 }
 a:active, a:focus, a:hover {
     text-decoration: none;
@@ -28,6 +27,11 @@ a {
     width: 1100px;
     margin-left: auto;
     margin-right: auto;
+}
+.header-container{
+    background-image: url(http://hopefully.qiniudn.com/background2.png);
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 .clear{
     clear: both;
