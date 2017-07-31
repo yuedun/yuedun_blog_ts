@@ -24,7 +24,7 @@ export var weather_key = "sdf==";
 //主机配置
 export var host = "localhost:3000";
 
-export var gallery_pass = "123";//婚纱照访问密码，格式：gallery/123
+export var gallery_pass = "123";//婚纱照访问密码，格式：gallery/?pass=123
 //leacloud
 export var LEACLOUD = {
     appId: '',

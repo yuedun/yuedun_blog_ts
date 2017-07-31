@@ -37,7 +37,7 @@
                     <p><%- note.content%></p>
                     <p class="breadcrumb">
                         <span>发表时间：<%= note.createDate%></span>
-                        <span><a href="/admin/toEditArticle/<%= note.id%>" name="update" disabled>修改</a></span>
+                        <span><a href="/admin/editQuickNote/<%= note.id%>" name="update" disabled>修改</a></span>
                         <span><a href="javascript:void(0);" id="<%= note.id%>" name="del">删除</a></span>
                     </p>
                 </div>

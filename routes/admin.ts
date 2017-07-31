@@ -450,6 +450,18 @@ export default class Routes {
             })
     }
     /**
+     * 修改速记页面
+     */
+    @route({
+        method: "get",
+        path: ":id"
+    })
+    static editQuickNote(req: Request, res: Response): Promise.Thenable<any> {
+        return QuickNote.findById(req.params.id).then(note => {
+            return { note, success: 1 }
+        })
+    }
+    /**
      * 修改速记
      */
     @route({
@@ -458,13 +470,12 @@ export default class Routes {
     })
     static updateQuickNote(req: Request, res: Response): Promise.Thenable<any> {
         return QuickNote.findByIdAndUpdate(req.params.id, {
-            $set:
-            {
+            $set: {
                 content: req.body.content,
                 updateDate: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
         }).then(() => {
-            return { success: 1 }
+            res.redirect('/admin/quickNoteList');
         })
     }
     /*
@@ -560,9 +571,9 @@ export default class Routes {
         console.log(args);
 
         return Resume.findOneAndUpdate(null, args)
-        .then(() => {
-            return { success: 1 }
-        })
+            .then(() => {
+                return { success: 1 }
+            })
     }
 }
 
