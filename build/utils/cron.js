@@ -86,8 +86,8 @@ var cronMap = new Array();
 cronMap.push(WeatherCron);
 cronMap.push(ReqCron);
 module.exports = function () {
-    if (process.env.ENV == "production") {
-        console.log(">>>>>>>>>>cron", process.env.ENV);
+    if (process.env.BAE_ENV_AK) {
+        console.log(">>>>>>>>>>cron", process.env.BAE_ENV_AK);
         cronMap.forEach(function (Cron, key) {
             var rule = new schedule.RecurrenceRule();
             var cronObj = new Cron();
