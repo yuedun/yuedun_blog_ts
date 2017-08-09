@@ -113,6 +113,13 @@ export default class RouteRegister {
                 //     res.redirect(data);
                 //     return;
                 // }
+                if (data instanceof Error) {
+                    res.render('error', {
+                        message: data.message,
+                        error: {}
+                    });
+                    return;
+                }
                 if (route.json) {
                     res.json(data);
                     return;
@@ -124,8 +131,12 @@ export default class RouteRegister {
                     let html = this.articleHtmlPath + "/" + methodName;
                     res.render(html, data);
                 }
-            }).catch((err: Error)=>{
+            }).catch((err: Error) => {
                 console.error(err);
+                res.render('error', {
+                    message: err.message,
+                    error: {}
+                });
             })
         })
     }

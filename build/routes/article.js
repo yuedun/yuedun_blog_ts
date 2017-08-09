@@ -77,6 +77,9 @@ var Routes = (function () {
             blogPromise
         ]).then(function (_a) {
             var result1 = _a[0], result2 = _a[1], doc = _a[2];
+            if (doc.status === 0) {
+                return new Error("找不到文章");
+            }
             if (doc.ismd) {
                 doc.content = md.render(doc.content);
             }

@@ -98,8 +98,8 @@ cronMap.push(ReqCron);
 
 //定时任务
 module.exports = function () {
-    if (process.env.ENV == "production") {
-        console.log(">>>>>>>>>>cron", process.env.ENV);
+    if (process.env.BAE_ENV_AK) {
+        console.log(">>>>>>>>>>cron", process.env.BAE_ENV_AK);
         
         cronMap.forEach(function (Cron, key) {
             let rule = new schedule.RecurrenceRule();

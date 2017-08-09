@@ -299,6 +299,11 @@ var Routes = (function () {
             res.redirect('/admin/quickNoteList');
         });
     };
+    Routes.editQuickNote = function (req, res) {
+        return quick_note_model_1.default.findById(req.params.id).then(function (note) {
+            return { note: note, success: 1 };
+        });
+    };
     Routes.updateQuickNote = function (req, res) {
         return quick_note_model_1.default.findByIdAndUpdate(req.params.id, {
             $set: {
@@ -306,7 +311,7 @@ var Routes = (function () {
                 updateDate: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
         }).then(function () {
-            return { success: 1 };
+            res.redirect('/admin/quickNoteList');
         });
     };
     Routes.deleteNote = function (req, res) {
@@ -489,6 +494,12 @@ var Routes = (function () {
             method: "post"
         })
     ], Routes, "quicknote", null);
+    __decorate([
+        route_1.route({
+            method: "get",
+            path: ":id"
+        })
+    ], Routes, "editQuickNote", null);
     __decorate([
         route_1.route({
             method: "post",

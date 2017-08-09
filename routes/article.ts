@@ -78,6 +78,9 @@ export default class Routes {
             visitedTop,
             blogPromise
         ]).then(([result1, result2, doc]) => {
+            if (doc.status ===0 ) {
+                return new Error("找不到文章");
+            }
             if (doc.ismd) {
                 doc.content = md.render(doc.content);
             }
