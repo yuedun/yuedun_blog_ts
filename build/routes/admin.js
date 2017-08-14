@@ -27,7 +27,14 @@ var Routes = (function () {
     Routes.index = function (req, res) {
         var user = req.session ? req.session.user : {};
         if (user != null) {
-            return Promise.resolve({ title: '后台管理首页', user: user });
+            var today = Moment().format('YYYY-MM-DD');
+            return Promise.all([
+                blog_model_1.default.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),
+                viewer_log_model_1.default.count({ createdAt: { $regex: today, $options: 'i' } }),
+            ]).then(function (_a) {
+                var result1 = _a[0], result2 = _a[1];
+                return { readCount: result1[0].pvCount, todayRead: result2 };
+            });
         }
         else {
             return Promise.resolve({ title: '用户登录' });
@@ -115,7 +122,11 @@ var Routes = (function () {
         var pageSize = 10;
         pageIndex = req.query.pageIndex ? req.query.pageIndex : pageIndex;
         pageSize = req.query.pageSize ? req.query.pageSize : pageSize;
-        return blog_model_1.default.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize })
+        var conditions = {};
+        if (req.query.title) {
+            conditions.title = { $regex: req.query.title, $options: 'i' };
+        }
+        return blog_model_1.default.find(conditions, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize })
             .then(function (docs) {
             docs.forEach(function (item, index) {
                 if (item.content) {
@@ -128,7 +139,14 @@ var Routes = (function () {
                 }
                 ;
             });
-            return { success: success, blogList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length };
+            return {
+                success: success,
+                title: req.query.title,
+                blogList: docs,
+                user: user,
+                pageIndex: pageIndex,
+                pageCount: docs.length
+            };
         });
     };
     Routes.blogDetail = function (req, res) {

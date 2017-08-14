@@ -4,7 +4,8 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="renderer" content="webkit">
-    <title>管理后台</title>
+    <title></title>
+
     <link rel="stylesheet" href="/stylesheets/layout.css" type="text/css" media="screen"/>
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js" type="text/javascript"></script>
     <script type="text/javascript">
@@ -12,7 +13,10 @@
             
         });
     </script>
+
 </head>
+
+
 <body>
 <% include header.html %>
 <!-- end of header bar -->
@@ -30,23 +34,27 @@
         </article>
 
         <article class="stats_overview">
-            <div class="overview_previous">
-                <p class="overview_day">总访问</p>
+            <div class="overview_today">
+                <p class="overview_day">Today</p>
 
-                <p class="overview_count"><%=readCount%></p>
+                <p class="overview_count">1,876</p>
 
-                <p class="overview_type">访问</p>
+                <p class="overview_type">Hits</p>
+
+                <p class="overview_count">2,103</p>
+
+                <p class="overview_type">Views</p>
             </div>
             <div class="overview_previous">
-                <p class="overview_day">今日</p>
+                <p class="overview_day">Yesterday</p>
 
-                <p class="overview_count"><%=todayRead%></p>
+                <p class="overview_count">1,646</p>
 
-                <p class="overview_type">总访问</p>
+                <p class="overview_type">Hits</p>
 
-                <p class="overview_count">0</p>
+                <p class="overview_count">2,054</p>
 
-                <p class="overview_type">访问最多</p>
+                <p class="overview_type">Views</p>
             </div>
         </article>
         <div class="clear"></div>
@@ -55,8 +63,7 @@
 <!-- end of stats article -->
 
 <article class="module width_3_quarter">
-    <header>
-        <h3 class="tabs_involved">Content Manager</h3>
+    <header><h3 class="tabs_involved">Content Manager</h3>
         <ul class="tabs">
             <li><a href="#tab1">Posts</a></li>
             <li><a href="#tab2">Comments</a></li>
