@@ -18,6 +18,7 @@ var mongodb = settins.mongodb;
 (require('./utils/cron'))();//定时任务
 import { default as pvLog } from './utils/viewer-log';//访问日志
 import RouteRegister from './utils/route-register';
+var originRoutes = require('./routes/origin-routes');
 var app = express();
 var store = new MongoStore({
     // //    url:"mongodb://"+mongodb.uid+":"+mongodb.pwd+"@"+mongodb.host+":"+mongodb.port+"/"+mongodb.db,
@@ -48,6 +49,7 @@ app.use(session({
     saveUninitialized: true
 }));
 
+app.use('/', originRoutes);
 app.use('/*', function (req, res, next) {
     if (req.originalUrl.indexOf('/admin') === -1) {
         pvLog(req);
