@@ -120,6 +120,11 @@ export default class RouteRegister {
                     });
                     return;
                 }
+                
+                //可以添加类似于全局变量的返回数据
+                if (!data.title) {
+                    data.title = "";
+                }
                 if (route.json) {
                     res.json(data);
                     return;
