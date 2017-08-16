@@ -84,7 +84,7 @@ export default class Routes {
             if (doc.ismd) {
                 doc.content = md.render(doc.content);
             }
-            res.cookie('visited' + blogId, visited, { maxAge: 1000 * 60 * 60 * 8, httpOnly: true });
+            res.cookie('visited' + blogId, visited, { maxAge: 1000 * 60 * 60 * 24 * 2, httpOnly: false });
             return {
                 newList: result1,
                 topList: result2,
@@ -93,9 +93,7 @@ export default class Routes {
         });
     };
     /* 博客目录 */
-    @route({
-
-    })
+    @route({})
     static catalog(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
             Blog.find({ status: 1 }, 'title createDate pv', { sort: { createDate: -1 } }),
@@ -110,9 +108,7 @@ export default class Routes {
         })
     };
     /* 我的微博 */
-    @route({
-
-    })
+    @route({})
     static weibo(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
             latestTop,
@@ -125,9 +121,7 @@ export default class Routes {
         })
     };
     /* 关于我 */
-    @route({
-
-    })
+    @route({})
     static about(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
             latestTop,
@@ -155,9 +149,7 @@ export default class Routes {
     };
 
     //婚纱
-    @route({
-
-    })
+    @route({})
     static gallery(req: Request, res: Response): Promise.Thenable<any> {
         if (req.query.pass === settings.gallery_pass) {
             return Promise.resolve(settings.LEACLOUD);
@@ -170,18 +162,14 @@ export default class Routes {
     };
 
     //简历
-    @route({
-
-    })
+    @route({})
     static resume(req: Request, res: Response): Promise.Thenable<any> {
         debug("*****resume:" + moment().format("YYYY-MM-DD HH:ss:mm"));
         return Promise.resolve({});
     };
 
     //速记本
-    @route({
-
-    })
+    @route({})
     static quicknote(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
             latestTop,

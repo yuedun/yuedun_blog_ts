@@ -1,6 +1,6 @@
 <aside id="sidebar" class="column">
-    <form class="quick_search">
-        <input type="text" value="Quick Search" onfocus="if(!this._haschanged){this.value=''};this._haschanged=true;">
+    <form class="quick_search" method="get" action="/admin/blogList">
+        <input type="text" name="title" value="<%=title%>" placeholder="搜索博客" onfocus="if(!this._haschanged){this.value=''};this._haschanged=true;">
     </form>
     <hr/>
     <h3>Content</h3>

@@ -83,7 +83,7 @@ var Routes = (function () {
             if (doc.ismd) {
                 doc.content = md.render(doc.content);
             }
-            res.cookie('visited' + blogId, visited, { maxAge: 1000 * 60 * 60 * 8, httpOnly: true });
+            res.cookie('visited' + blogId, visited, { maxAge: 1000 * 60 * 60 * 24 * 2, httpOnly: false });
             return {
                 newList: result1,
                 topList: result2,

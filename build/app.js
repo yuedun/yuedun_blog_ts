@@ -17,6 +17,7 @@ var mongodb = settins.mongodb;
 (require('./utils/cron'))();
 var viewer_log_1 = require("./utils/viewer-log");
 var route_register_1 = require("./utils/route-register");
+var originRoutes = require('./routes/origin-routes');
 var app = express();
 exports.app = app;
 var store = new MongoStore({
@@ -40,6 +41,7 @@ app.use(session({
     resave: true,
     saveUninitialized: true
 }));
+app.use('/', originRoutes);
 app.use('/*', function (req, res, next) {
     if (req.originalUrl.indexOf('/admin') === -1) {
         viewer_log_1.default(req);
