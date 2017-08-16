@@ -8,6 +8,7 @@
 body, div, h1, h2, h3, h4, h5, h6{
     margin: 0px;
     padding: 0px;
+    color: #454545;
     font-family: "Microsoft Yahei","Lato","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Verdana,Tahoma,sans-serif;
 }
 a:active, a:focus, a:hover {
