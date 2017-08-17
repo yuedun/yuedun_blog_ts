@@ -21,9 +21,8 @@ import RouteRegister from './utils/route-register';
 var originRoutes = require('./routes/origin-routes');
 var app = express();
 var store = new MongoStore({
-    // //    url:"mongodb://"+mongodb.uid+":"+mongodb.pwd+"@"+mongodb.host+":"+mongodb.port+"/"+mongodb.db,
-    // interval: 60000, // expiration check worker run interval in millisec (default: 60000)
-    mongooseConnection: connection.mongoose.connection // <== custom connection
+    // autoRemove: 'native',//自动清除过期session
+    mongooseConnection: connection.mongoose.connection
 });
 
 // view engine setup环境变量设置
@@ -42,10 +41,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));//浏览器可以直接访问public下的资源
 app.use(session({
     secret: mongodb.cookieSecret,
-    //key: mongodb.db,//cookie name
-    //cookie: {maxAge: 1000 * 60 * 60 * 24 * 30},//30 days
+    cookie: { maxAge: 1000 * 60 * 60 * 24 * 14, httpOnly: false },//14 days，客户端保存时长。将sessionid存放在cookie中1000 * 60 * 60 * 24 * 30
     store: store,
-    resave: true,
+    resave: false,//true会重新保存cookie的过期时间
     saveUninitialized: true
 }));
 
@@ -64,10 +62,6 @@ app.use('/*', function (req, res, next) {
  * 如果是登录状态则直接转交给下一个路由
  **/
 app.use('/admin', function (req, res, next) {
-    if (req.cookies['autologin']) {
-        next();
-        return;
-    }
     if (!req.session.user) {
         if (req.url == "/doLogin") {
             next();

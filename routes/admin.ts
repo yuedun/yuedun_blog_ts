@@ -2,6 +2,8 @@ import * as _ from 'lodash';
 import { Request, Response } from 'express';
 import * as Moment from 'moment';//日期格式化组件
 import * as Promise from 'bluebird';
+import * as crypto from "crypto";
+import * as Markdown from 'markdown-it';
 import { default as User } from '../models/user-model';
 import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
 import { default as QuickNote } from '../models/quick-note-model';
@@ -9,12 +11,16 @@ import { default as Category, ICategory as CategoryInstance } from '../models/ca
 import { default as WeatherUser } from '../models/weather-user-model';
 import { default as Resume, IResume as ResumeInstance } from '../models/about-model';
 import * as qiniu from '../utils/qiniu';
-import * as Markdown from 'markdown-it';
 var md = Markdown();
 var area = require('../area');
 import { default as PvModel } from '../models/viewer-log-model';
 import { route } from '../utils/route';
 
+function generatorPassword(password: string): string {
+    const hash = crypto.createHash('sha1');
+    hash.update(password)
+    return hash.digest("hex");
+}
 export default class Routes {
     /**
      * success0未修改，1成功
@@ -24,7 +30,7 @@ export default class Routes {
     /*进入后台主界面 */
     @route({})
     static index(req: Request, res: Response): Promise.Thenable<any> {
-        var user = req.session ? req.session.user : {};
+        var user = req.session && req.session.user ? req.session.user : null;
         if (user != null) {
             var today = Moment().format('YYYY-MM-DD');
             return Promise.all<any, number>([
@@ -52,17 +58,12 @@ export default class Routes {
         var object = req.body;
         var user = {
             username: object.username,
-            password: object.password
+            password: generatorPassword(object.password)
         }
         return User.findOne(user)
             .then(obj => {
                 if (obj || process.env.NODE_ENV === 'development') {
                     req.session.user = user;
-                    if (object.remeber) {
-                        res.cookie('autologin', 1, {
-                            expires: new Date(Date.now() + 864000000)//10天
-                        });
-                    }
                     res.redirect('/admin/blogList')
                     return
                 } else {
@@ -162,13 +163,13 @@ export default class Routes {
                         }
                     };
                 });
-                return { 
-                    success: success, 
+                return {
+                    success: success,
                     title: req.query.title,
-                    blogList: docs, 
-                    user: user, 
-                    pageIndex: pageIndex, 
-                    pageCount: docs.length 
+                    blogList: docs,
+                    user: user,
+                    pageIndex: pageIndex,
+                    pageCount: docs.length
                 };
             })
     }
@@ -297,7 +298,7 @@ export default class Routes {
         var user = new User({
             username: req.body.username,
             nickname: req.body.nickname,
-            password: password,
+            password: generatorPassword(password),
             level: 1,//权限级别，最高
             state: true,//可用/停用
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
@@ -369,10 +370,10 @@ export default class Routes {
     /*  登出  */
     @route({})
     static logout(req: Request, res: Response): void {
-        req.session.user = null;
-        res.clearCookie("autologin");
-        res.redirect('/admin/login');
-        return;
+        req.session.destroy(function (err) {
+            res.redirect('/admin/login');
+            return;
+        })
     }
 
     //添加天气用户界面

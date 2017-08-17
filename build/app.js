@@ -37,8 +37,9 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret: mongodb.cookieSecret,
+    cookie: { maxAge: 1000 * 60 * 60 * 24 * 14, httpOnly: false },
     store: store,
-    resave: true,
+    resave: false,
     saveUninitialized: true
 }));
 app.use('/', originRoutes);
@@ -49,10 +50,6 @@ app.use('/*', function (req, res, next) {
     next();
 });
 app.use('/admin', function (req, res, next) {
-    if (req.cookies['autologin']) {
-        next();
-        return;
-    }
     if (!req.session.user) {
         if (req.url == "/doLogin") {
             next();
