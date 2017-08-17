@@ -59,11 +59,6 @@ var Routes = (function () {
             .then(function (obj) {
             if (obj || process.env.NODE_ENV === 'development') {
                 req.session.user = user;
-                if (object.remeber) {
-                    res.cookie('autologin', 1, {
-                        expires: new Date(Date.now() + 864000000)
-                    });
-                }
                 res.redirect('/admin/blogList');
                 return;
             }
@@ -275,10 +270,10 @@ var Routes = (function () {
         });
     };
     Routes.logout = function (req, res) {
-        req.session.user = null;
-        res.clearCookie("autologin");
-        res.redirect('/admin/login');
-        return;
+        req.session.destroy(function (err) {
+            res.redirect('/admin/login');
+            return;
+        });
     };
     Routes.addWeatherUser = function (req, res) {
         return Promise.resolve({ success: 0, flag: 0 });

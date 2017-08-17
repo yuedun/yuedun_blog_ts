@@ -64,11 +64,6 @@ export default class Routes {
             .then(obj => {
                 if (obj || process.env.NODE_ENV === 'development') {
                     req.session.user = user;
-                    if (object.remeber) {
-                        res.cookie('autologin', 1, {
-                            expires: new Date(Date.now() + 864000000)//10天
-                        });
-                    }
                     res.redirect('/admin/blogList')
                     return
                 } else {
@@ -375,10 +370,10 @@ export default class Routes {
     /*  登出  */
     @route({})
     static logout(req: Request, res: Response): void {
-        req.session.user = null;
-        res.clearCookie("autologin");
-        res.redirect('/admin/login');
-        return;
+        req.session.destroy(function (err) {
+            res.redirect('/admin/login');
+            return;
+        })
     }
 
     //添加天气用户界面
