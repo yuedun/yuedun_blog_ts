@@ -6,8 +6,7 @@ var UserSchema: Schema = new Schema({
   nickname: String,
   level: Number,//权限等级
   state: Boolean,//用户是否可用
-  createDate: String
-});
+}, { timestamps: true });
 
 export interface IUser extends Document {
   username: string,
@@ -15,7 +14,8 @@ export interface IUser extends Document {
   nickname: string,
   level: number,//权限等级
   state: boolean,//用户是否可用
-  createDate: string
+  createdAt: Date;
+  updatedAt: Date;
 }
 var UserModel: Model<IUser> = model<IUser>('User', UserSchema);
 

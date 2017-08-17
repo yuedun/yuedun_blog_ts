@@ -9,6 +9,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
 var Moment = require("moment");
 var Promise = require("bluebird");
+var crypto = require("crypto");
+var Markdown = require("markdown-it");
 var user_model_1 = require("../models/user-model");
 var blog_model_1 = require("../models/blog-model");
 var quick_note_model_1 = require("../models/quick-note-model");
@@ -16,16 +18,20 @@ var category_model_1 = require("../models/category-model");
 var weather_user_model_1 = require("../models/weather-user-model");
 var about_model_1 = require("../models/about-model");
 var qiniu = require("../utils/qiniu");
-var Markdown = require("markdown-it");
 var md = Markdown();
 var area = require('../area');
 var viewer_log_model_1 = require("../models/viewer-log-model");
 var route_1 = require("../utils/route");
+function generatorPassword(password) {
+    var hash = crypto.createHash('sha1');
+    hash.update(password);
+    return hash.digest("hex");
+}
 var Routes = (function () {
     function Routes() {
     }
     Routes.index = function (req, res) {
-        var user = req.session ? req.session.user : {};
+        var user = req.session && req.session.user ? req.session.user : null;
         if (user != null) {
             var today = Moment().format('YYYY-MM-DD');
             return Promise.all([
@@ -47,7 +53,7 @@ var Routes = (function () {
         var object = req.body;
         var user = {
             username: object.username,
-            password: object.password
+            password: generatorPassword(object.password)
         };
         return user_model_1.default.findOne(user)
             .then(function (obj) {
@@ -221,7 +227,7 @@ var Routes = (function () {
         var user = new user_model_1.default({
             username: req.body.username,
             nickname: req.body.nickname,
-            password: password,
+            password: generatorPassword(password),
             level: 1,
             state: true,
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
