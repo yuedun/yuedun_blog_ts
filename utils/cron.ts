@@ -5,7 +5,6 @@ import * as schedule from "node-schedule";
 import * as http from 'http';
 import * as Moment from 'moment';
 import * as settings from '../settings';
-import * as connection from '../models/connection';
 import * as sms from './sms';
 import { default as WeatherUser, IWeatherUser as WeatherUserInstance } from '../models/weather-user-model';
 var WeatherCron = function () {
@@ -73,28 +72,12 @@ function sendSms(weatherObjs: any, umObjs: any, callback: Function) {
         callback(null, "succece");
     });
 }
-//定时请求本服务，防止mongodb断开链接
-var ReqCron = function () {
-    this.m_rule = [1, 11, 21, 31, 41, 51];
-    this.cron = function () {
-        console.log("请求定时任务启动", Moment().format("YYYY-MM-DD HH:mm:ss"))
-        var myReq = http.request(settings.host, function (result) {
-            console.log('request yuedun');
-        });
-        myReq.on('error', function (e) {
-            console.log('problem with request: ' + e.message);
-            connection.getConnect();
-        });
-        myReq.end();
-    }
-}
 
 // var cronMap = new Map();
 // cronMap.set("weather_cron", WeatherCron);
 // cronMap.set("req_cron", ReqCron);
 var cronMap = new Array();
 cronMap.push(WeatherCron);
-cronMap.push(ReqCron);
 
 //定时任务
 module.exports = function () {

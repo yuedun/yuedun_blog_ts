@@ -11,8 +11,8 @@ import * as ejs from 'ejs';
 import * as session from 'express-session';
 import * as mongoStore from 'connect-mongo';
 var MongoStore = mongoStore(session);//connect-mongo(session),mongoose(orm)
-import * as connection from './models/connection';
-connection.getConnect();//执行其中的方法。另外还有mongoose对象，用作session的公用连接
+import MongoConnection from './utils/connection';
+const connection = new MongoConnection();
 import * as settins from './settings';
 var mongodb = settins.mongodb;
 (require('./utils/cron'))();//定时任务
