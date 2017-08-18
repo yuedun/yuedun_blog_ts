@@ -114,6 +114,8 @@ var Routes = (function () {
             return blog.save();
         }).then(function () {
             return { success: 1 };
+        }).catch(function (err) {
+            return { success: 0, msg: err };
         });
     };
     Routes.blogList = function (req, res) {
