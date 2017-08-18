@@ -135,6 +135,8 @@ export default class Routes {
                 return blog.save();
             }).then(() => {
                 return { success: 1 };
+            }).catch(err => {
+                return { success: 0, msg: err }
             })
     }
     /**
