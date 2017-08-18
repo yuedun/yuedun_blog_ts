@@ -4,9 +4,7 @@ var async = require("async");
 var _ = require("lodash");
 var schedule = require("node-schedule");
 var http = require("http");
-var Moment = require("moment");
 var settings = require("../settings");
-var connection = require("../models/connection");
 var sms = require("./sms");
 var weather_user_model_1 = require("../models/weather-user-model");
 var WeatherCron = function () {
@@ -68,23 +66,8 @@ function sendSms(weatherObjs, umObjs, callback) {
         callback(null, "succece");
     });
 }
-var ReqCron = function () {
-    this.m_rule = [1, 11, 21, 31, 41, 51];
-    this.cron = function () {
-        console.log("请求定时任务启动", Moment().format("YYYY-MM-DD HH:mm:ss"));
-        var myReq = http.request(settings.host, function (result) {
-            console.log('request yuedun');
-        });
-        myReq.on('error', function (e) {
-            console.log('problem with request: ' + e.message);
-            connection.getConnect();
-        });
-        myReq.end();
-    };
-};
 var cronMap = new Array();
 cronMap.push(WeatherCron);
-cronMap.push(ReqCron);
 module.exports = function () {
     if (process.env.BAE_ENV_AK) {
         console.log(">>>>>>>>>>cron", process.env.BAE_ENV_AK);
