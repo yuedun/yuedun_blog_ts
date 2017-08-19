@@ -250,7 +250,7 @@ export default class Routes {
     @route({})
     static category(req: Request, res: Response): Promise.Thenable<any> {
         return Category.find({})
-            .then(docs => {
+            .then(docs => { 
                 return { cates: docs }
             });
     }
