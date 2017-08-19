@@ -110,26 +110,26 @@ var Routes = (function () {
         });
     };
     ;
-    __decorate([
-        route_1.route({
-            path: "/callbackComments",
-            method: "get"
-        })
-    ], Routes, "callbackComments", null);
-    __decorate([
-        route_1.route({
-            path: "/getLastLogId",
-            method: "get"
-        })
-    ], Routes, "getLastLogId", null);
-    __decorate([
-        route_1.route({
-            path: "/updateLastLogId",
-            method: "get"
-        })
-    ], Routes, "updateLastLogId", null);
     return Routes;
 }());
+__decorate([
+    route_1.route({
+        path: "/callbackComments",
+        method: "get"
+    })
+], Routes, "callbackComments", null);
+__decorate([
+    route_1.route({
+        path: "/getLastLogId",
+        method: "get"
+    })
+], Routes, "getLastLogId", null);
+__decorate([
+    route_1.route({
+        path: "/updateLastLogId",
+        method: "get"
+    })
+], Routes, "updateLastLogId", null);
 exports.Routes = Routes;
 function check_signature(req, secret) {
     var oriArray = [];
