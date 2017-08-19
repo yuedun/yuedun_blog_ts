@@ -5,10 +5,11 @@
      -moz-box-sizing: border-box;
           box-sizing: border-box;
 }
-body, div, h1, h2, h3, h4, h5, h6{
+body {
     margin: 0px;
     padding: 0px;
     color: #454545;
+    background-color: #f9f9f9;
     font-family: "Microsoft Yahei","Lato","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Verdana,Tahoma,sans-serif;
 }
 a:active, a:focus, a:hover {
@@ -24,7 +25,8 @@ a {
     color: #572C82;
     text-decoration: none;
 }
-.container{
+.container {
+    background-color: #fff;
     width: 1100px;
     margin-left: auto;
     margin-right: auto;
@@ -34,15 +36,17 @@ a {
     background-repeat: no-repeat;
     background-size: cover;
 }
+.header-container > h1{
+    padding: 20px 0px 0px 80px;
+    margin-top: 0;
+}
 .clear{
     clear: both;
     height:1px;
     margin-top:-1px;
     overflow:hidden;
 }
-header h1{
-    padding: 20px 0px 0px 80px;
-}
+
 header p{
     margin: 0px;
     padding: 15px 80px;
@@ -72,6 +76,7 @@ nav ul li a:hover{
     text-decoration-line: 2px;
 }
 .blogs{
+    background-color: #fff;
     margin-bottom: 20px; 
 }
 .blog_section{
@@ -80,14 +85,12 @@ nav ul li a:hover{
     padding-right: 15px;
 }
 .blog_section>*{
-    margin: 0 20px
+    margin: 20px 20px
 }
-.blogs{
-    margin-bottom: 20px; 
-}
-section .header{
-    padding: 10px;
+.container > .header{
+    padding-bottom: 10px;
     border-bottom: 2px solid #474645;
+    margin: 10px;
 }
 .blog_title{
     margin-top: 10px;
@@ -109,6 +112,7 @@ section .header{
 }
 .blog_footer{
     height: 30px;
+    padding: 0 10px;
     background-color: #E0E2E8;
  }
  .readall{
@@ -136,7 +140,7 @@ aside ul{padding-left: 18px;}
     line-height: 25px;
 }
 /*分页*/
-.pagination{text-align: center}
+.pagination{text-align: center; margin-top: 40px;}
 .pagination a {
     text-decoration: none;
 	border: 1px solid #AAE;
@@ -232,6 +236,7 @@ aside ul{padding-left: 18px;}
 /* 小屏幕（平板，大于等于 768px） */
 @media (min-width: 768px) { 
     .container{
+        background-color: #fff;
         width: 768px;
         margin-left: auto;
         margin-right: auto;
@@ -241,6 +246,7 @@ aside ul{padding-left: 18px;}
 /* 中等屏幕（桌面显示器，大于等于 992px） */
 @media (min-width: 992px) {
     .container{
+        background-color: #fff;
         width: 960px;
         margin-left: auto;
         margin-right: auto;

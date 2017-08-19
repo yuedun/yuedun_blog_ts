@@ -124,8 +124,7 @@ export default class Routes {
                 if (!category) {
                     var category = new Category({
                         cateName: args.category,
-                        state: true,
-                        createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
+                        state: true
                     });
                     return category.save();
                 } else {
@@ -260,10 +259,10 @@ export default class Routes {
         method: "post"
     })
     static addCategory(req: Request, res: Response): void {
-        var category = new Category();
-        category.cateName = req.body.cateName;
-        category.state = true;
-        category.createDate = Moment().format('YYYY-MM-DD HH:mm:ss');
+        var category = new Category({
+            cateName:req.body.cateName,
+            state: true
+        });
         category.save(function (e, docs, numberAffected) {
             if (e) res.send(e.message);
             res.redirect('/admin/category');
