@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
+    <meta name="renderer" content="webkit">
     <title>修改文章</title>
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
     <link rel="stylesheet" href="/stylesheets/layout.css" type="text/css" media="screen" />
@@ -87,7 +88,7 @@
             });
             */
             $(".alt_btn").click(function () {
-                var title = $('input[name=title]').val();
+                var title = $('#title_color').val();
                 var content = $('textarea[name=content]').val();
                 var status = $('select[name=status]').val();
                 var category = $('input[name=category]').val();

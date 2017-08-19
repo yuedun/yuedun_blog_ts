@@ -2,6 +2,8 @@ import * as _ from 'lodash';
 import { Request, Response } from 'express';
 import * as Moment from 'moment';//日期格式化组件
 import * as Promise from 'bluebird';
+import * as crypto from "crypto";
+import * as Markdown from 'markdown-it';
 import { default as User } from '../models/user-model';
 import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
 import { default as QuickNote } from '../models/quick-note-model';
@@ -9,12 +11,16 @@ import { default as Category, ICategory as CategoryInstance } from '../models/ca
 import { default as WeatherUser } from '../models/weather-user-model';
 import { default as Resume, IResume as ResumeInstance } from '../models/about-model';
 import * as qiniu from '../utils/qiniu';
-import * as Markdown from 'markdown-it';
 var md = Markdown();
 var area = require('../area');
 import { default as PvModel } from '../models/viewer-log-model';
 import { route } from '../utils/route';
 
+function generatorPassword(password: string): string {
+    const hash = crypto.createHash('sha1');
+    hash.update(password)
+    return hash.digest("hex");
+}
 export default class Routes {
     /**
      * success0未修改，1成功
@@ -22,22 +28,24 @@ export default class Routes {
     **/
 
     /*进入后台主界面 */
-    @route({
-
-    })
+    @route({})
     static index(req: Request, res: Response): Promise.Thenable<any> {
-        var user = req.session ? req.session.user : {};
+        var user = req.session && req.session.user ? req.session.user : null;
         if (user != null) {
-            return Promise.resolve({ title: '后台管理首页', user: user });
+            var today = Moment().format('YYYY-MM-DD');
+            return Promise.all<any, number>([
+                Blog.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),//聚合查询，总访问量,分组必须包含_id
+                PvModel.count({ createdAt: { $regex: today, $options: 'i' } }),//模糊查询"%text%"，今日访问量
+            ]).then(([result1, result2]) => {
+                return { readCount: result1[0].pvCount, todayRead: result2 }
+            })
         } else {
             return Promise.resolve({ title: '用户登录' });
         }
     }
 
     /* 后台登陆 */
-    @route({
-
-    })
+    @route({})
     static login(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.resolve({});
     }
@@ -50,17 +58,12 @@ export default class Routes {
         var object = req.body;
         var user = {
             username: object.username,
-            password: object.password
+            password: generatorPassword(object.password)
         }
         return User.findOne(user)
             .then(obj => {
                 if (obj || process.env.NODE_ENV === 'development') {
                     req.session.user = user;
-                    if (object.remeber) {
-                        res.cookie('autologin', 1, {
-                            expires: new Date(Date.now() + 864000000)//10天
-                        });
-                    }
                     res.redirect('/admin/blogList')
                     return
                 } else {
@@ -73,9 +76,7 @@ export default class Routes {
     /**
      * 新建文章页面
      */
-    @route({
-
-    })
+    @route({})
     static newArticle(req: Request, res: Response): Promise.Thenable<any> {
         var token = qiniu.uptoken('hopefully');
         return Category.find({})
@@ -87,9 +88,7 @@ export default class Routes {
     /**
      * 新建文章页面-markdown方式
      */
-    @route({
-
-    })
+    @route({})
     static newArticleMd(req: Request, res: Response): Promise.Thenable<any> {
         var token = qiniu.uptoken('hopefully');
         return Category.find({})
@@ -136,14 +135,14 @@ export default class Routes {
                 return blog.save();
             }).then(() => {
                 return { success: 1 };
+            }).catch(err => {
+                return { success: 0, msg: err }
             })
     }
     /**
      *文章列表
      */
-    @route({
-
-    })
+    @route({})
     static blogList(req: Request, res: Response): Promise.Thenable<any> {
         var user = req.session ? req.session.user : null;
         var success = req.query.success || 0;
@@ -151,7 +150,11 @@ export default class Routes {
         var pageSize = 10;
         pageIndex = req.query.pageIndex ? req.query.pageIndex : pageIndex;
         pageSize = req.query.pageSize ? req.query.pageSize : pageSize;
-        return Blog.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize })
+        let conditions: { title?: any } = {};
+        if (req.query.title) {
+            conditions.title = { $regex: req.query.title, $options: 'i' };
+        }
+        return Blog.find(conditions, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize })
             .then(docs => {
                 docs.forEach(function (item, index) {
                     if (item.content) {
@@ -162,7 +165,14 @@ export default class Routes {
                         }
                     };
                 });
-                return { success: success, blogList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length };
+                return {
+                    success: success,
+                    title: req.query.title,
+                    blogList: docs,
+                    user: user,
+                    pageIndex: pageIndex,
+                    pageCount: docs.length
+                };
             })
     }
     /**
@@ -238,9 +248,7 @@ export default class Routes {
     /**
      * 分类
      */
-    @route({
-
-    })
+    @route({})
     static category(req: Request, res: Response): Promise.Thenable<any> {
         return Category.find({})
             .then(docs => {
@@ -275,9 +283,7 @@ export default class Routes {
     }
 
     //添加用户界面
-    @route({
-
-    })
+    @route({})
     static addUserUi(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.resolve({ success: 0, flag: 0 });
     }
@@ -294,7 +300,7 @@ export default class Routes {
         var user = new User({
             username: req.body.username,
             nickname: req.body.nickname,
-            password: password,
+            password: generatorPassword(password),
             level: 1,//权限级别，最高
             state: true,//可用/停用
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
@@ -307,9 +313,7 @@ export default class Routes {
     /**
      * 查看用户列表
      */
-    @route({
-
-    })
+    @route({})
     static viewUser(req: Request, res: Response): void {
         User.find({}, null, function (err, docs) {
             if (err) res.send(err.message);
@@ -366,20 +370,16 @@ export default class Routes {
         });
     }
     /*  登出  */
-    @route({
-
-    })
+    @route({})
     static logout(req: Request, res: Response): void {
-        req.session.user = null;
-        res.clearCookie("autologin");
-        res.redirect('/admin/login');
-        return;
+        req.session.destroy(function (err) {
+            res.redirect('/admin/login');
+            return;
+        })
     }
 
     //添加天气用户界面
-    @route({
-
-    })
+    @route({})
     static addWeatherUser(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.resolve({ success: 0, flag: 0 });
     }
@@ -410,9 +410,7 @@ export default class Routes {
     /**
      * 查看天气用户列表
      */
-    @route({
-
-    })
+    @route({})
     static weatherUserList(req: Request, res: Response): Promise.Thenable<any> {
         return WeatherUser.find({}, null)
             .then(docs => {
@@ -492,9 +490,7 @@ export default class Routes {
     /*
      * 速记列表
      */
-    @route({
-
-    })
+    @route({})
     static quickNoteList(req: Request, res: Response): void {
         var user = req.session.user;
         var success = req.query.success || 0;
@@ -519,9 +515,7 @@ export default class Routes {
     /**
      * 访问统计
      */
-    @route({
-
-    })
+    @route({})
     static readCount(req: Request, res: Response): Promise.Thenable<any> {
         var today = Moment().format('YYYY-MM-DD');
         return Promise.all<any, number>([
@@ -534,9 +528,7 @@ export default class Routes {
     /**
      * 关于我配置
      */
-    @route({
-
-    })
+    @route({})
     static aboutConfig(req: Request, res: Response): Promise.Thenable<any> {
         let arr: { key: string; value: Object }[] = [];
         return Promise.resolve(Resume.findOne())

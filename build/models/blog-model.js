@@ -2,10 +2,10 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = require("mongoose");
 exports.BlogSchema = new mongoose_1.Schema({
-    title: String,
+    title: { type: String, required: true },
     createDate: String,
     updateTime: String,
-    content: String,
+    content: { type: String, required: true },
     status: {
         type: Number,
         default: 1
@@ -19,7 +19,7 @@ exports.BlogSchema = new mongoose_1.Schema({
     tags: String,
     pv: Number,
     ismd: Number
-});
+}, { validateBeforeSave: true });
 var BlogModel = mongoose_1.model('Blog', exports.BlogSchema);
 exports.default = BlogModel;
 //# sourceMappingURL=blog-model.js.map

@@ -7,8 +7,7 @@ var UserSchema = new mongoose_1.Schema({
     nickname: String,
     level: Number,
     state: Boolean,
-    createDate: String
-});
+}, { timestamps: true });
 var UserModel = mongoose_1.model('User', UserSchema);
 exports.default = UserModel;
 //# sourceMappingURL=user-model.js.map
