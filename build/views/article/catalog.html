@@ -11,22 +11,20 @@
 </head>
 
 <body>
-	<% include header.html %>
-	<section>
-		<div class="container">
-			<h3 class="header">博客目录</h3>
-			<section class="blog_section">
-				<ul class="catelog">
-					<% catalog.forEach(function(item, index){%>
-					<li><a href="/blogdetail/<%= item.id%>"><%= item.title%></a><span title="阅读数">(<%= item.pv%>)<time title="创建时间"><%= item.createDate.substring(0, 10)%></time></span></li>
-					<%})%>
-				</ul>
-			</section>
-			<% include asider.html %>
-			<div class="clear"></div>
-		</div>
-	</section>
-	<% include footer.html %>
+	<div class="container">
+		<% include header.html %>
+		<h3 class="header">博客目录</h3>
+		<section class="blog_section">
+			<ul class="catelog">
+				<% catalog.forEach(function(item, index){%>
+				<li><a href="/blogdetail/<%= item.id%>"><%= item.title%></a><span title="阅读数">(<%= item.pv%>)<time title="创建时间"><%= item.createDate.substring(0, 10)%></time></span></li>
+				<%})%>
+			</ul>
+		</section>
+		<% include asider.html %>
+		<div class="clear"></div>
+		<% include footer.html %>
+	</div>
 	<script src="/javascripts/silder.js"></script>
 </body>
 

@@ -102,8 +102,7 @@ var Routes = (function () {
             if (!category) {
                 var category = new category_model_1.default({
                     cateName: args.category,
-                    state: true,
-                    createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
+                    state: true
                 });
                 return category.save();
             }
@@ -200,10 +199,10 @@ var Routes = (function () {
         });
     };
     Routes.addCategory = function (req, res) {
-        var category = new category_model_1.default();
-        category.cateName = req.body.cateName;
-        category.state = true;
-        category.createDate = Moment().format('YYYY-MM-DD HH:mm:ss');
+        var category = new category_model_1.default({
+            cateName: req.body.cateName,
+            state: true
+        });
         category.save(function (e, docs, numberAffected) {
             if (e)
                 res.send(e.message);

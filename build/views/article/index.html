@@ -12,39 +12,37 @@
 </head>
 
 <body>
-	<% include header.html %>
-	<section>
-		<div class="container">
-			<h3 class="header">最新文章</h3>
-			<section class="blog_section">
-				<% blogList.forEach(function(blog){%>
-				<article class="blogs">
-					<h1 class="blog_title">
-						<a href="/blogdetail/<%= blog._id%>"><%= blog.title%></a>
-					</h1>
-					<div class="blog_content">
-						<p>
-							<%- blog.content%>
-						</p>
-						<a href="/blogdetail/<%= blog._id%>" class="readall">阅读全文</a>
-					</div>
-					<footer class="blog_footer">
-						<ul>
-							<li>分类:【<a href="/?category=<%= blog.category%>"><%= blog.category%></a>】</li>
-							<li>浏览（<%= blog.pv%>）</li>
-							<li>评论（<a href="/blogdetail/<%= blog._id%>"><%= blog.commentCount || 0%></a>）</li>
-							<li>发表时间:<%= blog.createDate%></li>
-						</ul>
-					</footer>
-				</article>
-				<% })%>
-				<div id="Pagination" class="pagination"><!-- 这里显示分页 --></div>
-			</section>
-			<% include asider.html %>
-			<div class="clear"></div>
-		</div>
-	</section>
-	<% include footer.html %>
+	<div class="container">
+		<% include header.html %>
+		<h3 class="header">最新文章</h3>
+		<section class="blog_section">
+			<% blogList.forEach(function(blog){%>
+			<article class="blogs">
+				<h1 class="blog_title">
+					<a href="/blogdetail/<%= blog._id%>"><%= blog.title%></a>
+				</h1>
+				<div class="blog_content">
+					<p>
+						<%- blog.content%>
+					</p>
+					<a href="/blogdetail/<%= blog._id%>" class="readall">阅读全文</a>
+				</div>
+				<footer class="blog_footer">
+					<ul>
+						<li>分类:【<a href="/?category=<%= blog.category%>"><%= blog.category%></a>】</li>
+						<li>浏览（<%= blog.pv%>）</li>
+						<li>评论（<a href="/blogdetail/<%= blog._id%>"><%= blog.commentCount || 0%></a>）</li>
+						<li>发表时间:<%= blog.createDate%></li>
+					</ul>
+				</footer>
+			</article>
+			<% })%>
+			<div id="Pagination" class="pagination"><!-- 这里显示分页 --></div>
+		</section>
+		<% include asider.html %>
+		<div class="clear"></div>
+		<% include footer.html %>
+	</div>
 	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script src="/javascripts/silder.js"></script>
 	<script src="/javascripts/jquery.pagination.js"></script>

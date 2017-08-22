@@ -11,34 +11,31 @@
 </head>
 
 <body>
-	<% include header.html %>
-	<section>
-		<div class="container">
-			<h3 class="header">关于我</h3>
-			<section class="blog_section">
-				<div class="about">
-					<div>
-						<h3>关于我</h3>
-						<p>网名：<%- config.nickname%></p>
-						<p>工作地：<%- config.addr%></p>
-						<p>电话：<a id="mobile" class="myinfo" href="javascript:void(0)">点击获取</a></p>
-						<p>邮箱：<a id="email" class="myinfo" href="javascript:void(0)">点击获取</a></p>
-						<h3>目前工作</h3>
-						<p><%- config.job%></p>
-						<h3>关于博客</h3>
-						<p><%- config.resume%></p>
-						<p><%- config.other%></p>
-						<p>QQ：438473005
-							<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=438473005&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:438473005:52" alt="点击这里给我发消息" title="点击这里给我发消息" /></a>
-						</p>
-					</div>
+	<div class="container">
+		<% include header.html %>
+		<h3 class="header">关于我</h3>
+		<section class="blog_section">
+			<div class="about">
+				<div>
+					<p>网名：<%- config.nickname%></p>
+					<p>工作地：<%- config.addr%></p>
+					<p>电话：<a id="mobile" class="myinfo" href="javascript:void(0)">点击获取</a></p>
+					<p>邮箱：<a id="email" class="myinfo" href="javascript:void(0)">点击获取</a></p>
+					<h3>目前工作</h3>
+					<p><%- config.job%></p>
+					<h3>关于博客</h3>
+					<p><%- config.resume%></p>
+					<p><%- config.other%></p>
+					<p>QQ：438473005
+						<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=438473005&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:438473005:52" alt="点击这里给我发消息" title="点击这里给我发消息" /></a>
+					</p>
 				</div>
-			</section>
-			<% include asider.html %>
-			<div class="clear"></div>
-		</div>
-	</section>
+			</div>
+		</section>
+		<% include asider.html %>
+		<div class="clear"></div>
 	<% include footer.html %>
+	</div>
 	<script src="/javascripts/silder.js"></script>
 	<script>
 		//获取手机
