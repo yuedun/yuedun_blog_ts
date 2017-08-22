@@ -62,10 +62,6 @@ app.use('/admin', function (req, res, next) {
     }
 });
 var routeRegister = new route_register_1.default(app, "routes");
-app.use(function (req, res, next) {
-    var err = new Error('Not Found');
-    next(err);
-});
 if (app.get('env') === 'development') {
     app.use(function (err, req, res, next) {
         console.error(err);

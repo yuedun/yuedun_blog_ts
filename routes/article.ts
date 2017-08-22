@@ -8,7 +8,14 @@ import { default as QuickNote } from '../models/quick-note-model';
 import * as Markdown from 'markdown-it';
 import * as Debug from 'debug';
 var debug = Debug('yuedun:article');
-var md = Markdown();
+var md = Markdown({
+    highlight: function (str, lang) {
+        if (lang) {
+            return `<pre class="prettyprint ${lang}"><code>${str}</code></pre>`;
+        }
+        return `<pre class="prettyprint"><code>${md.utils.escapeHtml(str)}</code></pre>`;
+    }
+});
 import { route } from '../utils/route';
 import * as settings from '../settings';
 
@@ -78,7 +85,7 @@ export default class Routes {
             visitedTop,
             blogPromise
         ]).then(([result1, result2, doc]) => {
-            if (doc.status ===0 ) {
+            if (doc.status === 0) {
                 return new Error("找不到文章");
             }
             if (doc.ismd) {

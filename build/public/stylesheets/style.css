@@ -253,7 +253,7 @@ aside ul{padding-left: 18px;}
 }
 /*代码样式*/
 .blog_content pre{
-    padding: 10px;
+    padding: 10px!important;
     border: 1px solid #ccc;
     border-radius: 7px;
     background-color: #f5f5f5;
@@ -272,9 +272,9 @@ aside ul{padding-left: 18px;}
     background-color: #f5f5f5;
 }
 .blog_content code{
+    color: #d14;
     background-color: #f5f5f5;
     font-weight: bold;
-    color: #1f35be;
     line-height: 20px;
 }
 

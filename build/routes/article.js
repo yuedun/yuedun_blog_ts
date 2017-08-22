@@ -14,7 +14,14 @@ var quick_note_model_1 = require("../models/quick-note-model");
 var Markdown = require("markdown-it");
 var Debug = require("debug");
 var debug = Debug('yuedun:article');
-var md = Markdown();
+var md = Markdown({
+    highlight: function (str, lang) {
+        if (lang) {
+            return "<pre class=\"prettyprint " + lang + "\"><code>" + str + "</code></pre>";
+        }
+        return "<pre class=\"prettyprint\"><code>" + md.utils.escapeHtml(str) + "</code></pre>";
+    }
+});
 var route_1 = require("../utils/route");
 var settings = require("../settings");
 var Routes = (function () {

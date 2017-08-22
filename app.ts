@@ -74,18 +74,12 @@ app.use('/admin', function (req, res, next) {
 });
 //需要方法body-parser后面，否则无法解析post提交的body内容
 const routeRegister = new RouteRegister(app, "routes");
+
 // catch 404 and forward to error handler
 // this middleware will be executed for every request to the app
 //加next每个请求都会经过，不加next所有请求不会通过，没有交给下一个路由
-/*添加路由*/
-app.use(function (req, res, next) {
-    var err = new Error('Not Found');
-    // err.status = 404;
-    next(err);
-});
-
-/// error handlers
-
+// error handlers
+// 报错时会执行
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
