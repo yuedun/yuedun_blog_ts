@@ -10,10 +10,7 @@ export var BlogSchema: Schema = new Schema({
         default: 1
     },//1发布，0草稿
     comments: [],//评论
-    category: {
-        type: String,
-        default: ''
-    },//分类
+    category: String,//分类
     top: Number,//置顶
     tags: String,//标签
     pv: Number,//访问量,
@@ -21,7 +18,7 @@ export var BlogSchema: Schema = new Schema({
 }, { validateBeforeSave: true });
 
 export interface IBlog extends Document {
-    // id在document中存在
+    // _id在Document中存在
     title: string,//标题
     createDate: string,//发表时间
     updateTime: string,//修改时间

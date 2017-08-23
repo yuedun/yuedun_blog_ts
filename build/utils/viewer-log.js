@@ -13,22 +13,24 @@ function default_1(req) {
         else {
             realIp = ip;
         }
-        var blogId_1 = req.originalUrl.substring(req.originalUrl.lastIndexOf("/") + 1);
-        blog_model_1.default.findById(blogId_1)
-            .then(function (blog) {
-            var pvLogObj = new viewer_log_model_1.default({
-                ip: realIp,
-                blogId: blogId_1,
-                title: blog.title,
-                url: req.originalUrl,
-                referer: req.headers['referer'] || '',
-                userAgent: req.headers['user-agent'] || '',
-                createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+        if (req.originalUrl.lastIndexOf("blogdetail/") > 0) {
+            var blogId_1 = req.originalUrl.substring(req.originalUrl.lastIndexOf("/") + 1);
+            blog_model_1.default.findById(blogId_1)
+                .then(function (blog) {
+                var pvLogObj = new viewer_log_model_1.default({
+                    ip: realIp,
+                    blogId: blogId_1,
+                    title: blog.title,
+                    url: req.originalUrl,
+                    referer: req.headers['referer'] || '',
+                    userAgent: req.headers['user-agent'] || '',
+                    createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
+                });
+                return pvLogObj.save();
+            }).then(function () {
+                console.log("访问记录成功！");
             });
-            return pvLogObj.save();
-        }).then(function () {
-            console.log("访问记录成功！");
-        });
+        }
     }
 }
 exports.default = default_1;
