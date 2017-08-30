@@ -17,10 +17,10 @@ var quick_note_model_1 = require("../models/quick-note-model");
 var category_model_1 = require("../models/category-model");
 var weather_user_model_1 = require("../models/weather-user-model");
 var about_model_1 = require("../models/about-model");
+var viewer_log_model_1 = require("../models/viewer-log-model");
 var qiniu = require("../utils/qiniu");
 var md = Markdown();
 var area = require('../area');
-var viewer_log_model_1 = require("../models/viewer-log-model");
 var route_1 = require("../utils/route");
 function generatorPassword(password) {
     var hash = crypto.createHash('sha1');
@@ -37,9 +37,10 @@ var Routes = (function () {
             return Promise.all([
                 blog_model_1.default.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),
                 viewer_log_model_1.default.count({ createdAt: { $regex: today, $options: 'i' } }),
+                viewer_log_model_1.default.aggregate({ $match: { createdAt: { $regex: today, $options: 'i' } } }, { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } }, { $sort: { createAt: -1 } }),
             ]).then(function (_a) {
-                var result1 = _a[0], result2 = _a[1];
-                return { readCount: result1[0].pvCount, todayRead: result2 };
+                var result1 = _a[0], result2 = _a[1], result3 = _a[2];
+                return { readCount: result1[0].pvCount, todayRead: result2, recent: result3 };
             });
         }
         else {
@@ -360,16 +361,6 @@ var Routes = (function () {
             res.render('admin/quicknote', { success: success, noteList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length });
         });
     };
-    Routes.readCount = function (req, res) {
-        var today = Moment().format('YYYY-MM-DD');
-        return Promise.all([
-            blog_model_1.default.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),
-            viewer_log_model_1.default.count({ createdAt: { $regex: today, $options: 'i' } })
-        ]).then(function (_a) {
-            var result1 = _a[0], result2 = _a[1];
-            return { readCount: result1[0].pvCount, todayRead: result2 };
-        });
-    };
     Routes.aboutConfig = function (req, res) {
         var arr = [];
         return Promise.resolve(about_model_1.default.findOne())
@@ -534,9 +525,6 @@ var Routes = (function () {
     __decorate([
         route_1.route({})
     ], Routes, "quickNoteList", null);
-    __decorate([
-        route_1.route({})
-    ], Routes, "readCount", null);
     __decorate([
         route_1.route({})
     ], Routes, "aboutConfig", null);
