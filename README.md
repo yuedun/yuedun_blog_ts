@@ -57,26 +57,7 @@ tsconfig.json配置说明：
         "!typings/**"
     ]
 ```
-配置完tsconfig.json后需要安装Definitely（ts定义文件），以下两种tsd和typings都已成历史，目前可以直接使用npm安装，可以直接跳到第三步。
-
-> tsd
-
-包管理已弃用，使用typings包管理
-> npm install typings -g
-
-> typings init
-
-初始化typings.json文件
-typings相关文档[https://github.com/typings/typings](https://github.com/typings/typings)
-常用typings命令：
-> typings search --name react
-
-根据名称搜索模块
-
-> typings install debug --save
-
-> typings install dt~node --global --save
-保存模块，一般第三方模块使用第二条命令
+配置完tsconfig.json后需要安装Definitely（ts定义文件）。
 
 ## 第三步：安装Definitely定义文件
 
@@ -88,6 +69,8 @@ typings相关文档[https://github.com/typings/typings](https://github.com/typin
 
 在命令行执行`tsc`命令并没有加参数，却依然按照`tsconfig.json`配置来执行，说明编译器会从当前目录开始去查找tsconfig.json文件，逐级向上搜索父目录。
 
+## 开发工具和调试
+`ctrl+shift+B`监听编译ts文件，`F5`启动debug模式 
 # mongoose promise化
 由于程序的多次迭代更新，当中使用了原生回调，`async.js`库，`bluebird`库，最终使用`async await`，`async await`的使用还是离不开promise，所以需要结合使用。
 首先需要将mongoose查询promise化，其实mongoose本身带有promise库，所以既可以使用回调的方式也可以使用promise的方式。但是最新版本建议使用第三方promise库，否则会在控制台打印出警告信息：

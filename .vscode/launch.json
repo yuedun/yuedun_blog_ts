@@ -2,7 +2,7 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "启动",
+            "name": "debug启动",
             "type": "node",
             "request": "launch",
             "program": "${workspaceRoot}/build/bin/www.js",
@@ -17,30 +17,11 @@
             "env": {
                 "NODE_ENV": "development"
             },
-            "externalConsole": false,
+            "console": "internalConsole",
             "sourceMaps": true,
-            "outDir": "${workspaceRoot}/build/"
-        },
-        {
-            "name": "附加",
-            "type": "node",
-            "request": "attach",
-            "port": 5858,
-            "address": "localhost",
-            "restart": false,
-            "sourceMaps": false,
-            "outDir": null,
-            "localRoot": "${workspaceRoot}/build",
-            "remoteRoot": null
-        },
-        {
-            "name": "Attach to Process",
-            "type": "node",
-            "request": "attach",
-            "processId": "${command.PickProcess}",
-            "port": 5858,
-            "sourceMaps": false,
-            "outDir": null
+            "outFiles": [
+                "${workspaceRoot}/build/**/*.js"
+            ]
         }
     ]
 }

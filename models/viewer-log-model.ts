@@ -13,7 +13,7 @@ var ViewerLogSchema: Schema = new Schema({
     createdAt: String,//创建时间
 });
 
-interface IViewerLog extends Document {
+export interface IViewerLog extends Document {
     ip: string,
     blogId: string,
     title: string,
