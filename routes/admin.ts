@@ -14,7 +14,6 @@ import { default as ViewerLogModel, IViewerLog as ViewerLogInstance } from '../m
 import * as qiniu from '../utils/qiniu';
 var md = Markdown();
 var area = require('../area');
-import { default as PvModel } from '../models/viewer-log-model';
 import { route } from '../utils/route';
 
 function generatorPassword(password: string): string {
@@ -36,10 +35,10 @@ export default class Routes {
             var today = Moment().format('YYYY-MM-DD');
             return Promise.all<any, number, any>([
                 Blog.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),//聚合查询，总访问量,分组必须包含_id
-                PvModel.count({ createdAt: { $regex: today, $options: 'i' } }),//模糊查询"%text%"，今日访问量
+                ViewerLogModel.count({ createdAt: { $regex: today, $options: 'i' } }),//模糊查询"%text%"，今日访问量
                 ViewerLogModel.aggregate(
+                    { $match: { createdAt: { $regex: today, $options: 'i' } } },
                     { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } },
-                    { $limit: 10 },
                     { $sort: { createAt: -1 } }
                 ),
             ]).then(([result1, result2, result3]) => {
