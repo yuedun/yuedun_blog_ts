@@ -52,8 +52,6 @@ export default class Routes {
                     item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
                 }
             });
-            console.log(">>>>>>>>>>>>>", result3);
-
             return {
                 blogList: docs,
                 newList: result2,
