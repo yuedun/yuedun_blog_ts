@@ -3,7 +3,7 @@
         <h3>阅读排行</h3>
         <ul>
             <% topList.forEach(function(blog){%>
-            <li><a href="/blogdetail/<%= blog._id%>"><%=blog.title%></a></li>
+            <li><a href="/blogdetail/<%= blog._id.blogId%>"><%=blog._id.title%></a></li>
             <%})%>
         </ul>
     </div>
