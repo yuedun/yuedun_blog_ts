@@ -11,6 +11,7 @@ var moment = require("moment");
 var blog_model_1 = require("../models/blog-model");
 var about_model_1 = require("../models/about-model");
 var quick_note_model_1 = require("../models/quick-note-model");
+var viewer_log_model_1 = require("../models/viewer-log-model");
 var Markdown = require("markdown-it");
 var Debug = require("debug");
 var debug = Debug('yuedun:article');
@@ -54,6 +55,7 @@ var Routes = (function () {
                     item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
                 }
             });
+            console.log(">>>>>>>>>>>>>", result3);
             return {
                 blogList: docs,
                 newList: result2,
@@ -219,5 +221,5 @@ var Routes = (function () {
 exports.default = Routes;
 var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
 var latestTop = blog_model_1.default.find({ 'status': "1", createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }).exec();
-var visitedTop = blog_model_1.default.find({ 'status': "1" }, null, { sort: { 'pv': -1 }, limit: 5 }).exec();
+var visitedTop = viewer_log_model_1.default.aggregate({ $match: { createdAt: { $gt: twoMonth } } }, { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } }, { $sort: { createAt: -1 } }).sort({ pv: -1 }).limit(5);
 //# sourceMappingURL=article.js.map
