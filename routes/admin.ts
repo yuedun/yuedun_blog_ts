@@ -495,25 +495,22 @@ export default class Routes {
      * 速记列表
      */
     @route({})
-    static quickNoteList(req: Request, res: Response): void {
+    static quickNoteList(req: Request, res: Response): Promise.Thenable<any> {
         var user = req.session.user;
         var success = req.query.success || 0;
         var pageIndex = 1;
         var pageSize = 10;
         pageIndex = req.query.pageIndex ? req.query.pageIndex : pageIndex;
         pageSize = req.query.pageSize ? req.query.pageSize : pageSize;
-        QuickNote.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize }, function (err, docs) {
-            if (err) {
-                res.send(err.message);
-                return;
-            }
-            docs.forEach(function (item, index) {
-                if (item.content) {
-                    item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
-                };
-            });
-            res.render('admin/quicknote', { success: success, noteList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length });
-        });
+        return QuickNote.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize })
+            .then(docs => {
+                docs.forEach(function (item, index) {
+                    if (item.content) {
+                        item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
+                    };
+                });
+                return { noteList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length };
+            })
     }
 
     /**
