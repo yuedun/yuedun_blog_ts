@@ -11,6 +11,8 @@ var Moment = require("moment");
 var Promise = require("bluebird");
 var crypto = require("crypto");
 var Markdown = require("markdown-it");
+var Debug = require("debug");
+var debug = Debug('yuedun:admin');
 var user_model_1 = require("../models/user-model");
 var blog_model_1 = require("../models/blog-model");
 var quick_note_model_1 = require("../models/quick-note-model");
@@ -173,6 +175,7 @@ var Routes = (function () {
     };
     Routes.updateArticle = function (req, res) {
         var args = req.body;
+        var md = args.ismd ? 1 : 0;
         return blog_model_1.default.findByIdAndUpdate(req.params.id, {
             $set: {
                 title: args.title,
@@ -180,6 +183,7 @@ var Routes = (function () {
                 category: args.category,
                 tags: args.tags,
                 status: parseInt(args.status),
+                ismd: md,
                 updateTime: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
         }).then(function () {
@@ -347,18 +351,15 @@ var Routes = (function () {
         var pageSize = 10;
         pageIndex = req.query.pageIndex ? req.query.pageIndex : pageIndex;
         pageSize = req.query.pageSize ? req.query.pageSize : pageSize;
-        quick_note_model_1.default.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize }, function (err, docs) {
-            if (err) {
-                res.send(err.message);
-                return;
-            }
+        return quick_note_model_1.default.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize })
+            .then(function (docs) {
             docs.forEach(function (item, index) {
                 if (item.content) {
                     item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
                 }
                 ;
             });
-            res.render('admin/quicknote', { success: success, noteList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length });
+            return { noteList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length };
         });
     };
     Routes.aboutConfig = function (req, res) {
@@ -386,7 +387,7 @@ var Routes = (function () {
     };
     Routes.updateAboutConfig = function (req, res) {
         var args = req.body;
-        console.log(args);
+        debug(args);
         return about_model_1.default.findOneAndUpdate(null, args)
             .then(function () {
             return { success: 1 };

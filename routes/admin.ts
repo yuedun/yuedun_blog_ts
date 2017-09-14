@@ -4,6 +4,8 @@ import * as Moment from 'moment';//日期格式化组件
 import * as Promise from 'bluebird';
 import * as crypto from "crypto";
 import * as Markdown from 'markdown-it';
+import * as Debug from 'debug';
+var debug = Debug('yuedun:admin');
 import { default as User } from '../models/user-model';
 import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
 import { default as QuickNote } from '../models/quick-note-model';
@@ -221,6 +223,7 @@ export default class Routes {
     })
     static updateArticle(req: Request, res: Response): Promise.Thenable<any> {
         var args = req.body;
+        let md = args.ismd? 1: 0;
         return Blog.findByIdAndUpdate(req.params.id, {
             $set: {
                 title: args.title,
@@ -228,6 +231,7 @@ export default class Routes {
                 category: args.category,
                 tags: args.tags,
                 status: parseInt(args.status),
+                ismd: md,
                 updateTime: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
         }).then(() => {
@@ -495,25 +499,22 @@ export default class Routes {
      * 速记列表
      */
     @route({})
-    static quickNoteList(req: Request, res: Response): void {
+    static quickNoteList(req: Request, res: Response): Promise.Thenable<any> {
         var user = req.session.user;
         var success = req.query.success || 0;
         var pageIndex = 1;
         var pageSize = 10;
         pageIndex = req.query.pageIndex ? req.query.pageIndex : pageIndex;
         pageSize = req.query.pageSize ? req.query.pageSize : pageSize;
-        QuickNote.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize }, function (err, docs) {
-            if (err) {
-                res.send(err.message);
-                return;
-            }
-            docs.forEach(function (item, index) {
-                if (item.content) {
-                    item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
-                };
-            });
-            res.render('admin/quicknote', { success: success, noteList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length });
-        });
+        return QuickNote.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize })
+            .then(docs => {
+                docs.forEach(function (item, index) {
+                    if (item.content) {
+                        item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
+                    };
+                });
+                return { noteList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length };
+            })
     }
 
     /**
@@ -551,7 +552,7 @@ export default class Routes {
     })
     static updateAboutConfig(req: Request, res: Response): Promise.Thenable<any> {
         var args = req.body;
-        console.log(args);
+        debug(args);
 
         return Resume.findOneAndUpdate(null, args)
             .then(() => {
