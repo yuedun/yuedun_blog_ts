@@ -4,6 +4,8 @@ import * as Moment from 'moment';//日期格式化组件
 import * as Promise from 'bluebird';
 import * as crypto from "crypto";
 import * as Markdown from 'markdown-it';
+import * as Debug from 'debug';
+var debug = Debug('yuedun:admin');
 import { default as User } from '../models/user-model';
 import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
 import { default as QuickNote } from '../models/quick-note-model';
@@ -221,6 +223,7 @@ export default class Routes {
     })
     static updateArticle(req: Request, res: Response): Promise.Thenable<any> {
         var args = req.body;
+        let md = args.ismd? 1: 0;
         return Blog.findByIdAndUpdate(req.params.id, {
             $set: {
                 title: args.title,
@@ -228,6 +231,7 @@ export default class Routes {
                 category: args.category,
                 tags: args.tags,
                 status: parseInt(args.status),
+                ismd: md,
                 updateTime: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
         }).then(() => {
@@ -548,7 +552,7 @@ export default class Routes {
     })
     static updateAboutConfig(req: Request, res: Response): Promise.Thenable<any> {
         var args = req.body;
-        console.log(args);
+        debug(args);
 
         return Resume.findOneAndUpdate(null, args)
             .then(() => {

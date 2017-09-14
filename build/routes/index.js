@@ -20,12 +20,12 @@ var Routes = (function () {
     Routes.index = function (req) {
         return blog_model_1.default.find({ status: 1 }, null, { sort: { '_id': -1 }, skip: 0, limit: 2 })
             .then(function (data) {
-            console.log(JSON.stringify(data));
+            debug(JSON.stringify(data));
             return data;
         });
     };
     Routes.uploadImg = function (req, res, next) {
-        console.log(">>>>>>>>>>>>>upload");
+        debug(">>>>>>>>>>>>>upload");
         var token = qiniu_1.uptoken(settings_1.qiniuConfig.bucketName);
         var form = new formidable.IncomingForm();
         return new Promise(function (resolve, reject) {
