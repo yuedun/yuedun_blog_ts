@@ -13,7 +13,7 @@ router.get('/google4a302d2a96242bba.html', function (req, res, next) {
 
 //robots.txt
 router.get('/robots.txt', function (req, res, next) {
-    res.sendfile("robots.txt");
+    res.sendFile("/robots.txt", {root: "./"});
 });
 
 module.exports = router;
