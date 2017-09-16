@@ -17,7 +17,7 @@ export default function (req: Request) {
             realIp = ip;
         }
         if (req.originalUrl.lastIndexOf("blogdetail/") > 0) {
-            const blogId = req.originalUrl.substring(req.originalUrl.lastIndexOf("blogdetail/") + 1);
+            const blogId = req.originalUrl.substring(req.originalUrl.lastIndexOf("/") + 1);
             BlogModel.findById(blogId)
                 .then(blog => {
                     var pvLogObj = new ViewerLogModel({

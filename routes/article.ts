@@ -5,6 +5,7 @@ import * as moment from 'moment';
 import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
 import { default as Resume, IResume as ResumeInstance } from '../models/about-model';
 import { default as QuickNote } from '../models/quick-note-model';
+import { default as ViewerLogModel, IViewerLog as ViewerLogInstance } from '../models/viewer-log-model';
 import * as Markdown from 'markdown-it';
 import * as Debug from 'debug';
 var debug = Debug('yuedun:article');
@@ -195,5 +196,12 @@ export default class Routes {
 var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
 var latestTop = Blog.find({ 'status': "1", createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }).exec();
 
-//访问最多
-var visitedTop = Blog.find({ 'status': "1" }, null, { sort: { 'pv': -1 }, limit: 5 }).exec();
+//近两月访问最多
+var visitedTop = ViewerLogModel.aggregate(
+    { $match: { createdAt: { $gt: twoMonth } } },
+    { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } },
+    { $sort: { createAt: -1 } }
+).sort({ pv: -1 }).limit(5);
+/**
+ * Blog.find(条件, 字段, 排序、limit)
+ */

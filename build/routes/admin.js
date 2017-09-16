@@ -11,16 +11,18 @@ var Moment = require("moment");
 var Promise = require("bluebird");
 var crypto = require("crypto");
 var Markdown = require("markdown-it");
+var Debug = require("debug");
+var debug = Debug('yuedun:admin');
 var user_model_1 = require("../models/user-model");
 var blog_model_1 = require("../models/blog-model");
 var quick_note_model_1 = require("../models/quick-note-model");
 var category_model_1 = require("../models/category-model");
 var weather_user_model_1 = require("../models/weather-user-model");
 var about_model_1 = require("../models/about-model");
+var viewer_log_model_1 = require("../models/viewer-log-model");
 var qiniu = require("../utils/qiniu");
 var md = Markdown();
 var area = require('../area');
-var viewer_log_model_1 = require("../models/viewer-log-model");
 var route_1 = require("../utils/route");
 function generatorPassword(password) {
     var hash = crypto.createHash('sha1');
@@ -37,9 +39,10 @@ var Routes = (function () {
             return Promise.all([
                 blog_model_1.default.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),
                 viewer_log_model_1.default.count({ createdAt: { $regex: today, $options: 'i' } }),
+                viewer_log_model_1.default.aggregate({ $match: { createdAt: { $regex: today, $options: 'i' } } }, { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } }, { $sort: { createAt: -1 } }),
             ]).then(function (_a) {
-                var result1 = _a[0], result2 = _a[1];
-                return { readCount: result1[0].pvCount, todayRead: result2 };
+                var result1 = _a[0], result2 = _a[1], result3 = _a[2];
+                return { readCount: result1[0].pvCount, todayRead: result2, recent: result3 };
             });
         }
         else {
@@ -172,6 +175,7 @@ var Routes = (function () {
     };
     Routes.updateArticle = function (req, res) {
         var args = req.body;
+        var md = args.ismd ? 1 : 0;
         return blog_model_1.default.findByIdAndUpdate(req.params.id, {
             $set: {
                 title: args.title,
@@ -179,6 +183,7 @@ var Routes = (function () {
                 category: args.category,
                 tags: args.tags,
                 status: parseInt(args.status),
+                ismd: md,
                 updateTime: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
         }).then(function () {
@@ -346,28 +351,15 @@ var Routes = (function () {
         var pageSize = 10;
         pageIndex = req.query.pageIndex ? req.query.pageIndex : pageIndex;
         pageSize = req.query.pageSize ? req.query.pageSize : pageSize;
-        quick_note_model_1.default.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize }, function (err, docs) {
-            if (err) {
-                res.send(err.message);
-                return;
-            }
+        return quick_note_model_1.default.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize })
+            .then(function (docs) {
             docs.forEach(function (item, index) {
                 if (item.content) {
                     item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
                 }
                 ;
             });
-            res.render('admin/quicknote', { success: success, noteList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length });
-        });
-    };
-    Routes.readCount = function (req, res) {
-        var today = Moment().format('YYYY-MM-DD');
-        return Promise.all([
-            blog_model_1.default.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),
-            viewer_log_model_1.default.count({ createdAt: { $regex: today, $options: 'i' } })
-        ]).then(function (_a) {
-            var result1 = _a[0], result2 = _a[1];
-            return { readCount: result1[0].pvCount, todayRead: result2 };
+            return { noteList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length };
         });
     };
     Routes.aboutConfig = function (req, res) {
@@ -395,7 +387,7 @@ var Routes = (function () {
     };
     Routes.updateAboutConfig = function (req, res) {
         var args = req.body;
-        console.log(args);
+        debug(args);
         return about_model_1.default.findOneAndUpdate(null, args)
             .then(function () {
             return { success: 1 };
@@ -534,9 +526,6 @@ var Routes = (function () {
     __decorate([
         route_1.route({})
     ], Routes, "quickNoteList", null);
-    __decorate([
-        route_1.route({})
-    ], Routes, "readCount", null);
     __decorate([
         route_1.route({})
     ], Routes, "aboutConfig", null);

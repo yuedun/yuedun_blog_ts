@@ -14,7 +14,7 @@ function default_1(req) {
             realIp = ip;
         }
         if (req.originalUrl.lastIndexOf("blogdetail/") > 0) {
-            var blogId_1 = req.originalUrl.substring(req.originalUrl.lastIndexOf("blogdetail/") + 1);
+            var blogId_1 = req.originalUrl.substring(req.originalUrl.lastIndexOf("/") + 1);
             blog_model_1.default.findById(blogId_1)
                 .then(function (blog) {
                 var pvLogObj = new viewer_log_model_1.default({

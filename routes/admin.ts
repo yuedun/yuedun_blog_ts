@@ -4,16 +4,18 @@ import * as Moment from 'moment';//日期格式化组件
 import * as Promise from 'bluebird';
 import * as crypto from "crypto";
 import * as Markdown from 'markdown-it';
+import * as Debug from 'debug';
+var debug = Debug('yuedun:admin');
 import { default as User } from '../models/user-model';
 import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
 import { default as QuickNote } from '../models/quick-note-model';
 import { default as Category, ICategory as CategoryInstance } from '../models/category-model';
 import { default as WeatherUser } from '../models/weather-user-model';
 import { default as Resume, IResume as ResumeInstance } from '../models/about-model';
+import { default as ViewerLogModel, IViewerLog as ViewerLogInstance } from '../models/viewer-log-model';
 import * as qiniu from '../utils/qiniu';
 var md = Markdown();
 var area = require('../area');
-import { default as PvModel } from '../models/viewer-log-model';
 import { route } from '../utils/route';
 
 function generatorPassword(password: string): string {
@@ -33,11 +35,16 @@ export default class Routes {
         var user = req.session && req.session.user ? req.session.user : null;
         if (user != null) {
             var today = Moment().format('YYYY-MM-DD');
-            return Promise.all<any, number>([
+            return Promise.all<any, number, any>([
                 Blog.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),//聚合查询，总访问量,分组必须包含_id
-                PvModel.count({ createdAt: { $regex: today, $options: 'i' } }),//模糊查询"%text%"，今日访问量
-            ]).then(([result1, result2]) => {
-                return { readCount: result1[0].pvCount, todayRead: result2 }
+                ViewerLogModel.count({ createdAt: { $regex: today, $options: 'i' } }),//模糊查询"%text%"，今日访问量
+                ViewerLogModel.aggregate(
+                    { $match: { createdAt: { $regex: today, $options: 'i' } } },
+                    { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } },
+                    { $sort: { createAt: -1 } }
+                ),
+            ]).then(([result1, result2, result3]) => {
+                return { readCount: result1[0].pvCount, todayRead: result2, recent: result3 }
             })
         } else {
             return Promise.resolve({ title: '用户登录' });
@@ -216,6 +223,7 @@ export default class Routes {
     })
     static updateArticle(req: Request, res: Response): Promise.Thenable<any> {
         var args = req.body;
+        let md = args.ismd? 1: 0;
         return Blog.findByIdAndUpdate(req.params.id, {
             $set: {
                 title: args.title,
@@ -223,6 +231,7 @@ export default class Routes {
                 category: args.category,
                 tags: args.tags,
                 status: parseInt(args.status),
+                ismd: md,
                 updateTime: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
         }).then(() => {
@@ -250,7 +259,7 @@ export default class Routes {
     @route({})
     static category(req: Request, res: Response): Promise.Thenable<any> {
         return Category.find({})
-            .then(docs => { 
+            .then(docs => {
                 return { cates: docs }
             });
     }
@@ -260,7 +269,7 @@ export default class Routes {
     })
     static addCategory(req: Request, res: Response): void {
         var category = new Category({
-            cateName:req.body.cateName,
+            cateName: req.body.cateName,
             state: true
         });
         category.save(function (e, docs, numberAffected) {
@@ -490,40 +499,24 @@ export default class Routes {
      * 速记列表
      */
     @route({})
-    static quickNoteList(req: Request, res: Response): void {
+    static quickNoteList(req: Request, res: Response): Promise.Thenable<any> {
         var user = req.session.user;
         var success = req.query.success || 0;
         var pageIndex = 1;
         var pageSize = 10;
         pageIndex = req.query.pageIndex ? req.query.pageIndex : pageIndex;
         pageSize = req.query.pageSize ? req.query.pageSize : pageSize;
-        QuickNote.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize }, function (err, docs) {
-            if (err) {
-                res.send(err.message);
-                return;
-            }
-            docs.forEach(function (item, index) {
-                if (item.content) {
-                    item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
-                };
-            });
-            res.render('admin/quicknote', { success: success, noteList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length });
-        });
+        return QuickNote.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize })
+            .then(docs => {
+                docs.forEach(function (item, index) {
+                    if (item.content) {
+                        item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
+                    };
+                });
+                return { noteList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length };
+            })
     }
 
-    /**
-     * 访问统计
-     */
-    @route({})
-    static readCount(req: Request, res: Response): Promise.Thenable<any> {
-        var today = Moment().format('YYYY-MM-DD');
-        return Promise.all<any, number>([
-            Blog.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),
-            PvModel.count({ createdAt: { $regex: today, $options: 'i' } })//模糊查询"%text%"
-        ]).then(([result1, result2]) => {
-            return { readCount: result1[0].pvCount, todayRead: result2 }
-        })
-    }
     /**
      * 关于我配置
      */
@@ -559,7 +552,7 @@ export default class Routes {
     })
     static updateAboutConfig(req: Request, res: Response): Promise.Thenable<any> {
         var args = req.body;
-        console.log(args);
+        debug(args);
 
         return Resume.findOneAndUpdate(null, args)
             .then(() => {
