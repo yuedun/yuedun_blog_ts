@@ -89,7 +89,6 @@ var Routes = (function () {
         var args = req.body;
         var blog = new blog_model_1.default({
             title: args.title,
-            createDate: Moment().format('YYYY-MM-DD HH:mm:ss'),
             content: args.content,
             status: parseInt(args.status),
             comments: [],
@@ -183,8 +182,7 @@ var Routes = (function () {
                 category: args.category,
                 tags: args.tags,
                 status: parseInt(args.status),
-                ismd: md,
-                updateTime: Moment().format('YYYY-MM-DD HH:mm:ss')
+                ismd: md
             }
         }).then(function () {
             return { success: 1 };
