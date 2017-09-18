@@ -104,7 +104,7 @@ export default class Routes {
     @route({})
     static catalog(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
-            Blog.find({ status: 1 }, 'title createDate pv', { sort: { createDate: -1 } }),
+            Blog.find({ status: 1 }, 'title createdAt pv', { sort: { createdAt: -1 } }),
             latestTop,
             visitedTop
         ]).then(([result1, result2, result3]) => {
@@ -194,7 +194,7 @@ export default class Routes {
 }
 //最近新建
 var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
-var latestTop = Blog.find({ 'status': "1", createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }).exec();
+var latestTop = Blog.find({ 'status': "1", createdAt: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }).exec();
 
 //近两月访问最多
 var visitedTop = ViewerLogModel.aggregate(

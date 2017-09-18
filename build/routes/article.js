@@ -102,7 +102,7 @@ var Routes = (function () {
     ;
     Routes.catalog = function (req, res) {
         return Promise.all([
-            blog_model_1.default.find({ status: 1 }, 'title createDate pv', { sort: { createDate: -1 } }),
+            blog_model_1.default.find({ status: 1 }, 'title createdAt pv', { sort: { createdAt: -1 } }),
             latestTop,
             visitedTop
         ]).then(function (_a) {
@@ -219,6 +219,6 @@ var Routes = (function () {
 }());
 exports.default = Routes;
 var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
-var latestTop = blog_model_1.default.find({ 'status': "1", createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }).exec();
+var latestTop = blog_model_1.default.find({ 'status': "1", createdAt: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }).exec();
 var visitedTop = viewer_log_model_1.default.aggregate({ $match: { createdAt: { $gt: twoMonth } } }, { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } }, { $sort: { createAt: -1 } }).sort({ pv: -1 }).limit(5);
 //# sourceMappingURL=article.js.map
