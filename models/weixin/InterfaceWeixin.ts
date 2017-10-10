@@ -2,41 +2,47 @@
  * Created by huopanpan on 2014/10/10.
  */
 import * as crypto from 'crypto';
-import { Request, Response } from 'express';
+import { Request as RequestExpress, Response as ResponseExpress } from 'express';
+import * as Request from 'request';
+import * as Debug from 'debug';
+var debug = Debug('yuedun:weixin');
+import { weixin as weixinConfig } from '../../settings';
+
 /**
  * 验证token
- * @param req
- * @param res
+ * 
+ * @param {Request} req 
+ * @param {Response} res 
  */
-function validateToken(req: Request, res: Response) {
+export function validateToken(req: RequestExpress, res: ResponseExpress) {
     var query = req.query;
     var signature = query.signature;//微信服务器加密字符串
     var echostr = query.echostr;//随机字符串
     var timestamp = query['timestamp'];//时间戳
-    var nonce = query.nonce;//nonce
+    var nonce = query.nonce;
     var oriArray = new Array();
     oriArray[0] = nonce;
     oriArray[1] = timestamp;
-    oriArray[2] = "hale";//这里填写你的token
-    oriArray.sort();
-    var original = oriArray[0]+oriArray[1]+oriArray[2];
-    console.log("Original Str:"+original);
-    console.log("signature:"+signature);
-    var scyptoString = sha1(original);//将三个参数拼接加密字符串，并与服务器发送的字符串对比
-    if (signature == scyptoString) {
+    oriArray[2] = "hale";//token微信配置中的token
+    var original = oriArray.sort().join('');//字典排序,拼接成字符串
+    debug(">>>>>>>>ori:", signature);
+    var sha1String = sha1(original);
+    debug(">>>>>>>>now:", sha1String);
+
+    if (signature == sha1String) {
         res.send(echostr);
-    }
-    else {
+    } else {
         res.send("Bad Token!");
     }
 }
 
 /**
  * sha1加密
- * @param str
- * @returns {*}
+ * 
+ * @param {string} str 
+ * @returns 
  */
-function sha1(str:string) {
+function sha1(str: string) {
     var md5sum = crypto.createHash('sha1');
     md5sum.update(str);
     str = md5sum.digest('hex');
@@ -44,12 +50,16 @@ function sha1(str:string) {
 }
 /**
  * 重新获取access_token
- * @type {validateToken}
+ * 
  */
-function getAccessToken(){
-    var appid = "";
-    var appsecret = "";
-    var url = "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=wxdec38c03e93cd4e8&secret=ba19fa2a324780addde9818d889bb1b1";
-
+export function getAccessToken(callback) {
+    let url = `https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=${weixinConfig.appId}&secret=${weixinConfig.secret}`;
+    let chunk = "";
+    Request.get(url, { json: true }, (err, resp, body) => {
+        if (err) {
+            callback(err)
+        }
+        debug(">>",body)
+        callback(null, body);
+    })
 }
-exports.validateToken = validateToken;
