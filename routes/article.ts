@@ -196,6 +196,21 @@ export default class Routes {
             };
         })
     };
+
+    //临时使用
+    @route({json:true})
+    static updateTime(req: Request, res: Response): Promise.Thenable<any> {
+        return Blog.find().then(blogs=>{
+            return Promise.each(blogs, (item, index)=>{
+                // item.createdAt = moment(item.createdAt).toDate()
+                let time = new Date(item.createdAt)
+                item.set("createdAt", time)
+                console.log(">>>>>>>>>",time);
+                item.set("updatedAt", time)
+                return item.save()
+            })
+        })
+    };
 }
 //最近新建
 var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
