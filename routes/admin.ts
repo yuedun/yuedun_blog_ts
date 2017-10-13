@@ -115,7 +115,6 @@ export default class Routes {
         var args = req.body;
         var blog = new Blog({
             title: args.title,//标题
-            createDate: Moment().format('YYYY-MM-DD HH:mm:ss'),//发表时间
             content: args.content, //内容
             status: parseInt(args.status),//发布，草稿，
             comments: [],//评论，可以在评论时添加
@@ -231,8 +230,7 @@ export default class Routes {
                 category: args.category,
                 tags: args.tags,
                 status: parseInt(args.status),
-                ismd: md,
-                updateTime: Moment().format('YYYY-MM-DD HH:mm:ss')
+                ismd: md
             }
         }).then(() => {
             return { success: 1 }
