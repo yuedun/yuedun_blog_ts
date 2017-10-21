@@ -5,10 +5,18 @@ import * as moment from 'moment';
 import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
 import { default as Resume, IResume as ResumeInstance } from '../models/about-model';
 import { default as QuickNote } from '../models/quick-note-model';
+import { default as ViewerLogModel, IViewerLog as ViewerLogInstance } from '../models/viewer-log-model';
 import * as Markdown from 'markdown-it';
 import * as Debug from 'debug';
 var debug = Debug('yuedun:article');
-var md = Markdown();
+var md = Markdown({
+    highlight: function (str, lang) {
+        if (lang) {
+            return `<pre class="prettyprint ${lang}"><code>${str}</code></pre>`;
+        }
+        return `<pre class="prettyprint"><code>${md.utils.escapeHtml(str)}</code></pre>`;
+    }
+});
 import { route } from '../utils/route';
 import * as settings from '../settings';
 
@@ -78,13 +86,13 @@ export default class Routes {
             visitedTop,
             blogPromise
         ]).then(([result1, result2, doc]) => {
-            if (doc.status ===0 ) {
+            if (doc.status === 0) {
                 return new Error("找不到文章");
             }
             if (doc.ismd) {
                 doc.content = md.render(doc.content);
             }
-            res.cookie('visited' + blogId, visited, { maxAge: 1000 * 60 * 60 * 8, httpOnly: true });
+            res.cookie('visited' + blogId, visited, { maxAge: 1000 * 60 * 60 * 24 * 2, httpOnly: false });
             return {
                 newList: result1,
                 topList: result2,
@@ -93,12 +101,10 @@ export default class Routes {
         });
     };
     /* 博客目录 */
-    @route({
-
-    })
+    @route({})
     static catalog(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
-            Blog.find({ status: 1 }, 'title createDate pv', { sort: { createDate: -1 } }),
+            Blog.find({ status: 1 }, 'title createdAt pv', { sort: { createdAt: -1 } }),
             latestTop,
             visitedTop
         ]).then(([result1, result2, result3]) => {
@@ -110,9 +116,7 @@ export default class Routes {
         })
     };
     /* 我的微博 */
-    @route({
-
-    })
+    @route({})
     static weibo(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
             latestTop,
@@ -125,9 +129,7 @@ export default class Routes {
         })
     };
     /* 关于我 */
-    @route({
-
-    })
+    @route({})
     static about(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
             latestTop,
@@ -155,9 +157,7 @@ export default class Routes {
     };
 
     //婚纱
-    @route({
-
-    })
+    @route({})
     static gallery(req: Request, res: Response): Promise.Thenable<any> {
         if (req.query.pass === settings.gallery_pass) {
             return Promise.resolve(settings.LEACLOUD);
@@ -170,18 +170,14 @@ export default class Routes {
     };
 
     //简历
-    @route({
-
-    })
+    @route({})
     static resume(req: Request, res: Response): Promise.Thenable<any> {
         debug("*****resume:" + moment().format("YYYY-MM-DD HH:ss:mm"));
         return Promise.resolve({});
     };
 
     //速记本
-    @route({
-
-    })
+    @route({})
     static quicknote(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
             latestTop,
@@ -198,7 +194,14 @@ export default class Routes {
 }
 //最近新建
 var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
-var latestTop = Blog.find({ 'status': "1", createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }).exec();
+var latestTop = Blog.find({ 'status': "1", createdAt: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }).exec();
 
-//访问最多
-var visitedTop = Blog.find({ 'status': "1" }, null, { sort: { 'pv': -1 }, limit: 5 }).exec();
+//近两月访问最多
+var visitedTop = ViewerLogModel.aggregate(
+    { $match: { createdAt: { $gt: twoMonth } } },
+    { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } },
+    { $sort: { createAt: -1 } }
+).sort({ pv: -1 }).limit(5);
+/**
+ * Blog.find(条件, 字段, 排序、limit)
+ */

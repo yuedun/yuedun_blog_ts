@@ -9,25 +9,41 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var _ = require("lodash");
 var Moment = require("moment");
 var Promise = require("bluebird");
+var crypto = require("crypto");
+var Markdown = require("markdown-it");
+var Debug = require("debug");
+var debug = Debug('yuedun:admin');
 var user_model_1 = require("../models/user-model");
 var blog_model_1 = require("../models/blog-model");
 var quick_note_model_1 = require("../models/quick-note-model");
 var category_model_1 = require("../models/category-model");
 var weather_user_model_1 = require("../models/weather-user-model");
 var about_model_1 = require("../models/about-model");
+var viewer_log_model_1 = require("../models/viewer-log-model");
 var qiniu = require("../utils/qiniu");
-var Markdown = require("markdown-it");
 var md = Markdown();
 var area = require('../area');
-var viewer_log_model_1 = require("../models/viewer-log-model");
 var route_1 = require("../utils/route");
+function generatorPassword(password) {
+    var hash = crypto.createHash('sha1');
+    hash.update(password);
+    return hash.digest("hex");
+}
 var Routes = (function () {
     function Routes() {
     }
     Routes.index = function (req, res) {
-        var user = req.session ? req.session.user : {};
+        var user = req.session && req.session.user ? req.session.user : null;
         if (user != null) {
-            return Promise.resolve({ title: '后台管理首页', user: user });
+            var today = Moment().format('YYYY-MM-DD');
+            return Promise.all([
+                blog_model_1.default.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),
+                viewer_log_model_1.default.count({ createdAt: { $regex: today, $options: 'i' } }),
+                viewer_log_model_1.default.aggregate({ $match: { createdAt: { $regex: today, $options: 'i' } } }, { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } }, { $sort: { createAt: -1 } }),
+            ]).then(function (_a) {
+                var result1 = _a[0], result2 = _a[1], result3 = _a[2];
+                return { readCount: result1[0].pvCount, todayRead: result2, recent: result3 };
+            });
         }
         else {
             return Promise.resolve({ title: '用户登录' });
@@ -40,17 +56,12 @@ var Routes = (function () {
         var object = req.body;
         var user = {
             username: object.username,
-            password: object.password
+            password: generatorPassword(object.password)
         };
         return user_model_1.default.findOne(user)
             .then(function (obj) {
             if (obj || process.env.NODE_ENV === 'development') {
                 req.session.user = user;
-                if (object.remeber) {
-                    res.cookie('autologin', 1, {
-                        expires: new Date(Date.now() + 864000000)
-                    });
-                }
                 res.redirect('/admin/blogList');
                 return;
             }
@@ -78,7 +89,6 @@ var Routes = (function () {
         var args = req.body;
         var blog = new blog_model_1.default({
             title: args.title,
-            createDate: Moment().format('YYYY-MM-DD HH:mm:ss'),
             content: args.content,
             status: parseInt(args.status),
             comments: [],
@@ -94,8 +104,7 @@ var Routes = (function () {
             if (!category) {
                 var category = new category_model_1.default({
                     cateName: args.category,
-                    state: true,
-                    createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
+                    state: true
                 });
                 return category.save();
             }
@@ -106,6 +115,8 @@ var Routes = (function () {
             return blog.save();
         }).then(function () {
             return { success: 1 };
+        }).catch(function (err) {
+            return { success: 0, msg: err };
         });
     };
     Routes.blogList = function (req, res) {
@@ -115,7 +126,11 @@ var Routes = (function () {
         var pageSize = 10;
         pageIndex = req.query.pageIndex ? req.query.pageIndex : pageIndex;
         pageSize = req.query.pageSize ? req.query.pageSize : pageSize;
-        return blog_model_1.default.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize })
+        var conditions = {};
+        if (req.query.title) {
+            conditions.title = { $regex: req.query.title, $options: 'i' };
+        }
+        return blog_model_1.default.find(conditions, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize })
             .then(function (docs) {
             docs.forEach(function (item, index) {
                 if (item.content) {
@@ -128,7 +143,14 @@ var Routes = (function () {
                 }
                 ;
             });
-            return { success: success, blogList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length };
+            return {
+                success: success,
+                title: req.query.title,
+                blogList: docs,
+                user: user,
+                pageIndex: pageIndex,
+                pageCount: docs.length
+            };
         });
     };
     Routes.blogDetail = function (req, res) {
@@ -152,6 +174,7 @@ var Routes = (function () {
     };
     Routes.updateArticle = function (req, res) {
         var args = req.body;
+        var md = args.ismd ? 1 : 0;
         return blog_model_1.default.findByIdAndUpdate(req.params.id, {
             $set: {
                 title: args.title,
@@ -159,7 +182,7 @@ var Routes = (function () {
                 category: args.category,
                 tags: args.tags,
                 status: parseInt(args.status),
-                updateTime: Moment().format('YYYY-MM-DD HH:mm:ss')
+                ismd: md
             }
         }).then(function () {
             return { success: 1 };
@@ -179,10 +202,10 @@ var Routes = (function () {
         });
     };
     Routes.addCategory = function (req, res) {
-        var category = new category_model_1.default();
-        category.cateName = req.body.cateName;
-        category.state = true;
-        category.createDate = Moment().format('YYYY-MM-DD HH:mm:ss');
+        var category = new category_model_1.default({
+            cateName: req.body.cateName,
+            state: true
+        });
         category.save(function (e, docs, numberAffected) {
             if (e)
                 res.send(e.message);
@@ -203,7 +226,7 @@ var Routes = (function () {
         var user = new user_model_1.default({
             username: req.body.username,
             nickname: req.body.nickname,
-            password: password,
+            password: generatorPassword(password),
             level: 1,
             state: true,
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
@@ -251,10 +274,10 @@ var Routes = (function () {
         });
     };
     Routes.logout = function (req, res) {
-        req.session.user = null;
-        res.clearCookie("autologin");
-        res.redirect('/admin/login');
-        return;
+        req.session.destroy(function (err) {
+            res.redirect('/admin/login');
+            return;
+        });
     };
     Routes.addWeatherUser = function (req, res) {
         return Promise.resolve({ success: 0, flag: 0 });
@@ -326,28 +349,15 @@ var Routes = (function () {
         var pageSize = 10;
         pageIndex = req.query.pageIndex ? req.query.pageIndex : pageIndex;
         pageSize = req.query.pageSize ? req.query.pageSize : pageSize;
-        quick_note_model_1.default.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize }, function (err, docs) {
-            if (err) {
-                res.send(err.message);
-                return;
-            }
+        return quick_note_model_1.default.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize })
+            .then(function (docs) {
             docs.forEach(function (item, index) {
                 if (item.content) {
                     item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
                 }
                 ;
             });
-            res.render('admin/quicknote', { success: success, noteList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length });
-        });
-    };
-    Routes.readCount = function (req, res) {
-        var today = Moment().format('YYYY-MM-DD');
-        return Promise.all([
-            blog_model_1.default.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),
-            viewer_log_model_1.default.count({ createdAt: { $regex: today, $options: 'i' } })
-        ]).then(function (_a) {
-            var result1 = _a[0], result2 = _a[1];
-            return { readCount: result1[0].pvCount, todayRead: result2 };
+            return { noteList: docs, user: user, pageIndex: pageIndex, pageCount: docs.length };
         });
     };
     Routes.aboutConfig = function (req, res) {
@@ -375,7 +385,7 @@ var Routes = (function () {
     };
     Routes.updateAboutConfig = function (req, res) {
         var args = req.body;
-        console.log(args);
+        debug(args);
         return about_model_1.default.findOneAndUpdate(null, args)
             .then(function () {
             return { success: 1 };
@@ -514,9 +524,6 @@ var Routes = (function () {
     __decorate([
         route_1.route({})
     ], Routes, "quickNoteList", null);
-    __decorate([
-        route_1.route({})
-    ], Routes, "readCount", null);
     __decorate([
         route_1.route({})
     ], Routes, "aboutConfig", null);

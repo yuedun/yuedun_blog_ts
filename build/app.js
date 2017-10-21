@@ -10,13 +10,14 @@ var ejs = require("ejs");
 var session = require("express-session");
 var mongoStore = require("connect-mongo");
 var MongoStore = mongoStore(session);
-var connection = require("./models/connection");
-connection.getConnect();
+var connection_1 = require("./utils/connection");
+var connection = new connection_1.default();
 var settins = require("./settings");
 var mongodb = settins.mongodb;
 (require('./utils/cron'))();
 var viewer_log_1 = require("./utils/viewer-log");
 var route_register_1 = require("./utils/route-register");
+var originRoutes = require('./routes/origin-routes');
 var app = express();
 exports.app = app;
 var store = new MongoStore({
@@ -36,10 +37,12 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(session({
     secret: mongodb.cookieSecret,
+    cookie: { maxAge: 1000 * 60 * 60 * 24 * 14, httpOnly: false },
     store: store,
-    resave: true,
+    resave: false,
     saveUninitialized: true
 }));
+app.use('/', originRoutes);
 app.use('/*', function (req, res, next) {
     if (req.originalUrl.indexOf('/admin') === -1) {
         viewer_log_1.default(req);
@@ -47,10 +50,6 @@ app.use('/*', function (req, res, next) {
     next();
 });
 app.use('/admin', function (req, res, next) {
-    if (req.cookies['autologin']) {
-        next();
-        return;
-    }
     if (!req.session.user) {
         if (req.url == "/doLogin") {
             next();
@@ -63,10 +62,6 @@ app.use('/admin', function (req, res, next) {
     }
 });
 var routeRegister = new route_register_1.default(app, "routes");
-app.use(function (req, res, next) {
-    var err = new Error('Not Found');
-    next(err);
-});
 if (app.get('env') === 'development') {
     app.use(function (err, req, res, next) {
         console.error(err);

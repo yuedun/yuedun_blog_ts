@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="utf-8"/>
+    <meta name="renderer" content="webkit">
     <title>分类列表</title>
     <link rel="stylesheet" href="/stylesheets/layout.css" type="text/css" media="screen"/>
     <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js" type="text/javascript"></script>
@@ -50,7 +51,7 @@
                         <td><input type="checkbox" value="<%=category.id%>"></td>
                         <td><%= category.cateName%></td>
                         <td><%= category.state%></td>
-                        <td><%= category.createDate%></td>
+                        <td><%= category.newdate%></td>
                         <td>
                             <a href="/admin/toModifyUser/<%=category.id%>">
                                 <input type="image" src="/images/admin/icn_edit.png" title="Edit">

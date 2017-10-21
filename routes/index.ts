@@ -20,7 +20,7 @@ export default class Routes {
     static index(req: Request): Promise.Thenable<any> {
         return Blog.find({ status: 1 }, null, { sort: { '_id': -1 }, skip: 0, limit: 2 })
             .then(data => {
-                console.log(JSON.stringify(data))
+                debug(JSON.stringify(data))
                 return data;
             });
     }
@@ -33,7 +33,7 @@ export default class Routes {
         json: true
     })
     static uploadImg(req: Request, res: Response, next: Function): Promise.Thenable<any> {
-        console.log(">>>>>>>>>>>>>upload");
+        debug(">>>>>>>>>>>>>upload");
         var token = uptoken(qiniuConfig.bucketName);
         var form = new formidable.IncomingForm();
 

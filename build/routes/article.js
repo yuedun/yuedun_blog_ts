@@ -11,10 +11,18 @@ var moment = require("moment");
 var blog_model_1 = require("../models/blog-model");
 var about_model_1 = require("../models/about-model");
 var quick_note_model_1 = require("../models/quick-note-model");
+var viewer_log_model_1 = require("../models/viewer-log-model");
 var Markdown = require("markdown-it");
 var Debug = require("debug");
 var debug = Debug('yuedun:article');
-var md = Markdown();
+var md = Markdown({
+    highlight: function (str, lang) {
+        if (lang) {
+            return "<pre class=\"prettyprint " + lang + "\"><code>" + str + "</code></pre>";
+        }
+        return "<pre class=\"prettyprint\"><code>" + md.utils.escapeHtml(str) + "</code></pre>";
+    }
+});
 var route_1 = require("../utils/route");
 var settings = require("../settings");
 var Routes = (function () {
@@ -83,7 +91,7 @@ var Routes = (function () {
             if (doc.ismd) {
                 doc.content = md.render(doc.content);
             }
-            res.cookie('visited' + blogId, visited, { maxAge: 1000 * 60 * 60 * 8, httpOnly: true });
+            res.cookie('visited' + blogId, visited, { maxAge: 1000 * 60 * 60 * 24 * 2, httpOnly: false });
             return {
                 newList: result1,
                 topList: result2,
@@ -94,7 +102,7 @@ var Routes = (function () {
     ;
     Routes.catalog = function (req, res) {
         return Promise.all([
-            blog_model_1.default.find({ status: 1 }, 'title createDate pv', { sort: { createDate: -1 } }),
+            blog_model_1.default.find({ status: 1 }, 'title createdAt pv', { sort: { createdAt: -1 } }),
             latestTop,
             visitedTop
         ]).then(function (_a) {
@@ -211,6 +219,6 @@ var Routes = (function () {
 }());
 exports.default = Routes;
 var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
-var latestTop = blog_model_1.default.find({ 'status': "1", createDate: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }).exec();
-var visitedTop = blog_model_1.default.find({ 'status': "1" }, null, { sort: { 'pv': -1 }, limit: 5 }).exec();
+var latestTop = blog_model_1.default.find({ 'status': "1", createdAt: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }).exec();
+var visitedTop = viewer_log_model_1.default.aggregate({ $match: { createdAt: { $gt: twoMonth } } }, { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } }, { $sort: { createAt: -1 } }).sort({ pv: -1 }).limit(5);
 //# sourceMappingURL=article.js.map

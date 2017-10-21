@@ -11,18 +11,18 @@ import * as ejs from 'ejs';
 import * as session from 'express-session';
 import * as mongoStore from 'connect-mongo';
 var MongoStore = mongoStore(session);//connect-mongo(session),mongoose(orm)
-import * as connection from './models/connection';
-connection.getConnect();//执行其中的方法。另外还有mongoose对象，用作session的公用连接
+import MongoConnection from './utils/connection';
+const connection = new MongoConnection();
 import * as settins from './settings';
 var mongodb = settins.mongodb;
 (require('./utils/cron'))();//定时任务
 import { default as pvLog } from './utils/viewer-log';//访问日志
 import RouteRegister from './utils/route-register';
+var originRoutes = require('./routes/origin-routes');
 var app = express();
 var store = new MongoStore({
-    // //    url:"mongodb://"+mongodb.uid+":"+mongodb.pwd+"@"+mongodb.host+":"+mongodb.port+"/"+mongodb.db,
-    // interval: 60000, // expiration check worker run interval in millisec (default: 60000)
-    mongooseConnection: connection.mongoose.connection // <== custom connection
+    // autoRemove: 'native',//自动清除过期session
+    mongooseConnection: connection.mongoose.connection
 });
 
 // view engine setup环境变量设置
@@ -41,13 +41,13 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));//浏览器可以直接访问public下的资源
 app.use(session({
     secret: mongodb.cookieSecret,
-    //key: mongodb.db,//cookie name
-    //cookie: {maxAge: 1000 * 60 * 60 * 24 * 30},//30 days
+    cookie: { maxAge: 1000 * 60 * 60 * 24 * 14, httpOnly: false },//14 days，客户端保存时长。将sessionid存放在cookie中1000 * 60 * 60 * 24 * 30
     store: store,
-    resave: true,
+    resave: false,//true会重新保存cookie的过期时间
     saveUninitialized: true
 }));
 
+app.use('/', originRoutes);
 app.use('/*', function (req, res, next) {
     if (req.originalUrl.indexOf('/admin') === -1) {
         pvLog(req);
@@ -62,10 +62,6 @@ app.use('/*', function (req, res, next) {
  * 如果是登录状态则直接转交给下一个路由
  **/
 app.use('/admin', function (req, res, next) {
-    if (req.cookies['autologin']) {
-        next();
-        return;
-    }
     if (!req.session.user) {
         if (req.url == "/doLogin") {
             next();
@@ -78,18 +74,12 @@ app.use('/admin', function (req, res, next) {
 });
 //需要方法body-parser后面，否则无法解析post提交的body内容
 const routeRegister = new RouteRegister(app, "routes");
+
 // catch 404 and forward to error handler
 // this middleware will be executed for every request to the app
 //加next每个请求都会经过，不加next所有请求不会通过，没有交给下一个路由
-/*添加路由*/
-app.use(function (req, res, next) {
-    var err = new Error('Not Found');
-    // err.status = 404;
-    next(err);
-});
-
-/// error handlers
-
+// error handlers
+// 报错时会执行
 // development error handler
 // will print stacktrace
 if (app.get('env') === 'development') {
