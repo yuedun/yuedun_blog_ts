@@ -46,7 +46,12 @@ a {
     margin-top:-1px;
     overflow:hidden;
 }
-
+.head-name{
+    padding: 20px 0px 0px 80px;
+    margin-top: 0;
+    font-size: 2em;
+    font-weight: bold;
+}
 header p{
     margin: 0px;
     padding: 15px 80px;
