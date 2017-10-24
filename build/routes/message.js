@@ -7,8 +7,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var http = require("http");
-var express = require("express");
-var router = express.Router;
+var Promise = require("bluebird");
 var sms = require("../utils/sms");
 var settings = require("../settings");
 var route_1 = require("../utils/route");
@@ -18,61 +17,58 @@ var Routes = (function () {
     }
     Routes.sendmsg = function (req, res) {
         if (req.query.code = SMS_ACCOUNT.code) {
-            sms.sendSMS(req.query.mobile, req.query.text, function (err, result) {
-                res.render('sms', { code: result });
+            return new Promise(function (resove, reject) {
+                sms.sendSMS(req.query.mobile, req.query.text, function (err, result) {
+                    if (err) {
+                        reject(err);
+                    }
+                    resove({ code: result });
+                });
             });
         }
         else {
-            res.render('sms', { code: "code error" });
+            return Promise.resolve({ code: "code error" });
         }
     };
     Routes.balance = function (req, res) {
-        var options = {
-            hostname: 'www.jianzhou.sh.cn',
-            port: 80,
-            path: '/JianzhouSMSWSServer/http/getUserInfo?account=' + SMS_ACCOUNT.account + '&password=' + SMS_ACCOUNT.password,
-            method: 'GET'
-        };
-        var resStr = "";
-        var myReq = http.request(options, function (result) {
-            result.setEncoding('utf8');
-            result.on('data', function (chunk) {
-                resStr += chunk;
-            }).on("end", function () {
-                res.send({
-                    status: 'ok',
-                    msg: "剩余" + resStr.substring(resStr.indexOf("<remainFee>") + 11, resStr.indexOf("</remainFee>")) + "条"
+        return new Promise(function (resove, reject) {
+            var options = {
+                hostname: 'www.jianzhou.sh.cn',
+                port: 80,
+                path: '/JianzhouSMSWSServer/http/getUserInfo?account=' + SMS_ACCOUNT.account + '&password=' + SMS_ACCOUNT.password,
+                method: 'GET'
+            };
+            var resStr = "";
+            var myReq = http.request(options, function (result) {
+                result.setEncoding('utf8');
+                result.on('data', function (chunk) {
+                    resStr += chunk;
+                }).on("end", function () {
+                    resove({
+                        status: 'ok',
+                        msg: "剩余" + resStr.substring(resStr.indexOf("<remainFee>") + 11, resStr.indexOf("</remainFee>")) + "条"
+                    });
                 });
             });
+            myReq.on('error', function (e) {
+                reject({ status: 'err' + e });
+            });
+            myReq.write("");
+            myReq.end();
         });
-        myReq.on('error', function (e) {
-            res.send({ status: 'err' + e });
-        });
-        myReq.write("");
-        myReq.end();
-    };
-    Routes.sms = function (req, res) {
-        res.render('sms', { code: "" });
     };
     __decorate([
         route_1.route({
             path: "/sendmsg",
-            method: "get"
         })
     ], Routes, "sendmsg", null);
     __decorate([
         route_1.route({
             path: "/balance",
-            method: "get"
+            json: true
         })
     ], Routes, "balance", null);
-    __decorate([
-        route_1.route({
-            path: "/sms",
-            method: "get"
-        })
-    ], Routes, "sms", null);
     return Routes;
 }());
-exports.Routes = Routes;
+exports.default = Routes;
 //# sourceMappingURL=message.js.map
