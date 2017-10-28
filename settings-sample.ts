@@ -38,3 +38,9 @@ export var qiniuConfig = {
     accessKey: '6CG6fskhgir---',
     secretKey: 'NxeiNiysdog---'
 }
+
+//微信APPSECRET
+export var weixin = {
+    appId: "wxcd",
+    secret: "7c9d",
+}

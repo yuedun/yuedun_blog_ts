@@ -30,7 +30,9 @@ var server = http.createServer(app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
-
+process.on('uncaughtException', function (err) {
+  console.log("uncaughtException", err)
+})
 /**
  * Normalize a port into a number, string, or false.
  */
