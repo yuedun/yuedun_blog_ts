@@ -12,6 +12,9 @@ var server = http.createServer(app_1.app);
 server.listen(port);
 server.on('error', onError);
 server.on('listening', onListening);
+process.on('uncaughtException', function (err) {
+    console.log("uncaughtException", err);
+});
 function normalizePort(val) {
     var port = parseInt(val, 10);
     if (isNaN(port)) {
