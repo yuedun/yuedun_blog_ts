@@ -42,7 +42,6 @@
             <table class="tablesorter" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>id</th>
                         <th>标题</th>
                         <th>访问数</th>
                     </tr>
@@ -50,8 +49,7 @@
                 <tbody>
                     <% recent.forEach(function(blog){%>
                     <tr>
-                        <td><%= blog._id.blogId%></td>
-                        <td><%= blog._id.title%></td>
+                        <td><a href="/admin/blogDetail/<%= blog._id.blogId%>"><%= blog._id.title%></a></td>
                         <td><%= blog.pv%></td>
                     </tr>
                     <% })%>
