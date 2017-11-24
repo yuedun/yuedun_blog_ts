@@ -222,7 +222,7 @@ export default class Routes {
     })
     static updateArticle(req: Request, res: Response): Promise.Thenable<any> {
         var args = req.body;
-        let md = args.ismd? 1: 0;
+        let md = args.ismd ? 1 : 0;
         return Blog.findByIdAndUpdate(req.params.id, {
             $set: {
                 title: args.title,
@@ -557,6 +557,22 @@ export default class Routes {
                 return { success: 1 }
             })
     }
+
+    //临时使用
+    @route({ json: true })
+    static updateTime(req: Request, res: Response): Promise.Thenable<any> {
+        return Blog.find().then(blogs => {
+            return Promise.each(blogs, (item, index) => {
+                // item.createdAt = moment(item.createdAt).toDate()
+                let time = new Date(item.createdAt)
+                item.set("createdAt", time)
+                console.log(">>>>>>>>>", time);
+                item.set("updatedAt", time)
+                return item.save()
+            })
+        })
+    };
+    
 }
 
 

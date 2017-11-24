@@ -187,18 +187,6 @@ var Routes = (function () {
         });
     };
     ;
-    Routes.updateTime = function (req, res) {
-        return blog_model_1.default.find().then(function (blogs) {
-            return Promise.each(blogs, function (item, index) {
-                var time = new Date(item.createdAt);
-                item.set("createdAt", time);
-                console.log(">>>>>>>>>", time);
-                item.set("updatedAt", time);
-                return item.save();
-            });
-        });
-    };
-    ;
     __decorate([
         route_1.route({
             path: "/"
@@ -227,9 +215,6 @@ var Routes = (function () {
     __decorate([
         route_1.route({})
     ], Routes, "quicknote", null);
-    __decorate([
-        route_1.route({ json: true })
-    ], Routes, "updateTime", null);
     return Routes;
 }());
 exports.default = Routes;
