@@ -430,11 +430,11 @@ export default class Routes {
     @route({
         path: ":userId"
     })
-    static delWeatherUser(req: Request, res: Response): void {
+    static delWeatherUser(req: Request, res: Response): Promise.Thenable<void> {
         return Promise.resolve(WeatherUser.remove({ _id: req.params.userId }))
             .then(d => {
                 res.redirect('/admin/weatherUserList');
-            }).value()
+            })
     }
     /**
      * 新增速记
@@ -572,7 +572,7 @@ export default class Routes {
             })
         })
     };
-    
+
 }
 
 

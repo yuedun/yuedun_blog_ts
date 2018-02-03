@@ -8,7 +8,7 @@ var settings = require("../settings");
 var sms = require("./sms");
 var weather_user_model_1 = require("../models/weather-user-model");
 var WeatherCron = function () {
-    this.h_rule = 7;
+    this.h_rule = 8;
     this.m_rule = 35;
     this.cron = function () {
         console.log("天气定时任务启动");

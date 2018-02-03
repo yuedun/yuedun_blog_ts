@@ -309,7 +309,7 @@ var Routes = (function () {
         return Promise.resolve(weather_user_model_1.default.remove({ _id: req.params.userId }))
             .then(function (d) {
             res.redirect('/admin/weatherUserList');
-        }).value();
+        });
     };
     Routes.quicknote = function (req, res) {
         var quicknote = new quick_note_model_1.default({
