@@ -6,6 +6,7 @@ import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
 import { default as Resume, IResume as ResumeInstance } from '../models/about-model';
 import { default as QuickNote } from '../models/quick-note-model';
 import { default as ViewerLogModel, IViewerLog as ViewerLogInstance } from '../models/viewer-log-model';
+import { default as FriendLinkModel, IFriendLink as FriendLinkInstance } from '../models/friend-link-model';
 import * as Markdown from 'markdown-it';
 import * as Debug from 'debug';
 var debug = Debug('yuedun:article');
@@ -43,8 +44,11 @@ export default class Routes {
             latestTop,
             //浏览量排行
             visitedTop,
-            Blog.count(condition)
-        ]).then(([docs, result2, result3, result4]: [Array<BlogInstance>, Array<BlogInstance>, Array<BlogInstance>, number]) => {
+            Blog.count(condition),
+            friendLink
+        ]).then(([docs, result2, result3, result4, result5]: 
+            [Array<BlogInstance>, Array<BlogInstance>, Array<BlogInstance>, number, Array<FriendLinkInstance>]) => {
+                debug(result5)
             docs.forEach(function (item, index) {
                 if (item.ismd) {
                     item.content = md.render(item.content).replace(/<\/?.+?>/g, "").substring(0, 300);
@@ -60,7 +64,8 @@ export default class Routes {
                 totalIndex: result4,
                 pageSize: pageSize,
                 pageCount: docs.length,
-                category: category
+                category: category,
+                friendLinks: result5
             };
         })
     };
@@ -205,3 +210,5 @@ var visitedTop = ViewerLogModel.aggregate(
 /**
  * Blog.find(条件, 字段, 排序、limit)
  */
+//获取友链
+var friendLink = FriendLinkModel.find({state: 1}).exec()

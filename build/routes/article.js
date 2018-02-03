@@ -12,6 +12,7 @@ var blog_model_1 = require("../models/blog-model");
 var about_model_1 = require("../models/about-model");
 var quick_note_model_1 = require("../models/quick-note-model");
 var viewer_log_model_1 = require("../models/viewer-log-model");
+var friend_link_model_1 = require("../models/friend-link-model");
 var Markdown = require("markdown-it");
 var Debug = require("debug");
 var debug = Debug('yuedun:article');
@@ -44,9 +45,11 @@ var Routes = (function () {
             blog_model_1.default.find(condition, null, { sort: { '_id': -1 }, skip: pageIndex * pageSize, limit: pageSize }),
             latestTop,
             visitedTop,
-            blog_model_1.default.count(condition)
+            blog_model_1.default.count(condition),
+            friendLink
         ]).then(function (_a) {
-            var docs = _a[0], result2 = _a[1], result3 = _a[2], result4 = _a[3];
+            var docs = _a[0], result2 = _a[1], result3 = _a[2], result4 = _a[3], result5 = _a[4];
+            debug(result5);
             docs.forEach(function (item, index) {
                 if (item.ismd) {
                     item.content = md.render(item.content).replace(/<\/?.+?>/g, "").substring(0, 300);
@@ -63,7 +66,8 @@ var Routes = (function () {
                 totalIndex: result4,
                 pageSize: pageSize,
                 pageCount: docs.length,
-                category: category
+                category: category,
+                friendLinks: result5
             };
         });
     };
@@ -221,4 +225,5 @@ exports.default = Routes;
 var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
 var latestTop = blog_model_1.default.find({ 'status': "1", createdAt: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }).exec();
 var visitedTop = viewer_log_model_1.default.aggregate({ $match: { createdAt: { $gt: twoMonth } } }, { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } }, { $sort: { createAt: -1 } }).sort({ pv: -1 }).limit(5);
+var friendLink = friend_link_model_1.default.find({ state: 1 }).exec();
 //# sourceMappingURL=article.js.map

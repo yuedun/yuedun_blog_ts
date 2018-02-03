@@ -20,6 +20,7 @@ var category_model_1 = require("../models/category-model");
 var weather_user_model_1 = require("../models/weather-user-model");
 var about_model_1 = require("../models/about-model");
 var viewer_log_model_1 = require("../models/viewer-log-model");
+var friend_link_model_1 = require("../models/friend-link-model");
 var qiniu = require("../utils/qiniu");
 var md = Markdown();
 var area = require('../area');
@@ -391,6 +392,27 @@ var Routes = (function () {
             return { success: 1 };
         });
     };
+    Routes.friendLinkList = function (req, res) {
+        return friend_link_model_1.default.find().exec()
+            .then(function (data) {
+            return { success: 0, friendLinks: data };
+        });
+    };
+    Routes.addFriendLink = function (req, res) {
+        return friend_link_model_1.default.create({
+            url: req.body.url,
+            name: req.body.name
+        }).then(function (data) {
+            res.redirect('/admin/friendLinkList');
+        });
+    };
+    Routes.delFriendLink = function (req, res) {
+        friend_link_model_1.default.remove({
+            _id: req.params.id
+        }).then(function (data) {
+            res.redirect('/admin/friendLinkList');
+        });
+    };
     Routes.updateTime = function (req, res) {
         return blog_model_1.default.find().then(function (blogs) {
             return Promise.each(blogs, function (item, index) {
@@ -545,6 +567,21 @@ var Routes = (function () {
             json: true
         })
     ], Routes, "updateAboutConfig", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "friendLinkList", null);
+    __decorate([
+        route_1.route({
+            method: "post",
+            json: true
+        })
+    ], Routes, "addFriendLink", null);
+    __decorate([
+        route_1.route({
+            method: "get",
+            path: ":id"
+        })
+    ], Routes, "delFriendLink", null);
     __decorate([
         route_1.route({ json: true })
     ], Routes, "updateTime", null);

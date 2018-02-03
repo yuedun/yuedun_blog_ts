@@ -13,6 +13,7 @@ import { default as Category, ICategory as CategoryInstance } from '../models/ca
 import { default as WeatherUser } from '../models/weather-user-model';
 import { default as Resume, IResume as ResumeInstance } from '../models/about-model';
 import { default as ViewerLogModel, IViewerLog as ViewerLogInstance } from '../models/viewer-log-model';
+import { default as FriendLinkModel, IFriendLink as FriendLinkInstance } from '../models/friend-link-model';
 import * as qiniu from '../utils/qiniu';
 var md = Markdown();
 var area = require('../area');
@@ -556,6 +557,45 @@ export default class Routes {
             .then(() => {
                 return { success: 1 }
             })
+    }
+    /**
+     * 友链
+     */
+    @route({})
+    static friendLinkList(req: Request, res: Response): Promise.Thenable<any> {
+        return FriendLinkModel.find().exec()
+            .then(data => {
+                return { success: 0, friendLinks: data }
+            })
+    }
+    /**
+     * 添加友链
+     */
+    @route({
+        method: "post",
+        json: true
+    })
+    static addFriendLink(req: Request, res: Response): Promise.Thenable<any> {
+        return FriendLinkModel.create({
+            url: req.body.url,
+            name: req.body.name
+        }).then(data => {
+            res.redirect('/admin/friendLinkList');
+        })
+    }
+    /**
+     * 删除友链
+     */
+    @route({
+        method: "get",
+        path: ":id"
+    })
+    static delFriendLink(req: Request, res: Response): void {
+        FriendLinkModel.remove({
+            _id: req.params.id
+        }).then(data => {
+            res.redirect('/admin/friendLinkList');
+        })
     }
 
     //临时使用

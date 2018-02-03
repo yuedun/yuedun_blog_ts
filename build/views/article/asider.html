@@ -25,7 +25,9 @@
     <div class="aside-item">
         <h3>友链</h3>
         <ul>
-            <li><a href="https://51nazi.com/" target="_blank">火蜥蜴的blog</a></li>
+            <% friendLinks.forEach(function(blog){%>
+            <li><a href="<%=blog.url %>" target="_blank"><%= blog.name%></a></li>
+            <%})%>
         </ul>
     </div>
 </aside>

@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="renderer" content="webkit">
+    <title>新增用户</title>
+    <link rel="stylesheet" href="/stylesheets/layout.css" type="text/css" media="screen" />
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            $(".del").click(function () {
+                $.post('/admin/delFriendLink',{
+                    id: $(this).attr("id")
+                }, function (data) {
+                    alert(JSON.stringify(data));
+                })
+            })
+        })
+    </script>
+</head>
+
+<body>
+
+    <% include header.html %>
+    <!-- end of header bar -->
+    <!--导入菜单-->
+    <% include menu.html %>
+    <section id="main" class="column">
+        <% if(success==1){%>
+        <h4 class="alert_success">添加成功！</h4>
+        <% }%>
+        <article class="module width_full">
+            <header>
+                <h3>速记</h3>
+            </header>
+            <article class="module width_full">
+                <form action="/admin/addFriendLink" method="post">
+                    <div class="module_content">
+                        <fieldset>
+                            <div class="feildgroup">
+                                <label>网站名称</label>
+                                <input type="text" id="name" name="name" />
+                            </div>
+                            <div class="feildgroup">
+                                <label>地址</label>
+                                <input type="text" id="url" name="url">
+                            </div>
+                        </fieldset>
+                    </div>
+                    <footer>
+                        <div class="submit_link">
+                            <input type="submit" value="保存" class="alt_btn">
+                        </div>
+                    </footer>
+                </form>
+            </article>
+            <div class="tab_container">
+                <div class="module_content">
+                    <% friendLinks.forEach(function(note){%>
+                    <div class="message">
+                        <p>
+                            <%- note.name%><%- note.url%>
+                        </p>
+                        <p class="breadcrumb">
+                            <span>时间：<%= note.createdAt%></span>
+                            <span><a href="/admin/delFriendLink/<%=note.id%>">删除</a></span>
+                        </p>
+                    </div>
+                    <% })%>
+                </div>
+            </div>
+        </article>
+        <!-- end of post new article -->
+        <div class="spacer"></div>
+    </section>
+
+</body>
+
+</html>
