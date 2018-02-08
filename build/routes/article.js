@@ -87,9 +87,10 @@ var Routes = (function () {
         return Promise.all([
             latestTop,
             visitedTop,
-            blogPromise
+            blogPromise,
+            friendLink
         ]).then(function (_a) {
-            var result1 = _a[0], result2 = _a[1], doc = _a[2];
+            var result1 = _a[0], result2 = _a[1], doc = _a[2], result3 = _a[3];
             if (doc.status === 0) {
                 return new Error("找不到文章");
             }
@@ -100,7 +101,8 @@ var Routes = (function () {
             return {
                 newList: result1,
                 topList: result2,
-                blog: doc
+                blog: doc,
+                friendLinks: result3
             };
         });
     };
@@ -109,13 +111,15 @@ var Routes = (function () {
         return Promise.all([
             blog_model_1.default.find({ status: 1 }, 'title createdAt pv', { sort: { createdAt: -1 } }),
             latestTop,
-            visitedTop
+            visitedTop,
+            friendLink
         ]).then(function (_a) {
-            var result1 = _a[0], result2 = _a[1], result3 = _a[2];
+            var result1 = _a[0], result2 = _a[1], result3 = _a[2], result4 = _a[3];
             return {
                 catalog: result1,
                 newList: result2,
-                topList: result3
+                topList: result3,
+                friendLinks: result4
             };
         });
     };
@@ -123,12 +127,14 @@ var Routes = (function () {
     Routes.weibo = function (req, res) {
         return Promise.all([
             latestTop,
-            visitedTop
+            visitedTop,
+            friendLink
         ]).then(function (_a) {
-            var result1 = _a[0], result2 = _a[1];
+            var result1 = _a[0], result2 = _a[1], result3 = _a[2];
             return {
                 newList: result1,
-                topList: result2
+                topList: result2,
+                friendLinks: result3
             };
         });
     };
@@ -137,9 +143,10 @@ var Routes = (function () {
         return Promise.all([
             latestTop,
             visitedTop,
-            about_model_1.default.findOne()
+            about_model_1.default.findOne(),
+            friendLink
         ]).then(function (_a) {
-            var result1 = _a[0], result2 = _a[1], result3 = _a[2];
+            var result1 = _a[0], result2 = _a[1], result3 = _a[2], result4 = _a[3];
             var resume = new about_model_1.default({
                 nickname: "",
                 job: "",
@@ -156,6 +163,7 @@ var Routes = (function () {
                 config: result3,
                 newList: result1,
                 topList: result2,
+                friendLinks: result4
             };
         });
     };
@@ -188,13 +196,15 @@ var Routes = (function () {
         return Promise.all([
             latestTop,
             visitedTop,
-            quick_note_model_1.default.find(null, null, { sort: { '_id': -1 } })
+            quick_note_model_1.default.find(null, null, { sort: { '_id': -1 } }),
+            friendLink
         ]).then(function (_a) {
-            var result1 = _a[0], result2 = _a[1], result3 = _a[2];
+            var result1 = _a[0], result2 = _a[1], result3 = _a[2], result4 = _a[3];
             return {
                 newList: result1,
                 topList: result2,
-                quickNoteList: result3
+                quickNoteList: result3,
+                friendLinks: result4
             };
         });
     };

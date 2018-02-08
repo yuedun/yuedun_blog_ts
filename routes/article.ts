@@ -90,8 +90,9 @@ export default class Routes {
         return Promise.all([
             latestTop,
             visitedTop,
-            blogPromise
-        ]).then(([result1, result2, doc]) => {
+            blogPromise,
+            friendLink
+        ]).then(([result1, result2, doc, result3]) => {
             if (doc.status === 0) {
                 return new Error("找不到文章");
             }
@@ -102,7 +103,8 @@ export default class Routes {
             return {
                 newList: result1,
                 topList: result2,
-                blog: doc
+                blog: doc,
+                friendLinks: result3
             };
         });
     };
@@ -112,12 +114,14 @@ export default class Routes {
         return Promise.all([
             Blog.find({ status: 1 }, 'title createdAt pv', { sort: { createdAt: -1 } }),
             latestTop,
-            visitedTop
-        ]).then(([result1, result2, result3]) => {
+            visitedTop,
+            friendLink
+        ]).then(([result1, result2, result3, result4]) => {
             return {
                 catalog: result1,
                 newList: result2,
-                topList: result3
+                topList: result3,
+                friendLinks: result4
             };
         })
     };
@@ -126,11 +130,13 @@ export default class Routes {
     static weibo(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
             latestTop,
-            visitedTop
-        ]).then(([result1, result2]) => {
+            visitedTop,
+            friendLink
+        ]).then(([result1, result2, result3]) => {
             return {
                 newList: result1,
-                topList: result2
+                topList: result2,
+                friendLinks: result3
             };
         })
     };
@@ -140,8 +146,9 @@ export default class Routes {
         return Promise.all([
             latestTop,
             visitedTop,
-            About.findOne()
-        ]).then(([result1, result2, result3]) => {
+            About.findOne(),
+            friendLink
+        ]).then(([result1, result2, result3, result4]) => {
             var resume = new About({
                 nickname: "",
                 job: "",
@@ -158,6 +165,7 @@ export default class Routes {
                 config: result3,
                 newList: result1,
                 topList: result2,
+                friendLinks: result4
             };
         })
     };
@@ -194,12 +202,14 @@ export default class Routes {
         return Promise.all([
             latestTop,
             visitedTop,
-            QuickNote.find(null, null, { sort: { '_id': -1 } })
-        ]).then(([result1, result2, result3]) => {
+            QuickNote.find(null, null, { sort: { '_id': -1 } }),
+            friendLink
+        ]).then(([result1, result2, result3, result4]) => {
             return {
                 newList: result1,
                 topList: result2,
-                quickNoteList: result3
+                quickNoteList: result3,
+                friendLinks: result4
             };
         })
     };
