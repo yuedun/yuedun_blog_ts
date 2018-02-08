@@ -612,7 +612,6 @@ export default class Routes {
             })
         })
     };
-
 }
 
 
