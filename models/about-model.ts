@@ -1,6 +1,6 @@
 import { Document, model, Model, Schema } from 'mongoose';
 
-var ResumeSchema: Schema = new Schema({
+var IAboutSchema: Schema = new Schema({
   nickname: String,
   job: String,
   addr: String,
@@ -10,7 +10,7 @@ var ResumeSchema: Schema = new Schema({
   other: String,
 });
 
-export interface IResume extends Document {
+export interface IAbout extends Document {
   nickname: string,
   job: string,
   addr: string,
@@ -19,6 +19,6 @@ export interface IResume extends Document {
   resume: string,
   other: string
 }
-var ResumeModel: Model<IResume> = model<IResume>('Resume', ResumeSchema);
+var IAboutModel: Model<IAbout> = model<IAbout>('Resume', IAboutSchema);
 
-export default ResumeModel;
+export default IAboutModel;

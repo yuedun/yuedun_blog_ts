@@ -11,9 +11,10 @@ import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
 import { default as QuickNote } from '../models/quick-note-model';
 import { default as Category, ICategory as CategoryInstance } from '../models/category-model';
 import { default as WeatherUser } from '../models/weather-user-model';
-import { default as Resume, IResume as ResumeInstance } from '../models/about-model';
+import { default as About, IAbout as AboutInstance } from '../models/about-model';
 import { default as ViewerLogModel, IViewerLog as ViewerLogInstance } from '../models/viewer-log-model';
 import { default as FriendLinkModel, IFriendLink as FriendLinkInstance } from '../models/friend-link-model';
+import { default as ResumeModel, IResume as ResumeInstance } from '../models/resume-model';
 import * as qiniu from '../utils/qiniu';
 var md = Markdown();
 var area = require('../area');
@@ -522,10 +523,10 @@ export default class Routes {
     @route({})
     static aboutConfig(req: Request, res: Response): Promise.Thenable<any> {
         let arr: { key: string; value: Object }[] = [];
-        return Promise.resolve(Resume.findOne())
+        return Promise.resolve(About.findOne())
             .then(resume => {
                 if (!resume) {
-                    var r = new Resume({
+                    var r = new About({
                         nickname: "待修改",
                         job: "待修改",
                         addr: "待修改",
@@ -553,11 +554,40 @@ export default class Routes {
         var args = req.body;
         debug(args);
 
-        return Resume.findOneAndUpdate(null, args)
+        return About.findOneAndUpdate(null, args)
             .then(() => {
                 return { success: 1 }
             })
-    }
+    };
+
+    //简历
+    @route({})
+    static resume(req: Request, res: Response): Promise.Thenable<any> {
+        return ResumeModel.findOne()
+            .then(resume => {
+                if (resume) {
+                    return resume;
+                } else {
+                    return ResumeModel.create({
+                        state: 0
+                    });
+                }
+            }).then(resume => {
+                return { resume }
+            })
+    };
+    //简历
+    @route({
+        method: "post",
+        json: true
+    })
+    static resumeSwitch(req: Request, res: Response): Promise.Thenable<any> {
+        var state = req.body.state;
+        var id = req.body.id;
+        return ResumeModel.findByIdAndUpdate(id, {
+            $set: { state: state }
+        })
+    };
     /**
      * 友链
      */

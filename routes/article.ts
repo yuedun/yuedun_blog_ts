@@ -3,10 +3,11 @@ import { Request, Response } from 'express';
 import * as Promise from 'bluebird';
 import * as moment from 'moment';
 import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
-import { default as Resume, IResume as ResumeInstance } from '../models/about-model';
+import { default as About, IAbout as AboutInstance } from '../models/about-model';
 import { default as QuickNote } from '../models/quick-note-model';
 import { default as ViewerLogModel, IViewerLog as ViewerLogInstance } from '../models/viewer-log-model';
 import { default as FriendLinkModel, IFriendLink as FriendLinkInstance } from '../models/friend-link-model';
+import { default as ResumeModel, IResume as ResumeInstance } from '../models/resume-model';
 import * as Markdown from 'markdown-it';
 import * as Debug from 'debug';
 var debug = Debug('yuedun:article');
@@ -46,9 +47,9 @@ export default class Routes {
             visitedTop,
             Blog.count(condition),
             friendLink
-        ]).then(([docs, result2, result3, result4, result5]: 
+        ]).then(([docs, result2, result3, result4, result5]:
             [Array<BlogInstance>, Array<BlogInstance>, Array<BlogInstance>, number, Array<FriendLinkInstance>]) => {
-                debug(result5)
+            debug(result5)
             docs.forEach(function (item, index) {
                 if (item.ismd) {
                     item.content = md.render(item.content).replace(/<\/?.+?>/g, "").substring(0, 300);
@@ -139,9 +140,9 @@ export default class Routes {
         return Promise.all([
             latestTop,
             visitedTop,
-            Resume.findOne()
+            About.findOne()
         ]).then(([result1, result2, result3]) => {
-            var resume = new Resume({
+            var resume = new About({
                 nickname: "",
                 job: "",
                 addr: "",
@@ -177,8 +178,14 @@ export default class Routes {
     //简历
     @route({})
     static resume(req: Request, res: Response): Promise.Thenable<any> {
-        debug("*****resume:" + moment().format("YYYY-MM-DD HH:ss:mm"));
-        return Promise.resolve({});
+        return ResumeModel.findOne().exec()
+            .then(resume => {
+                if (resume && resume.state === 1) {
+                    return Promise.resolve({});
+                } else {
+                    return Promise.reject(new Error("暂停访问！"))
+                }
+            })
     };
 
     //速记本
@@ -198,14 +205,14 @@ export default class Routes {
     };
 
     //临时使用
-    @route({json:true})
+    @route({ json: true })
     static updateTime(req: Request, res: Response): Promise.Thenable<any> {
-        return Blog.find().then(blogs=>{
-            return Promise.each(blogs, (item, index)=>{
+        return Blog.find().then(blogs => {
+            return Promise.each(blogs, (item, index) => {
                 // item.createdAt = moment(item.createdAt).toDate()
                 let time = new Date(item.createdAt)
                 item.set("createdAt", time)
-                console.log(">>>>>>>>>",time);
+                console.log(">>>>>>>>>", time);
                 item.set("updatedAt", time)
                 return item.save()
             })
@@ -226,4 +233,4 @@ var visitedTop = ViewerLogModel.aggregate(
  * Blog.find(条件, 字段, 排序、limit)
  */
 //获取友链
-var friendLink = FriendLinkModel.find({state: 1}).exec()
+var friendLink = FriendLinkModel.find({ state: 1 }).exec()
