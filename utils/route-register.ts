@@ -5,6 +5,9 @@ import { Express, Router, Request, Response } from 'express';
 import * as Fs from 'fs';
 import * as Path from 'path';
 import * as IO from './Io';
+import Message from "../utils/message";
+import { errorAlert } from '../settings';
+var debug = require('debug')('yuedun:route-register');
 
 const router = express.Router();
 const cwd = process.cwd();
@@ -120,7 +123,7 @@ export default class RouteRegister {
                     });
                     return;
                 }
-                
+
                 //可以添加类似于全局变量的返回数据
                 if (!data.title) {
                     data.title = "";
@@ -137,7 +140,10 @@ export default class RouteRegister {
                     res.render(html, data);
                 }
             }).catch((err: Error) => {
-                console.error(err);
+                var msg = new Message(errorAlert, `错误提醒`, null, err.message)
+                msg.send().then(data => {
+                    debug(">>>>>", data)
+                })
                 res.render('error', {
                     message: err.message,
                     error: {}

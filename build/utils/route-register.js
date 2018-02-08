@@ -4,6 +4,9 @@ var express = require("express");
 var Promise = require("bluebird");
 var Path = require("path");
 var IO = require("./Io");
+var message_1 = require("../utils/message");
+var settings_1 = require("../settings");
+var debug = require('debug')('yuedun:route-register');
 var router = express.Router();
 var cwd = process.cwd();
 var RouteRegister = (function () {
@@ -105,7 +108,10 @@ var RouteRegister = (function () {
                     res.render(html, data);
                 }
             }).catch(function (err) {
-                console.error(err);
+                var msg = new message_1.default(settings_1.errorAlert, "\u9519\u8BEF\u63D0\u9192", null, err.message);
+                msg.send().then(function (data) {
+                    debug(">>>>>", data);
+                });
                 res.render('error', {
                     message: err.message,
                     error: {}

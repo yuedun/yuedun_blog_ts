@@ -44,3 +44,12 @@ export var weixin = {
     appId: "wxcd",
     secret: "7c9d",
 }
+
+//发送邮件服务
+export var mail = {
+    from: "xx@163.com",
+    pass: "xx"
+}
+
+//错误发送地址
+export var errorAlert = "xx@163.com";

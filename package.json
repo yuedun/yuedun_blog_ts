@@ -45,6 +45,7 @@
     "@types/moment": "^2.13.0",
     "@types/mongoose": "^4.7.24",
     "@types/node": "^8.0.46",
+    "@types/nodemailer": "^4.3.2",
     "@types/request": "^2.0.6",
     "@types/typescript": "^2.0.0",
     "gulp": "^3.9.1",
