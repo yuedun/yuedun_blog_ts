@@ -13,6 +13,7 @@ var about_model_1 = require("../models/about-model");
 var quick_note_model_1 = require("../models/quick-note-model");
 var viewer_log_model_1 = require("../models/viewer-log-model");
 var friend_link_model_1 = require("../models/friend-link-model");
+var resume_model_1 = require("../models/resume-model");
 var Markdown = require("markdown-it");
 var Debug = require("debug");
 var debug = Debug('yuedun:article');
@@ -172,8 +173,15 @@ var Routes = (function () {
     };
     ;
     Routes.resume = function (req, res) {
-        debug("*****resume:" + moment().format("YYYY-MM-DD HH:ss:mm"));
-        return Promise.resolve({});
+        return resume_model_1.default.findOne().exec()
+            .then(function (resume) {
+            if (resume && resume.state === 1) {
+                return Promise.resolve({});
+            }
+            else {
+                return Promise.reject(new Error("暂停访问！"));
+            }
+        });
     };
     ;
     Routes.quicknote = function (req, res) {

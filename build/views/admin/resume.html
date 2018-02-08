@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="renderer" content="webkit">
+  <title>简历配置</title>
+  <link rel="stylesheet" href="/stylesheets/layout.css" type="text/css" media="screen" />
+  <link href="https://cdn.bootcss.com/bootstrap-switch/3.3.4/css/bootstrap2/bootstrap-switch.min.css" rel="stylesheet">
+  <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js" type="text/javascript"></script>
+  <script type="text/javascript">
+    $(document).ready(function () {
+      $("input[name=state]").on('click', function () {
+        $.post('/admin/resumeSwitch', {
+          id: $("#resumeId").val(),
+          state: $(this).val()
+        }, function (data) {
+          $('.alert_info').css('display', 'block');
+          alert("ok")
+        })
+      })
+    });
+  </script>
+</head>
+
+<body>
+  <% include header.html %>
+    <!-- end of header bar -->
+    <!--导入菜单-->
+    <% include menu.html %>
+      <section id="main" class="column">
+        <h4 class="alert_info">修改成功</h4>
+        <article class="module width_3_quarter">
+          <header>
+            <h3 class="tabs_involved">简历配置</h3>
+          </header>
+          <div class="tab_container">
+            <div id="tab1" class="tab_content">
+              <input type="hidden" id="resumeId" value="<%=resume._id%>">
+              <label class="radio-inline">
+                <input type="radio" name="state" id="state1" value="1" <%if(resume.state==1){%>checked="checked"<%}%>> 访问
+              </label>
+              <label class="radio-inline">
+                <input type="radio" name="state" id="state2" value="0" <%if(resume.state==0){%>checked="checked"<%}%>> 拒绝
+              </label>
+            </div>
+          </div>
+          <!-- end of .tab_container -->
+        </article>
+        <!-- end of content manager article -->
+      </section>
+</body>
+
+</html>

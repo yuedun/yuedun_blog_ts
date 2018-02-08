@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose_1 = require("mongoose");
-var ResumeSchema = new mongoose_1.Schema({
+var IAboutSchema = new mongoose_1.Schema({
     nickname: String,
     job: String,
     addr: String,
@@ -10,6 +10,6 @@ var ResumeSchema = new mongoose_1.Schema({
     resume: String,
     other: String,
 });
-var ResumeModel = mongoose_1.model('Resume', ResumeSchema);
-exports.default = ResumeModel;
+var IAboutModel = mongoose_1.model('Resume', IAboutSchema);
+exports.default = IAboutModel;
 //# sourceMappingURL=about-model.js.map

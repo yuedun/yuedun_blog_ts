@@ -21,6 +21,7 @@ var weather_user_model_1 = require("../models/weather-user-model");
 var about_model_1 = require("../models/about-model");
 var viewer_log_model_1 = require("../models/viewer-log-model");
 var friend_link_model_1 = require("../models/friend-link-model");
+var resume_model_1 = require("../models/resume-model");
 var qiniu = require("../utils/qiniu");
 var md = Markdown();
 var area = require('../area');
@@ -392,6 +393,31 @@ var Routes = (function () {
             return { success: 1 };
         });
     };
+    ;
+    Routes.resume = function (req, res) {
+        return resume_model_1.default.findOne()
+            .then(function (resume) {
+            if (resume) {
+                return resume;
+            }
+            else {
+                return resume_model_1.default.create({
+                    state: 0
+                });
+            }
+        }).then(function (resume) {
+            return { resume: resume };
+        });
+    };
+    ;
+    Routes.resumeSwitch = function (req, res) {
+        var state = req.body.state;
+        var id = req.body.id;
+        return resume_model_1.default.findByIdAndUpdate(id, {
+            $set: { state: state }
+        });
+    };
+    ;
     Routes.friendLinkList = function (req, res) {
         return friend_link_model_1.default.find().exec()
             .then(function (data) {
@@ -567,6 +593,15 @@ var Routes = (function () {
             json: true
         })
     ], Routes, "updateAboutConfig", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "resume", null);
+    __decorate([
+        route_1.route({
+            method: "post",
+            json: true
+        })
+    ], Routes, "resumeSwitch", null);
     __decorate([
         route_1.route({})
     ], Routes, "friendLinkList", null);
