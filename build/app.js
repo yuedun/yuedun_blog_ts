@@ -18,6 +18,8 @@ var mongodb = settins.mongodb;
 var viewer_log_1 = require("./utils/viewer-log");
 var route_register_1 = require("./utils/route-register");
 var originRoutes = require('./routes/origin-routes');
+var message_1 = require("./utils/message");
+var debug = require('debug')('yuedun:app.ts');
 var app = express();
 exports.app = app;
 var store = new MongoStore({
@@ -73,6 +75,10 @@ if (app.get('env') === 'development') {
     });
 }
 app.use(function (err, req, res, next) {
+    var msg = new message_1.default(settins.errorAlert, "\u9519\u8BEF\u63D0\u9192", null, err.message);
+    msg.send().then(function (data) {
+        debug(">>>>>", data);
+    });
     res.status(err.status || 500);
     res.render('error', {
         message: err.message,

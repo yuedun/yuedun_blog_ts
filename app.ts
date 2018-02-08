@@ -19,6 +19,8 @@ var mongodb = settins.mongodb;
 import { default as pvLog } from './utils/viewer-log';//访问日志
 import RouteRegister from './utils/route-register';
 var originRoutes = require('./routes/origin-routes');
+import Message from "./utils/message";
+var debug = require('debug')('yuedun:app.ts');
 var app = express();
 var store = new MongoStore({
     // autoRemove: 'native',//自动清除过期session
@@ -96,6 +98,10 @@ if (app.get('env') === 'development') {
 // production error handler
 // no stacktraces leaked to user
 app.use(function (err: any, req: Request, res: Response, next: Function) {
+    var msg = new Message(settins.errorAlert, `错误提醒`, null, err.message);
+    msg.send().then(data => {
+        debug(">>>>>", data)
+    })
     res.status(err.status || 500);
     res.render('error', {
         message: err.message,
