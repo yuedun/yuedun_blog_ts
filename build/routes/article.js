@@ -15,6 +15,7 @@ var viewer_log_model_1 = require("../models/viewer-log-model");
 var friend_link_model_1 = require("../models/friend-link-model");
 var resume_model_1 = require("../models/resume-model");
 var Markdown = require("markdown-it");
+var message_1 = require("../utils/message");
 var Debug = require("debug");
 var debug = Debug('yuedun:article');
 var md = Markdown({
@@ -70,6 +71,9 @@ var Routes = (function () {
                 category: category,
                 friendLinks: result5
             };
+        }).catch(function (err) {
+            log(err);
+            return new Error("服务异常，已通知博主，感谢访问！");
         });
     };
     ;
@@ -104,12 +108,15 @@ var Routes = (function () {
                 blog: doc,
                 friendLinks: result3
             };
+        }).catch(function (err) {
+            log(err);
+            return new Error("服务异常，已通知博主，感谢访问！");
         });
     };
     ;
     Routes.catalog = function (req, res) {
         return Promise.all([
-            blog_model_1.default.find({ status: 1 }, 'title createdAt pv', { sort: { createdAt: -1 } }),
+            blog_model_1.default.find({ status: 1 }, 'title createdAt pv', { sort: { _id: -1 } }),
             latestTop,
             visitedTop,
             friendLink
@@ -121,6 +128,9 @@ var Routes = (function () {
                 topList: result3,
                 friendLinks: result4
             };
+        }).catch(function (err) {
+            log(err);
+            return new Error("服务异常，已通知博主，感谢访问！");
         });
     };
     ;
@@ -136,6 +146,9 @@ var Routes = (function () {
                 topList: result2,
                 friendLinks: result3
             };
+        }).catch(function (err) {
+            log(err);
+            return new Error("服务异常，已通知博主，感谢访问！");
         });
     };
     ;
@@ -165,6 +178,9 @@ var Routes = (function () {
                 topList: result2,
                 friendLinks: result4
             };
+        }).catch(function (err) {
+            log(err);
+            return new Error("服务异常，已通知博主，感谢访问！");
         });
     };
     ;
@@ -206,16 +222,18 @@ var Routes = (function () {
                 quickNoteList: result3,
                 friendLinks: result4
             };
+        }).catch(function (err) {
+            log(err);
+            return new Error("服务异常，已通知博主，感谢访问！");
         });
     };
     ;
     Routes.updateTime = function (req, res) {
-        return blog_model_1.default.find().then(function (blogs) {
+        return blog_model_1.default.find({ createdAt: { $type: 2 } }).then(function (blogs) {
             return Promise.each(blogs, function (item, index) {
                 var time = new Date(item.createdAt);
                 item.set("createdAt", time);
-                console.log(">>>>>>>>>", time);
-                item.set("updatedAt", time);
+                console.log(">>>>>>>>>", item.createdAt);
                 return item.save();
             });
         });
@@ -259,4 +277,10 @@ var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
 var latestTop = blog_model_1.default.find({ 'status': "1", createdAt: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }).exec();
 var visitedTop = viewer_log_model_1.default.aggregate({ $match: { createdAt: { $gt: twoMonth } } }, { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } }, { $sort: { createAt: -1 } }).sort({ pv: -1 }).limit(5);
 var friendLink = friend_link_model_1.default.find({ state: 1 }).exec();
+function log(err) {
+    var msg = new message_1.default(settings.errorAlert, "\u9519\u8BEF\u63D0\u9192", null, err.message);
+    msg.send().then(function (data) {
+        debug(">>>>>", data);
+    });
+}
 //# sourceMappingURL=article.js.map

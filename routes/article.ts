@@ -9,6 +9,7 @@ import { default as ViewerLogModel, IViewerLog as ViewerLogInstance } from '../m
 import { default as FriendLinkModel, IFriendLink as FriendLinkInstance } from '../models/friend-link-model';
 import { default as ResumeModel, IResume as ResumeInstance } from '../models/resume-model';
 import * as Markdown from 'markdown-it';
+import Message from "../utils/message";
 import * as Debug from 'debug';
 var debug = Debug('yuedun:article');
 var md = Markdown({
@@ -68,6 +69,9 @@ export default class Routes {
                 category: category,
                 friendLinks: result5
             };
+        }).catch(err => {
+            log(err);
+            return new Error("服务异常，已通知博主，感谢访问！")
         })
     };
 
@@ -106,13 +110,16 @@ export default class Routes {
                 blog: doc,
                 friendLinks: result3
             };
+        }).catch(err => {
+            log(err);
+            return new Error("服务异常，已通知博主，感谢访问！")
         });
     };
     /* 博客目录 */
     @route({})
     static catalog(req: Request, res: Response): Promise.Thenable<any> {
         return Promise.all([
-            Blog.find({ status: 1 }, 'title createdAt pv', { sort: { createdAt: -1 } }),
+            Blog.find({ status: 1 }, 'title createdAt pv', { sort: { _id: -1 } }),
             latestTop,
             visitedTop,
             friendLink
@@ -123,7 +130,10 @@ export default class Routes {
                 topList: result3,
                 friendLinks: result4
             };
-        })
+        }).catch(err => {
+            log(err);
+            return new Error("服务异常，已通知博主，感谢访问！")
+        });
     };
     /* 我的微博 */
     @route({})
@@ -138,7 +148,10 @@ export default class Routes {
                 topList: result2,
                 friendLinks: result3
             };
-        })
+        }).catch(err => {
+            log(err);
+            return new Error("服务异常，已通知博主，感谢访问！")
+        });
     };
     /* 关于我 */
     @route({})
@@ -167,7 +180,10 @@ export default class Routes {
                 topList: result2,
                 friendLinks: result4
             };
-        })
+        }).catch(err => {
+            log(err);
+            return new Error("服务异常，已通知博主，感谢访问！")
+        });
     };
 
     //婚纱
@@ -211,19 +227,23 @@ export default class Routes {
                 quickNoteList: result3,
                 friendLinks: result4
             };
-        })
+        }).catch(err => {
+            log(err);
+            return new Error("服务异常，已通知博主，感谢访问！")
+        });
     };
 
     //临时使用
     @route({ json: true })
     static updateTime(req: Request, res: Response): Promise.Thenable<any> {
-        return Blog.find().then(blogs => {
+        return Blog.find({ createdAt: { $type: 2 } }).then(blogs => {
             return Promise.each(blogs, (item, index) => {
                 // item.createdAt = moment(item.createdAt).toDate()
                 let time = new Date(item.createdAt)
                 item.set("createdAt", time)
-                console.log(">>>>>>>>>", time);
-                item.set("updatedAt", time)
+                // item.createdAt = time;
+                console.log(">>>>>>>>>", item.createdAt);
+                // item.set("updatedAt", time)
                 return item.save()
             })
         })
@@ -243,4 +263,11 @@ var visitedTop = ViewerLogModel.aggregate(
  * Blog.find(条件, 字段, 排序、limit)
  */
 //获取友链
-var friendLink = FriendLinkModel.find({ state: 1 }).exec()
+var friendLink = FriendLinkModel.find({ state: 1 }).exec();
+
+function log(err) {
+    var msg = new Message(settings.errorAlert, `错误提醒`, null, err.message);
+    msg.send().then(data => {
+        debug(">>>>>", data)
+    })
+}
