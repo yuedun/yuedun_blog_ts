@@ -140,7 +140,7 @@ export default class RouteRegister {
                     res.render(html, data);
                 }
             }).catch((err: Error) => {
-                var msg = new Message(errorAlert, `错误提醒`, null, err.message)
+                var msg = new Message(errorAlert, `错误提醒`, null, err.stack)
                 msg.send().then(data => {
                     debug(">>>>>", data)
                 })
