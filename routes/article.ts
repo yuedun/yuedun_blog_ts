@@ -41,7 +41,7 @@ export default class Routes {
             condition.category = category;
         }
         return Promise.all([
-            Blog.find(condition, null, { sort: { '_id': -1 }, skip: pageIndex * pageSize, limit: pageSize }),
+            Blog.find(condition, null, { sort: { _id: -1 }, skip: pageIndex * pageSize, limit: pageSize }),
             //最新列表
             latestTop,
             //浏览量排行
@@ -69,9 +69,6 @@ export default class Routes {
                 category: category,
                 friendLinks: result5
             };
-        }).catch(err => {
-            log(err);
-            return new Error("服务异常，已通知博主，感谢访问！")
         })
     };
 
@@ -97,7 +94,7 @@ export default class Routes {
             blogPromise,
             friendLink
         ]).then(([result1, result2, doc, result3]) => {
-            if (doc.status === 0) {
+            if ((doc && doc.status === 0)|| !doc) {
                 return new Error("找不到文章");
             }
             if (doc.ismd) {
@@ -110,10 +107,7 @@ export default class Routes {
                 blog: doc,
                 friendLinks: result3
             };
-        }).catch(err => {
-            log(err);
-            return new Error("服务异常，已通知博主，感谢访问！")
-        });
+        })
     };
     /* 博客目录 */
     @route({})
@@ -130,9 +124,6 @@ export default class Routes {
                 topList: result3,
                 friendLinks: result4
             };
-        }).catch(err => {
-            log(err);
-            return new Error("服务异常，已通知博主，感谢访问！")
         });
     };
     /* 我的微博 */
@@ -148,9 +139,6 @@ export default class Routes {
                 topList: result2,
                 friendLinks: result3
             };
-        }).catch(err => {
-            log(err);
-            return new Error("服务异常，已通知博主，感谢访问！")
         });
     };
     /* 关于我 */
@@ -180,10 +168,11 @@ export default class Routes {
                 topList: result2,
                 friendLinks: result4
             };
-        }).catch(err => {
-            log(err);
-            return new Error("服务异常，已通知博主，感谢访问！")
-        });
+        })
+        // .catch(err => {
+        //     log(err);
+        //     return new Error("服务异常，已通知博主，感谢访问！")
+        // });
     };
 
     //婚纱
@@ -227,9 +216,6 @@ export default class Routes {
                 quickNoteList: result3,
                 friendLinks: result4
             };
-        }).catch(err => {
-            log(err);
-            return new Error("服务异常，已通知博主，感谢访问！")
         });
     };
 
@@ -251,7 +237,7 @@ export default class Routes {
 }
 //最近新建
 var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
-var latestTop = Blog.find({ 'status': "1", createdAt: { $gt: twoMonth } }, null, { sort: { '_id': -1 }, limit: 5 }).exec();
+var latestTop = Blog.find({ status: 1, createdAt: { $gt: twoMonth } }, null, { sort: { _id: -1 }, limit: 5 }).exec();
 
 //近两月访问最多
 var visitedTop = ViewerLogModel.aggregate(

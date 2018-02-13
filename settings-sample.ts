@@ -51,5 +51,5 @@ export var mail = {
     pass: "xx"
 }
 
-//错误发送地址
+//错误发送至
 export var errorAlert = "xx@163.com";

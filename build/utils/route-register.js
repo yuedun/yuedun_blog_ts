@@ -108,7 +108,7 @@ var RouteRegister = (function () {
                     res.render(html, data);
                 }
             }).catch(function (err) {
-                var msg = new message_1.default(settings_1.errorAlert, "\u9519\u8BEF\u63D0\u9192", null, err.message);
+                var msg = new message_1.default(settings_1.errorAlert, "\u9519\u8BEF\u63D0\u9192", null, err.stack);
                 msg.send().then(function (data) {
                     debug(">>>>>", data);
                 });
