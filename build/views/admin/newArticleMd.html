@@ -12,119 +12,118 @@
 
 <body>
     <% include header.html %>
-        <!-- end of header bar -->
-        <!--导入菜单-->
-        <% include menu.html %>
-            <section id="main" class="column">
-                <h4 class="alert_info">新建成功。</h4>
-                <div class="clear"></div>
-                <article class="module width_full">
-                    <form class="article_form" action="" method="post" onsubmit="return false">
-                        <header>
-                            <h3>新建博客</h3>
-                        </header>
-                        <div class="module_content">
-                            <fieldset>
-                                <label>标题：</label>
-                                <input type="text" name="title" id="title_color" required>
-                            </fieldset>
-                            <fieldset>
-                                <div id="test-editormd">
-                                    <textarea style="display:none;" name="content"></textarea>
-                                </div>
-                            </fieldset>
-                            <fieldset>
-                                <!-- to make two field float next to one another, adjust values accordingly -->
-                                <label>Category</label>
-                                <input class="input-large" type="text" list="catelist" name="category">
-                                <datalist id="catelist">
-                                <% categories.forEach(function(cate){%>
-                                    <option>
-                                        <%= cate.cateName%>
-                                    </option>
-                                    <% });%>
-                                </datalist>
-                                <label>Tags</label>
-                                <input type="text" name="tags">
-                                <input type="hidden" name="ismd" value="1">
-                            </fieldset>
-                            <div class="clear"></div>
+    <!-- end of header bar -->
+    <!--导入菜单-->
+    <% include menu.html %>
+    <section id="main" class="column">
+        <h4 class="alert_info">新建成功。</h4>
+        <div class="clear"></div>
+        <article class="module width_full">
+            <form class="article_form" action="" method="post" onsubmit="return false">
+                <header>
+                    <h3>新建博客</h3>
+                </header>
+                <div class="module_content">
+                    <fieldset>
+                        <label>标题：</label>
+                        <input type="text" name="title" id="title_color" required>
+                    </fieldset>
+                    <fieldset>
+                        <div id="test-editormd">
+                            <textarea style="display:none;" name="content"></textarea>
                         </div>
-                        <footer>
-                            <div class="submit_link">
-                                <select name="status">
-                            <option value="1" selected>发布</option>
-                            <option value="0">草稿</option>
-                        </select>
-                                <input type="submit" value="Publish" class="alt_btn">
-                            </div>
-                        </footer>
-                        <input type="hidden" name="qntoken" value="<%=token%>">
-                    </form>
-                </article>
-                <!-- end of post new article -->
-                <div class="spacer"></div>
-            </section>
-            <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-            <script src="/vendors/editor.md-master/editormd.min.js"></script>
-            <script type="text/javascript" src="/vendors/uploader/webuploader.min.js"></script>
-            <script type="text/javascript" src="/javascripts/bootstrap.min.js"></script>
-            <script type="text/javascript">
-                var testEditor;
-                $(function () {
-                    mdtestEditor = editormd("test-editormd", {
-                        width: "100%",
-                        height: 340,
-                        syncScrolling: "single",
-                        path: "/vendors/editor.md-master/lib/",
-                        imageUpload: true,
-                        imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-                        imageUploadURL: "/index/uploadImg",
-                        /*
-                        上传的后台只需要返回一个 JSON 数据，结构如下：
-                        {
-                        success : 0 | 1,           // 0 表示上传失败，1 表示上传成功
-                        message : "提示的信息，上传成功或上传失败及错误信息等。",
-                        url     : "图片地址"        // 上传成功时才返回
-                        }
-                        */
+                    </fieldset>
+                    <fieldset>
+                        <!-- to make two field float next to one another, adjust values accordingly -->
+                        <label>Category</label>
+                        <input class="input-large" type="text" list="catelist" name="category">
+                        <datalist id="catelist">
+                        <% categories.forEach(function(cate){%>
+                            <option>
+                                <%= cate.cateName%>
+                            </option>
+                            <% });%>
+                        </datalist>
+                        <label>Tags</label>
+                        <input type="text" name="tags">
+                        <input type="hidden" name="ismd" value="1">
+                    </fieldset>
+                    <div class="clear"></div>
+                </div>
+                <footer>
+                    <div class="submit_link">
+                        <select name="status">
+                    <option value="1" selected>发布</option>
+                    <option value="0">草稿</option>
+                </select>
+                        <input type="submit" value="Publish" class="alt_btn">
+                    </div>
+                </footer>
+                <input type="hidden" name="qntoken" value="<%=token%>">
+            </form>
+        </article>
+        <!-- end of post new article -->
+        <div class="spacer"></div>
+    </section>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script src="/vendors/editor.md-master/editormd.min.js"></script>
+    <script type="text/javascript" src="/vendors/uploader/webuploader.min.js"></script>
+    <script type="text/javascript" src="/javascripts/bootstrap.min.js"></script>
+    <script type="text/javascript">
+        var testEditor;
+        $(function () {
+            mdtestEditor = editormd("test-editormd", {
+                width: "100%",
+                height: 340,
+                syncScrolling: "single",
+                path: "/vendors/editor.md-master/lib/",
+                imageUpload: true,
+                imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
+                imageUploadURL: "/index/uploadImg",
+                /*
+                上传的后台只需要返回一个 JSON 数据，结构如下：
+                {
+                success : 0 | 1,           // 0 表示上传失败，1 表示上传成功
+                message : "提示的信息，上传成功或上传失败及错误信息等。",
+                url     : "图片地址"        // 上传成功时才返回
+                }
+                */
 
-                    });
-                    mdtestEditor.setToolbarAutoFixed(false);
+            });
+            mdtestEditor.setToolbarAutoFixed(false);
 
-                    /*
-                    // or
-                    testEditor = editormd({
-                        id      : "test-editormd",
-                        width   : "90%",
-                        height  : 640,
-                        path    : "../lib/"
-                    });
-                    */
-                    $(".alt_btn").click(function () {
-                        var title = $('#title_color').val();
-                        var content = $('textarea[name=content]').val();
-                        var status = $('select[name=status]').val();
-                        var category = $('input[name=category]').val();
-                        var tags = $('input[name=tags]').val();
-                        $.post('/admin/createArticle', {
-                            title: title,
-                            content: content,
-                            category: category,
-                            tags: tags,
-                            status: status,
-                            ismd: 1
-                        }, function (data) {
-                            if (data.success === 1) {
-                                alert("ok")
-                                $('.alert_info').css('display', 'block');
-                            } else {
-                                alert(JSON.stringify(data.msg))
-                            }
-                        })
-                    })
-                });
-            </script>
+            /*
+            // or
+            testEditor = editormd({
+                id      : "test-editormd",
+                width   : "90%",
+                height  : 640,
+                path    : "../lib/"
+            });
+            */
+            $(".alt_btn").click(function () {
+                var title = $('#title_color').val();
+                var content = $('textarea[name=content]').val();
+                var status = $('select[name=status]').val();
+                var category = $('input[name=category]').val();
+                var tags = $('input[name=tags]').val();
+                $.post('/admin/createArticle', {
+                    title: title,
+                    content: content,
+                    category: category,
+                    tags: tags,
+                    status: status,
+                    ismd: 1
+                }, function (data) {
+                    if (data.success === 1) {
+                        $('.alert_info').css('display', 'block');
+                    } else {
+                        alert(JSON.stringify(data.msg))
+                    }
+                })
+            })
+        });
+    </script>
 </body>
 
 </html>

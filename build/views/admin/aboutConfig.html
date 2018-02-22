@@ -16,7 +16,6 @@
                 obj[key] = value.html();
                 $.post('/admin/updateAboutConfig', obj, function (data) {
                     $('.alert_info').css('display', 'block');
-                    alert("ok")
                 })
             })
         });
