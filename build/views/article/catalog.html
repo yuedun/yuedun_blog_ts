@@ -15,11 +15,11 @@
 		<% include header.html %>
 		<h3 class="header">博客目录</h3>
 		<section class="blog_section">
-			<ul class="catelog">
+			<ol class="catelog">
 				<% catalog.forEach(function(item, index){%>
-				<li><a href="/blogdetail/<%= item.id%>"><%= item.title%></a><span title="阅读数">(<%= item.pv%>)<time title="创建时间"><%= item.createDate.substring(0, 10)%></time></span></li>
+				<li><a href="/blogdetail/<%= item.id%>"><%= item.title%></a><span title="阅读数">阅读数：(<%= item.pv%>)<time title="创建时间"><%= item.createDate.substring(0, 10)%></time></span></li>
 				<%})%>
-			</ul>
+			</ol>
 		</section>
 		<% include asider.html %>
 		<div class="clear"></div>

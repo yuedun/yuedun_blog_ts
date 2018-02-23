@@ -69,8 +69,8 @@ function sendSms(weatherObjs, umObjs, callback) {
 var cronMap = new Array();
 cronMap.push(WeatherCron);
 module.exports = function () {
-    if (process.env.BAE_ENV_AK) {
-        console.log(">>>>>>>>>>cron", process.env.BAE_ENV_AK);
+    console.log(">>>>>>>>>>cron:", process.env.BAE_ENV_AK, ',', process.env.NODE_ENV);
+    if (process.env.NODE_ENV === 'production') {
         cronMap.forEach(function (Cron, key) {
             var rule = new schedule.RecurrenceRule();
             var cronObj = new Cron();

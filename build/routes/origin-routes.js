@@ -9,9 +9,6 @@ router.get('/google4a302d2a96242bba.html', function (req, res, next) {
 router.get('/robots.txt', function (req, res, next) {
     res.sendFile("/robots.txt", { root: "./" });
 });
-router.get('/error.html', function (req, res, next) {
-    res.sendFile("/error.html", { root: "./" });
-});
 router.get('/weixin/validateToken', function (req, res) {
     weixin.validateToken(req, res);
 });

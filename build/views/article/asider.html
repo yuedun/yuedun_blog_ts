@@ -16,6 +16,12 @@
         </ul>
     </div>
     <div class="aside-item">
+        <h3>分类</h3>
+        <% categories.forEach(function(blog){%>
+        <a href="/?category=<%=blog.cateName%>"><%=blog.cateName%></a>&nbsp;
+        <%})%>
+    </div>
+    <div class="aside-item">
         <h3>其他博客</h3>
         <ul>
             <li><a href="http://guard.iteye.com/admin" target="_blank">ITEYE</a></li>
