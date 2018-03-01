@@ -49,7 +49,6 @@ var Routes = (function () {
             return Promise.all([blogPromise, blog_model_1.default.count(condition)])
                 .then(function (_a) {
                 var blogList = _a[0], totalIndex = _a[1];
-                debug(">>>>>>>>>", totalIndex);
                 blogList.forEach(function (item, index) {
                     if (item.ismd) {
                         item.content = md.render(item.content).replace(/<\/?.+?>/g, "").substring(0, 300);
