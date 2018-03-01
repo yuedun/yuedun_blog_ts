@@ -47,7 +47,6 @@ export default class Routes {
         return getNewTopFriend().then(list => {
             return Promise.all([blogPromise, Blog.count(condition)])
                 .then(([blogList, totalIndex]) => {
-                    debug(">>>>>>>>>", totalIndex)
                     blogList.forEach(function (item, index) {
                         if (item.ismd) {
                             item.content = md.render(item.content).replace(/<\/?.+?>/g, "").substring(0, 300);

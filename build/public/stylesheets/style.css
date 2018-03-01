@@ -134,7 +134,7 @@ nav ul li a:hover{
 aside{
     width: 33.33333%;
     float: left;
-    padding-left: 15px;
+    padding: 0 15px;
 }
 aside ul{padding-left: 18px;}
 .aside-item{
