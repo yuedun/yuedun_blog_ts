@@ -191,7 +191,7 @@ aside ul{padding-left: 18px;}
     margin-left: 20px;
     margin-right: 20px;
 }
-.catelog{padding: 0;}
+.catelog{padding: 0 0 0 15px;}
 .catelog li {
     padding: 8px 0;
     border-bottom: 1px dotted #ccc;
