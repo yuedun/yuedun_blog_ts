@@ -37,7 +37,7 @@ export default class Routes {
         var user = req.session && req.session.user ? req.session.user : null;
         if (user != null) {
             var today = Moment().format('YYYY-MM-DD');
-            return Promise.all<any, number, any>([
+            return Promise.all<any, number, any, any>([
                 Blog.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),//聚合查询，总访问量,分组必须包含_id
                 ViewerLogModel.count({ createdAt: { $regex: today, $options: 'i' } }),//模糊查询"%text%"，今日访问量
                 ViewerLogModel.aggregate(
@@ -45,8 +45,9 @@ export default class Routes {
                     { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } },
                     { $sort: { createAt: -1 } }
                 ),
-            ]).then(([result1, result2, result3]) => {
-                return { readCount: result1[0].pvCount, todayRead: result2, recent: result3 }
+                ViewerLogModel.find({}, null, { sort: { _id: -1 }, limit: 10 })
+            ]).then(([result1, result2, result3, result4]) => {
+                return { readCount: result1[0].pvCount, todayRead: result2, recent: result3, newRead: result4 }
             })
         } else {
             return Promise.resolve({ title: '用户登录' });
