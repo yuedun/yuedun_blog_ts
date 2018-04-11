@@ -101,7 +101,8 @@ export default class Routes {
                     newList: list.newList,
                     topList: list.topList,
                     friendLinks: list.friendLink,
-                    categories: list.category
+                    categories: list.category,
+                    description: doc.content.replace(/<\/?.+?>/g, "").substring(0, 300)
                 }
             })
         })
