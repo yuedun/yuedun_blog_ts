@@ -41,7 +41,7 @@ var Routes = (function () {
             return Promise.all([
                 blog_model_1.default.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),
                 viewer_log_model_1.default.count({ createdAt: { $regex: today, $options: 'i' } }),
-                viewer_log_model_1.default.aggregate({ $match: { createdAt: { $regex: today, $options: 'i' } } }, { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } }, { $sort: { createAt: -1 } }),
+                viewer_log_model_1.default.aggregate({ $match: { createdAt: { $regex: today, $options: 'i' } } }, { $group: { _id: { blogId: '$blogId', title: "$title", url: "$url" }, pv: { $sum: 1 } } }, { $sort: { createAt: -1 } }),
                 viewer_log_model_1.default.find({}, null, { sort: { _id: -1 }, limit: 10 })
             ]).then(function (_a) {
                 var result1 = _a[0], result2 = _a[1], result3 = _a[2], result4 = _a[3];

@@ -49,7 +49,7 @@
                 <tbody>
                     <% recent.forEach(function(blog){%>
                     <tr>
-                        <td><a href="/admin/blogDetail/<%= blog._id.blogId%>"><%= blog._id.title%></a></td>
+                        <td><a href="/admin/blogDetail/<%= blog._id.blogId%>"><%= blog._id.title%><% if (!blog._id.title){%><%= blog._id.url %><%}%></a></td>
                         <td><%= blog.pv%></td>
                     </tr>
                     <% })%>
@@ -79,7 +79,7 @@
                 <tbody>
                     <% newRead.forEach(function(blog){%>
                     <tr>
-                        <td><a href="/admin/blogDetail/<%= blog._id.blogId%>"><%= blog.title%></a></td>
+                        <td><a href="/admin/blogDetail/<%= blog._id.blogId%>"><%= blog.title %><% if (!blog.title){%><%= blog.url %><%}%></a></td>
                         <td><%= blog.createdAt%></td>
                     </tr>
                     <% })%>
