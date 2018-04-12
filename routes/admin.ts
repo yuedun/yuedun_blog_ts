@@ -42,7 +42,7 @@ export default class Routes {
                 ViewerLogModel.count({ createdAt: { $regex: today, $options: 'i' } }),//模糊查询"%text%"，今日访问量
                 ViewerLogModel.aggregate(
                     { $match: { createdAt: { $regex: today, $options: 'i' } } },
-                    { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } },
+                    { $group: { _id: { blogId: '$blogId', title: "$title", url: "$url" }, pv: { $sum: 1 } } },
                     { $sort: { createAt: -1 } }
                 ),
                 ViewerLogModel.find({}, null, { sort: { _id: -1 }, limit: 10 })
