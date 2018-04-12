@@ -32,7 +32,10 @@ export default function (req: Request) {
             }).then(() => {
                 console.log("访问记录成功！");
             })
-    } else {
+    } else if(req.originalUrl.indexOf("/catalog") > -1 
+        || req.originalUrl.indexOf("/quicknote") > -1
+        || req.originalUrl.indexOf("/weibo") > -1
+        || req.originalUrl.indexOf("/about") > -1){
         var pvLogObj = new ViewerLogModel({
             ip: realIp,
             url: req.originalUrl,
