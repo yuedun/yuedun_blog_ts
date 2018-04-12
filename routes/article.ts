@@ -262,9 +262,3 @@ function getNewTopFriend(): Promise.Thenable<CommonList> {
         }
     })
 }
-function log(err) {
-    var msg = new Message(settings.errorAlert, `错误提醒`, null, err.message);
-    msg.send().then(data => {
-        debug(">>>>>", data)
-    })
-}
