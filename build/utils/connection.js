@@ -14,6 +14,9 @@ var MongoConnection = (function () {
         this.dbName = mongodbConfig.db;
         this.url = "mongodb://" + this.username + ":" + this.password + "@" + this.host + ":" + this.port + "/" + this.dbName;
         this.mongoose = mongoose;
+        if (process.env.NODE_ENV == "development") {
+            mongoose.set("debug", true);
+        }
         var opts = {
             loggerLevel: "warn",
             useMongoClient: true
