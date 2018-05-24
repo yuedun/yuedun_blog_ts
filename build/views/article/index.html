@@ -12,12 +12,11 @@
 </head>
 
 <body>
-	<div class="container">
+	<div>
 		<% include header.html %>
-		<h3 class="header">最新文章</h3>
-		<section class="blog_section">
+		<article>
 			<% blogList.forEach(function(blog){%>
-			<article class="blogs">
+			<section>
 				<h1 class="blog_title">
 					<a href="/blogdetail/<%= blog._id%>"><%= blog.title%></a>
 				</h1>
@@ -35,13 +34,13 @@
 						<li>发表时间:<%= blog.createDate%></li>
 					</ul>
 				</footer>
-			</article>
+			</section>
 			<% })%>
 			<div id="Pagination" class="pagination"><!-- 这里显示分页 --></div>
-		</section>
-		<% include asider.html %>
-		<div class="clear"></div>
-		<% include footer.html %>
+			<% include asider.html %>
+			<div class="clear"></div>
+			<% include footer.html %>
+		</article>
 	</div>
 	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
 	<script src="/javascripts/silder.js"></script>

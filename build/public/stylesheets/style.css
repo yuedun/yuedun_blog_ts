@@ -5,11 +5,12 @@
      -moz-box-sizing: border-box;
           box-sizing: border-box;
 }
+@media (min-width: 1200px) {
 body {
     margin: 0px;
     padding: 0px;
     color: #454545;
-    background-color: #f9f9f9;
+    background-color: #d69d9d;
     font-family: "Microsoft Yahei","Lato","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Verdana,Tahoma,sans-serif;
 }
 a:active, a:focus, a:hover {
@@ -25,272 +26,17 @@ a {
     color: #572C82;
     text-decoration: none;
 }
-.container {
-    background-color: #fff;
-    width: 1100px;
-    margin-left: auto;
-    margin-right: auto;
+article {
+    width: 45%;
+    margin-left: 20%;
+    background-color: #FFF;
+    border-radius: 10px;
+    padding: 0 60px;
 }
-.header-container{
-    background-image: url(http://hopefully.qiniudn.com/background2.png);
-    background-repeat: no-repeat;
-    background-size: cover;
-}
-.header-container > h1{
-    padding: 20px 0px 0px 80px;
-    margin-top: 0;
-}
-.clear{
-    clear: both;
-    height:1px;
-    margin-top:-1px;
-    overflow:hidden;
-}
-.head-name{
-    padding: 20px 0px 0px 80px;
-    margin-top: 0;
-    font-size: 2em;
-    font-weight: bold;
-}
-header p{
-    margin: 0px;
-    padding: 15px 80px;
-}
-nav{
-    background-color: #572C82;
-    line-height: 45px;
-}
-nav ul{
-    padding-left: 30px;
-    margin-top: 0px;
-    margin-bottom: 0px;
-}
-nav ul li{
-    list-style: none;
-    display: inline-block;
-    -webkit-transition: all 1s; -moz-transition: all 1s; -o-transition: all 1s; transition: all 1s;
-}
-nav ul li a{
-    text-decoration: none;
-    font-size: 18px;
-    color: #FFF;
-    padding: 10px 15px;
-}
-nav ul li a:hover{
-    text-decoration: underline;
-    text-decoration-line: 2px;
-}
-.blogs{
-    background-color: #fff;
-    margin-bottom: 20px; 
-}
-.blog_section{
-    float: left;
-    width: 66.66667%;
-    padding-right: 15px;
-}
-.blog_section>*{
-    margin: 20px 20px
-}
-.container > .header{
-    padding-bottom: 10px;
-    border-bottom: 2px solid #474645;
-    margin: 10px;
-}
-.blog_title{
-    margin-top: 10px;
-    line-height: 25px;
-    font-size: 21px;
-}
-.blog_content{
-    margin-bottom: 20px;
-}
-.blog_detail_content{
-    margin-top: 35px;
-}
-.blog_content p{
-    line-height: 25px;
-    word-wrap: break-word;
-}
-.blog_content p img{
-    width: 100%;
-}
-.blog_footer{
-    height: 30px;
-    padding: 0 10px;
-    background-color: #E0E2E8;
- }
- .readall{
-     text-decoration-line: underline;
- }
- article footer ul{
-     padding-left: 0; 
-     list-style: none;
-     line-height: 30px;
- }
- article footer ul li{
-     display: inline;
- }
-aside{
-    width: 33.33333%;
-    float: left;
-    padding: 0 15px;
-}
-aside ul{padding-left: 18px;}
-.aside-item{
-    border-bottom: 1px solid #ccc;
-    margin-bottom: 20px;
-}
-.aside-item li{
-    line-height: 25px;
-}
-/*分页*/
-.pagination{text-align: center; margin-top: 40px;}
-.pagination a {
-    text-decoration: none;
-	border: 1px solid #AAE;
-}
+article > section {
+    margin-top: 30px;
+    padding-bottom: 3.5rem;
+    border-bottom: 1px dotted #111;
 
-.pagination a, .pagination span {
-    display: inline-block;
-    padding: 0.1em 0.4em;
-    margin-right: 5px;
-	margin-bottom: 5px;
 }
-
-.pagination .current {
-    background: #572C82;
-    color: #fff;
-	border: 1px solid #AAE;
 }
-
-.pagination .current.prev, .pagination .current.next{
-	color:#999;
-	border-color:#999;
-	background:#fff;
-}
-.footer{
-    margin-top: 35px;
-}
-.body-footer{
-    text-align: center;
-    height: 130px;;
-    padding: 35px;
-    background-color: #572C82;
-}
-.body-footer p{
-    color: #fff;
-}
-.body-footer p:nth-child(1){
-    margin-top: 0px;
-}
-.body-footer p a{
-    color: #fff;
-}
-.conments{
-    margin-left: 20px;
-    margin-right: 20px;
-}
-.catelog{padding: 0;}
-.catelog li {
-    padding: 8px 0;
-    border-bottom: 1px dotted #ccc;
-}
-.catelog li span{
-    float: right;
-    font-size: 14px;
-    margin-top: 3px;
-}
-.catelog time{
-    margin-left: 8px;
-}
-#topnav_current { background: #e41635 }
-.notecontent{border-bottom: 1px dotted #ccc;padding-bottom: 10px;}
-/*媒体查询*/
-@media screen and (max-width:768px) {
-    /*手机屏幕下整体结构*/
-    .container{width: 100%}
-    aside, header h1,header p{ display: none }
-    nav ul{padding: 0 2px;background-color: #FFF}
-    nav ul li{ display: block; height: auto; line-height: 40px; text-align: center; background: #FFF;}
-    nav ul li a { display: block; background: #572C82;; margin-bottom: 2px;font-size: 16px;padding: 0; }
-    .blog_section{width: 100%;padding: 0;}
-    .blog_footer{height: auto}
-
-    /*手机屏幕下博客目录*/
-    .catelog{
-        padding-left: 5px;
-        list-style: none;
-    }
-    .catelog li{
-        border-bottom: 1px dotted #ccc;
-    }
-    .catelog li>a+span{
-        float: none !important;
-        display: block;
-        margin: 5px 0;
-    }
-    .catelog time{
-        float: right;
-        margin-right: 20px;
-    }
-    .catelog li span::before{
-        content: '阅读数：'
-    }
-}
-/* 小屏幕（平板，大于等于 768px） */
-@media (min-width: 768px) { 
-    .container{
-        background-color: #fff;
-        width: 768px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-}
-
-/* 中等屏幕（桌面显示器，大于等于 992px） */
-@media (min-width: 992px) {
-    .container{
-        background-color: #fff;
-        width: 960px;
-        margin-left: auto;
-        margin-right: auto;
-    }
-}
-
-/* 大屏幕（大桌面显示器，大于等于 1200px） */
-@media (min-width: 1200px) {
-    
-}
-/*代码样式*/
-.blog_content pre{
-    padding: 10px!important;
-    border: 1px solid #ccc;
-    border-radius: 7px;
-    background-color: #f5f5f5;
-    overflow-x: auto; 
-}
-.blog_content blockquote{
-    border-left: 4px solid #ccc;
-    margin-left: 0px;
-    margin-right: 0px;
-    padding-left: 10px;
-    background-color: #f5f5f5
-}
-.blog_content ol{
-    border: 1px solid #ccc;
-    border-radius: 7px;
-    background-color: #f5f5f5;
-}
-.blog_content code{
-    color: #d14;
-    background-color: #f5f5f5;
-    font-weight: bold;
-    line-height: 20px;
-}
-
-
-
-
-
-
