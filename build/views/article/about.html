@@ -11,10 +11,9 @@
 </head>
 
 <body>
+	<% include header.html %>
 	<div class="container">
-		<% include header.html %>
-		<h3 class="header">关于我</h3>
-		<section class="blog_section">
+		<article class="backgroud border">
 			<div class="about">
 				<div>
 					<p>网名：<%- config.nickname%></p>
@@ -31,11 +30,10 @@
 					</p>
 				</div>
 			</div>
-		</section>
+		</article>
 		<% include asider.html %>
-		<div class="clear"></div>
-	<% include footer.html %>
 	</div>
+	<% include footer.html %>
 	<script src="/javascripts/silder.js"></script>
 	<script>
 		//获取手机

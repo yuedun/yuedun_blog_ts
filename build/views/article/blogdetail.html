@@ -19,7 +19,15 @@
 			<h1 class="blog_title">
 				<%= blog.title%>
 			</h1>
-			<div class="blog_content blog_detail_content">
+			<div class="blog_sumary">
+				<ul>
+					<li>分类:【<a href="/?category=<%= blog.category%>"><%= blog.category%></a>】</li>
+					<li>浏览【<%= blog.pv%>】</li>
+					<li>评论【<%= blog.commentCount || 0%>】</li>
+					<li>更新【<%= blog.createDate%>】</li>
+				</ul>
+			</div>
+			<div class="blog_content">
 				<p>
 					<%- blog.content%>
 				</p>
@@ -28,7 +36,7 @@
 				<div class="keybq">
 					<p><image src="/images/6264.png"></image>关键字词：<span><%= blog.tags%></span></p>
 				</div>
-				<div class="conments">
+				<div class="comment">
 					<!--评论-->
 					<div id="SOHUCS" sid="<%=blog._id%>"></div>
 					<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
