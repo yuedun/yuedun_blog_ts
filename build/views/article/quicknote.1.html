@@ -11,23 +11,26 @@
 </head>
 
 <body>
-	<% include header.html %>
 	<div class="container">
-		<article class="backgroud border">
-			<section class="blog_section">
+		<% include header.html %>
+		<h3 class="header">速记本</h3>
+		<section class="blog_section">
+			<article class="blogs">
 				<% quickNoteList.forEach(function(note){%>
-				<div class="notecontent">
-					<p>
-						<%- note.content %>
-					</p>
-					<time title="创建时间">
-						<%=note.createDate%>
-					</time>
-				</div>
-				<% })%>
+					<div class="notecontent">
+						<p>
+							<%- note.content %>
+						</p>
+						<time title="创建时间">
+							<%=note.createDate%>
+						</time>
+					</div>
+					<% })%>
+			</article>
 		</section>
-		</article>
 		<% include asider.html %>
+		<div class="clear"></div>
+		<% include footer.html %>
 	</div>
 	<script src="/javascripts/silder.js"></script>
 </body>
