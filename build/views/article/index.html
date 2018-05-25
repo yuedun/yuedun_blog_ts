@@ -16,19 +16,19 @@
 	<div class="container">
 		<article class="backgroud border">
 			<% blogList.forEach(function(blog){%>
-			<section>
+			<section class="blog-section">
 				<div class="blog_title">
 					<a href="/blogdetail/<%= blog._id%>"><%= blog.title%></a>
 				</div>
 				<div class="blog_sumary">
 					<ul>
 						<li>分类:【<a href="/?category=<%= blog.category%>"><%= blog.category%></a>】</li>
-						<li>浏览（<%= blog.pv%>）</li>
-						<li>评论（<a href="/blogdetail/<%= blog._id%>"><%= blog.commentCount || 0%></a>）</li>
-						<li>更新:<%= blog.createDate%></li>
+						<li>浏览【<%= blog.pv%>】</li>
+						<li>评论【<%= blog.commentCount || 0%>】</li>
+						<li>更新【<%= blog.createDate%>】</li>
 					</ul>
 				</div>
-				<div class="blog_content">
+				<div>
 					<p>
 						<%- blog.content%>
 					</p>

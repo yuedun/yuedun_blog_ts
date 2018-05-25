@@ -1,6 +1,6 @@
 <aside>
     <div class="aside-block backgroud border">
-        <h3>阅读排行</h3>
+        <h4>阅读排行</h4>
         <ul>
             <% topList.forEach(function(blog){%>
             <li><a href="/blogdetail/<%= blog._id.blogId%>"><%=blog._id.title%></a></li>
@@ -8,7 +8,7 @@
         </ul>
     </div>
     <div class="aside-block backgroud border">
-        <h3>近两月发布</h3>
+        <h4>近两月发布</h4>
         <ul>
             <% newList.forEach(function(blog){%>
             <li><a href="/blogdetail/<%= blog._id%>"><%=blog.title%></a></li>
@@ -16,7 +16,7 @@
         </ul>
     </div>
     <div class="aside-block backgroud border">
-        <h3>分类</h3>
+        <h4>分类</h4>
         <div class="category">
             <% categories.forEach(function(blog){%>
             <a href="/?category=<%=blog.cateName%>"><%=blog.cateName%></a>
@@ -24,14 +24,14 @@
         </div>
     </div>
     <div class="aside-block backgroud border">
-        <h3>其他博客</h3>
+        <h4>其他博客</h4>
         <ul>
             <li><a href="http://guard.iteye.com/admin" target="_blank">ITEYE</a></li>
             <li><a href="http://blog.sina.com.cn/guard90" target="_blank">新浪博客</a></li>
         </ul>
     </div>
     <div class="aside-block backgroud border">
-        <h3>友链</h3>
+        <h4>友链</h4>
         <ul>
             <% friendLinks.forEach(function(blog){%>
             <li><a href="<%=blog.url %>" target="_blank"><%= blog.name%></a></li>
