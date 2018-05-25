@@ -16,7 +16,6 @@ var friend_link_model_1 = require("../models/friend-link-model");
 var resume_model_1 = require("../models/resume-model");
 var category_model_1 = require("../models/category-model");
 var Markdown = require("markdown-it");
-var message_1 = require("../utils/message");
 var Debug = require("debug");
 var debug = Debug('yuedun:article');
 var md = Markdown({
@@ -98,7 +97,8 @@ var Routes = (function () {
                     newList: list.newList,
                     topList: list.topList,
                     friendLinks: list.friendLink,
-                    categories: list.category
+                    categories: list.category,
+                    description: doc.content.replace(/<\/?.+?>/g, "").substring(0, 300)
                 };
             });
         });
@@ -250,18 +250,13 @@ var promisies = [latestTop, visitedTop, friendLink, categies];
 function getNewTopFriend() {
     return Promise.all(promisies).then(function (_a) {
         var newList = _a[0], topList = _a[1], friendLink = _a[2], category = _a[3];
+        console.log(">>>>>>>>>>>", friendLink);
         return {
             newList: newList,
             topList: topList,
             friendLink: friendLink,
             category: category
         };
-    });
-}
-function log(err) {
-    var msg = new message_1.default(settings.errorAlert, "\u9519\u8BEF\u63D0\u9192", null, err.message);
-    msg.send().then(function (data) {
-        debug(">>>>>", data);
     });
 }
 //# sourceMappingURL=article.js.map
