@@ -1,19 +1,15 @@
 <aside>
     <div class="aside-block backgroud border">
         <h4>阅读排行</h4>
-        <ul>
-            <% topList.forEach(function(blog){%>
-            <li><a href="/blogdetail/<%= blog._id.blogId%>"><%=blog._id.title%></a></li>
-            <%})%>
-        </ul>
+        <% topList.forEach(function(blog){%>
+        <p><a href="/blogdetail/<%= blog._id.blogId%>"><%=blog._id.title%></a></p>
+        <%})%>
     </div>
     <div class="aside-block backgroud border">
         <h4>近两月发布</h4>
-        <ul>
-            <% newList.forEach(function(blog){%>
-            <li><a href="/blogdetail/<%= blog._id%>"><%=blog.title%></a></li>
-            <%})%>
-        </ul>
+        <% newList.forEach(function(blog){%>
+        <p><a href="/blogdetail/<%= blog._id%>"><%=blog.title%></a></p>
+        <%})%>
     </div>
     <div class="aside-block backgroud border">
         <h4>分类</h4>
@@ -25,17 +21,13 @@
     </div>
     <div class="aside-block backgroud border">
         <h4>其他博客</h4>
-        <ul>
-            <li><a href="http://guard.iteye.com/admin" target="_blank">ITEYE</a></li>
-            <li><a href="http://blog.sina.com.cn/guard90" target="_blank">新浪博客</a></li>
-        </ul>
+        <p><a href="http://guard.iteye.com/admin" target="_blank">ITEYE</a></p>
+        <p><a href="http://blog.sina.com.cn/guard90" target="_blank">新浪博客</a></p>
     </div>
     <div class="aside-block backgroud border">
         <h4>友链</h4>
-        <ul>
-            <% friendLinks.forEach(function(blog){%>
-            <li><a href="<%=blog.url %>" target="_blank"><%= blog.name%></a></li>
-            <%})%>
-        </ul>
+        <% friendLinks.forEach(function(blog){%>
+            <p><a href="<%=blog.url %>" target="_blank"><%= blog.name%></a></p>
+        <%})%>
     </div>
 </aside>
