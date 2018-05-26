@@ -81,7 +81,7 @@ cronMap.push(WeatherCron);
 
 //定时任务
 module.exports = function () {
-    console.log(">>>>>>>>>>cron:", process.env.BAE_ENV_AK, ',', process.env.NODE_ENV);
+    console.log(`>>>>>>>>>>cron:BAE_ENV_AK:[${process.env.BAE_ENV_AK}], NODE_ENV:[${process.env.NODE_ENV}]`);
     if (process.env.NODE_ENV === 'production') { 
         cronMap.forEach(function (Cron, key) {
             let rule = new schedule.RecurrenceRule();

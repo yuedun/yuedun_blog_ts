@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="zh-cmn">
+	<meta charset="UTF-8">
+	<title>关于我</title>
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+	<meta name="keywords" content="霍潘,月盾">
+	<meta name="description" content="霍潘的技术博客，工作经验分享，记录">
+	<link rel="stylesheet" href="/stylesheets/style.css" />
+</head>
+
+<body>
+	<div class="container">
+		<% include header.html %>
+		<h3 class="header">关于我</h3>
+		<section class="blog_section">
+			<div class="about">
+				<div>
+					<p>网名：<%- config.nickname%></p>
+					<p>工作地：<%- config.addr%></p>
+					<p>电话：<a id="mobile" class="myinfo" href="javascript:void(0)">点击获取</a></p>
+					<p>邮箱：<a id="email" class="myinfo" href="javascript:void(0)">点击获取</a></p>
+					<h3>目前工作</h3>
+					<p><%- config.job%></p>
+					<h3>关于博客</h3>
+					<p><%- config.resume%></p>
+					<p><%- config.other%></p>
+					<p>QQ：438473005
+						<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=438473005&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:438473005:52" alt="点击这里给我发消息" title="点击这里给我发消息" /></a>
+					</p>
+				</div>
+			</div>
+		</section>
+		<% include asider.html %>
+		<div class="clear"></div>
+	<% include footer.html %>
+	</div>
+	<script src="/javascripts/silder.js"></script>
+	<script>
+		//获取手机
+		!function () {
+			var telObj = document.querySelector("#mobile");
+			var mobileObj = document.querySelector("#email");
+			if (telObj) {
+				telObj.addEventListener("click", function () {
+					this.innerText = "18701897527";
+				})
+				mobileObj.addEventListener("click", function () {
+					this.innerText = "huo.win.n@gmail.com";
+				})
+			}
+		}()
+	</script>
+</body>
+
+</html>
