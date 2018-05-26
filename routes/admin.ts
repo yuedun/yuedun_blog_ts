@@ -45,7 +45,7 @@ export default class Routes {
                     { $group: { _id: { blogId: '$blogId', title: "$title", url: "$url" }, pv: { $sum: 1 } } },
                     { $sort: { createAt: -1 } }
                 ),
-                ViewerLogModel.find({}, null, { sort: { _id: -1 }, limit: 10 })
+                ViewerLogModel.find({}, null, { sort: { _id: -1 }, limit: 20 })
             ]).then(([result1, result2, result3, result4]) => {
                 return { readCount: result1[0].pvCount, todayRead: result2, recent: result3, newRead: result4 }
             })

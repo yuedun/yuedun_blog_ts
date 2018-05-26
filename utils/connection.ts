@@ -20,6 +20,9 @@ export default class MongoConnection {
     private url = `mongodb://${this.username}:${this.password}@${this.host}:${this.port}/${this.dbName}`;
     public mongoose = mongoose;
     constructor() {
+        if (process.env.NODE_ENV == "development") {
+            mongoose.set("debug", true);
+        }
         const opts = {
             // autoReconnect: false,//默认true
             // reconnectTries: 30,//尝试重连，默认30次

@@ -73,6 +73,7 @@
                 <thead>
                     <tr>
                         <th>标题</th>
+                        <th>来源</th>
                         <th>访问时间</th>
                     </tr>
                 </thead>
@@ -80,6 +81,7 @@
                     <% newRead.forEach(function(blog){%>
                     <tr>
                         <td><a href="/admin/blogDetail/<%= blog._id.blogId%>"><%= blog.title %><% if (!blog.title){%><%= blog.url %><%}%></a></td>
+                        <td><%= blog.referer.substr(0, 30)%></td>
                         <td><%= blog.createdAt%></td>
                     </tr>
                     <% })%>
@@ -91,15 +93,6 @@
 </article>
 <!-- end of new read article -->
 
-<div class="clear"></div>
-
-<h4 class="alert_warning">A Warning Alert</h4>
-
-<h4 class="alert_error">An Error Message</h4>
-
-<h4 class="alert_success">A Success Message</h4>
-
-<div class="spacer"></div>
 </section>
 
 </body>

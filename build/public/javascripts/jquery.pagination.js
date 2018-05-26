@@ -7,6 +7,8 @@
  * @param {Object} opts Several options (see README for documentation)
  * @return {Object} jQuery Object
  */
+
+jQuery = $;
 jQuery.fn.pagination = function(maxentries, opts){
 	opts = jQuery.extend({
 		items_per_page:10,

@@ -30,7 +30,10 @@ function default_1(req) {
             console.log("访问记录成功！");
         });
     }
-    else {
+    else if (req.originalUrl.indexOf("/catalog") > -1
+        || req.originalUrl.indexOf("/quicknote") > -1
+        || req.originalUrl.indexOf("/weibo") > -1
+        || req.originalUrl.indexOf("/about") > -1) {
         var pvLogObj = new viewer_log_model_1.default({
             ip: realIp,
             url: req.originalUrl,
