@@ -53,6 +53,7 @@ header {
 .footer-container {
     margin: 20px;
     padding: 20px;
+    text-align: center;
 }
 
 /*导航*/
@@ -106,6 +107,8 @@ article {
     display: inline-block;
     -webkit-transition: all 1s; -moz-transition: all 1s; -o-transition: all 1s; transition: all 1s;
 }
+.blog_content {text-indent: 2em;}
+.blog_content p {line-height: 2em;letter-spacing:1px;}
 .readall{float: right;border-bottom: 1px solid #572C82;padding-bottom: 4px;}
 /*旁边*/
 aside {
@@ -116,6 +119,9 @@ aside {
     margin: 0 0 20px 0;
     padding: 20px;
 }
+.aside-block ul li {
+    list-style-type: none;
+}
 /*旁边-分类*/
 .category {
     display: inline-flex;
@@ -125,6 +131,7 @@ aside {
     background-color: #ccc;
     border-radius: 3px;
     padding: 3px;
+    margin: 0 3px;
 }
 /*分页*/
 .pagination{text-align: center; margin-top: 40px;}
@@ -162,6 +169,10 @@ aside {
 .catalog-section span{
     float: right;
 }
+.catalog-section time {
+    font-size: 13px;
+
+}
 .notecontent{padding-bottom: 10px;}
 /* 中等屏幕（桌面显示器，大于等于 992px） */
 @media screen and (min-width: 992px) {
@@ -184,7 +195,8 @@ aside {
 @media screen and (max-width:768px) { 
     article {
         width: 100%;
-        margin-left: 0; 
+        margin-left: 0;
+        padding: 0 10px;
     }
     aside {
         display: none;

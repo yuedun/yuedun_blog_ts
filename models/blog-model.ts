@@ -35,7 +35,8 @@ export interface IBlog extends Document {
     top: number,//置顶
     tags: string,//标签
     pv: number,//访问量,
-    ismd: number//是否markdown编写0否，1是
+    ismd: number,//是否markdown编写0否，1是
+    createDate: string,
 }
 var BlogModel: Model<IBlog> = model<IBlog>('Blog', BlogSchema);
 
