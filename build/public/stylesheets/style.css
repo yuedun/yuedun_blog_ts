@@ -9,7 +9,7 @@ body {
     margin: 0px;
     padding: 0px;
     color: #454545;
-    background-color: #d69d9d;
+    background-color: #9dd6d3;
     font-family: "Microsoft Yahei","Lato","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Verdana,Tahoma,sans-serif;
     background-repeat: no-repeat;
     background-size: 100%;
@@ -108,8 +108,11 @@ article {
     -webkit-transition: all 1s; -moz-transition: all 1s; -o-transition: all 1s; transition: all 1s;
 }
 .blog_content {text-indent: 2em;}
-.blog_content p {line-height: 2em;letter-spacing:1px;}
+.blog_content p {line-height: 2em;letter-spacing:1px;word-wrap: break-word;}
 .readall{float: right;border-bottom: 1px solid #572C82;padding-bottom: 4px;}
+.blog_content p img{
+    width: 100%;
+}
 /*旁边*/
 aside {
     margin-left: 1%;
@@ -131,7 +134,7 @@ aside {
     background-color: #ccc;
     border-radius: 3px;
     padding: 3px;
-    margin: 0 3px;
+    margin: 2px 3px;
 }
 /*分页*/
 .pagination{text-align: center; margin-top: 40px;}
@@ -193,6 +196,10 @@ aside {
 
 /* 小屏幕（平板，大于等于 768px） */
 @media screen and (max-width:768px) { 
+    body {
+        background-image: none;
+    }
+    header {margin: 0;}
     article {
         width: 100%;
         margin-left: 0;
