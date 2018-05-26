@@ -12,45 +12,44 @@
 </head>
 
 <body>
+	<% include header.html %>
 	<div class="container">
-		<% include header.html %>
-		<h3 class="header">最新文章</h3>
-		<section class="blog_section">
+		<article class="backgroud border">
 			<% blogList.forEach(function(blog){%>
-			<article class="blogs">
-				<h1 class="blog_title">
+			<section class="blog-section">
+				<div class="blog_title">
 					<a href="/blogdetail/<%= blog._id%>"><%= blog.title%></a>
-				</h1>
-				<div class="blog_content">
+				</div>
+				<div class="blog_sumary">
+					<ul>
+						<li>分类:【<a href="/?category=<%= blog.category%>"><%= blog.category%></a>】</li>
+						<li>浏览【<%= blog.pv%>】</li>
+						<li>评论【<%= blog.commentCount || 0%>】</li>
+						<li>更新【<%= blog.createDate%>】</li>
+					</ul>
+				</div>
+				<div>
 					<p>
 						<%- blog.content%>
 					</p>
 					<a href="/blogdetail/<%= blog._id%>" class="readall">阅读全文</a>
 				</div>
-				<footer class="blog_footer">
-					<ul>
-						<li>分类:【<a href="/?category=<%= blog.category%>"><%= blog.category%></a>】</li>
-						<li>浏览（<%= blog.pv%>）</li>
-						<li>评论（<a href="/blogdetail/<%= blog._id%>"><%= blog.commentCount || 0%></a>）</li>
-						<li>发表时间:<%= blog.createDate%></li>
-					</ul>
-				</footer>
-			</article>
+			</section>
 			<% })%>
 			<div id="Pagination" class="pagination"><!-- 这里显示分页 --></div>
-		</section>
+		</article>
 		<% include asider.html %>
-		<div class="clear"></div>
-		<% include footer.html %>
 	</div>
-	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<% include footer.html %>
+	<script src="http://apps.bdimg.com/libs/zepto/1.1.4/zepto.min.js"></script>
 	<script src="/javascripts/silder.js"></script>
 	<script src="/javascripts/jquery.pagination.js"></script>
 	<script type="text/javascript">
 		$(function(){
-			var current = <%= pageIndex%>;
-			var pageSize = <%= pageSize%>
-			$("#Pagination").pagination(<%= totalIndex%>, {
+			var current = parseInt('<%= pageIndex%>');
+			var pageSize = parseInt('<%= pageSize%>');
+			var totalIndex = parseInt('<%= totalIndex%>');
+			$("#Pagination").pagination(totalIndex, {
 				num_edge_entries: 1, //边缘页数
 				num_display_entries: 4, //主体页数
 				prev_text: "« 上一页",

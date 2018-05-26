@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="zh-cmn">
+	<meta charset="UTF-8">
+	<title>月盾</title>
+	<meta name="keywords" content="霍潘,月盾">
+	<meta name="description" content="霍潘的技术博客，工作经验分享，记录">
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+	<meta name="baidu-site-verification" content="gjQe88t6Om" />
+	<link rel="stylesheet" href="/stylesheets/style.css" />
+</head>
+
+<body>
+	<div class="container">
+		<% include header.html %>
+		<h3 class="header">最新文章</h3>
+		<section class="blog_section">
+			<% blogList.forEach(function(blog){%>
+			<article class="blogs">
+				<h1 class="blog_title">
+					<a href="/blogdetail/<%= blog._id%>"><%= blog.title%></a>
+				</h1>
+				<div class="blog_content">
+					<p>
+						<%- blog.content%>
+					</p>
+					<a href="/blogdetail/<%= blog._id%>" class="readall">阅读全文</a>
+				</div>
+				<footer class="blog_footer">
+					<ul>
+						<li>分类:【<a href="/?category=<%= blog.category%>"><%= blog.category%></a>】</li>
+						<li>浏览（<%= blog.pv%>）</li>
+						<li>评论（<a href="/blogdetail/<%= blog._id%>"><%= blog.commentCount || 0%></a>）</li>
+						<li>发表时间:<%= blog.createDate%></li>
+					</ul>
+				</footer>
+			</article>
+			<% })%>
+			<div id="Pagination" class="pagination"><!-- 这里显示分页 --></div>
+		</section>
+		<% include asider.html %>
+		<div class="clear"></div>
+		<% include footer.html %>
+	</div>
+	<script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+	<script src="/javascripts/silder.js"></script>
+	<script src="/javascripts/jquery.pagination.js"></script>
+	<script type="text/javascript">
+		$(function(){
+			var current = <%= pageIndex%>;
+			var pageSize = <%= pageSize%>
+			$("#Pagination").pagination(<%= totalIndex%>, {
+				num_edge_entries: 1, //边缘页数
+				num_display_entries: 4, //主体页数
+				prev_text: "« 上一页",
+                next_text: "下一页 »",
+				current_page: current,
+				link_to: "/?pageIndex=__id__&pageSize="+pageSize+"&category=<%= category%>",
+				callback: function (page_index, jq) {
+					return true;
+				},
+				items_per_page: pageSize, //每页多少条
+				load_first_page: false
+			});
+		});
+		</script>
+</body>
+
+</html>
