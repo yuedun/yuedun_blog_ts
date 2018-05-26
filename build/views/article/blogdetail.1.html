@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="zh-cmn">
+	<meta charset="UTF-8">
+	<title><%= blog.title%></title>
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+	<meta name="keywords" content="<%= blog.tags%>" />
+	<meta name="description" content="<%= description%>">
+	<link rel="stylesheet" href="/stylesheets/style.css" />
+	<link href="https://cdn.bootcss.com/prettify/r298/prettify.css" rel="stylesheet">
+</head>
+
+<body>
+	<div class="container">
+		<% include header.html %>
+		<h3 class="header">文章详情</h3>
+		<section class="blog_section">
+			<article class="blogs">
+				<h1 class="blog_title">
+					<%= blog.title%>
+				</h1>
+				<div class="blog_content blog_detail_content">
+					<p>
+						<%- blog.content%>
+					</p>
+				</div>
+				<footer>
+					<div class="keybq">
+						<p><image src="/images/6264.png"></image>关键字词：<span><%= blog.tags%></span></p>
+					</div>
+					<div class="conments">
+						<!--评论-->
+						<div id="SOHUCS" sid="<%=blog._id%>"></div>
+						<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
+						<script type="text/javascript">
+						window.changyan.api.config({
+							appid: 'cyt3jJvEt',
+							conf: 'prod_a624b3b54fee0783e886929e85225a64'
+						});
+						</script>
+					</div>
+				</footer>
+			</article>
+		</section>
+		<% include asider.html %>
+		<div class="clear"></div>
+		<% include footer.html %>
+	</div>
+	<script src="/javascripts/silder.js"></script>
+	<script src="https://cdn.bootcss.com/prettify/r298/prettify.js"></script>
+	<script>
+		window.onload =function(){
+			prettyPrint();
+		}
+	</script>
+</body>
+
+</html>

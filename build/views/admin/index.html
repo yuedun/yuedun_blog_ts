@@ -32,7 +32,7 @@
 </article>
 <!-- end of stats article -->
 
-<article class="module width_3_quarter">
+<article class="module width_half">
     <header>
         <h3 class="tabs_involved">今日访问</h3>
     </header>
@@ -49,7 +49,7 @@
                 <tbody>
                     <% recent.forEach(function(blog){%>
                     <tr>
-                        <td><a href="/admin/blogDetail/<%= blog._id.blogId%>"><%= blog._id.title%></a></td>
+                        <td><a href="/admin/blogDetail/<%= blog._id.blogId%>"><%= blog._id.title%><% if (!blog._id.title){%><%= blog._id.url %><%}%></a></td>
                         <td><%= blog.pv%></td>
                     </tr>
                     <% })%>
@@ -61,72 +61,38 @@
 </article>
 <!-- end of content manager article -->
 
-<article class="module width_quarter">
-    <header><h3>Messages</h3></header>
-    <div class="message_list">
-        <div class="module_content">
-            <div class="message"><p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor.</p>
+<!-- start of new read article -->
+<article class="module width_half">
+    <header>
+        <h3 class="tabs_involved">最新访问</h3>
+    </header>
 
-                <p><strong>John Doe</strong></p></div>
-            <div class="message"><p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor.</p>
-
-                <p><strong>John Doe</strong></p></div>
-            <div class="message"><p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor.</p>
-
-                <p><strong>John Doe</strong></p></div>
-            <div class="message"><p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor.</p>
-
-                <p><strong>John Doe</strong></p></div>
-            <div class="message"><p>Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor.</p>
-
-                <p><strong>John Doe</strong></p></div>
+    <div class="tab_container">
+        <div id="tab1" class="tab_content">
+            <table class="tablesorter" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>标题</th>
+                        <th>来源</th>
+                        <th>访问时间</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% newRead.forEach(function(blog){%>
+                    <tr>
+                        <td><a href="/admin/blogDetail/<%= blog._id.blogId%>"><%= blog.title %><% if (!blog.title){%><%= blog.url %><%}%></a></td>
+                        <td><%= blog.referer.substr(0, 30)%></td>
+                        <td><%= blog.createdAt%></td>
+                    </tr>
+                    <% })%>
+                </tbody>
+            </table>
         </div>
     </div>
-    <footer>
-        <form class="post_message">
-            <input type="text" value="Message" onfocus="if(!this._haschanged){this.value=''};this._haschanged=true;">
-            <input type="submit" class="btn_post_message" value="发送"/>
-        </form>
-    </footer>
+    <!-- end of .tab_container -->
 </article>
-<!-- end of messages article -->
+<!-- end of new read article -->
 
-<div class="clear"></div>
-
-<h4 class="alert_warning">A Warning Alert</h4>
-
-<h4 class="alert_error">An Error Message</h4>
-
-<h4 class="alert_success">A Success Message</h4>
-
-<article class="module width_full">
-    <header><h3>Basic Styles</h3></header>
-    <div class="module_content">
-        <h1>Header 1</h1>
-
-        <h2>Header 2</h2>
-
-        <h3>Header 3</h3>
-        <h4>Header 4</h4>
-
-        <p>Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras mattis consectetur
-            purus sit amet fermentum. Maecenas faucibus mollis interdum. Maecenas faucibus mollis interdum. Cras justo
-            odio, dapibus ac facilisis in, egestas eget quam.</p>
-
-        <p>Donec id elit non mi porta <a href="#">link text</a> gravida at eget metus. Donec ullamcorper nulla non metus
-            auctor fringilla. Cras mattis consectetur purus sit amet fermentum. Aenean eu leo quam. Pellentesque ornare
-            sem lacinia quam venenatis vestibulum.</p>
-
-        <ul>
-            <li>Donec ullamcorper nulla non metus auctor fringilla.</li>
-            <li>Cras mattis consectetur purus sit amet fermentum.</li>
-            <li>Donec ullamcorper nulla non metus auctor fringilla.</li>
-            <li>Cras mattis consectetur purus sit amet fermentum.</li>
-        </ul>
-    </div>
-</article>
-<!-- end of styles article -->
-<div class="spacer"></div>
 </section>
 
 </body>
