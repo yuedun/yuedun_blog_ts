@@ -4,7 +4,7 @@
   "description": "关于dependencies符号的解释：1.version 必须完全和version一致   2.>version 必须比version大 3.>=version 同上  4.<version 同上  5.<=version 同上  6.~version 大约一样  7. 1.2.x 1.2.0, 1.2.1, 等，但不包括1.3.0  8.^1.2.1大于1.2.1小于2.0.0",
   "private": true,
   "scripts": {
-    "tsc": "tsc -w",
+    "tsc": "tsc -w --pretty",
     "serve": "set NODE_ENV=development& set DEBUG=yuedun:*& cd ./build & nodemon --delay 5 ./bin/www.js",
     "dev": "parallelshell \"npm run tsc\" \"npm run serve\"",
     "start": "node ./bin/www.js"

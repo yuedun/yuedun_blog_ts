@@ -254,8 +254,6 @@ interface CommonList {
 //获取公共数据
 function getNewTopFriend(): Promise.Thenable<CommonList> {
     return Promise.all(promisies).then(([newList, topList, friendLink, category]) => {
-        console.log(">>>>>>>>>>>", friendLink);
-        
         return {
             newList,
             topList,
