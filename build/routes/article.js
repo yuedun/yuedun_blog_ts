@@ -250,7 +250,6 @@ var promisies = [latestTop, visitedTop, friendLink, categies];
 function getNewTopFriend() {
     return Promise.all(promisies).then(function (_a) {
         var newList = _a[0], topList = _a[1], friendLink = _a[2], category = _a[3];
-        console.log(">>>>>>>>>>>", friendLink);
         return {
             newList: newList,
             topList: topList,
