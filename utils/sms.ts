@@ -11,7 +11,7 @@ const SMS_ACCOUNT = settings.SMS_ACCOUNT;
  * mobiles string 单个或多个手机号字符串，用;分割
  * text string 发送内容
  */
-export var sendSMS = function (mobiles:string, text:string, callback: Function):void {
+export var sendSMS = function (mobiles: string, text: string, callback: Function): void {
     let postData = querystring.stringify({
         'account': SMS_ACCOUNT.account,
         'password': SMS_ACCOUNT.password,
@@ -45,7 +45,7 @@ export var sendSMS = function (mobiles:string, text:string, callback: Function):
         })
     });
     myReq.on('error', function (e) {
-        console.log(JSON.stringify(e));
+        console.log("发送短信异常", JSON.stringify(e));
         callback(e, "")
     });
     myReq.write(postData);
