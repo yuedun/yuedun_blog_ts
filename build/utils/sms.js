@@ -40,7 +40,7 @@ exports.sendSMS = function (mobiles, text, callback) {
         });
     });
     myReq.on('error', function (e) {
-        console.log(JSON.stringify(e));
+        console.log("发送短信异常", JSON.stringify(e));
         callback(e, "");
     });
     myReq.write(postData);

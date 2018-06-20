@@ -8,7 +8,7 @@ var settings = require("../settings");
 var sms = require("./sms");
 var weather_user_model_1 = require("../models/weather-user-model");
 var WeatherCron = function () {
-    this.h_rule = 8;
+    this.h_rule = 7;
     this.m_rule = 35;
     this.cron = function () {
         console.log("天气定时任务启动");
@@ -34,13 +34,12 @@ var WeatherCron = function () {
                             resStr += chunk;
                         }).on("end", function () {
                             var w = JSON.parse(resStr).forecast;
-                            console.log(">>>>>>>>>>>", w);
                             if (w[0].cond.cond_d.indexOf("雨") > -1) {
                                 sendSms(w, umObjs, callback);
                             }
                         });
                     }).on('error', function (e) {
-                        console.log(">>>err:", e);
+                        console.log("获取天气异常:", e);
                     });
                     myReq.write("");
                     myReq.end();
@@ -69,7 +68,7 @@ function sendSms(weatherObjs, umObjs, callback) {
 var cronMap = new Array();
 cronMap.push(WeatherCron);
 module.exports = function () {
-    console.log(">>>>>>>>>>cron:BAE_ENV_AK:[" + process.env.BAE_ENV_AK + "], NODE_ENV:[" + process.env.NODE_ENV + "]");
+    console.log(">>>>>>>>>>cron:NODE_ENV:[" + process.env.NODE_ENV + "]");
     if (process.env.NODE_ENV === 'production') {
         cronMap.forEach(function (Cron, key) {
             var rule = new schedule.RecurrenceRule();
