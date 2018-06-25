@@ -12,11 +12,6 @@ router.get('/google4a302d2a96242bba.html', function (req, res, next) {
     res.render('google4a302d2a96242bba.html');
 });
 
-//robots.txt
-router.get('/robots.txt', function (req, res, next) {
-    res.sendFile("/robots.txt", { root: "./" });
-});
-
 //微信token验证
 router.get('/weixin/validateToken', function (req: Request, res: Response) {
     weixin.validateToken(req, res);
