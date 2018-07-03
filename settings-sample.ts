@@ -1,17 +1,17 @@
 /**
  * Created by huopanpan on 2014/5/26.
  */
-export var mongodb = {
+export const mongodb = {
     cookieSecret: 'node-blog',
     db: 'blogs',
-    port: '27017',//8908
+    port: '27017',
     uid: 'admin' || process.env.BAE_ENV_AK,
     pwd: 'admin' || process.env.BAE_ENV_SK,
     host: 'localhost'
 };
 
 //建周短信账户
-export var SMS_ACCOUNT = {
+export const SMS_ACCOUNT = {
     account: 'xxx',
     password: 'xxx',
     signature: '【hp】',
@@ -19,20 +19,17 @@ export var SMS_ACCOUNT = {
 };
 
 //环境云key http://www.envicloud.cn/
-export var weather_key = "sdf==";
+export const weather_key = "sdf==";
 
-//主机配置
-export var host = "localhost:3000";
-
-export var gallery_pass = "123";//格式：gallery/?pass=123
+export const gallery_pass = "123";//格式：gallery/?pass=123
 //leacloud
-export var LEACLOUD = {
+export const LEACLOUD = {
     appId: '',
     appKey: ''
 };
 
 //七牛key
-export var qiniuConfig = {
+export const qiniuConfig = {
     url: 'http://hopefully.qiniudn.com/',
     bucketName: 'xxx',
     accessKey: '6CG6fskhgir---',
@@ -40,16 +37,16 @@ export var qiniuConfig = {
 }
 
 //微信APPSECRET
-export var weixin = {
+export const weixin = {
     appId: "wxcd",
     secret: "7c9d",
 }
 
 //发送邮件服务
-export var mail = {
+export const mail = {
     from: "xx@163.com",
     pass: "xx"
 }
 
 //错误发送至
-export var errorAlert = "xx@163.com";
+export const errorAlert = "xx@163.com";
