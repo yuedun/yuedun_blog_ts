@@ -6,7 +6,7 @@ var Path = require("path");
 var IO = require("./Io");
 var message_1 = require("../utils/message");
 var settings_1 = require("../settings");
-var debug = require('debug')('yuedun:route-register');
+var debug = require('debug')("yuedun:route-register.ts");
 var router = express.Router();
 var cwd = process.cwd();
 var RouteRegister = (function () {
@@ -108,7 +108,7 @@ var RouteRegister = (function () {
                     res.render(html, data);
                 }
             }).catch(function (err) {
-                var errMsg = "\u3010\u8BBF\u95EEurl\u3011\uFF1A" + req.url + "\uFF0C\u3010\u9519\u8BEF\u5806\u6808\u3011\uFF1A" + err.stack;
+                var errMsg = "\u3010\u8BBF\u95EEurl\u3011\uFF1A" + req.url + "\n\u3010\u9519\u8BEF\u5806\u6808\u3011\uFF1A" + err.stack;
                 var msg = new message_1.default(settings_1.errorAlert, "\u9519\u8BEF\u63D0\u9192", null, errMsg);
                 msg.send().then(function (data) {
                     debug(">>>>>", data);
