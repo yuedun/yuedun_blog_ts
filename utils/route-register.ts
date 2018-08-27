@@ -7,7 +7,7 @@ import * as Path from 'path';
 import * as IO from './Io';
 import Message from "../utils/message";
 import { errorAlert } from '../settings';
-var debug = require('debug')('yuedun:route-register');
+var debug = require('debug')("yuedun:route-register.ts");
 
 const router = express.Router();
 const cwd = process.cwd();
@@ -140,7 +140,7 @@ export default class RouteRegister {
                     res.render(html, data);
                 }
             }).catch((err: Error) => {
-                let errMsg = `【访问url】：${req.url}，【错误堆栈】：${err.stack}`
+                let errMsg = `【访问url】：${req.url}\n【错误堆栈】：${err.stack}`
                 var msg = new Message(errorAlert, `错误提醒`, null, errMsg)
                 msg.send().then(data => {
                     debug(">>>>>", data)
