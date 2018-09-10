@@ -6,7 +6,7 @@ var app_1 = require("../app");
 var Debug = require("debug");
 var debug = Debug('yuedun:www');
 var http = require("http");
-var port = normalizePort(process.env.PORT || '3000');
+var port = normalizePort(process.env.PORT || '3001');
 app_1.app.set('port', port);
 var server = http.createServer(app_1.app);
 server.listen(port);
