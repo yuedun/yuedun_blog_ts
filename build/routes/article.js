@@ -241,14 +241,24 @@ var Routes = (function () {
     return Routes;
 }());
 exports.default = Routes;
-var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
-var latestTop = blog_model_1.default.find({ status: 1, createdAt: { $gt: twoMonth } }, null, { sort: { _id: -1 }, limit: 5 }).exec();
-var visitedTop = viewer_log_model_1.default.aggregate({ $match: { createdAt: { $gt: twoMonth } } }, { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } }, { $sort: { createAt: -1 } }).sort({ pv: -1 }).limit(5).exec();
-var friendLink = friend_link_model_1.default.find({ state: 1 }).exec();
-var categies = category_model_1.default.find().exec();
+var twoMonth = function () {
+    return moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
+};
+var latestTop = function () {
+    return blog_model_1.default.find({ status: 1, createdAt: { $gt: twoMonth() } }, null, { sort: { _id: -1 }, limit: 5 }).exec();
+};
+var visitedTop = function () {
+    return viewer_log_model_1.default.aggregate({ $match: { createdAt: { $gt: twoMonth() } } }, { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } }, { $sort: { createAt: -1 } }).sort({ pv: -1 }).limit(5).exec();
+};
+var friendLink = function () {
+    return friend_link_model_1.default.find({ state: 1 }).exec();
+};
+var categies = function () {
+    return category_model_1.default.find().exec();
+};
 var promisies = [latestTop, visitedTop, friendLink, categies];
 function getNewTopFriend() {
-    return Promise.all(promisies).then(function (_a) {
+    return Promise.all([latestTop(), visitedTop(), friendLink(), categies()]).then(function (_a) {
         var newList = _a[0], topList = _a[1], friendLink = _a[2], category = _a[3];
         return {
             newList: newList,

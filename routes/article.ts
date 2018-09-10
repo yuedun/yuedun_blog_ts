@@ -225,23 +225,33 @@ export default class Routes {
     };
 }
 //最近新建
-var twoMonth = moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
-var latestTop = Blog.find({ status: 1, createdAt: { $gt: twoMonth } }, null, { sort: { _id: -1 }, limit: 5 }).exec();
+var twoMonth = function () {
+    return moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
+}
+var latestTop = function () {
+    return Blog.find({ status: 1, createdAt: { $gt: twoMonth() } }, null, { sort: { _id: -1 }, limit: 5 }).exec();
+}
 
 //近两月访问最多
-var visitedTop = ViewerLogModel.aggregate(
-    { $match: { createdAt: { $gt: twoMonth } } },
-    { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } },
-    { $sort: { createAt: -1 } }
-).sort({ pv: -1 }).limit(5).exec();
+var visitedTop = function () {
+    return ViewerLogModel.aggregate(
+        { $match: { createdAt: { $gt: twoMonth() } } },
+        { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } },
+        { $sort: { createAt: -1 } }
+    ).sort({ pv: -1 }).limit(5).exec();
+}
 /**
  * Blog.find(条件, 字段, 排序、limit)
  */
 //获取友链
-var friendLink = FriendLinkModel.find({ state: 1 }).exec();
+var friendLink = function () {
+    return FriendLinkModel.find({ state: 1 }).exec();
+}
 
 //所有分类
-var categies = CategoryModel.find().exec();
+var categies = function () {
+    return CategoryModel.find().exec();
+}
 
 var promisies: Array<any> = [latestTop, visitedTop, friendLink, categies];
 
@@ -253,7 +263,7 @@ interface CommonList {
 }
 //获取公共数据
 function getNewTopFriend(): Promise.Thenable<CommonList> {
-    return Promise.all(promisies).then(([newList, topList, friendLink, category]) => {
+    return Promise.all([latestTop(), visitedTop(), friendLink(), categies()]).then(([newList, topList, friendLink, category]) => {
         return {
             newList,
             topList,
