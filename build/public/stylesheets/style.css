@@ -145,7 +145,7 @@ aside {
     flex-wrap: wrap;
 }
 .category a {
-    background-color: #ccc;
+    background-color: #e4e3e3;
     border-radius: 3px;
     padding: 3px;
     margin: 2px 3px;
@@ -185,6 +185,7 @@ aside {
 .catalog-section div {border-bottom: 1px dotted lightgray;line-height: 35px;}
 .catalog-section span{
     float: right;
+    font-size: 12px;
 }
 .catalog-section time {
     font-size: 13px;
