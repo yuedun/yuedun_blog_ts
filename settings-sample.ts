@@ -30,7 +30,7 @@ export const LEACLOUD = {
 
 //七牛key
 export const qiniuConfig = {
-    url: 'http://hopefully.qiniudn.com/',
+    url: 'http://hopefully-img.yuedun.wang/',
     bucketName: 'xxx',
     accessKey: '6CG6fskhgir---',
     secretKey: 'NxeiNiysdog---'
