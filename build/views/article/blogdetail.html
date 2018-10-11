@@ -59,14 +59,16 @@
 	<script>
 		window.onload = function(){
 			prettyPrint();//代码高亮
-			var ad = document.querySelector(".pop_ad");
-			ad.style.display = "none";
 		}
 	</script>
 	<script>
 		setInterval(function () {
+			var ad = document.querySelector("#pop_ad");
 			var adblock = document.querySelector("#feedAv");
 			var adblockcontent = document.querySelector("div[node-type=cmt-list]");
+			if (ad) {
+				ad.style.display = "none";
+			}
 			if (adblock) {
 				adblock.style.display = "display:block !important;";
 				adblock.remove();
@@ -74,7 +76,7 @@
 			if (adblockcontent) {
 				adblockcontent.attributes[0] = "node-type2";
 			}
-		}, 5000);
+		}, 2000);
 	</script>
 </body>
 
