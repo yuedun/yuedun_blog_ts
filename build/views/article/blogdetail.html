@@ -35,7 +35,7 @@
 			</div>
 			<footer>
 				<div class="keybq">
-					<p><image src="/images/6264.png"></image>关键字词：<span><%= blog.tags%></span></p>
+					<p><img src="/images/6264.png"/>关键字词：<span><%= blog.tags%></span></p>
 				</div>
 				<div class="comment">
 					<!--评论-->
@@ -54,11 +54,27 @@
 	</div>
 	<% include footer.html %>
 	<script src="/javascripts/silder.js"></script>
+	<!-- <script src="https://cdn.bootcss.com/prettify/r298/prettify.js"></script> -->
 	<script src="https://cdn.staticfile.org/prettify/r298/prettify.min.js"></script>
 	<script>
-		window.onload =function(){
-			prettyPrint();
+		window.onload = function(){
+			prettyPrint();//代码高亮
+			var ad = document.querySelector(".pop_ad");
+			ad.style.display = "none";
 		}
+	</script>
+	<script>
+		setInterval(function () {
+			var adblock = document.querySelector("#feedAv");
+			var adblockcontent = document.querySelector("div[node-type=cmt-list]");
+			if (adblock) {
+				adblock.style.display = "display:block !important;";
+				adblock.remove();
+			}
+			if (adblockcontent) {
+				adblockcontent.attributes[0] = "node-type2";
+			}
+		}, 5000);
 	</script>
 </body>
 
