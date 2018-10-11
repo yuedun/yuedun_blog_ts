@@ -257,3 +257,8 @@ aside {
     font-weight: bold;
     line-height: 20px;
 }
+
+/* 畅言广告屏蔽*/
+.pop_ad {
+    display: none !important;
+}
