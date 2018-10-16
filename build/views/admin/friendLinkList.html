@@ -10,7 +10,7 @@
     <script type="text/javascript">
         $(function () {
             $(".del").click(function () {
-                $.post('/admin/delFriendLink',{
+                $.post('/admin/delFriendLink', {
                     id: $(this).attr("id")
                 }, function (data) {
                     alert(JSON.stringify(data));
@@ -60,11 +60,16 @@
                     <% friendLinks.forEach(function(note){%>
                     <div class="message">
                         <p>
-                            <%- note.name%><%- note.url%>
+                            【<%- note.name%>】<a href="<%- note.url%>"><%- note.url%></a>
                         </p>
                         <p class="breadcrumb">
                             <span>时间：<%= note.createdAt%></span>
                             <span><a href="/admin/delFriendLink/<%=note.id%>">删除</a></span>
+                            <% if(note.state==1){%>
+                            <span><a href="/admin/freezeFriendLink/<%=note.id%>?state=0">暂停</a></span>
+                            <% } else {%>
+                            <span><a href="/admin/freezeFriendLink/<%=note.id%>?state=1">启用</a></span>
+                            <%}%>
                         </p>
                     </div>
                     <% })%>

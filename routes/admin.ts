@@ -596,6 +596,8 @@ export default class Routes {
     static friendLinkList(req: Request, res: Response): Promise.Thenable<any> {
         return FriendLinkModel.find().exec()
             .then(data => {
+                console.log(data);
+                
                 return { success: 0, friendLinks: data }
             })
     }
@@ -615,14 +617,32 @@ export default class Routes {
         })
     }
     /**
+     * 暂停友链
+     */
+    @route({
+        method: "get",
+        path: ":id"
+    })
+    static freezeFriendLink(req: Request, res: Response): Promise.Thenable<void> {
+        let state = req.query.state;
+        return FriendLinkModel.update({
+            _id: req.params.id
+        },{
+            state
+        }).then(data => {
+            res.redirect('/admin/friendLinkList');
+            return
+        })
+    }
+    /**
      * 删除友链
      */
     @route({
         method: "get",
         path: ":id"
     })
-    static delFriendLink(req: Request, res: Response): void {
-        FriendLinkModel.remove({
+    static delFriendLink(req: Request, res: Response): Promise.Thenable<void> {
+        return FriendLinkModel.remove({
             _id: req.params.id
         }).then(data => {
             res.redirect('/admin/friendLinkList');
