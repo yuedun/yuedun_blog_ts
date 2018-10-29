@@ -9,6 +9,7 @@ export interface IResume extends Document {
 	createdAt: Date;
 	updatedAt: Date;
 }
+//resume已被占用，使用Curriculum
 var ResumeModel: Model<IResume> = model<IResume>('Curriculum', ResumeSchema);
 
 export default ResumeModel;
