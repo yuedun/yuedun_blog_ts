@@ -140,7 +140,7 @@ export default class RouteRegister {
                     res.render(html, data);
                 }
             }).catch((err: Error) => {
-                let errMsg = `【访问url】：${req.url}\n【错误堆栈】：${err.stack}`
+                let errMsg = `【访问url】：${req.url}\n【错误堆栈】：${err.stack.match(/[^\n]+\n[^\n]+\n[^\n]+/)}`
                 var msg = new Message(errorAlert, `错误提醒`, null, errMsg)
                 msg.send().then(data => {
                     debug(">>>>>", data)
