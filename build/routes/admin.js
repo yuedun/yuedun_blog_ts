@@ -422,6 +422,7 @@ var Routes = (function () {
     Routes.friendLinkList = function (req, res) {
         return friend_link_model_1.default.find().exec()
             .then(function (data) {
+            console.log(data);
             return { success: 0, friendLinks: data };
         });
     };
@@ -433,8 +434,19 @@ var Routes = (function () {
             res.redirect('/admin/friendLinkList');
         });
     };
+    Routes.freezeFriendLink = function (req, res) {
+        var state = req.query.state;
+        return friend_link_model_1.default.update({
+            _id: req.params.id
+        }, {
+            state: state
+        }).then(function (data) {
+            res.redirect('/admin/friendLinkList');
+            return;
+        });
+    };
     Routes.delFriendLink = function (req, res) {
-        friend_link_model_1.default.remove({
+        return friend_link_model_1.default.remove({
             _id: req.params.id
         }).then(function (data) {
             res.redirect('/admin/friendLinkList');
@@ -612,6 +624,12 @@ var Routes = (function () {
             json: true
         })
     ], Routes, "addFriendLink", null);
+    __decorate([
+        route_1.route({
+            method: "get",
+            path: ":id"
+        })
+    ], Routes, "freezeFriendLink", null);
     __decorate([
         route_1.route({
             method: "get",

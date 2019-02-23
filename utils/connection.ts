@@ -33,7 +33,7 @@ export default class MongoConnection {
         mongoose.connect(this.url, opts, function (err) {
             if (err) {
                 console.log('connection callback error');
-            }
+            }           
         });//一个数据库用connect,多个用createConnection
     }
 }
