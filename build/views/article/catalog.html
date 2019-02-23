@@ -16,6 +16,7 @@
 	<div class="container">
 		<article class="backgroud border">
 			<section class="catalog-section">
+				<h4>总博客数（<%=catalog.length%>）</h4>
 				<% catalog.forEach(function(item, index){%>
 				<div>
 					<time title="创建时间"><%= item.createDate.substring(0, 10)%></time>
