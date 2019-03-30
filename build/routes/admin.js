@@ -232,7 +232,7 @@ var Routes = (function () {
             password: generatorPassword(password),
             level: 1,
             state: true,
-            createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
+            createdAt: new Date()
         });
         return user.save()
             .then(function () {
@@ -295,7 +295,7 @@ var Routes = (function () {
             cityCode: areaId,
             sendCount: 0,
             status: 1,
-            createAt: Moment().format('YYYY-MM-DD HH:mm:ss'),
+            createAt: new Date()
         });
         return weathUser.save()
             .then(function (data) {
@@ -317,7 +317,7 @@ var Routes = (function () {
     Routes.quicknote = function (req, res) {
         var quicknote = new quick_note_model_1.default({
             content: req.body.content,
-            state: true,
+            status: true,
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
         });
         return quicknote.save()

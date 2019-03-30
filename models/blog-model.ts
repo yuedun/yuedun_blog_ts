@@ -9,6 +9,7 @@ export var BlogSchema: Schema = new Schema({
         default: 1
     },//1发布，0草稿
     comments: [],//评论
+    commentCount: Number,
     category: String,//分类
     top: Number,//置顶
     tags: String,//标签
@@ -31,6 +32,7 @@ export interface IBlog extends Document {
     content: string, //内容
     status: number,//发布，草稿，
     comments: string[],//评论
+    commentCount: number,
     category: string,//分类
     top: number,//置顶
     tags: string,//标签
