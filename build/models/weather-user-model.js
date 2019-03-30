@@ -6,7 +6,7 @@ exports.WeatherUserSchema = new mongoose_1.Schema({
     mobile: String,
     city: String,
     cityCode: Number,
-    createAt: String,
+    createAt: Date,
     sendCount: Number,
     status: Number,
 });

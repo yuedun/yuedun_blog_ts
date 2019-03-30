@@ -10,6 +10,7 @@ exports.BlogSchema = new mongoose_1.Schema({
         default: 1
     },
     comments: [],
+    commentCount: Number,
     category: String,
     top: Number,
     tags: String,
