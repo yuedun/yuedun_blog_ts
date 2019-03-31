@@ -1,5 +1,4 @@
 import * as Promise from 'bluebird';
-import * as moment from 'moment';
 import * as formidable from 'formidable';
 import * as Debug from 'debug';
 var debug = Debug('yuedun:index');

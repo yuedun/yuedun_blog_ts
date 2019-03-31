@@ -2,11 +2,7 @@
  * Created by huopanpan on 2017/6/10.
  */
 import * as Promise from 'bluebird';
-import { Request, Response } from 'express';
-var http = require('http');
-var utils = require('utility');
-var moment = require('moment');
-var nodemailer = require('nodemailer');
+import { Request } from 'express';
 import { default as Comment, IComment as CommentInstance } from '../models/comment-model';
 import { route } from '../utils/route';
 
