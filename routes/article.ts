@@ -1,4 +1,3 @@
-import * as async from 'async';
 import { Request, Response } from 'express';
 import * as Promise from 'bluebird';
 import * as moment from 'moment';
@@ -10,7 +9,6 @@ import { default as FriendLinkModel, IFriendLink as FriendLinkInstance } from '.
 import { default as ResumeModel, IResume as ResumeInstance } from '../models/resume-model';
 import { default as CategoryModel, ICategory as CategoryInstance } from '../models/category-model';
 import * as Markdown from 'markdown-it';
-import Message from "../utils/message";
 import * as Debug from 'debug';
 var debug = Debug('yuedun:article');
 var md = Markdown({

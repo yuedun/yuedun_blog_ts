@@ -2,13 +2,10 @@
  * Created by huopanpan on 2014/10/31.
  */
 var async = require('async');
-var express = require('express');
 import { Request, Response } from 'express';
 var http = require('http');
 var utils = require('utility');
-var moment = require('moment');
 var nodemailer = require('nodemailer');
-var router = express.Router();//获取路由变量，对其设置路径，再导出在app.js中使用app.use(blog)
 import { default as LogId } from '../models/LogId';
 import { default as Blog } from '../models/blog-model';
 import { route } from '../utils/route';

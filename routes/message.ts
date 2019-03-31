@@ -1,9 +1,7 @@
 'use strict';
 import * as http from 'http';
-import * as express from 'express';
 import * as Promise from 'bluebird';
 import { Request, Response } from 'express';
-import * as errmsg from '../utils/error-code';
 import * as sms from '../utils/sms';
 import * as settings from '../settings';
 import { route } from '../utils/route';
