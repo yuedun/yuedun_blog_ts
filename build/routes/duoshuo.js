@@ -7,12 +7,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var async = require('async');
-var express = require('express');
 var http = require('http');
 var utils = require('utility');
-var moment = require('moment');
 var nodemailer = require('nodemailer');
-var router = express.Router();
 var LogId_1 = require("../models/LogId");
 var blog_model_1 = require("../models/blog-model");
 var route_1 = require("../utils/route");

@@ -312,7 +312,7 @@ export default class Routes {
             password: generatorPassword(password),
             level: 1,//权限级别，最高
             state: true,//可用/停用
-            createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
+            createdAt: new Date()
         });
         return user.save()
             .then(() => {
@@ -401,7 +401,7 @@ export default class Routes {
     static createWeatherUser(req: Request, res: Response): Promise.Thenable<any> {
         var args = req.body;
         // var areaObjs = JSON.parse(area);
-        var areaId = _.result(_.find(area, { 'NAMECN': args.city }), 'AREAID');
+        var areaId = _.result<number>(_.find(area, { 'NAMECN': args.city }), 'AREAID');
         var weathUser = new WeatherUser({
             username: args.username,
             mobile: args.mobile,
@@ -409,7 +409,7 @@ export default class Routes {
             cityCode: areaId,
             sendCount: 0,
             status: 1,//1可用/0停用
-            createAt: Moment().format('YYYY-MM-DD HH:mm:ss'),
+            createAt: new Date()
         });
         return weathUser.save()
             .then(data => {
@@ -448,7 +448,7 @@ export default class Routes {
     static quicknote(req: Request, res: Response): Promise.Thenable<void> {
         var quicknote = new QuickNote({
             content: req.body.content,
-            state: true,//可用/停用
+            status: true,//可用/停用
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
         });
         return quicknote.save()

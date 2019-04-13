@@ -7,10 +7,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 var Promise = require("bluebird");
-var http = require('http');
-var utils = require('utility');
-var moment = require('moment');
-var nodemailer = require('nodemailer');
 var comment_model_1 = require("../models/comment-model");
 var route_1 = require("../utils/route");
 var Routes = (function () {
