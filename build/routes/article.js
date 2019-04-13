@@ -100,6 +100,15 @@ var Routes = (function () {
                     categories: list.category,
                     description: doc.content.replace(/<\/?.+?>/g, "").substring(0, 300)
                 };
+            }).catch(function (err) {
+                return {
+                    blog: null,
+                    newList: list.newList,
+                    topList: list.topList,
+                    friendLinks: list.friendLink,
+                    categories: list.category,
+                    description: null
+                };
             });
         });
     };
