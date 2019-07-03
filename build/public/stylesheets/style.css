@@ -102,7 +102,7 @@ nav ul li a:hover{
 
 }
 article {
-    width: 45%;
+    width: 40%;
     margin-left: 20%;
     padding: 0 50px;
 }
@@ -130,7 +130,7 @@ article {
 /*旁边*/
 aside {
     margin-left: 1%;
-    width: 20%;
+    width: 19%;
 }
 .aside-block {
     margin: 0 0 20px 0;
