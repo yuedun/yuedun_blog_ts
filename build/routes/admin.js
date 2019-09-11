@@ -40,7 +40,7 @@ var Routes = (function () {
             var today = Moment().format('YYYY-MM-DD');
             return Promise.all([
                 blog_model_1.default.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),
-                viewer_log_model_1.default.count({ createdAt: { $regex: today, $options: 'i' } }),
+                viewer_log_model_1.default.count({ createdAt: { $regex: today, $options: 'i' } }).exec(),
                 viewer_log_model_1.default.aggregate({ $match: { createdAt: { $regex: today, $options: 'i' } } }, { $group: { _id: { blogId: '$blogId', title: "$title", url: "$url" }, pv: { $sum: 1 } } }, { $sort: { createAt: -1 } }),
                 viewer_log_model_1.default.find({}, null, { sort: { _id: -1 }, limit: 20 })
             ]).then(function (_a) {
@@ -167,8 +167,8 @@ var Routes = (function () {
         });
     };
     Routes.editArticleMd = function (req, res) {
-        var getBlogById = blog_model_1.default.findById(req.params.id);
-        var getCategory = category_model_1.default.find({});
+        var getBlogById = blog_model_1.default.findById(req.params.id).exec();
+        var getCategory = category_model_1.default.find({}).exec();
         return Promise.all([getBlogById, getCategory])
             .then(function (_a) {
             var blogObj = _a[0], categories = _a[1];
@@ -309,7 +309,7 @@ var Routes = (function () {
         });
     };
     Routes.delWeatherUser = function (req, res) {
-        return Promise.resolve(weather_user_model_1.default.remove({ _id: req.params.userId }))
+        return Promise.resolve(weather_user_model_1.default.remove({ _id: req.params.userId }).exec())
             .then(function (d) {
             res.redirect('/admin/weatherUserList');
         });
@@ -365,7 +365,7 @@ var Routes = (function () {
     };
     Routes.aboutConfig = function (req, res) {
         var arr = [];
-        return Promise.resolve(about_model_1.default.findOne())
+        return Promise.resolve(about_model_1.default.findOne().exec())
             .then(function (resume) {
             if (!resume) {
                 var r = new about_model_1.default({
@@ -416,7 +416,7 @@ var Routes = (function () {
         var id = req.body.id;
         return resume_model_1.default.findByIdAndUpdate(id, {
             $set: { state: state }
-        });
+        }).exec();
     };
     ;
     Routes.friendLinkList = function (req, res) {
