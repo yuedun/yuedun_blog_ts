@@ -2,14 +2,16 @@ import { Request, Response } from 'express';
 import * as Promise from 'bluebird';
 import * as moment from 'moment';
 import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
-import { default as About, IAbout as AboutInstance } from '../models/about-model';
+import { default as About } from '../models/about-model';
 import { default as QuickNote } from '../models/quick-note-model';
-import { default as ViewerLogModel, IViewerLog as ViewerLogInstance } from '../models/viewer-log-model';
+import { default as ViewerLogModel } from '../models/viewer-log-model';
 import { default as FriendLinkModel, IFriendLink as FriendLinkInstance } from '../models/friend-link-model';
-import { default as ResumeModel, IResume as ResumeInstance } from '../models/resume-model';
+import { default as ResumeModel } from '../models/resume-model';
 import { default as CategoryModel, ICategory as CategoryInstance } from '../models/category-model';
 import * as Markdown from 'markdown-it';
 import * as Debug from 'debug';
+import { route } from '../utils/route';
+import * as settings from '../settings';
 var debug = Debug('yuedun:article');
 var md = Markdown({
     highlight: function (str, lang) {
@@ -19,9 +21,6 @@ var md = Markdown({
         return `<pre class="prettyprint"><code>${md.utils.escapeHtml(str)}</code></pre>`;
     }
 });
-import { route } from '../utils/route';
-import * as settings from '../settings';
-
 
 export default class Routes {
     /* 首页 */
@@ -40,10 +39,10 @@ export default class Routes {
         if (category) {
             condition.category = category;
         }
-        var blogPromise = Promise.resolve(Blog.find(condition, null, { sort: { _id: -1 }, skip: pageIndex * pageSize, limit: pageSize }));
+        var blogPromise = Promise.resolve(Blog.find(condition, null, { sort: { _id: -1 }, skip: pageIndex * pageSize, limit: pageSize }).exec());
 
         return getNewTopFriend().then(list => {
-            return Promise.all([blogPromise, Blog.count(condition)])
+            return Promise.all([blogPromise, Blog.count(condition).exec()])
                 .then(([blogList, totalIndex]) => {
                     blogList.forEach(function (item, index) {
                         if (item.ismd) {
@@ -80,9 +79,9 @@ export default class Routes {
         let visited = ip + blogId;
         let blogPromise: Promise.Thenable<BlogInstance>;
         if (req.cookies['visited' + blogId]) {
-            blogPromise = Blog.findById(req.params.id);
+            blogPromise = Blog.findById(req.params.id).exec();
         } else {
-            blogPromise = Blog.findByIdAndUpdate(req.params.id, { $inc: { pv: 1 } })
+            blogPromise = Blog.findByIdAndUpdate(req.params.id, { $inc: { pv: 1 } }).exec();
         }
 
         return getNewTopFriend().then(list => {
@@ -117,7 +116,7 @@ export default class Routes {
     /* 博客目录 */
     @route({})
     static catalog(req: Request, res: Response): Promise.Thenable<any> {
-        var catalogPromise = Blog.find({ status: 1 }, 'title createdAt pv', { sort: { _id: -1 } })
+        var catalogPromise = Blog.find({ status: 1 }, 'title createdAt pv', { sort: { _id: -1 } }).exec();
         return getNewTopFriend().then(list => {
             return Promise.resolve(catalogPromise)
                 .then(catalog => {
@@ -147,7 +146,7 @@ export default class Routes {
     @route({})
     static about(req: Request, res: Response): Promise.Thenable<any> {
         return getNewTopFriend().then(list => {
-            return Promise.resolve(About.findOne())
+            return Promise.resolve(About.findOne().exec())
                 .then(about => {
                     var resume = new About({
                         nickname: "",
@@ -202,7 +201,7 @@ export default class Routes {
     @route({})
     static quicknote(req: Request, res: Response): Promise.Thenable<any> {
         return getNewTopFriend().then(list => {
-            return Promise.resolve(QuickNote.find(null, null, { sort: { '_id': -1 } }))
+            return Promise.resolve(QuickNote.find(null, null, { sort: { '_id': -1 } }).exec())
                 .then(quicknote => {
                     return {
                         quickNoteList: quicknote,

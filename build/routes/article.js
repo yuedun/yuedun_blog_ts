@@ -17,6 +17,8 @@ var resume_model_1 = require("../models/resume-model");
 var category_model_1 = require("../models/category-model");
 var Markdown = require("markdown-it");
 var Debug = require("debug");
+var route_1 = require("../utils/route");
+var settings = require("../settings");
 var debug = Debug('yuedun:article');
 var md = Markdown({
     highlight: function (str, lang) {
@@ -26,8 +28,6 @@ var md = Markdown({
         return "<pre class=\"prettyprint\"><code>" + md.utils.escapeHtml(str) + "</code></pre>";
     }
 });
-var route_1 = require("../utils/route");
-var settings = require("../settings");
 var Routes = (function () {
     function Routes() {
     }
@@ -43,9 +43,9 @@ var Routes = (function () {
         if (category) {
             condition.category = category;
         }
-        var blogPromise = Promise.resolve(blog_model_1.default.find(condition, null, { sort: { _id: -1 }, skip: pageIndex * pageSize, limit: pageSize }));
+        var blogPromise = Promise.resolve(blog_model_1.default.find(condition, null, { sort: { _id: -1 }, skip: pageIndex * pageSize, limit: pageSize }).exec());
         return getNewTopFriend().then(function (list) {
-            return Promise.all([blogPromise, blog_model_1.default.count(condition)])
+            return Promise.all([blogPromise, blog_model_1.default.count(condition).exec()])
                 .then(function (_a) {
                 var blogList = _a[0], totalIndex = _a[1];
                 blogList.forEach(function (item, index) {
@@ -78,10 +78,10 @@ var Routes = (function () {
         var visited = ip + blogId;
         var blogPromise;
         if (req.cookies['visited' + blogId]) {
-            blogPromise = blog_model_1.default.findById(req.params.id);
+            blogPromise = blog_model_1.default.findById(req.params.id).exec();
         }
         else {
-            blogPromise = blog_model_1.default.findByIdAndUpdate(req.params.id, { $inc: { pv: 1 } });
+            blogPromise = blog_model_1.default.findByIdAndUpdate(req.params.id, { $inc: { pv: 1 } }).exec();
         }
         return getNewTopFriend().then(function (list) {
             return Promise.resolve(blogPromise).then(function (doc) {
@@ -113,7 +113,7 @@ var Routes = (function () {
         });
     };
     Routes.catalog = function (req, res) {
-        var catalogPromise = blog_model_1.default.find({ status: 1 }, 'title createdAt pv', { sort: { _id: -1 } });
+        var catalogPromise = blog_model_1.default.find({ status: 1 }, 'title createdAt pv', { sort: { _id: -1 } }).exec();
         return getNewTopFriend().then(function (list) {
             return Promise.resolve(catalogPromise)
                 .then(function (catalog) {
@@ -141,7 +141,7 @@ var Routes = (function () {
     ;
     Routes.about = function (req, res) {
         return getNewTopFriend().then(function (list) {
-            return Promise.resolve(about_model_1.default.findOne())
+            return Promise.resolve(about_model_1.default.findOne().exec())
                 .then(function (about) {
                 var resume = new about_model_1.default({
                     nickname: "",
@@ -192,7 +192,7 @@ var Routes = (function () {
     ;
     Routes.quicknote = function (req, res) {
         return getNewTopFriend().then(function (list) {
-            return Promise.resolve(quick_note_model_1.default.find(null, null, { sort: { '_id': -1 } }))
+            return Promise.resolve(quick_note_model_1.default.find(null, null, { sort: { '_id': -1 } }).exec())
                 .then(function (quicknote) {
                 return {
                     quickNoteList: quicknote,

@@ -39,7 +39,7 @@ export default class Routes {
             var today = Moment().format('YYYY-MM-DD');
             return Promise.all<any, number, any, any>([
                 Blog.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),//聚合查询，总访问量,分组必须包含_id
-                ViewerLogModel.count({ createdAt: { $regex: today, $options: 'i' } }),//模糊查询"%text%"，今日访问量
+                ViewerLogModel.count({ createdAt: { $regex: today, $options: 'i' } }).exec(),//模糊查询"%text%"，今日访问量
                 ViewerLogModel.aggregate(
                     { $match: { createdAt: { $regex: today, $options: 'i' } } },
                     { $group: { _id: { blogId: '$blogId', title: "$title", url: "$url" }, pv: { $sum: 1 } } },
@@ -207,8 +207,8 @@ export default class Routes {
         path: ":id"
     })
     static editArticleMd(req: Request, res: Response): Promise.Thenable<any> {
-        let getBlogById = Blog.findById(req.params.id);
-        let getCategory = Category.find({});
+        let getBlogById = Blog.findById(req.params.id).exec();
+        let getCategory = Category.find({}).exec();
 
         return Promise.all([getBlogById, getCategory])
             .then(([blogObj, categories]: [BlogInstance, CategoryInstance[]]) => {
@@ -434,7 +434,7 @@ export default class Routes {
         path: ":userId"
     })
     static delWeatherUser(req: Request, res: Response): Promise.Thenable<void> {
-        return Promise.resolve(WeatherUser.remove({ _id: req.params.userId }))
+        return Promise.resolve(WeatherUser.remove({ _id: req.params.userId }).exec())
             .then(d => {
                 res.redirect('/admin/weatherUserList');
             })
@@ -524,7 +524,7 @@ export default class Routes {
     @route({})
     static aboutConfig(req: Request, res: Response): Promise.Thenable<any> {
         let arr: { key: string; value: Object }[] = [];
-        return Promise.resolve(About.findOne())
+        return Promise.resolve(About.findOne().exec())
             .then(resume => {
                 if (!resume) {
                     var r = new About({
@@ -587,7 +587,7 @@ export default class Routes {
         var id = req.body.id;
         return ResumeModel.findByIdAndUpdate(id, {
             $set: { state: state }
-        })
+        }).exec();
     };
     /**
      * 友链
@@ -597,7 +597,6 @@ export default class Routes {
         return FriendLinkModel.find().exec()
             .then(data => {
                 console.log(data);
-                
                 return { success: 0, friendLinks: data }
             })
     }
