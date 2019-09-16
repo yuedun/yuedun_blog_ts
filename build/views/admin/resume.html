@@ -7,287 +7,287 @@
   <title>简历设置</title>
   <link rel="stylesheet" href="/stylesheets/layout.css" type="text/css" media="screen" />
   <style>
-      *{outline:0;}
-      body{margin:0;padding:0;color:#333;word-wrap:break-word;font-size:14px;font-family:Hiragino Sans GB,Microsoft Yahei,SimSun,Arial,Helvetica Neue,Helvetica;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
-      article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block;}
-      progress{display:inline-block;vertical-align:baseline;}
-      a{background-color:transparent;color:#555;text-decoration:none;}
-      a:hover{color:#00b38a;}
-      h1,h2,h3,h4{margin:10px 0;font-weight:400;}
-      p{margin:0;}
-      p+p{margin-top:10px;}
-      img{display:inline-block;border:0;vertical-align:top;}
-      button,input,optgroup,select,textarea{margin:0;padding:0;border:1px solid #ededed;border-radius:0;font-family:Hiragino Sans GB,Microsoft Yahei,SimSun,Arial,Helvetica Neue,Helvetica;}
-      textarea{overflow:auto;}
-      button,input[type=button],input[type=checkbox],input[type=file],input[type=radio],input[type=reset],input[type=submit],label,select{cursor:pointer;}
-      input[type=password],input[type=text],textarea{font-family:Microsoft Yahei,SimSun,Arial,Helvetica Neue,Helvetica;}
-      table{border-collapse:collapse;border-spacing:0;}
-      td,th{padding:0;}
-      strong{font-weight:400;}
-      em,i{font-style:normal;}
-      dd,dl,dt{margin:0;}
-      ::selection{background-color:#00b38a;color:#fff;}
-      ::-moz-selection{background-color:#00b38a;color:#fff;}
-      ol,ul{margin:0;padding:0;list-style:none;}
-      .fl{float:left;}
-      .fr{float:right;}
-      .clearfix:after,.clearfix:before{display:table;content:"";}
-      .clearfix:after{clear:both;}
-      @font-face{font-weight:400;font-style:normal;font-family:lagou-www;src:url(//static.lagou.com/www/static/common/static/font/lagou-www/fonts/lagou-www_787c39e.eot?xbgnn9);src:url(//static.lagou.com/www/static/common/static/font/lagou-www/fonts/lagou-www_787c39e.eot?xbgnn9#iefix) format('embedded-opentype'),url(//static.lagou.com/www/static/common/static/font/lagou-www/fonts/lagou-www_9e01d92.ttf?xbgnn9) format('truetype'),url(//static.lagou.com/www/static/common/static/font/lagou-www/fonts/lagou-www_74d349a.woff?xbgnn9) format('woff'),url(//static.lagou.com/www/static/common/static/font/lagou-www/fonts/lagou-www_32a6c6f.svg?xbgnn9#lagou-www) format('svg');}
-      [class*=" icon-glyph-"],[class^=icon-glyph-]{text-transform:none;font-weight:400;font-style:normal;font-variant:normal;font-family:lagou-www!important;line-height:1;speak:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
-      .icon-glyph-attachment:before{content:"\e900";}
-      .icon-glyph-attachment2:before{content:"\e901";}
-      .icon-glyph-online-resume:before{content:"\e908";}
-      .icon-glyph-attention:before{content:"\e902";}
-      .icon-glyph-attention2:before{content:"\e903";}
-      .icon-glyph-question:before{content:"\e905";}
-      .icon-glyph-smile:before{content:"\e906";}
-      .icon-glyph-star:before{content:"\e907";}
-      .icon-glyph-hollow-star:before{content:"\e909";}
-      .icon-glyph-fourSquare:before{content:"\e90c";}
-      .icon-glyph-trend:before{content:"\e90b";}
-      .icon-glyph-doller:before{content:"\e913";}
-      .icon-glyph-figure:before{content:"\e90e";}
-      .icon-glyph-home:before{content:"\e90d";}
-      .icon-glyph-valid:before{content:"\e90f";}
-      .icon-glyph-address:before{content:"\e910";}
-      .icon-glyph-close2:before{content:"\e911";}
-      .icon-glyph-close:before{content:"\e912";}
-      .icon-glyph-ku:before{content:"\e914";}
-      .icon-glyph-wechat:before{content:"\e90a";}
-      .icon-glyph-mina:before{content:"\e915";}
-      /*!mycenter/modules/common/main.less*/h2,h3,h4,p{margin:0;}
-      .container{margin:35px auto 0;margin:0 auto;padding-bottom:5pc;padding-bottom:0;width:64pc;}
-      /*!mycenter/modules/preview/preview/main.less*/.clearfixs:after,.clearfixs:before{display:table;content:"";}
-      .clearfixs:after{clear:both;display:block;}
-      .mr_created input[type=text]:focus{border-width:1px;}
-      .mr_content input[type=text]:focus,.mr_created input{border:0;}
-      .mr_created input,.mr_created textarea{font-size:14px;}
-      .mr_created .city_s .xl_list{height:130px;}
-      .mr_created .mr_selCity{top:0;}
-      .mr_created .mr_selCity ul.mr_province ul{padding:10px;width:287px;height:110px;}
-      .mr_created #mr_mr_head,.mr_created .mr_infoed{margin-bottom:0;}
-      .mr_created .mr_baseinfo{border-bottom:0;border-bottom-right-radius:0;border-bottom-left-radius:0;}
-      .mr_baseinfo{position:relative;padding:56px 0 10px;min-height:118px;border:1px solid #f2f2f2;border-bottom-right-radius:3px;border-bottom-left-radius:3px;background-color:#fafafa;}
-      .mr_myresume_l{float:left;margin-bottom:20px;width:702px;}
-      .mr_myresume_l .switch_resume{z-index:10;float:right;margin:9pt 1pc 0 0;width:186px;font-size:14px;}
-      .mr_myresume_l .openresume_tip{top:35px;right:-6px;left:auto;display:none;font-size:14px;}
-      .mr_myresume_l .openresume_tip.unopen{padding:14px;width:13pc;height:52px;}
-      .mr_myresume_l .openresume_tip.succ-fail{padding:9pt 10px 9pt 14px;width:85px;}
-      .mr_myresume_l .openresume_tip.firstset{padding:9pt 8px 14px 9pt;width:252px;height:54px;}
-      .mr_myresume_l .triangle_border{position:absolute;right:2pc;left:auto;overflow:hidden;width:0;height:0;border-style:dashed dashed solid;border-width:7px;}
-      .mr_myresume_l .tb_border{top:-18px;border-color:transparent transparent #efefe2;}
-      .mr_myresume_l .tb_background{top:-1pc;border-color:transparent transparent #fdfdde;}
-      .mr_myresume_l input{margin:0;}
-      .mr_myresume_l .mr_content{padding-top:26px;border:1px solid #f2f2f2;border-top:0;border-bottom:2px solid #f2f2f2;border-bottom-right-radius:3px;border-bottom-left-radius:3px;background-color:#fafafa;}
-      .mr_myresume_l .mr_content pre{white-space:normal;}
-      .switch_resume>span{color:#68bea8;}
-      .switch_resume>.find_me{margin-right:6px;}
-      .mrcenter{float:none;margin:0 auto;padding-bottom:1px;}
-      #mr_mr_head{margin-bottom:0;}
-      #mr_mr_head .dn{display:none;}
-      #mr_mr_head .shenfen{display:block;margin-bottom:8px;}
-      #mr_mr_head .base_info{display:inline-block;}
-      .mr_top_bg{position:relative;z-index:2;height:135px;background:#fafafa url(//static.lagou.com/www/static/mycenter/modules/common/img/tou_c3707c7.png) center top no-repeat;}
-      .mr_top_bg img,.mr_top_bg input{position:absolute;top:39px;left:287px;width:129px;height:129px;}
-      .mr_top_bg img{border:0;}
-      .mr_top_bg input{border-radius:50%;opacity:0;cursor:pointer;}
-      .mr_top_bg .mr_headimg{background-color:#fafafa;}
-      .mr_top_bg .opa{top:0;left:0;width:100%;height:170px;}
-      .mr_top_bg .shadow{top:45px;left:293px;display:none;width:87pt;height:87pt;}
-      .mr_left_bg,.mr_right_bg{position:absolute;top:76px;width:9pt;height:34px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/top_bg_3c61ee8.png) no-repeat;}
-      .mr_left_bg{left:-1px;background-position:0 0;}
-      .mr_right_bg{right:-2px;background-position:-40px 0;}
-      .mr_name_edit{padding-bottom:8px;padding-left:155px;min-height:40px;line-height:30px;}
-      .mr_name_edit span.error{margin-bottom:-5px;}
-      .mr_name_edit input{vertical-align:middle;}
-      .mr_name_edit .ed_name{margin:0;margin-right:9pt;padding:0 10px;width:23pc;height:38px;border:1px solid #eeeff1;border-radius:3px;text-align:center;font:30px/30px Arial,Hiragino Sans GB,"微软雅黑","宋体";line-height:38px;}
-      .mr_name_edit input[type=text]:focus{border-width:1px;}
-      .mr_name_edit .save{display:inline-block;margin:0;margin-right:9pt;padding:0 11px;height:30px;border:0;border-radius:3px;background-color:#00b38a;color:#fff;text-align:center;font-size:14px;line-height:30px;}
-      .mr_name_edit .cancel{color:#00b38a;}
-      .mr_name_edit a{vertical-align:middle;}
-      .mr_p_name{margin-bottom:8px;height:40px;line-height:38px;}
-      .mr_name{width:468px;height:40px;font-size:30px;line-height:40px;}
-      .mr_intro,.mr_name{display:block;margin:0 auto;color:#333;text-align:center;}
-      .mr_p_introduce{margin-bottom:8px;min-height:34px;line-height:2pc;}
-      .mr_p_introduce .mr_intro{width:468px;font-size:1pc;line-height:34px;}
-      .mr_p_introduce .mr_intro_grey{color:#bdbdbd;font-style:italic;}
-      .mr_p_introduce .mr_edit{height:34px;}
-      .mr_w604{margin:0 auto;width:604px;}
-      .mr_p_info{position:relative;padding:5px 0 7px;color:#666;}
-      .mr_p_info .info_j,.mr_p_info .info_t{margin-bottom:8px;text-align:center;}
-      .mr_p_info i{display:inline-block;margin-right:5px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/icons_mr_0ef4596.png) no-repeat;}
-      .mr_p_info .xl{margin-right:30px;}
-      .mr_p_info .xl i{width:1pc;height:9pt;background-position:-24px -10pc;}
-      .mr_p_info .gzjy{margin-right:25px;}
-      .mr_p_info .gzjy i{width:15px;height:9pt;background-position:-90px -72px;}
-      .mr_p_info em,.mr_p_info i{vertical-align:middle;}
-      .mr_p_info .city i{width:9pt;height:14px;background-position:-131px -92px;}
-      .mr_p_info .info_b{text-align:center;}
-      .mr_p_info .mobile{margin-right:18px;}
-      .mr_p_info .mobile i{width:9pt;height:14px;background-position:-131px -70px;}
-      .mr_p_info .email i{width:14px;height:10px;background-position:-150px -73px;}
-      .mr_p_info .email em{display:inline-block;overflow:hidden;height:24px;max-width:190px;text-overflow:ellipsis;white-space:nowrap;}
-      .mr_p_info .mr_edit{position:absolute;top:4px;right:0;}
-      .mr_p_info .shenfen{margin-right:15px;}
-      .mr_p_info .shenfen i{width:14px;height:9pt;background-position:-90px -72px;}
-      .mr_p_info .base_info i{width:13px;height:13px;background-position:-111px -70px;}
-      .mr_p_info .base_info em{margin-right:6px;height:24px;}
-      .mr_p_info .base_info em.mr0{display:inline-block;overflow:hidden;margin:0;height:24px;max-width:74px;text-overflow:ellipsis;white-space:nowrap;line-height:24px;}
-      em.a{position:relative;}
-      .birth_span{position:absolute;top:-4px;left:50%;margin-top:-20px;margin-left:-50px;padding:0 5px;height:20px;border-radius:10px;background-color:#666;color:#fff;text-align:center;white-space:nowrap;line-height:20px;}
-      .birth_span em{position:absolute;bottom:-28px;left:50px;overflow:hidden;margin-left:-7px;width:0;height:0;border-color:#666 transparent transparent;border-style:solid dashed;border-width:4px 4px 0;font-size:0;-webkit-transition:all .4s ease 0s;transition:all .4s ease 0s;}
-      #workExperience .mr_content_m{padding-top:4px;padding-bottom:1px;}
-      #workExperience .mr_moudle_content{padding-bottom:0;}
-      #workExperience .list_show{padding-bottom:6px;}
-      .mr_work_upload .mr_content_l{max-width:540px!important;}
-      .mr_content_m{padding:14px 0 0;color:#555;}
-      .mr_jobe_list{padding-bottom:44px;}
-      .mr_jobe_list .l1,.mr_jobe_list .l2{display:inline-block;vertical-align:top;}
-      .mr_content_r span{color:#999;}
-      .mb46{margin-bottom:46px;}
-      #educationalBackground .mr_content_l .l2{padding-top:4px;}
-      #educationalBackground .mr_btn{width:356px;}
-      #educationalBackground .mb46{margin-bottom:0;}
-      #educationalBackground .mr_time_area .mr_btn{width:130px;}
-      #educationalBackground .mr_moudle_content{padding-bottom:5px;}
-      .mr_moudle_head{margin-bottom:23px;}
-      .mr_moudle_head .mr_head_l{float:left;}
-      .mr_moudle_head .mr_head_r{float:right;margin-top:3px;cursor:pointer;}
-      .mr_moudle_head .mr_head_r *{vertical-align:middle;}
-      .mr_moudle_head .mr_head_r em{color:#00b88d;font-size:1pc;}
-      .mr_moudle_head .mr_head_r i{display:inline-block;margin-right:6px;width:15px;height:15px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/icons_mr_0ef4596.png) -5px -69px no-repeat;}
-      #projectExperience .mr_jobe_list{padding-bottom:2pc;}
-      #projectExperience .mr_moudle_content{padding-bottom:18px;}
-      #projectExperience .mr_content_m{padding-top:8px;}
-      #projectExperience .mr_empty_add{margin-bottom:8px;}
-      .mr_title span{display:inline-block;vertical-align:middle;}
-      .mr_title .mr_title_l{width:230px;height:0;border-top:1px solid #ededed;}
-      .mr_title .mr_title_c{margin:0 13px;padding:6px 24px;border-radius:26px;background-color:#eee;text-align:center;font-size:18px;}
-      .mr_title .mr_title_r{width:152px;height:0;border-top:1px solid #ededed;}
-      .mr_title .cust_title{position:absolute;top:-4px;left:50%;margin:0 13px;padding:0 13px;background-color:#fafafa;}
-      .mr_title .cust_title span{padding:6px 24px;border-radius:26px;background-color:#eee;text-align:center;font-size:18px;}
-      .mr_preview .mr_title .mr_title_r{width:228px;}
-      .mr_moudle_content{padding-bottom:21px;color:#555;font-size:14px;}
-      .mr_moudle_content .mr_content_l{float:left;max-width:445px;}
-      .mr_moudle_content .mr_content_r{float:right;text-align:right;}
-      .mr_moudle_content .mr_self_l{float:left;padding-top:5px;}
-      .mr_moudle_content .mr_self_r{float:left;color:#555;line-height:26px;}
-      .mr_moudle_content .mr_job_info{padding-left:28px;text-align:center;}
-      .mr_moudle_content .mr_skill_add{display:none;padding-left:125px;color:#999;font-size:1pc;}
-      .mr_moudle_content .mr_add_work{position:relative;margin:0 -3pc;margin-bottom:20px;padding:3pc 88px;background-color:#fefef2;}
-      .mr_content_l .l2{padding-top:4px;}
-      .mr_content_l .l2 a.projectTitle{font-size:1pc;}
-      .mr_content_l .l2 a.nourl{cursor:default;}
-      .mr_content_l .l2 a.nourl:hover{color:#555;}
-      .mr_content_l .l2 p{color:#999;}
-      .mr_content_l .l2 a.projectTitle i{position:absolute;top:15px;margin-left:5px;width:9pt;height:9pt;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/icons_mr_0ef4596.png) -95px -197px no-repeat;}
-      .mr_content_l .l2 h4{font-size:1pc;}
-      .mr_content_l .l2 span{display:block;color:#999;}
-      .mr_content_l .l1 img{width:46px;height:46px;border:2px solid #eee;}
-      #worksShow .mr_empty_add{margin-bottom:8px;}
-      .mr_c_r_t{float:none;margin:5px 0 2px;text-align:right;}
-      .mr_self_site{margin-bottom:8px;color:#fff;font-size:24px;}
-      .mr_wo_show{margin-bottom:38px;padding:13px 25px 38px;border-radius:3px;background-color:#00b88d;}
-      .mr_wo_show p{color:#fff;line-height:26px;}
-      .mr_wo_show .mr_c_r_t em{color:#50f9d2;}
-      .mr_wo_show .mr_c_r_t i{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/icons_mr_0ef4596.png) -131px -115px no-repeat;}
-      .mr_self_sitelink{color:#fff;font-weight:700;word-break:break-all;}
-      .mr_self_sitelink:hover,.mr_wo_preview{color:#fff;}
-      #selfDescription .mr_moudle_content{padding-bottom:3pc;}
-      #selfDescription .mr_empty_add{margin-bottom:-20px;}
-      #selfDescription .mr_head_r i{display:inline-block;margin-right:7px;width:15px;height:15px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/icons_mr_0ef4596.png) -53px -6px no-repeat;}
-      #expectJob .mr_moudle_content{padding-bottom:25px;}
-      #expectJob .mr_moudle_content .mr_job_t{top:1px;left:0;background-position:-10pc -110px;}
-      #expectJob .mr_moudle_content .mr_job_b{right:0;bottom:5px;background-position:-10pc -153px;}
-      #expectJob .mr_head_r i{display:inline-block;margin-right:7px;width:15px;height:15px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/icons_mr_0ef4596.png) -53px -6px no-repeat;}
-      #expectJob .expectjob_list{position:relative;}
-      #expectJob .mr_job_des i{position:absolute;width:2pc;height:31px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/icons_mr_0ef4596.png) no-repeat;}
-      .expectjob_list .clearfixs li{font-size:1pc;}
-      .expectjob_list .mr_job_des{position:relative;margin-top:28px;padding:15px 38px 25px 47px;}
-      .mr_job_info{color:#555;}
-      .mr_job_info i{display:inline-block;margin-right:10px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/icons_mr_0ef4596.png) no-repeat;}
-      .mr_job_info li{float:left;overflow:hidden;height:24px;text-align:left;text-overflow:ellipsis;white-space:nowrap;line-height:24px;}
-      .mr_job_info li *{vertical-align:middle;}
-      .mr_job_info p .mr_333{color:#333;}
-      .mr_name_li{width:188px;}
-      .mr_name_li i{width:9px;height:19px;background-position:-97px -220px;}
-      .mr_jobtype_li{width:8pc;}
-      .mr_jobtype_li i{width:17px;height:17px;background-position:-93px -247px;}
-      .mr_city_li{width:93pt;}
-      .mr_city_li i{width:14px;height:17px;background-position:-93px -273px;}
-      .mr_jobrange_li{width:94px;}
-      .mr_jobrange_li i{width:18px;height:18px;background-position:-92px -294px;}
-      #skillsAssess{padding-bottom:9pt;}
-      #skillsAssess .mr_head_r i{display:inline-block;margin-right:7px;width:15px;height:15px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/icons_mr_0ef4596.png) -53px -6px no-repeat;}
-      .mr_skill_con{position:relative;margin-bottom:18px;padding-left:10px;}
-      .mr_skill_con span{display:inline-block;vertical-align:middle;}
-      .mr_skill_con .mr_skill_name{overflow:hidden;margin-right:13px;width:102px;height:24px;text-align:right;text-overflow:ellipsis;white-space:nowrap;word-wrap:break-word;}
-      .mr_skill_con .mr_skill_plan{position:relative;overflow:hidden;margin-right:21px;width:420px;height:8px;border-radius:4px;background-color:#eee;}
-      .mr_skill_con .mr_skill_plan em{position:absolute;top:0;left:0;display:inline-block;overflow:hidden;height:8px;border-radius:4px;background-color:#00b88d;}
-      .mr_skill_con .mr_skill_circle{position:absolute;top:3px;left:122px;display:none;width:20px;height:19px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/skill_circle_752598c.png) no-repeat center top;}
-      .mr_skill_con .mr_skill_circle em{position:absolute;top:-22px;right:-4px;display:inline-block;padding:0;width:29px;height:23px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/skill_img_f5a4aab.png) center top no-repeat;color:#fff;text-align:center;font-size:10px;line-height:17px;}
-      .mr_skill_con .mr_skill_delete{display:none;width:13px;height:13px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/skill_delete_b0062d9.png) center top no-repeat;cursor:pointer;}
-      #customBlock{padding-bottom:30px;}
-      #customBlock .mr_title{position:relative;}
-      #customBlock .mr_line_tl{height:0;border-top:1px solid #ededed;}
-      #customBlock .mr_prolink .mr_btn{width:484px;}
-      #customBlock .mr_moudle_head{margin-bottom:33px;}
-      #customBlock .mr_head_r i{display:inline-block;margin-right:7px;width:15px;height:15px;background:url(../images/myresume/icons_mr.png) -53px -6px no-repeat;}
-      .form_wrap{position:relative;margin-bottom:9px;width:396px;height:46px;border:1px solid #f1f3e9;border-radius:3px;background-color:#fff;cursor:pointer;}
-      .form_wrap .mr_selCity{width:395px;}
-      .form_wrap input{font-size:14px;}
-      .form_wrap .mr_button{padding-left:17px;width:327px;height:44px;background-color:#fff;text-align:left;}
-      .form_wrap .mr_input{padding:0 0 0 17px;width:327px;height:46px;border:0;}
-      .form_wrap .mr_input:focus{border:0;}
-      .mr_self_state{position:relative;height:94px;background-color:#f6f6f6;}
-      .mr_self_state .form_wrap{position:absolute;top:36%;left:50%;margin:-24px 0 0 -135px;width:270px;border:1px solid #eaeced;}
-      .mr_self_state .form_wrap.active{background-color:#f6f6f6;}
-      .mr_self_state .form_wrap.active input{background-color:#f6f6f6;color:#999;}
-      .mr_self_state .mr_button{width:15pc;}
-      .mr_self_state .select_color{border-color:#32dbb3;}
-      .mr_self_state .xl_list{width:270px;}
-      .resume_status{margin:-9pt 0 0 -135px!important;border:0!important;background:#f6f6f6;text-align:center;cursor:default;}
-      .mr_bottom_r{color:#c6c6c6;text-align:right;}
-      #mr_pre_bot{float:none;margin:20px 0 90pt;height:20px;text-align:center;}
-      .mr_bottom_l .mr_down_tip{position:absolute;top:-90pt;left:9pt;width:6pc;border:1px solid #e7e7e7;border-radius:3px;background-color:#fff;box-shadow:2px 2px 4px #efefe4;}
-      #resume_preview_bar{position:fixed;bottom:0;left:0;z-index:1000;width:100%;height:54px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/overlay_c2e5558.png) repeat;}
-      #resume_preview_bar .mr_bottom_l .mr_down{margin:9pt auto;width:87pt;height:33px;border-radius:3px;background:#fff;text-align:center;line-height:33px;}
-      #resume_preview_bar .mr_bottom_l .mr_down i{float:left;margin:7px 7px 7px 9pt;width:21px;height:19px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/mr_down_01e668e.png) -21px no-repeat;}
-      #resume_preview_bar .mr_bottom_l .mr_down em{float:left;color:#08aa84;}
-      #resume_preview_bar .mr_bottom_l .mr_down:hover{background:#03a47f;cursor:pointer;}
-      #resume_preview_bar .mr_bottom_l .mr_down:hover i{background-position:0 0;}
-      #resume_preview_bar .mr_bottom_l .mr_down:hover em{color:#fff;}
-      #resume_preview_bar .mr_bottom_l .mr_down_tip{left:50%;margin-left:-3pc;}
-      .mr_down_tip i{bottom:-1pc;}
-      .mr_down_tip em,.mr_down_tip i{position:absolute;right:40px;display:block;width:0;height:0;border:8px solid #e7e7e7;border-color:#e7e7e7 transparent transparent;background:0 0;font-size:0;}
-      .mr_down_tip em{bottom:-15px;border-color:#fff transparent transparent;}
-      .mr_down_tip li{height:38px;line-height:38px;}
-      .mr_down_tip li a{display:block;text-align:center;}
-      .mr_down_tip li.active a{background-color:#f4f4f4;color:#555;}
-      .preview_down em{right:40px;}
-      .dn{display:none;}
-      #width604{width:604px;}
-      .mr_sns{padding-top:20px;text-align:center;}
-      .mr_sns a{position:relative;display:inline-block;margin:0 8px;width:30px;height:30px;background:0 0;}
-      .mr_sns a span{position:absolute;top:-29px;left:50%;display:none;padding:0 10px;height:20px;min-width:28px;border-radius:10px;background-color:#666660;color:#fff;text-align:center;line-height:20px;line-height:18px\9;}
-      .mr_sns a em{position:absolute;top:20px;left:50%;overflow:hidden;margin-left:-4px;width:0;height:0;border-color:#666 transparent transparent;border-style:solid dashed;border-width:4px 4px 0;font-size:0;-webkit-transition:all .4s ease 0s;transition:all .4s ease 0s;}
-      .mr_sns .sns1{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -4px -5px no-repeat;}
-      .mr_sns .sns2{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -56px -5px no-repeat;}
-      .mr_sns .sns3{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -81pt -5px no-repeat;}
-      .mr_sns .sns4{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -10pc -5px no-repeat;}
-      .mr_sns .sns5{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -212px -5px no-repeat;}
-      .mr_sns .sns6{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -263px -5px no-repeat;}
-      .mr_sns .sns7{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -314px -5px no-repeat;}
-      .mr_sns .sns8{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -366px -5px no-repeat;}
-      .mr_sns .sns9{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -417px -5px no-repeat;}
-      .mr_sns .sns10{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -469px -5px no-repeat;}
-      .mr_sns .sns11{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -520px -5px no-repeat;}
-      .mr_sns .sns12{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -572px -5px no-repeat;}
-      .ueditor_parse ul{padding-left:2em;list-style-type:disc;}
-      .ueditor_parse ol{padding-left:2em;list-style-type:decimal;}
-  
-    </style>  
+		*{outline:0;}
+		body{margin:0;padding:0;color:#333;word-wrap:break-word;font-size:14px;font-family:Hiragino Sans GB,Microsoft Yahei,SimSun,Arial,Helvetica Neue,Helvetica;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+		article,aside,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary{display:block;}
+		progress{display:inline-block;vertical-align:baseline;}
+		a{background-color:transparent;color:#555;text-decoration:none;}
+		a:hover{color:#00b38a;}
+		h1,h2,h3,h4{margin:10px 0;font-weight:400;}
+		p{margin:0;}
+		p+p{margin-top:10px;}
+		img{display:inline-block;border:0;vertical-align:top;}
+		button,input,optgroup,select,textarea{margin:0;padding:0;border:1px solid #ededed;border-radius:0;font-family:Hiragino Sans GB,Microsoft Yahei,SimSun,Arial,Helvetica Neue,Helvetica;}
+		textarea{overflow:auto;}
+		button,input[type=button],input[type=checkbox],input[type=file],input[type=radio],input[type=reset],input[type=submit],label,select{cursor:pointer;}
+		input[type=password],input[type=text],textarea{font-family:Microsoft Yahei,SimSun,Arial,Helvetica Neue,Helvetica;}
+		table{border-collapse:collapse;border-spacing:0;}
+		td,th{padding:0;}
+		strong{font-weight:400;}
+		em,i{font-style:normal;}
+		dd,dl,dt{margin:0;}
+		::selection{background-color:#00b38a;color:#fff;}
+		::-moz-selection{background-color:#00b38a;color:#fff;}
+		ol,ul{margin:0;padding:0;list-style:none;}
+		.fl{float:left;}
+		.fr{float:right;}
+		.clearfix:after,.clearfix:before{display:table;content:"";}
+		.clearfix:after{clear:both;}
+		@font-face{font-weight:400;font-style:normal;font-family:lagou-www;src:url(//static.lagou.com/www/static/common/static/font/lagou-www/fonts/lagou-www_787c39e.eot?xbgnn9);src:url(//static.lagou.com/www/static/common/static/font/lagou-www/fonts/lagou-www_787c39e.eot?xbgnn9#iefix) format('embedded-opentype'),url(//static.lagou.com/www/static/common/static/font/lagou-www/fonts/lagou-www_9e01d92.ttf?xbgnn9) format('truetype'),url(//static.lagou.com/www/static/common/static/font/lagou-www/fonts/lagou-www_74d349a.woff?xbgnn9) format('woff'),url(//static.lagou.com/www/static/common/static/font/lagou-www/fonts/lagou-www_32a6c6f.svg?xbgnn9#lagou-www) format('svg');}
+		[class*=" icon-glyph-"],[class^=icon-glyph-]{text-transform:none;font-weight:400;font-style:normal;font-variant:normal;font-family:lagou-www!important;line-height:1;speak:none;-webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+		.icon-glyph-attachment:before{content:"\e900";}
+		.icon-glyph-attachment2:before{content:"\e901";}
+		.icon-glyph-online-resume:before{content:"\e908";}
+		.icon-glyph-attention:before{content:"\e902";}
+		.icon-glyph-attention2:before{content:"\e903";}
+		.icon-glyph-question:before{content:"\e905";}
+		.icon-glyph-smile:before{content:"\e906";}
+		.icon-glyph-star:before{content:"\e907";}
+		.icon-glyph-hollow-star:before{content:"\e909";}
+		.icon-glyph-fourSquare:before{content:"\e90c";}
+		.icon-glyph-trend:before{content:"\e90b";}
+		.icon-glyph-doller:before{content:"\e913";}
+		.icon-glyph-figure:before{content:"\e90e";}
+		.icon-glyph-home:before{content:"\e90d";}
+		.icon-glyph-valid:before{content:"\e90f";}
+		.icon-glyph-address:before{content:"\e910";}
+		.icon-glyph-close2:before{content:"\e911";}
+		.icon-glyph-close:before{content:"\e912";}
+		.icon-glyph-ku:before{content:"\e914";}
+		.icon-glyph-wechat:before{content:"\e90a";}
+		.icon-glyph-mina:before{content:"\e915";}
+		/*!mycenter/modules/common/main.less*/h2,h3,h4,p{margin:0;}
+		.container{margin:35px auto 0;margin:0 auto;padding-bottom:5pc;padding-bottom:0;width:64pc;}
+		/*!mycenter/modules/preview/preview/main.less*/.clearfixs:after,.clearfixs:before{display:table;content:"";}
+		.clearfixs:after{clear:both;display:block;}
+		.mr_created input[type=text]:focus{border-width:1px;}
+		.mr_content input[type=text]:focus,.mr_created input{border:0;}
+		.mr_created input,.mr_created textarea{font-size:14px;}
+		.mr_created .city_s .xl_list{height:130px;}
+		.mr_created .mr_selCity{top:0;}
+		.mr_created .mr_selCity ul.mr_province ul{padding:10px;width:287px;height:110px;}
+		.mr_created #mr_mr_head,.mr_created .mr_infoed{margin-bottom:0;}
+		.mr_created .mr_baseinfo{border-bottom:0;border-bottom-right-radius:0;border-bottom-left-radius:0;}
+		.mr_baseinfo{position:relative;padding:56px 0 10px;min-height:118px;border:1px solid #f2f2f2;border-bottom-right-radius:3px;border-bottom-left-radius:3px;background-color:#fafafa;}
+		.mr_myresume_l{float:left;margin-bottom:20px;width:702px;}
+		.mr_myresume_l .switch_resume{z-index:10;float:right;margin:9pt 1pc 0 0;width:186px;font-size:14px;}
+		.mr_myresume_l .openresume_tip{top:35px;right:-6px;left:auto;display:none;font-size:14px;}
+		.mr_myresume_l .openresume_tip.unopen{padding:14px;width:13pc;height:52px;}
+		.mr_myresume_l .openresume_tip.succ-fail{padding:9pt 10px 9pt 14px;width:85px;}
+		.mr_myresume_l .openresume_tip.firstset{padding:9pt 8px 14px 9pt;width:252px;height:54px;}
+		.mr_myresume_l .triangle_border{position:absolute;right:2pc;left:auto;overflow:hidden;width:0;height:0;border-style:dashed dashed solid;border-width:7px;}
+		.mr_myresume_l .tb_border{top:-18px;border-color:transparent transparent #efefe2;}
+		.mr_myresume_l .tb_background{top:-1pc;border-color:transparent transparent #fdfdde;}
+		.mr_myresume_l input{margin:0;}
+		.mr_myresume_l .mr_content{padding-top:26px;border:1px solid #f2f2f2;border-top:0;border-bottom:2px solid #f2f2f2;border-bottom-right-radius:3px;border-bottom-left-radius:3px;background-color:#fafafa;}
+		.mr_myresume_l .mr_content pre{white-space:normal;}
+		.switch_resume>span{color:#68bea8;}
+		.switch_resume>.find_me{margin-right:6px;}
+		.mrcenter{float:none;margin:0 auto;padding-bottom:1px;}
+		#mr_mr_head{margin-bottom:0;}
+		#mr_mr_head .dn{display:none;}
+		#mr_mr_head .shenfen{display:block;margin-bottom:8px;}
+		#mr_mr_head .base_info{display:inline-block;}
+		.mr_top_bg{position:relative;z-index:2;height:135px;background:#fafafa url(//static.lagou.com/www/static/mycenter/modules/common/img/tou_c3707c7.png) center top no-repeat;}
+		.mr_top_bg img,.mr_top_bg input{position:absolute;top:39px;left:287px;width:129px;height:129px;}
+		.mr_top_bg img{border:0;}
+		.mr_top_bg input{border-radius:50%;opacity:0;cursor:pointer;}
+		.mr_top_bg .mr_headimg{background-color:#fafafa;}
+		.mr_top_bg .opa{top:0;left:0;width:100%;height:170px;}
+		.mr_top_bg .shadow{top:45px;left:293px;display:none;width:87pt;height:87pt;}
+		.mr_left_bg,.mr_right_bg{position:absolute;top:76px;width:9pt;height:34px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/top_bg_3c61ee8.png) no-repeat;}
+		.mr_left_bg{left:-1px;background-position:0 0;}
+		.mr_right_bg{right:-2px;background-position:-40px 0;}
+		.mr_name_edit{padding-bottom:8px;padding-left:155px;min-height:40px;line-height:30px;}
+		.mr_name_edit span.error{margin-bottom:-5px;}
+		.mr_name_edit input{vertical-align:middle;}
+		.mr_name_edit .ed_name{margin:0;margin-right:9pt;padding:0 10px;width:23pc;height:38px;border:1px solid #eeeff1;border-radius:3px;text-align:center;font:30px/30px Arial,Hiragino Sans GB,"微软雅黑","宋体";line-height:38px;}
+		.mr_name_edit input[type=text]:focus{border-width:1px;}
+		.mr_name_edit .save{display:inline-block;margin:0;margin-right:9pt;padding:0 11px;height:30px;border:0;border-radius:3px;background-color:#00b38a;color:#fff;text-align:center;font-size:14px;line-height:30px;}
+		.mr_name_edit .cancel{color:#00b38a;}
+		.mr_name_edit a{vertical-align:middle;}
+		.mr_p_name{margin-bottom:8px;height:40px;line-height:38px;}
+		.mr_name{width:468px;height:40px;font-size:30px;line-height:40px;}
+		.mr_intro,.mr_name{display:block;margin:0 auto;color:#333;text-align:center;}
+		.mr_p_introduce{margin-bottom:8px;min-height:34px;line-height:2pc;}
+		.mr_p_introduce .mr_intro{width:468px;font-size:1pc;line-height:34px;}
+		.mr_p_introduce .mr_intro_grey{color:#bdbdbd;font-style:italic;}
+		.mr_p_introduce .mr_edit{height:34px;}
+		.mr_w604{margin:0 auto;width:604px;}
+		.mr_p_info{position:relative;padding:5px 0 7px;color:#666;}
+		.mr_p_info .info_j,.mr_p_info .info_t{margin-bottom:8px;text-align:center;}
+		.mr_p_info i{display:inline-block;margin-right:5px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/icons_mr_0ef4596.png) no-repeat;}
+		.mr_p_info .xl{margin-right:30px;}
+		.mr_p_info .xl i{width:1pc;height:9pt;background-position:-24px -10pc;}
+		.mr_p_info .gzjy{margin-right:25px;}
+		.mr_p_info .gzjy i{width:15px;height:9pt;background-position:-90px -72px;}
+		.mr_p_info em,.mr_p_info i{vertical-align:middle;}
+		.mr_p_info .city i{width:9pt;height:14px;background-position:-131px -92px;}
+		.mr_p_info .info_b{text-align:center;}
+		.mr_p_info .mobile{margin-right:18px;}
+		.mr_p_info .mobile i{width:9pt;height:14px;background-position:-131px -70px;}
+		.mr_p_info .email i{width:14px;height:10px;background-position:-150px -73px;}
+		.mr_p_info .email em{display:inline-block;overflow:hidden;height:24px;max-width:190px;text-overflow:ellipsis;white-space:nowrap;}
+		.mr_p_info .mr_edit{position:absolute;top:4px;right:0;}
+		.mr_p_info .shenfen{margin-right:15px;}
+		.mr_p_info .shenfen i{width:14px;height:9pt;background-position:-90px -72px;}
+		.mr_p_info .base_info i{width:13px;height:13px;background-position:-111px -70px;}
+		.mr_p_info .base_info em{margin-right:6px;height:24px;}
+		.mr_p_info .base_info em.mr0{display:inline-block;overflow:hidden;margin:0;height:24px;max-width:74px;text-overflow:ellipsis;white-space:nowrap;line-height:24px;}
+		em.a{position:relative;}
+		.birth_span{position:absolute;top:-4px;left:50%;margin-top:-20px;margin-left:-50px;padding:0 5px;height:20px;border-radius:10px;background-color:#666;color:#fff;text-align:center;white-space:nowrap;line-height:20px;}
+		.birth_span em{position:absolute;bottom:-28px;left:50px;overflow:hidden;margin-left:-7px;width:0;height:0;border-color:#666 transparent transparent;border-style:solid dashed;border-width:4px 4px 0;font-size:0;-webkit-transition:all .4s ease 0s;transition:all .4s ease 0s;}
+		#workExperience .mr_content_m{padding-top:4px;padding-bottom:1px;}
+		#workExperience .mr_moudle_content{padding-bottom:0;}
+		#workExperience .list_show{padding-bottom:6px;}
+		.mr_work_upload .mr_content_l{max-width:540px!important;}
+		.mr_content_m{padding:14px 0 0;color:#555;}
+		.mr_jobe_list{padding-bottom:44px;}
+		.mr_jobe_list .l1,.mr_jobe_list .l2{display:inline-block;vertical-align:top;}
+		.mr_content_r span{color:#999;}
+		.mb46{margin-bottom:46px;}
+		#educationalBackground .mr_content_l .l2{padding-top:4px;}
+		#educationalBackground .mr_btn{width:356px;}
+		#educationalBackground .mb46{margin-bottom:0;}
+		#educationalBackground .mr_time_area .mr_btn{width:130px;}
+		#educationalBackground .mr_moudle_content{padding-bottom:5px;}
+		.mr_moudle_head{margin-bottom:23px;}
+		.mr_moudle_head .mr_head_l{float:left;}
+		.mr_moudle_head .mr_head_r{float:right;margin-top:3px;cursor:pointer;}
+		.mr_moudle_head .mr_head_r *{vertical-align:middle;}
+		.mr_moudle_head .mr_head_r em{color:#00b88d;font-size:1pc;}
+		.mr_moudle_head .mr_head_r i{display:inline-block;margin-right:6px;width:15px;height:15px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/icons_mr_0ef4596.png) -5px -69px no-repeat;}
+		#projectExperience .mr_jobe_list{padding-bottom:2pc;}
+		#projectExperience .mr_moudle_content{padding-bottom:18px;}
+		#projectExperience .mr_content_m{padding-top:8px;}
+		#projectExperience .mr_empty_add{margin-bottom:8px;}
+		.mr_title span{display:inline-block;vertical-align:middle;}
+		.mr_title .mr_title_l{width:230px;height:0;border-top:1px solid #ededed;}
+		.mr_title .mr_title_c{margin:0 13px;padding:6px 24px;border-radius:26px;background-color:#eee;text-align:center;font-size:18px;}
+		.mr_title .mr_title_r{width:152px;height:0;border-top:1px solid #ededed;}
+		.mr_title .cust_title{position:absolute;top:-4px;left:50%;margin:0 13px;padding:0 13px;background-color:#fafafa;}
+		.mr_title .cust_title span{padding:6px 24px;border-radius:26px;background-color:#eee;text-align:center;font-size:18px;}
+		.mr_preview .mr_title .mr_title_r{width:228px;}
+		.mr_moudle_content{padding-bottom:21px;color:#555;font-size:14px;}
+		.mr_moudle_content .mr_content_l{float:left;max-width:445px;}
+		.mr_moudle_content .mr_content_r{float:right;text-align:right;}
+		.mr_moudle_content .mr_self_l{float:left;padding-top:5px;}
+		.mr_moudle_content .mr_self_r{float:left;color:#555;line-height:26px;}
+		.mr_moudle_content .mr_job_info{padding-left:28px;text-align:center;}
+		.mr_moudle_content .mr_skill_add{display:none;padding-left:125px;color:#999;font-size:1pc;}
+		.mr_moudle_content .mr_add_work{position:relative;margin:0 -3pc;margin-bottom:20px;padding:3pc 88px;background-color:#fefef2;}
+		.mr_content_l .l2{padding-top:4px;}
+		.mr_content_l .l2 a.projectTitle{font-size:1pc;}
+		.mr_content_l .l2 a.nourl{cursor:default;}
+		.mr_content_l .l2 a.nourl:hover{color:#555;}
+		.mr_content_l .l2 p{color:#999;}
+		.mr_content_l .l2 a.projectTitle i{position:absolute;top:15px;margin-left:5px;width:9pt;height:9pt;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/icons_mr_0ef4596.png) -95px -197px no-repeat;}
+		.mr_content_l .l2 h4{font-size:1pc;}
+		.mr_content_l .l2 span{display:block;color:#999;}
+		.mr_content_l .l1 img{width:46px;height:46px;border:2px solid #eee;}
+		#worksShow .mr_empty_add{margin-bottom:8px;}
+		.mr_c_r_t{float:none;margin:5px 0 2px;text-align:right;}
+		.mr_self_site{margin-bottom:8px;color:#fff;font-size:24px;}
+		.mr_wo_show{margin-bottom:38px;padding:13px 25px 38px;border-radius:3px;background-color:#00b88d;}
+		.mr_wo_show p{color:#fff;line-height:26px;}
+		.mr_wo_show .mr_c_r_t em{color:#50f9d2;}
+		.mr_wo_show .mr_c_r_t i{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/icons_mr_0ef4596.png) -131px -115px no-repeat;}
+		.mr_self_sitelink{color:#fff;font-weight:700;word-break:break-all;}
+		.mr_self_sitelink:hover,.mr_wo_preview{color:#fff;}
+		#selfDescription .mr_moudle_content{padding-bottom:3pc;}
+		#selfDescription .mr_empty_add{margin-bottom:-20px;}
+		#selfDescription .mr_head_r i{display:inline-block;margin-right:7px;width:15px;height:15px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/icons_mr_0ef4596.png) -53px -6px no-repeat;}
+		#expectJob .mr_moudle_content{padding-bottom:25px;}
+		#expectJob .mr_moudle_content .mr_job_t{top:1px;left:0;background-position:-10pc -110px;}
+		#expectJob .mr_moudle_content .mr_job_b{right:0;bottom:5px;background-position:-10pc -153px;}
+		#expectJob .mr_head_r i{display:inline-block;margin-right:7px;width:15px;height:15px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/icons_mr_0ef4596.png) -53px -6px no-repeat;}
+		#expectJob .expectjob_list{position:relative;}
+		#expectJob .mr_job_des i{position:absolute;width:2pc;height:31px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/icons_mr_0ef4596.png) no-repeat;}
+		.expectjob_list .clearfixs li{font-size:1pc;}
+		.expectjob_list .mr_job_des{position:relative;margin-top:28px;padding:15px 38px 25px 47px;}
+		.mr_job_info{color:#555;}
+		.mr_job_info i{display:inline-block;margin-right:10px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/icons_mr_0ef4596.png) no-repeat;}
+		.mr_job_info li{float:left;overflow:hidden;height:24px;text-align:left;text-overflow:ellipsis;white-space:nowrap;line-height:24px;}
+		.mr_job_info li *{vertical-align:middle;}
+		.mr_job_info p .mr_333{color:#333;}
+		.mr_name_li{width:188px;}
+		.mr_name_li i{width:9px;height:19px;background-position:-97px -220px;}
+		.mr_jobtype_li{width:8pc;}
+		.mr_jobtype_li i{width:17px;height:17px;background-position:-93px -247px;}
+		.mr_city_li{width:93pt;}
+		.mr_city_li i{width:14px;height:17px;background-position:-93px -273px;}
+		.mr_jobrange_li{width:94px;}
+		.mr_jobrange_li i{width:18px;height:18px;background-position:-92px -294px;}
+		#skillsAssess{padding-bottom:9pt;}
+		#skillsAssess .mr_head_r i{display:inline-block;margin-right:7px;width:15px;height:15px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/icons_mr_0ef4596.png) -53px -6px no-repeat;}
+		.mr_skill_con{position:relative;margin-bottom:18px;padding-left:10px;}
+		.mr_skill_con span{display:inline-block;vertical-align:middle;}
+		.mr_skill_con .mr_skill_name{overflow:hidden;margin-right:13px;width:102px;height:24px;text-align:right;text-overflow:ellipsis;white-space:nowrap;word-wrap:break-word;}
+		.mr_skill_con .mr_skill_plan{position:relative;overflow:hidden;margin-right:21px;width:420px;height:8px;border-radius:4px;background-color:#eee;}
+		.mr_skill_con .mr_skill_plan em{position:absolute;top:0;left:0;display:inline-block;overflow:hidden;height:8px;border-radius:4px;background-color:#00b88d;}
+		.mr_skill_con .mr_skill_circle{position:absolute;top:3px;left:122px;display:none;width:20px;height:19px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/skill_circle_752598c.png) no-repeat center top;}
+		.mr_skill_con .mr_skill_circle em{position:absolute;top:-22px;right:-4px;display:inline-block;padding:0;width:29px;height:23px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/skill_img_f5a4aab.png) center top no-repeat;color:#fff;text-align:center;font-size:10px;line-height:17px;}
+		.mr_skill_con .mr_skill_delete{display:none;width:13px;height:13px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/skill_delete_b0062d9.png) center top no-repeat;cursor:pointer;}
+		#customBlock{padding-bottom:30px;}
+		#customBlock .mr_title{position:relative;}
+		#customBlock .mr_line_tl{height:0;border-top:1px solid #ededed;}
+		#customBlock .mr_prolink .mr_btn{width:484px;}
+		#customBlock .mr_moudle_head{margin-bottom:33px;}
+		#customBlock .mr_head_r i{display:inline-block;margin-right:7px;width:15px;height:15px;background:url(../images/myresume/icons_mr.png) -53px -6px no-repeat;}
+		.form_wrap{position:relative;margin-bottom:9px;width:396px;height:46px;border:1px solid #f1f3e9;border-radius:3px;background-color:#fff;cursor:pointer;}
+		.form_wrap .mr_selCity{width:395px;}
+		.form_wrap input{font-size:14px;}
+		.form_wrap .mr_button{padding-left:17px;width:327px;height:44px;background-color:#fff;text-align:left;}
+		.form_wrap .mr_input{padding:0 0 0 17px;width:327px;height:46px;border:0;}
+		.form_wrap .mr_input:focus{border:0;}
+		.mr_self_state{position:relative;height:94px;background-color:#f6f6f6;}
+		.mr_self_state .form_wrap{position:absolute;top:36%;left:50%;margin:-24px 0 0 -135px;width:270px;border:1px solid #eaeced;}
+		.mr_self_state .form_wrap.active{background-color:#f6f6f6;}
+		.mr_self_state .form_wrap.active input{background-color:#f6f6f6;color:#999;}
+		.mr_self_state .mr_button{width:15pc;}
+		.mr_self_state .select_color{border-color:#32dbb3;}
+		.mr_self_state .xl_list{width:270px;}
+		.resume_status{margin:-9pt 0 0 -135px!important;border:0!important;background:#f6f6f6;text-align:center;cursor:default;}
+		.mr_bottom_r{color:#c6c6c6;text-align:right;}
+		#mr_pre_bot{float:none;margin:20px 0 90pt;height:20px;text-align:center;}
+		.mr_bottom_l .mr_down_tip{position:absolute;top:-90pt;left:9pt;width:6pc;border:1px solid #e7e7e7;border-radius:3px;background-color:#fff;box-shadow:2px 2px 4px #efefe4;}
+		#resume_preview_bar{position:fixed;bottom:0;left:0;z-index:1000;width:100%;height:54px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/overlay_c2e5558.png) repeat;}
+		#resume_preview_bar .mr_bottom_l .mr_down{margin:9pt auto;width:87pt;height:33px;border-radius:3px;background:#fff;text-align:center;line-height:33px;}
+		#resume_preview_bar .mr_bottom_l .mr_down i{float:left;margin:7px 7px 7px 9pt;width:21px;height:19px;background:url(//static.lagou.com/www/static/mycenter/modules/common/img/mr_down_01e668e.png) -21px no-repeat;}
+		#resume_preview_bar .mr_bottom_l .mr_down em{float:left;color:#08aa84;}
+		#resume_preview_bar .mr_bottom_l .mr_down:hover{background:#03a47f;cursor:pointer;}
+		#resume_preview_bar .mr_bottom_l .mr_down:hover i{background-position:0 0;}
+		#resume_preview_bar .mr_bottom_l .mr_down:hover em{color:#fff;}
+		#resume_preview_bar .mr_bottom_l .mr_down_tip{left:50%;margin-left:-3pc;}
+		.mr_down_tip i{bottom:-1pc;}
+		.mr_down_tip em,.mr_down_tip i{position:absolute;right:40px;display:block;width:0;height:0;border:8px solid #e7e7e7;border-color:#e7e7e7 transparent transparent;background:0 0;font-size:0;}
+		.mr_down_tip em{bottom:-15px;border-color:#fff transparent transparent;}
+		.mr_down_tip li{height:38px;line-height:38px;}
+		.mr_down_tip li a{display:block;text-align:center;}
+		.mr_down_tip li.active a{background-color:#f4f4f4;color:#555;}
+		.preview_down em{right:40px;}
+		.dn{display:none;}
+		#width604{width:604px;}
+		.mr_sns{padding-top:20px;text-align:center;}
+		.mr_sns a{position:relative;display:inline-block;margin:0 8px;width:30px;height:30px;background:0 0;}
+		.mr_sns a span{position:absolute;top:-29px;left:50%;display:none;padding:0 10px;height:20px;min-width:28px;border-radius:10px;background-color:#666660;color:#fff;text-align:center;line-height:20px;line-height:18px\9;}
+		.mr_sns a em{position:absolute;top:20px;left:50%;overflow:hidden;margin-left:-4px;width:0;height:0;border-color:#666 transparent transparent;border-style:solid dashed;border-width:4px 4px 0;font-size:0;-webkit-transition:all .4s ease 0s;transition:all .4s ease 0s;}
+		.mr_sns .sns1{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -4px -5px no-repeat;}
+		.mr_sns .sns2{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -56px -5px no-repeat;}
+		.mr_sns .sns3{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -81pt -5px no-repeat;}
+		.mr_sns .sns4{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -10pc -5px no-repeat;}
+		.mr_sns .sns5{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -212px -5px no-repeat;}
+		.mr_sns .sns6{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -263px -5px no-repeat;}
+		.mr_sns .sns7{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -314px -5px no-repeat;}
+		.mr_sns .sns8{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -366px -5px no-repeat;}
+		.mr_sns .sns9{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -417px -5px no-repeat;}
+		.mr_sns .sns10{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -469px -5px no-repeat;}
+		.mr_sns .sns11{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -520px -5px no-repeat;}
+		.mr_sns .sns12{background:url(//static.lagou.com/www/static/mycenter/modules/common/img/sns_bg_2abebda.png) -572px -5px no-repeat;}
+		.ueditor_parse ul{padding-left:2em;list-style-type:disc;}
+		.ueditor_parse ol{padding-left:2em;list-style-type:decimal;}
+
+	</style>
   <link href="https://cdn.bootcss.com/bootstrap-switch/3.3.4/css/bootstrap2/bootstrap-switch.min.css" rel="stylesheet">
   <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js" type="text/javascript"></script>
   <script>
@@ -317,23 +317,23 @@
 
 <body>
   <% include header.html %>
-    <!-- end of header bar -->
-    <!--导入菜单-->
-    <% include menu.html %>
-      <section id="main" class="column">
-        <h4 class="alert_info">修改成功</h4>
-        <article class="module width_3_quarter">
-          <header>
-            <h3 class="tabs_involved">简历设置</h3>
-          </header>
-          <div class="tab_container">
-            <div id="tab1" class="tab_content">
-              <input type="hidden" id="resumeId" value="<%=resume._id%>">
-              <label class="radio-inline">
-                <input type="radio" name="state" id="state1" value="1" <%if(resume.state==1){%>checked="checked"<%}%>> 访问
+  <!-- end of header bar -->
+  <!--导入菜单-->
+  <% include menu.html %>
+  <section id="main" class="column">
+    <h4 class="alert_info">修改成功</h4>
+    <article class="module width_4_quarter">
+      <header>
+        <h3 class="tabs_involved">简历设置</h3>
+      </header>
+      <div class="tab_container">
+        <div id="tab1" class="tab_content">
+          <input type="hidden" id="resumeId" value="<%=resume._id%>">
+          <label class="radio-inline">
+            <input type="radio" name="state" id="state1" value="1" <%if(resume.state==1){%>checked="checked" <%}%>> 访问
               </label>
               <label class="radio-inline">
-                <input type="radio" name="state" id="state2" value="0" <%if(resume.state==0){%>checked="checked"<%}%>> 拒绝
+                <input type="radio" name="state" id="state2" value="0" <%if(resume.state==0){%>checked="checked" <%}%>> 拒绝
               </label>
               <button id="commit-resume" class="alt_btn">提交</button>
             </div>
@@ -348,10 +348,8 @@
                     <img class="shadow" height="119" src="//static.lagou.com/www/static/mycenter/modules/common/img/shadow_tx_a482008.png" width="119" />
                   </div>
                   <div class="mr_baseinfo">
-                    <i class="mr_left_bg">
-                    </i>
-                    <i class="mr_right_bg">
-                    </i>
+                    <i class="mr_left_bg"></i>
+                    <i class="mr_right_bg"></i>
                     <div class="mr_p_name mr_w604 clearfixs">
                       <span class="mr_name">
                         Node.js高级开发工程师-霍潘潘
@@ -365,60 +363,37 @@
                     <div class="mr_p_info mr_infoed mr_w604 clearfixs">
                       <div class="info_t">
                         <span class="shenfen">
-                          <i>
-                          </i>
-                          <em data-id="2" title="nodejs资深工程师 · 掌门1对1在线教育">
-                            nodejs资深工程师·掌门1对1在线教育
-                          </em>
+                          <i></i>
+                          <em data-id="2" title="nodejs资深工程师 · 掌门1对1在线教育">nodejs资深工程师·掌门1对1在线教育</em>
                         </span>
                         <span class="base_info">
-                          <i>
-                          </i>
-                          <em class="s">
-                            男
-                          </em>
+                          <i></i>
+                          <em class="s">男</em>
                           <em class="a">
-                            <span class="age">
-                              27岁
-                            </span>
-                            <span class="birth_span dn">
-                              1990年02月出生
-                              <em>
-                              </em>
-                            </span>
+                            <span class="age"> 27岁</span>
+                            <span class="birth_span dn">1990年02月出生<em></em></span>
                           </em>
-                          <em class="x">
-                            大专
-                          </em>
+                          <em class="x">大专</em>
                           <em class="j">
                             <span class="job_span">
                               6年工作经验
                             </span>
                           </em>
-                          <em class="mr0 d">
-                            上海
-                          </em>
+                          <em class="mr0 d">上海</em>
                         </span>
                       </div>
                       <div class="info_b">
                         <span class="mobile">
-                          <i>
-                          </i>
-                          <em>
-                            18701897527
-                          </em>
+                          <i></i>
+                          <em>18701897527</em>
                         </span>
                         <span class="email">
-                          <i>
-                          </i>
-                          <em>
-                            huo.win.n@gmail.com
-                          </em>
+                          <i></i>
+                          <em>huo.win.n@gmail.com</em>
                         </span>
                       </div>
                       <div class="mr_sns">
-                        <a class="sns6" href="https://github.com/yuedun" target="_blank">
-                        </a>
+                        <a class="sns6" href="https://github.com/yuedun" target="_blank"></a>
                       </div>
                     </div>
                   </div>
@@ -430,13 +405,9 @@
                         <div class="mr_moudle_head clearfixs">
                           <div class="mr_head_l">
                             <div class="mr_title">
-                              <span class="mr_title_l">
-                              </span>
-                              <span class="mr_title_c">
-                                工作经历
-                              </span>
-                              <span class="mr_title_r">
-                              </span>
+                              <span class="mr_title_l"></span>
+                              <span class="mr_title_c">工作经历</span>
+                              <span class="mr_title_r"></span>
                             </div>
                           </div>
                         </div>
@@ -446,62 +417,38 @@
                               <div class="clearfixs">
                                 <div class="mr_content_l">
                                   <div class="l1">
-                                    <img alt="掌门1对1在线教育" src="//static.lagou.com/i/image/M00/43/FC/CgpFT1lgqBiAUjBoAAAK0nSng_8628.jpg?cc=0.237220631423263"
-                                    />
+                                    <img alt="掌门1对1在线教育" src="//static.lagou.com/i/image/M00/43/FC/CgpFT1lgqBiAUjBoAAAK0nSng_8628.jpg?cc=0.237220631423263"/>
                                   </div>
                                   <div class="l2">
-                                    <h4>
-                                      掌门1对1在线教育
-                                    </h4>
-                                    <span>
-                                      nodejs资深工程师
-                                    </span>
+                                    <h4>掌门1对1在线教育</h4>
+                                    <span>nodejs资深工程师</span>
                                   </div>
                                 </div>
                                 <div class="mr_content_r">
-                                  <span>
-                                    2016.03—至今
-                                  </span>
+                                  <span> 2016.03—至今</span>
                                 </div>
                               </div>
                               <div class="mr_content_m ueditor_parse">
-                                <p>
-                                  1、负责销售预约课程，教务排课
-                                </p>
-                                <p>
-                                  智能推送，快速匹配上课老师，以减轻教务老师每天几千节的排课工作量，提升排课效率
-                                </p>
-                                <p>
-                                  2、负责招师业务开发
-                                </p>
-                                <p>
-                                  老师预约报名，面试，培训，管理，满足智能排课需求
-                                </p>
-                                <p>
-                                  3、其他遗留bug修复，业务逻辑优化，SQL优化
-                                </p>
+                                <p>1、负责销售预约课程，教务排课</p>
+                                <p>智能推送，快速匹配上课老师，以减轻教务老师每天几千节的排课工作量，提升排课效率</p>
+                                <p>2、负责招师业务开发</p>
+                                <p>老师预约报名，面试，培训，管理，满足智能排课需求</p>
+                                <p>3、其他遗留bug修复，业务逻辑优化，SQL优化</p>
                               </div>
                             </div>
                             <div class="mr_jobe_list">
                               <div class="clearfixs">
                                 <div class="mr_content_l">
                                   <div class="l1">
-                                    <img alt="上海罗馥缇电子商务有限公司" src="//static.lagou.com/i/image/M00/43/FD/CgpFT1lgq9-AY-5XAAAMTpYCUts761.jpg?cc=0.42466962707392875"
-                                    />
+                                    <img alt="上海罗馥缇电子商务有限公司" src="//static.lagou.com/i/image/M00/43/FD/CgpFT1lgq9-AY-5XAAAMTpYCUts761.jpg?cc=0.42466962707392875"/>
                                   </div>
                                   <div class="l2">
-                                    <h4>
-                                      上海罗馥缇电子商务有限公司
-                                    </h4>
-                                    <span>
-                                      全栈工程师
-                                    </span>
+                                    <h4>上海罗馥缇电子商务有限公司</h4>
+                                    <span> 全栈工程师 </span>
                                   </div>
                                 </div>
                                 <div class="mr_content_r">
-                                  <span>
-                                    2014.12—2015.12
-                                  </span>
+                                  <span>2014.12—2015.12</span>
                                 </div>
                               </div>
                               <div class="mr_content_m ueditor_parse">
@@ -514,22 +461,15 @@
                               <div class="clearfixs">
                                 <div class="mr_content_l">
                                   <div class="l1">
-                                    <img alt="圆通速递有限公司" src="//static.lagou.com/i/image2/M00/1A/F5/CgotOVoBytWAEUyzAAAWIH12evA695.jpg?cc=0.9992562164151408"
-                                    />
+                                    <img alt="圆通速递有限公司" src="//static.lagou.com/i/image2/M00/1A/F5/CgotOVoBytWAEUyzAAAWIH12evA695.jpg?cc=0.9992562164151408"/>
                                   </div>
                                   <div class="l2">
-                                    <h4>
-                                      圆通速递有限公司
-                                    </h4>
-                                    <span>
-                                      java开发工程师
-                                    </span>
+                                    <h4>圆通速递有限公司</h4>
+                                    <span>java开发工程师</span>
                                   </div>
                                 </div>
                                 <div class="mr_content_r">
-                                  <span>
-                                    2014.02—2014.12
-                                  </span>
+                                  <span>2014.02—2014.12</span>
                                 </div>
                               </div>
                               <div class="mr_content_m ueditor_parse">
@@ -542,22 +482,15 @@
                               <div class="clearfixs">
                                 <div class="mr_content_l">
                                   <div class="l1">
-                                    <img alt="易石软件" src="//static.lagou.com/i/image2/M00/1A/F5/CgotOVoByvuAfSk2AAAUxtPNV8Q256.jpg?cc=0.8371135556050817"
-                                    />
+                                    <img alt="易石软件" src="//static.lagou.com/i/image2/M00/1A/F5/CgotOVoByvuAfSk2AAAUxtPNV8Q256.jpg?cc=0.8371135556050817"/>
                                   </div>
                                   <div class="l2">
-                                    <h4>
-                                      易石软件
-                                    </h4>
-                                    <span>
-                                      java开发工程师
-                                    </span>
+                                    <h4> 易石软件</h4>
+                                    <span>java开发工程师</span>
                                   </div>
                                 </div>
                                 <div class="mr_content_r">
-                                  <span>
-                                    2012.07—2014.02
-                                  </span>
+                                  <span>2012.07—2014.02</span>
                                 </div>
                               </div>
                               <div class="mr_content_m ueditor_parse">
@@ -575,13 +508,9 @@
                         <div class="mr_moudle_head clearfixs">
                           <div class="mr_head_l">
                             <div class="mr_title">
-                              <span class="mr_title_l">
-                              </span>
-                              <span class="mr_title_c">
-                                教育经历
-                              </span>
-                              <span class="mr_title_r">
-                              </span>
+                              <span class="mr_title_l"></span>
+                              <span class="mr_title_c">教育经历</span>
+                              <span class="mr_title_r"></span>
                             </div>
                           </div>
                         </div>
@@ -589,18 +518,12 @@
                           <div class="clearfixs mb46 mr_jobe_list">
                             <div class="mr_content_l">
                               <div class="l2">
-                                <h4>
-                                  咸阳职业技术学院
-                                </h4>
-                                <span>
-                                  大专·计算机应用技术
-                                </span>
+                                <h4>咸阳职业技术学院</h4>
+                                <span>大专·计算机应用技术</span>
                               </div>
                             </div>
                             <div class="mr_content_r">
-                              <span>
-                                2012年毕业
-                              </span>
+                              <span>2012年毕业</span>
                             </div>
                           </div>
                         </div>
@@ -611,13 +534,9 @@
                         <div class="mr_moudle_head clearfixs">
                           <div class="mr_head_l">
                             <div class="mr_title">
-                              <span class="mr_title_l">
-                              </span>
-                              <span class="mr_title_c">
-                                项目经验
-                              </span>
-                              <span class="mr_title_r">
-                              </span>
+                              <span class="mr_title_l"></span>
+                              <span class="mr_title_c">项目经验</span>
+                              <span class="mr_title_r"></span>
                             </div>
                           </div>
                         </div>
@@ -636,9 +555,7 @@
                                   </div>
                                 </div>
                                 <div class="mr_content_r">
-                                  <span>
-                                    2016.03-至今
-                                  </span>
+                                  <span>2016.03-至今</span>
                                 </div>
                               </div>
                               <div class="mr_content_m ueditor_parse">
@@ -666,9 +583,7 @@
                                   </div>
                                 </div>
                                 <div class="mr_content_r">
-                                  <span>
-                                    2015.12-2016.03
-                                  </span>
+                                  <span> 2015.12-2016.03</span>
                                 </div>
                               </div>
                               <div class="mr_content_m ueditor_parse">
@@ -691,9 +606,7 @@
                                   </div>
                                 </div>
                                 <div class="mr_content_r">
-                                  <span>
-                                    2014.12-2015.12
-                                  </span>
+                                  <span>2014.12-2015.12</span>
                                 </div>
                               </div>
                               <div class="mr_content_m ueditor_parse">
@@ -715,9 +628,7 @@
                                   </div>
                                 </div>
                                 <div class="mr_content_r">
-                                  <span>
-                                    2014.02-2015.12
-                                  </span>
+                                  <span>2014.02-2015.12</span>
                                 </div>
                               </div>
                               <div class="mr_content_m ueditor_parse">
@@ -730,18 +641,12 @@
                               <div class="clearfixs">
                                 <div class="mr_content_l">
                                   <div class="l2">
-                                    <a class="projectTitle nourl">
-                                      供应链系统——Java项目
-                                    </a>
-                                    <p>
-                                      Java开发工程师
-                                    </p>
+                                    <a class="projectTitle nourl">供应链系统——Java项目</a>
+                                    <p>Java开发工程师</p>
                                   </div>
                                 </div>
                                 <div class="mr_content_r">
-                                  <span>
-                                    2013.10-2014.02
-                                  </span>
+                                  <span> 2013.10-2014.02</span>
                                 </div>
                               </div>
                               <div class="mr_content_m ueditor_parse">
@@ -757,15 +662,11 @@
                                     <a class="projectTitle nourl">
                                       代理商系统——Java项目
                                     </a>
-                                    <p>
-                                      java中级开发工程师
-                                    </p>
+                                    <p>java中级开发工程师</p>
                                   </div>
                                 </div>
                                 <div class="mr_content_r">
-                                  <span>
-                                    2012.07-2013.11
-                                  </span>
+                                  <span>2012.07-2013.11</span>
                                 </div>
                               </div>
                               <div class="mr_content_m ueditor_parse">
@@ -784,13 +685,9 @@
                         <div class="mr_moudle_head clearfixs">
                           <div class="mr_head_l">
                             <div class="mr_title">
-                              <span class="mr_title_l">
-                              </span>
-                              <span class="mr_title_c">
-                                作品展示
-                              </span>
-                              <span class="mr_title_r">
-                              </span>
+                              <span class="mr_title_l"></span>
+                              <span class="mr_title_c">作品展示</span>
+                              <span class="mr_title_r"></span>
                             </div>
                           </div>
                         </div>
@@ -840,13 +737,9 @@
                         <div class="mr_moudle_head clearfixs">
                           <div class="mr_head_l">
                             <div class="mr_title">
-                              <span class="mr_title_l">
-                              </span>
-                              <span class="mr_title_c">
-                                自我描述
-                              </span>
-                              <span class="mr_title_r">
-                              </span>
+                              <span class="mr_title_l"></span>
+                              <span class="mr_title_c">自我描述</span>
+                              <span class="mr_title_r"></span>
                             </div>
                           </div>
                         </div>
@@ -867,13 +760,9 @@
                         <div class="mr_moudle_head clearfixs mr_w604">
                           <div class="mr_head_l">
                             <div class="mr_title">
-                              <span class="mr_title_l">
-                              </span>
-                              <span class="mr_title_c">
-                                期望工作
-                              </span>
-                              <span class="mr_title_r">
-                              </span>
+                              <span class="mr_title_l"></span>
+                              <span class="mr_title_c">期望工作</span>
+                              <span class="mr_title_r"></span>
                             </div>
                           </div>
                         </div>
@@ -883,32 +772,20 @@
                             <div class="mr_job_info" data-id="422618">
                               <ul class="clearfixs">
                                 <li class="mr_name_li">
-                                  <i>
-                                  </i>
-                                  <span class="mr_job_name" title="Nodejs高级开发工程师">
-                                    Nodejs高级开发工程师
-                                  </span>
+                                  <i></i>
+                                  <span class="mr_job_name" title="Nodejs高级开发工程师">Nodejs高级开发工程师</span>
                                 </li>
                                 <li class="mr_jobtype_li">
-                                  <i>
-                                  </i>
-                                  <span class="mr_job_type" title="全职">
-                                    全职
-                                  </span>
+                                  <i></i>
+                                  <span class="mr_job_type" title="全职">全职</span>
                                 </li>
                                 <li class="mr_city_li">
-                                  <i>
-                                  </i>
-                                  <span class="mr_job_adr" title="上海">
-                                    上海
-                                  </span>
+                                  <i></i>
+                                  <span class="mr_job_adr" title="上海">上海</span>
                                 </li>
                                 <li class="mr_jobrange_li">
-                                  <i>
-                                  </i>
-                                  <span class="mr_job_range" title="25k-50k">
-                                    25k-50k
-                                  </span>
+                                  <i></i>
+                                  <span class="mr_job_range" title="25k-50k">25k-50k</span>
                                 </li>
                               </ul>
                             </div>
@@ -921,76 +798,37 @@
                         <div class="mr_moudle_head clearfixs">
                           <div class="mr_head_l">
                             <div class="mr_title">
-                              <span class="mr_title_l">
-                              </span>
-                              <span class="mr_title_c">
-                                技能评价
-                              </span>
-                              <span class="mr_title_r">
-                              </span>
+                              <span class="mr_title_l"></span>
+                              <span class="mr_title_c">技能评价</span>
+                              <span class="mr_title_r"></span>
                             </div>
                           </div>
                         </div>
                         <div class="mr_moudle_content">
                           <div class="mr_skill_con">
-                            <span class="mr_skill_name" title="HTML5,CSS3">
-                              HTML5,CSS3
-                            </span>
-                            <span class="mr_skill_plan" data-skilllevel="56">
-                              <em style="width: 56%">
-                              </em>
-                            </span>
-                            <span class="mr_skill_level">
-                              掌握
-                            </span>
+                            <span class="mr_skill_name" title="HTML5,CSS3"> HTML5,CSS3</span>
+                            <span class="mr_skill_plan" data-skilllevel="56"><em style="width: 56%"></em></span>
+                            <span class="mr_skill_level">掌握</span>
                           </div>
                           <div class="mr_skill_con">
-                            <span class="mr_skill_name" title="MySql">
-                              MySql
-                            </span>
-                            <span class="mr_skill_plan" data-skilllevel="84">
-                              <em style="width: 84%">
-                              </em>
-                            </span>
-                            <span class="mr_skill_level">
-                              专家
-                            </span>
+                            <span class="mr_skill_name" title="MySql">MySql</span>
+                            <span class="mr_skill_plan" data-skilllevel="84"><em style="width: 84%"></em></span>
+                            <span class="mr_skill_level">专家</span>
                           </div>
                           <div class="mr_skill_con">
-                            <span class="mr_skill_name" title="Node.js">
-                              Node.js
-                            </span>
-                            <span class="mr_skill_plan" data-skilllevel="87">
-                              <em style="width: 87%">
-                              </em>
-                            </span>
-                            <span class="mr_skill_level">
-                              专家
-                            </span>
+                            <span class="mr_skill_name" title="Node.js">Node.js</span><span class="mr_skill_plan" data-skilllevel="87">
+                              <em style="width: 87%"></em></span>
+                              <span class="mr_skill_level"> 专家</span>
                           </div>
                           <div class="mr_skill_con">
-                            <span class="mr_skill_name" title="Linux">
-                              Linux
-                            </span>
-                            <span class="mr_skill_plan" data-skilllevel="46">
-                              <em style="width: 46%">
-                              </em>
-                            </span>
-                            <span class="mr_skill_level">
-                              掌握
-                            </span>
+                            <span class="mr_skill_name" title="Linux">Linux</span>
+                            <span class="mr_skill_plan" data-skilllevel="46"><em style="width: 46%"></em></span>
+                            <span class="mr_skill_level">掌握</span>
                           </div>
                           <div class="mr_skill_con">
-                            <span class="mr_skill_name" title="MongoDB">
-                              MongoDB
-                            </span>
-                            <span class="mr_skill_plan" data-skilllevel="20">
-                              <em style="width: 20%">
-                              </em>
-                            </span>
-                            <span class="mr_skill_level">
-                              了解
-                            </span>
+                            <span class="mr_skill_name" title="MongoDB">MongoDB</span>
+                            <span class="mr_skill_plan" data-skilllevel="20"><em style="width: 20%"></em></span>
+                            <span class="mr_skill_level">了解</span>
                           </div>
                         </div>
                       </div>
@@ -1005,13 +843,9 @@
                 <div id="resume_preview_bar">
                   <div class="mr_bottom_l">
                     <div class="mr_down">
-                      <i>
-                      </i>
-                      <a href="http://hopefully.qiniudn.com/Nodejs%E5%BC%80%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88--%E9%9C%8D%E6%BD%98%E6%BD%98.pdf"
-                      target="_blank">
-                        <em>
-                          下载简历
-                        </em>
+                      <i></i>
+                      <a href="http://hopefully-img.yuedun.wang/Nodejs%E5%BC%80%E5%8F%91%E5%B7%A5%E7%A8%8B%E5%B8%88--%E9%9C%8D%E6%BD%98%E6%BD%98.pdf" target="_blank">
+                        <em>下载简历</em>
                       </a>
                     </div>
                   </div>

@@ -421,9 +421,11 @@ var Routes = (function () {
     ;
     Routes.updateResume = function (req, res) {
         var _a = req.body, id = _a.id, content = _a.content;
-        return resume_model_1.default.findByIdAndUpdate(id, {
-            $set: { content: content }
-        }).exec();
+        return resume_model_1.default.findById(id).then(function (record) {
+            record.bakup = record.content;
+            record.content = content;
+            return record.save();
+        });
     };
     ;
     Routes.friendLinkList = function (req, res) {
