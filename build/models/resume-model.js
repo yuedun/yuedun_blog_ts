@@ -5,6 +5,6 @@ var ResumeSchema = new mongoose_1.Schema({
     state: Number,
     content: String,
 }, { timestamps: true });
-var ResumeModel = mongoose_1.model('Curriculum', ResumeSchema);
+var ResumeModel = mongoose_1.model('Resume', ResumeSchema);
 exports.default = ResumeModel;
 //# sourceMappingURL=resume-model.js.map

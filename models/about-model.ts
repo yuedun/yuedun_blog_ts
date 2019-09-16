@@ -19,6 +19,6 @@ export interface IAbout extends Document {
   resume: string,
   other: string
 }
-var IAboutModel: Model<IAbout> = model<IAbout>('Resume', IAboutSchema);
+var IAboutModel: Model<IAbout> = model<IAbout>('About', IAboutSchema);
 
 export default IAboutModel;
