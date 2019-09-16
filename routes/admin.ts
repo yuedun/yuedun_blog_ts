@@ -595,10 +595,12 @@ export default class Routes {
         json: true
     })
     static updateResume(req: Request, res: Response): Promise.Thenable<any> {
-        var {id, content } = req.body;
-        return ResumeModel.findByIdAndUpdate(id, {
-            $set: { content }
-        }).exec();
+        var { id, content } = req.body;
+        return ResumeModel.findById(id).then(record => {
+            record.bakup = record.content;
+            record.content = content;
+            return record.save();
+        })
     };
     /**
      * 友链
