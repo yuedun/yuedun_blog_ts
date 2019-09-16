@@ -326,7 +326,7 @@ export default class Routes {
     static viewUser(req: Request, res: Response): void {
         User.find({}, null, function (err, docs) {
             if (err) res.send(err.message);
-            res.render('admin/viewUser', { users: docs });
+            res.render('admin/viewUser', { users: docs, title: req.query.title, });
         });
     }
     /**
@@ -577,7 +577,7 @@ export default class Routes {
                 return { resume }
             })
     };
-    //简历
+    //简历是否可访问
     @route({
         method: "post",
         json: true
@@ -587,6 +587,17 @@ export default class Routes {
         var id = req.body.id;
         return ResumeModel.findByIdAndUpdate(id, {
             $set: { state: state }
+        }).exec();
+    };
+    //更新简历内容
+    @route({
+        method: "post",
+        json: true
+    })
+    static updateResume(req: Request, res: Response): Promise.Thenable<any> {
+        var {id, content } = req.body;
+        return ResumeModel.findByIdAndUpdate(id, {
+            $set: { content }
         }).exec();
     };
     /**
@@ -626,7 +637,7 @@ export default class Routes {
         let state = req.query.state;
         return FriendLinkModel.update({
             _id: req.params.id
-        },{
+        }, {
             state
         }).then(data => {
             res.redirect('/admin/friendLinkList');

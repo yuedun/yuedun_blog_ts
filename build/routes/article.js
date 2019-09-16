@@ -182,7 +182,9 @@ var Routes = (function () {
         return resume_model_1.default.findOne().exec()
             .then(function (resume) {
             if (resume && resume.state === 1) {
-                return Promise.resolve({});
+                return Promise.resolve({
+                    resumeContent: resume.content
+                });
             }
             else {
                 return Promise.reject(new Error("暂停访问！"));

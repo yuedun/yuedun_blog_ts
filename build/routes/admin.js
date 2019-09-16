@@ -243,7 +243,7 @@ var Routes = (function () {
         user_model_1.default.find({}, null, function (err, docs) {
             if (err)
                 res.send(err.message);
-            res.render('admin/viewUser', { users: docs });
+            res.render('admin/viewUser', { users: docs, title: req.query.title, });
         });
     };
     Routes.toModifyUser = function (req, res) {
@@ -416,6 +416,13 @@ var Routes = (function () {
         var id = req.body.id;
         return resume_model_1.default.findByIdAndUpdate(id, {
             $set: { state: state }
+        }).exec();
+    };
+    ;
+    Routes.updateResume = function (req, res) {
+        var _a = req.body, id = _a.id, content = _a.content;
+        return resume_model_1.default.findByIdAndUpdate(id, {
+            $set: { content: content }
         }).exec();
     };
     ;
@@ -615,6 +622,12 @@ var Routes = (function () {
             json: true
         })
     ], Routes, "resumeSwitch", null);
+    __decorate([
+        route_1.route({
+            method: "post",
+            json: true
+        })
+    ], Routes, "updateResume", null);
     __decorate([
         route_1.route({})
     ], Routes, "friendLinkList", null);

@@ -101,7 +101,7 @@ export default class Routes {
                     categories: list.category,
                     description: doc.content.replace(/<\/?.+?>/g, "").substring(0, 300)
                 }
-            }).catch(err=>{
+            }).catch(err => {
                 return {
                     blog: null,
                     newList: list.newList,
@@ -190,7 +190,9 @@ export default class Routes {
         return ResumeModel.findOne().exec()
             .then(resume => {
                 if (resume && resume.state === 1) {
-                    return Promise.resolve({});
+                    return Promise.resolve({
+                        resumeContent: resume.content
+                    });
                 } else {
                     return Promise.reject(new Error("暂停访问！"))
                 }
