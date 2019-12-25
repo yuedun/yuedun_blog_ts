@@ -11,10 +11,10 @@ import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
 import { default as QuickNote } from '../models/quick-note-model';
 import { default as Category, ICategory as CategoryInstance } from '../models/category-model';
 import { default as WeatherUser } from '../models/weather-user-model';
-import { default as About, IAbout as AboutInstance } from '../models/about-model';
-import { default as ViewerLogModel, IViewerLog as ViewerLogInstance } from '../models/viewer-log-model';
-import { default as FriendLinkModel, IFriendLink as FriendLinkInstance } from '../models/friend-link-model';
-import { default as ResumeModel, IResume as ResumeInstance } from '../models/resume-model';
+import { default as About } from '../models/about-model';
+import { default as ViewerLogModel } from '../models/viewer-log-model';
+import { default as FriendLinkModel } from '../models/friend-link-model';
+import { default as ResumeModel } from '../models/resume-model';
 import * as qiniu from '../utils/qiniu';
 var md = Markdown();
 var area = require('../area');
@@ -38,13 +38,13 @@ export default class Routes {
         if (user != null) {
             var today = Moment().format('YYYY-MM-DD');
             return Promise.all<any, number, any, any>([
-                Blog.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),//聚合查询，总访问量,分组必须包含_id
+                Blog.aggregate([{ $group: { _id: null, pvCount: { $sum: '$pv' } } }]),//聚合查询，总访问量,分组必须包含_id
                 ViewerLogModel.count({ createdAt: { $regex: today, $options: 'i' } }).exec(),//模糊查询"%text%"，今日访问量
-                ViewerLogModel.aggregate(
+                ViewerLogModel.aggregate([
                     { $match: { createdAt: { $regex: today, $options: 'i' } } },
                     { $group: { _id: { blogId: '$blogId', title: "$title", url: "$url" }, pv: { $sum: 1 } } },
                     { $sort: { createAt: -1 } }
-                ),
+                ]),
                 ViewerLogModel.find({}, null, { sort: { _id: -1 }, limit: 20 })
             ]).then(([result1, result2, result3, result4]) => {
                 return { readCount: result1[0].pvCount, todayRead: result2, recent: result3, newRead: result4 }
@@ -268,15 +268,12 @@ export default class Routes {
     @route({
         method: "post"
     })
-    static addCategory(req: Request, res: Response): void {
+    static addCategory(req: Request, res: Response): Promise<any> {
         var category = new Category({
             cateName: req.body.cateName,
             state: true
         });
-        category.save(function (e, docs, numberAffected) {
-            if (e) res.send(e.message);
-            res.redirect('/admin/category');
-        });
+        return Promise.resolve(category.save());
     }
     /**
      * 删除分类

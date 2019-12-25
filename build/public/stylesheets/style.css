@@ -110,7 +110,7 @@ article {
     margin-top: 30px;
     padding-bottom: 2.5rem;
     border-bottom: 1px dotted #111;
-
+    word-break: break-word;
 }
 .blog_sumary {
     font-size: 12px;

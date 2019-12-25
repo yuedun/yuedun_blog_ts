@@ -242,11 +242,11 @@ var latestTop = function () {
 
 //近两月访问最多
 var visitedTop = function () {
-    return ViewerLogModel.aggregate(
+    return ViewerLogModel.aggregate([
         { $match: { createdAt: { $gt: twoMonth() } } },
         { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } },
         { $sort: { createAt: -1 } }
-    ).sort({ pv: -1 }).limit(5).exec();
+    ]).sort({ pv: -1 }).limit(5).exec();
 }
 /**
  * Blog.find(条件, 字段, 排序、limit)

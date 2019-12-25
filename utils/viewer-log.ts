@@ -9,7 +9,7 @@ import BlogModel from '../models/blog-model';
  */
 export default function (req: Request) {
     var ip = req.ip || req.headers['x-forwarded-for'] || req.connection.remoteAddress;
-    var realIp = req.headers['x-forwarded-for'];
+    var realIp:any = req.headers['x-forwarded-for'];
     if (req.headers['referer'] && req.headers['user-agent']) {
         if (realIp) {
             realIp = realIp.substring(0, realIp.indexOf(','))
@@ -25,7 +25,7 @@ export default function (req: Request) {
                         blogId,
                         title: blog.title,
                         url: req.originalUrl,
-                        referer: req.headers['referer'] || '',
+                        referer: (req.headers['referer'] as string) || '',
                         userAgent: req.headers['user-agent'] || '',
                         createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
                     });
@@ -40,7 +40,7 @@ export default function (req: Request) {
             var pvLogObj = new ViewerLogModel({
                 ip: realIp,
                 url: req.originalUrl,
-                referer: req.headers['referer'] || '',
+                referer: (req.headers['referer'] as string) || '',
                 userAgent: req.headers['user-agent'] || '',
                 createdAt: moment().format('YYYY-MM-DD HH:mm:ss'),
             });

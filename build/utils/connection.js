@@ -19,11 +19,12 @@ var MongoConnection = (function () {
         }
         var opts = {
             loggerLevel: "warn",
-            useMongoClient: true
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
         };
         mongoose.connect(this.url, opts, function (err) {
             if (err) {
-                console.log('connection callback error');
+                console.log('connection callback error', err);
             }
         });
     }

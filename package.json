@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "tsc": "tsc -w --pretty",
-    "serve": "set NODE_ENV=development& set DEBUG=yuedun:*& cd ./build & nodemon --delay 5 ./bin/www.js",
+    "serve": "set NODE_ENV=development& set DEBUG=yuedun:*& cd ./build & npx nodemon --delay 5 ./bin/www.js",
     "dev": "parallelshell \"npm run tsc\" \"npm run serve\"",
     "start": "node ./bin/www.js"
   },
@@ -24,7 +24,7 @@
     "lodash": "^4.17.11",
     "markdown-it": "^6.1.1",
     "moment": "^2.24.0",
-    "mongoose": "^5.7.5",
+    "mongoose": "^5.8.3",
     "morgan": "^1.9.1",
     "node-schedule": "^1.3.2",
     "nodemailer": "^2.7.2",
@@ -41,7 +41,7 @@
     "@types/formidable": "^1.0.31",
     "@types/lodash": "^4.14.149",
     "@types/moment": "^2.13.0",
-    "@types/mongoose": "^4.7.51",
+    "@types/mongoose": "^5.5.35",
     "@types/node": "^8.10.59",
     "@types/nodemailer": "^4.6.8",
     "@types/request": "^2.48.3",
@@ -49,6 +49,6 @@
     "gulp": "^3.9.1",
     "parallelshell": "^3.0.2",
     "source-map-support": "^0.4.18",
-    "typescript": "^2.9.2"
+    "typescript": "^3.7.4"
   }
 }

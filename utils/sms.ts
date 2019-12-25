@@ -39,9 +39,8 @@ export var sendSMS = function (mobiles: string, text: string, callback: Function
                 weather: text,
                 createAt: moment().format('YYYY-MM-DD HH:mm:ss'),
             });
-            weathLog.save(function (e, docs, numberAffected) {
-                callback(null, resStr);
-            });
+            weathLog.save();
+            callback(null);
         })
     });
     myReq.on('error', function (e) {

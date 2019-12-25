@@ -28,11 +28,12 @@ export default class MongoConnection {
             // reconnectTries: 30,//尝试重连，默认30次
             // reconnectInterval: 1000, //重连间隔，默认1000毫秒
             loggerLevel: "warn", //error/warn/info/debug
-            useMongoClient: true
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
         };
         mongoose.connect(this.url, opts, function (err) {
             if (err) {
-                console.log('connection callback error');
+                console.log('connection callback error', err);
             }           
         });//一个数据库用connect,多个用createConnection
     }

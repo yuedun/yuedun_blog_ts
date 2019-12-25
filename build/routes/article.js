@@ -259,7 +259,11 @@ var latestTop = function () {
     return blog_model_1.default.find({ status: 1, createdAt: { $gt: twoMonth() } }, null, { sort: { _id: -1 }, limit: 5 }).exec();
 };
 var visitedTop = function () {
-    return viewer_log_model_1.default.aggregate({ $match: { createdAt: { $gt: twoMonth() } } }, { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } }, { $sort: { createAt: -1 } }).sort({ pv: -1 }).limit(5).exec();
+    return viewer_log_model_1.default.aggregate([
+        { $match: { createdAt: { $gt: twoMonth() } } },
+        { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } },
+        { $sort: { createAt: -1 } }
+    ]).sort({ pv: -1 }).limit(5).exec();
 };
 var friendLink = function () {
     return friend_link_model_1.default.find({ state: 1 }).exec();
