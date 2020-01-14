@@ -8,16 +8,16 @@
 import * as mongoose from 'mongoose';
 import * as Promise from 'bluebird';
 (<any>mongoose).Promise = Promise;//使用bluebird代替mongoose自身的promise
-import * as settings from '../settings';
-const mongodbConfig = settings.mongodb;
+import { mongodb } from '../settings';
 
 export default class MongoConnection {
-    private host = mongodbConfig.host;
-    private port = mongodbConfig.port;
-    private username = mongodbConfig.uid;
-    private password = mongodbConfig.pwd;
-    private dbName = mongodbConfig.db;
-    private url = `mongodb://${this.username}:${this.password}@${this.host}:${this.port}/${this.dbName}`;
+    private host = mongodb.host;
+    private port = mongodb.port;
+    private username = mongodb.uid;
+    private password = mongodb.pwd;
+    private dbName = mongodb.db;
+    private url = mongodb.murl;//`mongodb://${this.username}:${this.password}@${this.host}:${this.port}/${this.dbName}`;
+    // private url = `mongodb://${this.username}:${this.password}@${this.host}:${this.port}/${this.dbName}`;
     public mongoose = mongoose;
     constructor() {
         if (process.env.NODE_ENV == "development") {
@@ -34,7 +34,7 @@ export default class MongoConnection {
         mongoose.connect(this.url, opts, function (err) {
             if (err) {
                 console.log('connection callback error', err);
-            }           
+            }
         });//一个数据库用connect,多个用createConnection
     }
 }

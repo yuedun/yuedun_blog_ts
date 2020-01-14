@@ -1,18 +1,15 @@
-'use strict';
+"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var express = require("express");
 var Promise = require("bluebird");
 var Path = require("path");
 var IO = require("./Io");
 var message_1 = require("../utils/message");
 var settings_1 = require("../settings");
 var debug = require('debug')("yuedun:route-register.ts");
-var router = express.Router();
 var cwd = process.cwd();
 var RouteRegister = (function () {
     function RouteRegister(app, module) {
         this.jsExtRegex = /\.js$/;
-        this.htmlExtRegex = /\.html$/;
         this.adminHtmlPath = "admin";
         this.articleHtmlPath = "article";
         this.app = app;

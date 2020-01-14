@@ -1,11 +1,9 @@
 import * as express from 'express';
 import { Request, Response } from 'express';
 import * as path from 'path';
-import * as http from 'http';
 import * as favicon from 'serve-favicon';//图标组件由static-favicon改为serve-favicon
 import * as logger from 'morgan';//此模块及以下部分模块由express分离出来
 import * as cookieParser from 'cookie-parser';
-// import * as bodyParser from 'body-parser';
 var bodyParser = require('body-parser')
 import * as ejs from 'ejs';
 import * as session from 'express-session';

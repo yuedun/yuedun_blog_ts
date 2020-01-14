@@ -38,15 +38,7 @@
 					<p><img src="/images/6264.png"/>关键字词：<span><%= blog.tags%></span></p>
 				</div>
 				<div class="comment">
-					<!--评论-->
-					<div id="SOHUCS" sid="<%=blog._id%>"></div>
-					<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
-					<script>
-					window.changyan.api.config({
-						appid: 'cyt3jJvEt',
-						conf: 'prod_a624b3b54fee0783e886929e85225a64'
-					});
-					</script>
+					<a href="/message?blogId=<%= blog.id%>">留言</a>
 				</div>
 			</footer>
 			<%} else {%>

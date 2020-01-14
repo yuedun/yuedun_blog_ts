@@ -3,16 +3,15 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose = require("mongoose");
 var Promise = require("bluebird");
 mongoose.Promise = Promise;
-var settings = require("../settings");
-var mongodbConfig = settings.mongodb;
+var settings_1 = require("../settings");
 var MongoConnection = (function () {
     function MongoConnection() {
-        this.host = mongodbConfig.host;
-        this.port = mongodbConfig.port;
-        this.username = mongodbConfig.uid;
-        this.password = mongodbConfig.pwd;
-        this.dbName = mongodbConfig.db;
-        this.url = "mongodb://" + this.username + ":" + this.password + "@" + this.host + ":" + this.port + "/" + this.dbName;
+        this.host = settings_1.mongodb.host;
+        this.port = settings_1.mongodb.port;
+        this.username = settings_1.mongodb.uid;
+        this.password = settings_1.mongodb.pwd;
+        this.dbName = settings_1.mongodb.db;
+        this.url = settings_1.mongodb.murl;
         this.mongoose = mongoose;
         if (process.env.NODE_ENV == "development") {
             mongoose.set("debug", true);

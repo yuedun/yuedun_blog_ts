@@ -1,15 +1,11 @@
-'use strict'
-import * as express from 'express';
 import * as Promise from 'bluebird';
-import { Express, Router, Request, Response } from 'express';
-import * as Fs from 'fs';
+import { Express, Request, Response } from 'express';
 import * as Path from 'path';
 import * as IO from './Io';
 import Message from "../utils/message";
 import { errorAlert } from '../settings';
 var debug = require('debug')("yuedun:route-register.ts");
 
-const router = express.Router();
 const cwd = process.cwd();
 
 export interface RouteInfo {
@@ -26,7 +22,6 @@ interface ROUTE {
 export default class RouteRegister {
     private app: Express;
     private jsExtRegex = /\.js$/;
-    private htmlExtRegex = /\.html$/;
     private adminHtmlPath = "admin";
     private articleHtmlPath = "article";
     /**

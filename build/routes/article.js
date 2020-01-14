@@ -207,6 +207,21 @@ var Routes = (function () {
         });
     };
     ;
+    Routes.message = function (req, res) {
+        return getNewTopFriend().then(function (list) {
+            return Promise.resolve(quick_note_model_1.default.find(null, null, { sort: { '_id': -1 } }).exec())
+                .then(function (quicknote) {
+                return {
+                    quickNoteList: quicknote,
+                    newList: list.newList,
+                    topList: list.topList,
+                    friendLinks: list.friendLink,
+                    categories: list.category
+                };
+            });
+        });
+    };
+    ;
     Routes.updateTime = function (req, res) {
         return blog_model_1.default.find({ createdAt: { $type: 2 } }).then(function (blogs) {
             return Promise.each(blogs, function (item, index) {
@@ -247,6 +262,9 @@ var Routes = (function () {
         route_1.route({})
     ], Routes, "quicknote", null);
     __decorate([
+        route_1.route({})
+    ], Routes, "message", null);
+    __decorate([
         route_1.route({ json: true })
     ], Routes, "updateTime", null);
     return Routes;
@@ -271,7 +289,6 @@ var friendLink = function () {
 var categies = function () {
     return category_model_1.default.find().exec();
 };
-var promisies = [latestTop, visitedTop, friendLink, categies];
 function getNewTopFriend() {
     return Promise.all([latestTop(), visitedTop(), friendLink(), categies()]).then(function (_a) {
         var newList = _a[0], topList = _a[1], friendLink = _a[2], category = _a[3];

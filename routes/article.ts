@@ -215,6 +215,23 @@ export default class Routes {
                 })
         });
     };
+    
+    //留言
+    @route({})
+    static message(req: Request, res: Response): Promise.Thenable<any> {
+        return getNewTopFriend().then(list => {
+            return Promise.resolve(QuickNote.find(null, null, { sort: { '_id': -1 } }).exec())
+                .then(quicknote => {
+                    return {
+                        quickNoteList: quicknote,
+                        newList: list.newList,
+                        topList: list.topList,
+                        friendLinks: list.friendLink,
+                        categories: list.category
+                    };
+                })
+        });
+    };
 
     //临时使用
     @route({ json: true })
@@ -260,8 +277,6 @@ var friendLink = function () {
 var categies = function () {
     return CategoryModel.find().exec();
 }
-
-var promisies: Array<any> = [latestTop, visitedTop, friendLink, categies];
 
 interface CommonList {
     newList: Array<BlogInstance>;
