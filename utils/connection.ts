@@ -16,8 +16,8 @@ export default class MongoConnection {
     private username = mongodb.uid;
     private password = mongodb.pwd;
     private dbName = mongodb.db;
-    private url = mongodb.murl;//`mongodb://${this.username}:${this.password}@${this.host}:${this.port}/${this.dbName}`;
-    // private url = `mongodb://${this.username}:${this.password}@${this.host}:${this.port}/${this.dbName}`;
+    // private url = mongodb.murl;//`mongodb://${this.username}:${this.password}@${this.host}:${this.port}/${this.dbName}`;
+    private url = `mongodb://${this.username}:${this.password}@${this.host}:${this.port}/${this.dbName}`;
     public mongoose = mongoose;
     constructor() {
         if (process.env.NODE_ENV == "development") {

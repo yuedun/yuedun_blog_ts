@@ -11,7 +11,7 @@ var MongoConnection = (function () {
         this.username = settings_1.mongodb.uid;
         this.password = settings_1.mongodb.pwd;
         this.dbName = settings_1.mongodb.db;
-        this.url = settings_1.mongodb.murl;
+        this.url = "mongodb://" + this.username + ":" + this.password + "@" + this.host + ":" + this.port + "/" + this.dbName;
         this.mongoose = mongoose;
         if (process.env.NODE_ENV == "development") {
             mongoose.set("debug", true);

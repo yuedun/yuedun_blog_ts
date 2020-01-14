@@ -175,8 +175,20 @@ var Routes = (function () {
         }
         return message_model_1.default.find(condition)
             .then(function (data) {
-            debug(data);
-            return {};
+            debug(">>>>>>>>>>>.", data);
+            return {
+                messageList: data,
+            };
+        });
+    };
+    ;
+    Routes.messagePost = function (req, res) {
+        var args = req.body;
+        debug(args);
+        return message_model_1.default.create(args)
+            .then(function (data) {
+            debug(">>>>>>>>>>>.", data);
+            return new route_1.RedirecPage('/message');
         });
     };
     ;
@@ -222,6 +234,11 @@ var Routes = (function () {
     __decorate([
         route_1.route({})
     ], Routes, "message", null);
+    __decorate([
+        route_1.route({
+            method: 'post'
+        })
+    ], Routes, "messagePost", null);
     __decorate([
         route_1.route({ json: true })
     ], Routes, "updateTime", null);

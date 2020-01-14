@@ -6,6 +6,7 @@ export var Mychema: Schema = new Schema({
 	replyid: String,//留言博客id
 	status: Number,//留言状态
 	nickname: String,//昵称
+	email: String,
 	usericon: String,//头像
 	useragent: String,//
 	createdAt: Date,
@@ -18,6 +19,7 @@ export interface IMessage extends Document {
 	replyid: string,
 	status: number,
 	nickname: string,
+	email: string,
 	usericon: string
 	useragent: string
 	createdAt: Date;
