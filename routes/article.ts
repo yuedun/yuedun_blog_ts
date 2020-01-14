@@ -11,7 +11,7 @@ import { default as CategoryModel, ICategory as CategoryInstance } from '../mode
 import { default as MessageModel, IMessage } from '../models/message-model';
 import * as Markdown from 'markdown-it';
 import * as Debug from 'debug';
-import { route } from '../utils/route';
+import { route, RedirecPage } from '../utils/route';
 import * as settings from '../settings';
 var debug = Debug('yuedun:article');
 var md = Markdown({
@@ -176,7 +176,7 @@ export default class Routes {
             })
     };
 
-    //留言
+    //留言列表
     @route({})
     static message(req: Request, res: Response): Promise.Thenable<any> {
         let blogId = req.query.blogId;
@@ -186,10 +186,23 @@ export default class Routes {
         }
         return MessageModel.find(condition)
             .then(data => {
-                debug(data)
+                debug(">>>>>>>>>>>.", data)
                 return {
-
+                    messageList: data,
                 };
+            });
+    };
+    //留言
+    @route({
+        method: 'post'
+    })
+    static messagePost(req: Request, res: Response): Promise.Thenable<RedirecPage> {
+        let args = req.body;
+        debug(args);
+        return MessageModel.create(args)
+            .then(data => {
+                debug(">>>>>>>>>>>.", data)
+                return new RedirecPage('/message');
             });
     };
 
