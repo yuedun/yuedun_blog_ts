@@ -5,6 +5,7 @@ import * as IO from './Io';
 import Message from "../utils/message";
 import { errorAlert } from '../settings';
 import { RedirecPage } from './route';
+import { getNewTopFriend } from '../routes/article';
 var debug = require('debug')("yuedun:route-register.ts");
 
 const cwd = process.cwd();
@@ -105,7 +106,7 @@ export default class RouteRegister {
                 return route.handler.call(route.target, req, res);
             }).then(data => {
                 //返回重定向实例
-                if(data instanceof RedirecPage){
+                if (data instanceof RedirecPage) {
                     res.redirect(data.url);
                     return;
                 }
@@ -129,8 +130,16 @@ export default class RouteRegister {
                     let html = this.adminHtmlPath + "/" + methodName;
                     res.render(html, data);
                 } else {
-                    let html = this.articleHtmlPath + "/" + methodName;
-                    res.render(html, data);
+                    //获取公共数据
+                    return getNewTopFriend()
+                        .then(list => {
+                            data.newList = list.newList;
+                            data.topList = list.topList;
+                            data.friendLinks = list.friendLink;
+                            data.categories = list.category;
+                            let html = this.articleHtmlPath + "/" + methodName;
+                            res.render(html, data);
+                        })
                 }
             }).catch((err: Error) => {
                 let errMsg = `【访问url】：${req.url}\n【错误堆栈】：${err.stack.match(/[^\n]+\n[^\n]+\n[^\n]+/)}`

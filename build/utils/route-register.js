@@ -6,6 +6,7 @@ var IO = require("./Io");
 var message_1 = require("../utils/message");
 var settings_1 = require("../settings");
 var route_1 = require("./route");
+var article_1 = require("../routes/article");
 var debug = require('debug')("yuedun:route-register.ts");
 var cwd = process.cwd();
 var RouteRegister = (function () {
@@ -102,8 +103,15 @@ var RouteRegister = (function () {
                     res.render(html, data);
                 }
                 else {
-                    var html = _this.articleHtmlPath + "/" + methodName;
-                    res.render(html, data);
+                    return article_1.getNewTopFriend()
+                        .then(function (list) {
+                        data.newList = list.newList;
+                        data.topList = list.topList;
+                        data.friendLinks = list.friendLink;
+                        data.categories = list.category;
+                        var html = _this.articleHtmlPath + "/" + methodName;
+                        res.render(html, data);
+                    });
                 }
             }).catch(function (err) {
                 var errMsg = "\u3010\u8BBF\u95EEurl\u3011\uFF1A" + req.url + "\n\u3010\u9519\u8BEF\u5806\u6808\u3011\uFF1A" + err.stack.match(/[^\n]+\n[^\n]+\n[^\n]+/);

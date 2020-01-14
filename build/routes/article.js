@@ -45,31 +45,25 @@ var Routes = (function () {
             condition.category = category;
         }
         var blogPromise = Promise.resolve(blog_model_1.default.find(condition, null, { sort: { _id: -1 }, skip: pageIndex * pageSize, limit: pageSize }).exec());
-        return getNewTopFriend().then(function (list) {
-            return Promise.all([blogPromise, blog_model_1.default.count(condition).exec()])
-                .then(function (_a) {
-                var blogList = _a[0], totalIndex = _a[1];
-                blogList.forEach(function (item, index) {
-                    if (item.ismd) {
-                        item.content = md.render(item.content).replace(/<\/?.+?>/g, "").substring(0, 300);
-                    }
-                    else {
-                        item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
-                    }
-                });
-                return {
-                    blogList: blogList,
-                    totalIndex: totalIndex,
-                    newList: list.newList,
-                    topList: list.topList,
-                    pageIndex: req.query.pageIndex ? req.query.pageIndex : pageIndex,
-                    pageSize: pageSize,
-                    pageCount: blogList.length,
-                    category: category,
-                    friendLinks: list.friendLink,
-                    categories: list.category
-                };
+        return Promise.all([blogPromise, blog_model_1.default.count(condition).exec()])
+            .then(function (_a) {
+            var blogList = _a[0], totalIndex = _a[1];
+            blogList.forEach(function (item, index) {
+                if (item.ismd) {
+                    item.content = md.render(item.content).replace(/<\/?.+?>/g, "").substring(0, 300);
+                }
+                else {
+                    item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
+                }
             });
+            return {
+                blogList: blogList,
+                totalIndex: totalIndex,
+                pageIndex: req.query.pageIndex ? req.query.pageIndex : pageIndex,
+                pageSize: pageSize,
+                pageCount: blogList.length,
+                category: category,
+            };
         });
     };
     ;
@@ -84,86 +78,57 @@ var Routes = (function () {
         else {
             blogPromise = blog_model_1.default.findByIdAndUpdate(req.params.id, { $inc: { pv: 1 } }).exec();
         }
-        return getNewTopFriend().then(function (list) {
-            return Promise.resolve(blogPromise).then(function (doc) {
-                if ((doc && doc.status === 0) || !doc) {
-                    return new Error("找不到文章");
-                }
-                if (doc.ismd) {
-                    doc.content = md.render(doc.content);
-                }
-                res.cookie('visited' + blogId, visited, { maxAge: 1000 * 60 * 60 * 24 * 2, httpOnly: false });
-                return {
-                    blog: doc,
-                    newList: list.newList,
-                    topList: list.topList,
-                    friendLinks: list.friendLink,
-                    categories: list.category,
-                    description: doc.content.replace(/<\/?.+?>/g, "").substring(0, 300)
-                };
-            }).catch(function (err) {
-                return {
-                    blog: null,
-                    newList: list.newList,
-                    topList: list.topList,
-                    friendLinks: list.friendLink,
-                    categories: list.category,
-                    description: null
-                };
-            });
+        return Promise.resolve(blogPromise).then(function (doc) {
+            if ((doc && doc.status === 0) || !doc) {
+                return new Error("找不到文章");
+            }
+            if (doc.ismd) {
+                doc.content = md.render(doc.content);
+            }
+            res.cookie('visited' + blogId, visited, { maxAge: 1000 * 60 * 60 * 24 * 2, httpOnly: false });
+            return {
+                blog: doc,
+                description: doc.content.replace(/<\/?.+?>/g, "").substring(0, 300)
+            };
+        }).catch(function (err) {
+            return {
+                blog: null,
+                description: null
+            };
         });
     };
     Routes.catalog = function (req, res) {
         var catalogPromise = blog_model_1.default.find({ status: 1 }, 'title createdAt pv', { sort: { _id: -1 } }).exec();
-        return getNewTopFriend().then(function (list) {
-            return Promise.resolve(catalogPromise)
-                .then(function (catalog) {
-                return {
-                    catalog: catalog,
-                    newList: list.newList,
-                    topList: list.topList,
-                    friendLinks: list.friendLink,
-                    categories: list.category
-                };
-            });
-        });
-    };
-    ;
-    Routes.weibo = function (req, res) {
-        return getNewTopFriend().then(function (list) {
+        return Promise.resolve(catalogPromise)
+            .then(function (catalog) {
             return {
-                newList: list.newList,
-                topList: list.topList,
-                friendLinks: list.friendLink,
-                categories: list.category
+                catalog: catalog,
             };
         });
     };
     ;
+    Routes.weibo = function (req, res) {
+        return Promise.resolve({});
+    };
+    ;
     Routes.about = function (req, res) {
-        return getNewTopFriend().then(function (list) {
-            return Promise.resolve(about_model_1.default.findOne().exec())
-                .then(function (about) {
-                var resume = new about_model_1.default({
-                    nickname: "",
-                    job: "",
-                    addr: "",
-                    tel: "",
-                    email: "",
-                    resume: "",
-                    other: ""
-                });
-                if (!about) {
-                    about = resume;
-                }
-                return {
-                    config: about,
-                    newList: list.newList,
-                    topList: list.topList,
-                    friendLinks: list.friendLink,
-                    categories: list.category
-                };
+        return Promise.resolve(about_model_1.default.findOne().exec())
+            .then(function (about) {
+            var resume = new about_model_1.default({
+                nickname: "",
+                job: "",
+                addr: "",
+                tel: "",
+                email: "",
+                resume: "",
+                other: ""
             });
+            if (!about) {
+                about = resume;
+            }
+            return {
+                config: about,
+            };
         });
     };
     ;
@@ -194,17 +159,11 @@ var Routes = (function () {
     };
     ;
     Routes.quicknote = function (req, res) {
-        return getNewTopFriend().then(function (list) {
-            return Promise.resolve(quick_note_model_1.default.find(null, null, { sort: { '_id': -1 } }).exec())
-                .then(function (quicknote) {
-                return {
-                    quickNoteList: quicknote,
-                    newList: list.newList,
-                    topList: list.topList,
-                    friendLinks: list.friendLink,
-                    categories: list.category
-                };
-            });
+        return Promise.resolve(quick_note_model_1.default.find(null, null, { sort: { '_id': -1 } }).exec())
+            .then(function (quicknote) {
+            return {
+                quickNoteList: quicknote,
+            };
         });
     };
     ;
@@ -217,14 +176,7 @@ var Routes = (function () {
         return message_model_1.default.find(condition)
             .then(function (data) {
             debug(data);
-            return getNewTopFriend().then(function (list) {
-                return {
-                    newList: list.newList,
-                    topList: list.topList,
-                    friendLinks: list.friendLink,
-                    categories: list.category
-                };
-            });
+            return {};
         });
     };
     ;
@@ -276,27 +228,27 @@ var Routes = (function () {
     return Routes;
 }());
 exports.default = Routes;
-exports.twoMonth = function () {
+var twoMonth = function () {
     return moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
 };
-exports.latestTop = function () {
-    return blog_model_1.default.find({ status: 1, createdAt: { $gt: exports.twoMonth() } }, null, { sort: { _id: -1 }, limit: 5 }).exec();
+var latestTop = function () {
+    return blog_model_1.default.find({ status: 1, createdAt: { $gt: twoMonth() } }, null, { sort: { _id: -1 }, limit: 5 }).exec();
 };
-exports.visitedTop = function () {
+var visitedTop = function () {
     return viewer_log_model_1.default.aggregate([
-        { $match: { createdAt: { $gt: exports.twoMonth() } } },
+        { $match: { createdAt: { $gt: twoMonth() } } },
         { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } },
         { $sort: { createAt: -1 } }
     ]).sort({ pv: -1 }).limit(5).exec();
 };
-exports.friendLink = function () {
+var friendLink = function () {
     return friend_link_model_1.default.find({ state: 1 }).exec();
 };
-exports.categies = function () {
+var categies = function () {
     return category_model_1.default.find().exec();
 };
 function getNewTopFriend() {
-    return Promise.all([exports.latestTop(), exports.visitedTop(), exports.friendLink(), exports.categies()]).then(function (_a) {
+    return Promise.all([latestTop(), visitedTop(), friendLink(), categies()]).then(function (_a) {
         var newList = _a[0], topList = _a[1], friendLink = _a[2], category = _a[3];
         return {
             newList: newList,
@@ -306,4 +258,5 @@ function getNewTopFriend() {
         };
     });
 }
+exports.getNewTopFriend = getNewTopFriend;
 //# sourceMappingURL=article.js.map
