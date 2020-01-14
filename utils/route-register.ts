@@ -4,6 +4,7 @@ import * as Path from 'path';
 import * as IO from './Io';
 import Message from "../utils/message";
 import { errorAlert } from '../settings';
+import { RedirecPage } from './route';
 var debug = require('debug')("yuedun:route-register.ts");
 
 const cwd = process.cwd();
@@ -103,14 +104,11 @@ export default class RouteRegister {
                 //获取到数据可以做一些后续补充处理
                 return route.handler.call(route.target, req, res);
             }).then(data => {
-                if (!data) {
-                    console.warn("没有数据返回，或许是路由中重定向或render")
+                //返回重定向实例
+                if(data instanceof RedirecPage){
+                    res.redirect(data.url);
                     return;
-                }//没有返回数据，一般是redirect跳转了，不需要往下执行。也可以返回需要重定向的地址，在此统一处理
-                // if(typeof data == "string"){
-                //     res.redirect(data);
-                //     return;
-                // }
+                }
                 if (data instanceof Error) {
                     res.render('error', {
                         message: data.message,
@@ -120,7 +118,7 @@ export default class RouteRegister {
                 }
 
                 //可以添加类似于全局变量的返回数据
-                if (!data.title) {
+                if (data && !data.title) {
                     data.title = "";
                 }
                 if (route.json) {
@@ -137,6 +135,7 @@ export default class RouteRegister {
             }).catch((err: Error) => {
                 let errMsg = `【访问url】：${req.url}\n【错误堆栈】：${err.stack.match(/[^\n]+\n[^\n]+\n[^\n]+/)}`
                 var msg = new Message(errorAlert, `错误提醒`, null, errMsg)
+                debug(err.message);
                 msg.send().then(data => {
                     debug(">>>>>", data)
                 })

@@ -18,7 +18,7 @@ import { default as ResumeModel } from '../models/resume-model';
 import * as qiniu from '../utils/qiniu';
 var md = Markdown();
 var area = require('../area');
-import { route } from '../utils/route';
+import { route, RedirecPage } from '../utils/route';
 
 function generatorPassword(password: string): string {
     const hash = crypto.createHash('sha1');
@@ -74,11 +74,9 @@ export default class Routes {
             .then(obj => {
                 if (obj || process.env.NODE_ENV === 'development') {
                     req.session.user = user;
-                    res.redirect('/admin/blogList')
-                    return
+                    return new RedirecPage('/admin/blogList');
                 } else {
-                    res.redirect('/admin/login')
-                    return
+                    return new RedirecPage('/admin/login');
                 }
             })
     }
@@ -250,7 +248,7 @@ export default class Routes {
         var user = req.session.user;
         return Blog.findByIdAndRemove(req.params.id)
             .then(doc => {
-                res.redirect('/admin/blogList');
+                return new RedirecPage('/admin/blogList');
             })
     }
 
@@ -284,7 +282,8 @@ export default class Routes {
     static deleteCate(req: Request, res: Response): void {
         var user = req.session.user;
         Category.findByIdAndRemove(req.params.id, function (err) {
-            res.redirect('/admin/category');
+            // res.redirect('/admin/category');
+            return new RedirecPage('/admin/category');
         });
     }
 
@@ -371,17 +370,20 @@ export default class Routes {
         path: ":userId"
     })
     static deleteUser(req: Request, res: Response): void {
-        User.remove({ _id: req.params.userId }, function (err) {
-            res.redirect('/admin/viewUser');
+        User.remove({ _id: req.params.userId }).then(()=>{
+            return new RedirecPage('/admin/viewUser');
         });
     }
     /*  登出  */
     @route({})
-    static logout(req: Request, res: Response): void {
-        req.session.destroy(function (err) {
-            res.redirect('/admin/login');
-            return;
+    static logout(req: Request, res: Response): Promise.Thenable<RedirecPage> {
+        return new Promise((resolve, reject)=>{
+            req.session.destroy(function (err) {
+                // res.redirect('/admin/login');
+                resolve(new RedirecPage('/admin/login'))
+            })
         })
+
     }
 
     //添加天气用户界面
@@ -410,7 +412,8 @@ export default class Routes {
         });
         return weathUser.save()
             .then(data => {
-                res.redirect('/admin/weatherUserList');
+                // res.redirect('/admin/weatherUserList');
+                return new RedirecPage('/admin/weatherUserList');
             })
     }
     /**
@@ -430,10 +433,11 @@ export default class Routes {
     @route({
         path: ":userId"
     })
-    static delWeatherUser(req: Request, res: Response): Promise.Thenable<void> {
+    static delWeatherUser(req: Request, res: Response): Promise.Thenable<RedirecPage> {
         return Promise.resolve(WeatherUser.remove({ _id: req.params.userId }).exec())
             .then(d => {
-                res.redirect('/admin/weatherUserList');
+                // res.redirect('/admin/weatherUserList');
+                return new RedirecPage('/admin/weatherUserList');
             })
     }
     /**
@@ -442,7 +446,7 @@ export default class Routes {
     @route({
         method: "post"
     })
-    static quicknote(req: Request, res: Response): Promise.Thenable<void> {
+    static quicknote(req: Request, res: Response): Promise.Thenable<RedirecPage> {
         var quicknote = new QuickNote({
             content: req.body.content,
             status: true,//可用/停用
@@ -450,7 +454,8 @@ export default class Routes {
         });
         return quicknote.save()
             .then(data => {
-                res.redirect('/admin/quickNoteList');
+                // res.redirect('/admin/quickNoteList');
+                return new RedirecPage('/admin/quickNoteList');
             })
     }
     /**
@@ -479,7 +484,8 @@ export default class Routes {
                 updateDate: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
         }).then(() => {
-            res.redirect('/admin/quickNoteList');
+            // res.redirect('/admin/quickNoteList');
+            return new RedirecPage('/admin/quickNoteList');
         })
     }
     /*
@@ -488,9 +494,10 @@ export default class Routes {
     @route({
         path: ":id"
     })
-    static deleteNote(req: Request, res: Response): void {
-        QuickNote.remove({ _id: req.params.id }, function (err) {
-            res.redirect('/admin/quickNoteList');
+    static deleteNote(req: Request, res: Response): Promise.Thenable<RedirecPage> {
+        return QuickNote.remove({ _id: req.params.id }).exec()
+        .then(()=>{
+            return new RedirecPage('/admin/quickNoteList');
         });
     }
     /*
@@ -617,12 +624,13 @@ export default class Routes {
         method: "post",
         json: true
     })
-    static addFriendLink(req: Request, res: Response): Promise.Thenable<any> {
+    static addFriendLink(req: Request, res: Response): Promise.Thenable<RedirecPage> {
         return FriendLinkModel.create({
             url: req.body.url,
             name: req.body.name
         }).then(data => {
-            res.redirect('/admin/friendLinkList');
+            // res.redirect('/admin/friendLinkList');
+            return new RedirecPage('/admin/friendLinkList');
         })
     }
     /**
@@ -632,15 +640,15 @@ export default class Routes {
         method: "get",
         path: ":id"
     })
-    static freezeFriendLink(req: Request, res: Response): Promise.Thenable<void> {
+    static freezeFriendLink(req: Request, res: Response): Promise.Thenable<RedirecPage> {
         let state = req.query.state;
         return FriendLinkModel.update({
             _id: req.params.id
         }, {
             state
         }).then(data => {
-            res.redirect('/admin/friendLinkList');
-            return
+            // res.redirect('/admin/friendLinkList');
+            return new RedirecPage('/admin/friendLinkList');
         })
     }
     /**
@@ -650,11 +658,12 @@ export default class Routes {
         method: "get",
         path: ":id"
     })
-    static delFriendLink(req: Request, res: Response): Promise.Thenable<void> {
+    static delFriendLink(req: Request, res: Response): Promise.Thenable<RedirecPage> {
         return FriendLinkModel.remove({
             _id: req.params.id
         }).then(data => {
-            res.redirect('/admin/friendLinkList');
+            // res.redirect('/admin/friendLinkList');
+            return new RedirecPage('/admin/friendLinkList');
         })
     }
 

@@ -15,6 +15,7 @@ var viewer_log_model_1 = require("../models/viewer-log-model");
 var friend_link_model_1 = require("../models/friend-link-model");
 var resume_model_1 = require("../models/resume-model");
 var category_model_1 = require("../models/category-model");
+var message_model_1 = require("../models/message-model");
 var Markdown = require("markdown-it");
 var Debug = require("debug");
 var route_1 = require("../utils/route");
@@ -208,11 +209,16 @@ var Routes = (function () {
     };
     ;
     Routes.message = function (req, res) {
-        return getNewTopFriend().then(function (list) {
-            return Promise.resolve(quick_note_model_1.default.find(null, null, { sort: { '_id': -1 } }).exec())
-                .then(function (quicknote) {
+        var blogId = req.query.blogId;
+        var condition = {};
+        if (blogId) {
+            condition.replyid = blogId;
+        }
+        return message_model_1.default.find(condition)
+            .then(function (data) {
+            debug(data);
+            return getNewTopFriend().then(function (list) {
                 return {
-                    quickNoteList: quicknote,
                     newList: list.newList,
                     topList: list.topList,
                     friendLinks: list.friendLink,
@@ -270,27 +276,27 @@ var Routes = (function () {
     return Routes;
 }());
 exports.default = Routes;
-var twoMonth = function () {
+exports.twoMonth = function () {
     return moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
 };
-var latestTop = function () {
-    return blog_model_1.default.find({ status: 1, createdAt: { $gt: twoMonth() } }, null, { sort: { _id: -1 }, limit: 5 }).exec();
+exports.latestTop = function () {
+    return blog_model_1.default.find({ status: 1, createdAt: { $gt: exports.twoMonth() } }, null, { sort: { _id: -1 }, limit: 5 }).exec();
 };
-var visitedTop = function () {
+exports.visitedTop = function () {
     return viewer_log_model_1.default.aggregate([
-        { $match: { createdAt: { $gt: twoMonth() } } },
+        { $match: { createdAt: { $gt: exports.twoMonth() } } },
         { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } },
         { $sort: { createAt: -1 } }
     ]).sort({ pv: -1 }).limit(5).exec();
 };
-var friendLink = function () {
+exports.friendLink = function () {
     return friend_link_model_1.default.find({ state: 1 }).exec();
 };
-var categies = function () {
+exports.categies = function () {
     return category_model_1.default.find().exec();
 };
 function getNewTopFriend() {
-    return Promise.all([latestTop(), visitedTop(), friendLink(), categies()]).then(function (_a) {
+    return Promise.all([exports.latestTop(), exports.visitedTop(), exports.friendLink(), exports.categies()]).then(function (_a) {
         var newList = _a[0], topList = _a[1], friendLink = _a[2], category = _a[3];
         return {
             newList: newList,

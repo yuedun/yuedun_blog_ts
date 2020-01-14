@@ -76,6 +76,7 @@ if (app.get('env') === 'development') {
 }
 app.use(function (err, req, res, next) {
     var msg = new message_1.default(settins.errorAlert, "\u9519\u8BEF\u63D0\u9192", null, err.message);
+    debug(err.message);
     msg.send().then(function (data) {
         debug(">>>>>", data);
     });

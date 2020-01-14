@@ -5,6 +5,7 @@ var Path = require("path");
 var IO = require("./Io");
 var message_1 = require("../utils/message");
 var settings_1 = require("../settings");
+var route_1 = require("./route");
 var debug = require('debug')("yuedun:route-register.ts");
 var cwd = process.cwd();
 var RouteRegister = (function () {
@@ -78,8 +79,8 @@ var RouteRegister = (function () {
             }).then(function (data) {
                 return route.handler.call(route.target, req, res);
             }).then(function (data) {
-                if (!data) {
-                    console.warn("没有数据返回，或许是路由中重定向或render");
+                if (data instanceof route_1.RedirecPage) {
+                    res.redirect(data.url);
                     return;
                 }
                 if (data instanceof Error) {
@@ -89,7 +90,7 @@ var RouteRegister = (function () {
                     });
                     return;
                 }
-                if (!data.title) {
+                if (data && !data.title) {
                     data.title = "";
                 }
                 if (route.json) {
@@ -107,6 +108,7 @@ var RouteRegister = (function () {
             }).catch(function (err) {
                 var errMsg = "\u3010\u8BBF\u95EEurl\u3011\uFF1A" + req.url + "\n\u3010\u9519\u8BEF\u5806\u6808\u3011\uFF1A" + err.stack.match(/[^\n]+\n[^\n]+\n[^\n]+/);
                 var msg = new message_1.default(settings_1.errorAlert, "\u9519\u8BEF\u63D0\u9192", null, errMsg);
+                debug(err.message);
                 msg.send().then(function (data) {
                     debug(">>>>>", data);
                 });

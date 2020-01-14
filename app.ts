@@ -97,6 +97,7 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function (err: any, req: Request, res: Response, next: Function) {
     var msg = new Message(settins.errorAlert, `错误提醒`, null, err.message);
+    debug(err.message);
     msg.send().then(data => {
         debug(">>>>>", data)
     })

@@ -16,4 +16,11 @@ function route(_a) {
     };
 }
 exports.route = route;
+var RedirecPage = (function () {
+    function RedirecPage(url) {
+        this.url = url;
+    }
+    return RedirecPage;
+}());
+exports.RedirecPage = RedirecPage;
 //# sourceMappingURL=route.js.map

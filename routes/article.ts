@@ -8,6 +8,7 @@ import { default as ViewerLogModel } from '../models/viewer-log-model';
 import { default as FriendLinkModel, IFriendLink as FriendLinkInstance } from '../models/friend-link-model';
 import { default as ResumeModel } from '../models/resume-model';
 import { default as CategoryModel, ICategory as CategoryInstance } from '../models/category-model';
+import { default as MessageModel, IMessage } from '../models/message-model';
 import * as Markdown from 'markdown-it';
 import * as Debug from 'debug';
 import { route } from '../utils/route';
@@ -215,22 +216,27 @@ export default class Routes {
                 })
         });
     };
-    
+
     //留言
     @route({})
     static message(req: Request, res: Response): Promise.Thenable<any> {
-        return getNewTopFriend().then(list => {
-            return Promise.resolve(QuickNote.find(null, null, { sort: { '_id': -1 } }).exec())
-                .then(quicknote => {
+        let blogId = req.query.blogId;
+        let condition: any = {};
+        if (blogId) {
+            condition.replyid = blogId;
+        }
+        return MessageModel.find(condition)
+            .then(data => {
+                debug(data)
+                return getNewTopFriend().then(list => {
                     return {
-                        quickNoteList: quicknote,
                         newList: list.newList,
                         topList: list.topList,
                         friendLinks: list.friendLink,
                         categories: list.category
                     };
-                })
-        });
+                });
+            });
     };
 
     //临时使用
@@ -250,15 +256,15 @@ export default class Routes {
     };
 }
 //最近新建
-var twoMonth = function () {
+export var twoMonth = function () {
     return moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
 }
-var latestTop = function () {
+export var latestTop = function () {
     return Blog.find({ status: 1, createdAt: { $gt: twoMonth() } }, null, { sort: { _id: -1 }, limit: 5 }).exec();
 }
 
 //近两月访问最多
-var visitedTop = function () {
+export var visitedTop = function () {
     return ViewerLogModel.aggregate([
         { $match: { createdAt: { $gt: twoMonth() } } },
         { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } },
@@ -269,12 +275,12 @@ var visitedTop = function () {
  * Blog.find(条件, 字段, 排序、limit)
  */
 //获取友链
-var friendLink = function () {
+export var friendLink = function () {
     return FriendLinkModel.find({ state: 1 }).exec();
 }
 
 //所有分类
-var categies = function () {
+export var categies = function () {
     return CategoryModel.find().exec();
 }
 

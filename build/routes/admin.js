@@ -69,12 +69,10 @@ var Routes = (function () {
             .then(function (obj) {
             if (obj || process.env.NODE_ENV === 'development') {
                 req.session.user = user;
-                res.redirect('/admin/blogList');
-                return;
+                return new route_1.RedirecPage('/admin/blogList');
             }
             else {
-                res.redirect('/admin/login');
-                return;
+                return new route_1.RedirecPage('/admin/login');
             }
         });
     };
@@ -199,7 +197,7 @@ var Routes = (function () {
         var user = req.session.user;
         return blog_model_1.default.findByIdAndRemove(req.params.id)
             .then(function (doc) {
-            res.redirect('/admin/blogList');
+            return new route_1.RedirecPage('/admin/blogList');
         });
     };
     Routes.category = function (req, res) {
@@ -218,7 +216,7 @@ var Routes = (function () {
     Routes.deleteCate = function (req, res) {
         var user = req.session.user;
         category_model_1.default.findByIdAndRemove(req.params.id, function (err) {
-            res.redirect('/admin/category');
+            return new route_1.RedirecPage('/admin/category');
         });
     };
     Routes.addUserUi = function (req, res) {
@@ -272,14 +270,15 @@ var Routes = (function () {
         });
     };
     Routes.deleteUser = function (req, res) {
-        user_model_1.default.remove({ _id: req.params.userId }, function (err) {
-            res.redirect('/admin/viewUser');
+        user_model_1.default.remove({ _id: req.params.userId }).then(function () {
+            return new route_1.RedirecPage('/admin/viewUser');
         });
     };
     Routes.logout = function (req, res) {
-        req.session.destroy(function (err) {
-            res.redirect('/admin/login');
-            return;
+        return new Promise(function (resolve, reject) {
+            req.session.destroy(function (err) {
+                resolve(new route_1.RedirecPage('/admin/login'));
+            });
         });
     };
     Routes.addWeatherUser = function (req, res) {
@@ -299,7 +298,7 @@ var Routes = (function () {
         });
         return weathUser.save()
             .then(function (data) {
-            res.redirect('/admin/weatherUserList');
+            return new route_1.RedirecPage('/admin/weatherUserList');
         });
     };
     Routes.weatherUserList = function (req, res) {
@@ -311,7 +310,7 @@ var Routes = (function () {
     Routes.delWeatherUser = function (req, res) {
         return Promise.resolve(weather_user_model_1.default.remove({ _id: req.params.userId }).exec())
             .then(function (d) {
-            res.redirect('/admin/weatherUserList');
+            return new route_1.RedirecPage('/admin/weatherUserList');
         });
     };
     Routes.quicknote = function (req, res) {
@@ -322,7 +321,7 @@ var Routes = (function () {
         });
         return quicknote.save()
             .then(function (data) {
-            res.redirect('/admin/quickNoteList');
+            return new route_1.RedirecPage('/admin/quickNoteList');
         });
     };
     Routes.editQuickNote = function (req, res) {
@@ -337,12 +336,13 @@ var Routes = (function () {
                 updateDate: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
         }).then(function () {
-            res.redirect('/admin/quickNoteList');
+            return new route_1.RedirecPage('/admin/quickNoteList');
         });
     };
     Routes.deleteNote = function (req, res) {
-        quick_note_model_1.default.remove({ _id: req.params.id }, function (err) {
-            res.redirect('/admin/quickNoteList');
+        return quick_note_model_1.default.remove({ _id: req.params.id }).exec()
+            .then(function () {
+            return new route_1.RedirecPage('/admin/quickNoteList');
         });
     };
     Routes.quickNoteList = function (req, res) {
@@ -440,7 +440,7 @@ var Routes = (function () {
             url: req.body.url,
             name: req.body.name
         }).then(function (data) {
-            res.redirect('/admin/friendLinkList');
+            return new route_1.RedirecPage('/admin/friendLinkList');
         });
     };
     Routes.freezeFriendLink = function (req, res) {
@@ -450,15 +450,14 @@ var Routes = (function () {
         }, {
             state: state
         }).then(function (data) {
-            res.redirect('/admin/friendLinkList');
-            return;
+            return new route_1.RedirecPage('/admin/friendLinkList');
         });
     };
     Routes.delFriendLink = function (req, res) {
         return friend_link_model_1.default.remove({
             _id: req.params.id
         }).then(function (data) {
-            res.redirect('/admin/friendLinkList');
+            return new route_1.RedirecPage('/admin/friendLinkList');
         });
     };
     Routes.updateTime = function (req, res) {
