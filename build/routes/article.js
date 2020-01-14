@@ -187,7 +187,7 @@ var Routes = (function () {
         debug(args);
         return message_model_1.default.create(args)
             .then(function (data) {
-            debug(">>>>>>>>>>>.", data);
+            debug(">>>>>>>>>>>", data);
             return new route_1.RedirecPage('/message');
         });
     };

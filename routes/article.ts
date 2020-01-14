@@ -201,7 +201,7 @@ export default class Routes {
         debug(args);
         return MessageModel.create(args)
             .then(data => {
-                debug(">>>>>>>>>>>.", data)
+                debug(">>>>>>>>>>>", data)
                 return new RedirecPage('/message');
             });
     };
