@@ -119,9 +119,9 @@ var RouteRegister = (function () {
                     });
                 }
             }).catch(function (err) {
+                console.log(err.message);
                 var errMsg = "\u3010\u8BBF\u95EEurl\u3011\uFF1A" + req.url + "\n\u3010\u9519\u8BEF\u5806\u6808\u3011\uFF1A" + err.stack.match(/[^\n]+\n[^\n]+\n[^\n]+/);
                 var msg = new message_1.default(settings_1.errorAlert, "\u9519\u8BEF\u63D0\u9192", null, errMsg);
-                debug(err.message);
                 msg.send().then(function (data) {
                     debug(">>>>>", data);
                 });
