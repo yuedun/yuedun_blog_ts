@@ -176,8 +176,12 @@ var Routes = (function () {
         return message_model_1.default.find(condition)
             .then(function (data) {
             debug(">>>>>>>>>>>.", data);
+            data.forEach(function (element) {
+                element.createdDate = moment(element.createdAt).format('YYYY-MM-DD HH:mm:SS');
+            });
             return {
                 messageList: data,
+                replyid: blogId,
             };
         });
     };

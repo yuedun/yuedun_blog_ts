@@ -23,6 +23,7 @@ export interface IMessage extends Document {
 	usericon: string
 	useragent: string
 	createdAt: Date;
+	createdDate: string;
 	updatedAt: Date;
 }
 var CommentModel: Model<IMessage> = model<IMessage>('Message', Mychema);

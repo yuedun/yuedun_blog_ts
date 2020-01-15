@@ -14,49 +14,49 @@
 <body>
 	<% include header.html %>
 	<div class="container">
-		<article class="backgroud border">
-			<section class="catalog-section">
-				<h4>留言</h4>
-				<div>
-					<form action="" method="post"></form>
-					<form class="form-horizontal" action="/messagePost" method="POST">
-						<div class="form-group">
-							<label for="nickname" class="col-sm-2 control-label">昵称</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="nickname" name="nickname" placeholder="昵称">
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="email" class="col-sm-2 control-label">邮箱</label>
-							<div class="col-sm-10">
-								<input type="email" class="form-control" id="email" name="email" placeholder="邮箱">
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="content" class="col-sm-2 control-label">留言内容</label>
-							<div class="col-sm-10">
-								<textarea class="form-control" cols="40" id="content" name="content" placeholder="留言内容"></textarea>
-							</div>
-						</div>
-						<div class="form-group">
-							<label for="blog" class="col-sm-2 control-label">个人网站</label>
-							<div class="col-sm-10">
-								<input type="text" class="form-control" id="blog" placeholder="个人网站" style="width: 50%;">
-							</div>
-						</div>
-						<div class="form-group">
-							<div class="col-sm-offset-2 col-sm-10">
-								<button type="submit" class="btn btn-default">提交</button>
-							</div>
-						</div>
-					</form>
+		<article class="backgroud border blog message-box">
+			<h4>留言|<a href="/message">查看全部</a></h4>
+			<form class="form-horizontal" action="/messagePost" method="POST">
+				<input type="hidden" name="replyid" value="<%=replyid%>">
+				<div class="form-group">
+					<label for="nickname" class="col-sm-2 control-label">昵称</label>
+					<div class="y-input">
+						<input type="text" class="form-control" id="nickname" name="nickname" placeholder="昵称" required>
+					</div>
 				</div>
-				<div>
-					<% messageList.forEach(function(msg){%>
-					<p><%=msg.nickname%>：<%=msg.content%></p>
-					<% })%>
+				<div class="form-group">
+					<label for="email" class="col-sm-2 control-label">邮箱</label>
+					<div class="y-input">
+						<input type="email" class="form-control" id="email" name="email" placeholder="邮箱">
+					</div>
 				</div>
-			</section>
+				<div class="form-group">
+					<label for="content" class="col-sm-2 control-label">留言</label>
+					<div class="y-input">
+						<textarea class="form-control" cols="40" id="content" name="content" placeholder="留言内容"
+							required></textarea>
+					</div>
+				</div>
+				<div class="form-group">
+					<label for="blog" class="col-sm-2 control-label">个人网站</label>
+					<div class="y-input">
+						<input type="text" class="form-control" id="blog" placeholder="个人网站" style="width: 50%;">
+					</div>
+				</div>
+				<div class="form-group">
+					<div class="col-sm-offset-2 col-sm-10">
+						<button type="submit" class="btn btn-default">提交</button>
+					</div>
+				</div>
+			</form>
+			<div class="message-list">
+				<% messageList.forEach(function(msg){%>
+				<div>
+					<p><%=msg.nickname%>：<%=msg.createdDate%></p>
+					<p><%=msg.content%></p>
+				</div>
+				<% })%>
+			</div>
 		</article>
 		<% include asider.html %>
 	</div>

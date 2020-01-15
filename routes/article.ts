@@ -187,8 +187,12 @@ export default class Routes {
         return MessageModel.find(condition)
             .then(data => {
                 debug(">>>>>>>>>>>.", data)
+                data.forEach(element => {
+                    element.createdDate = moment(element.createdAt).format('YYYY-MM-DD HH:mm:SS')
+                });
                 return {
                     messageList: data,
+                    replyid: blogId,
                 };
             });
     };

@@ -14,7 +14,7 @@ body {
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-attachment: fixed;
-    background-image: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1527268957029&di=555e8c6a7a568d3fca59dea9354a19e2&imgtype=0&src=http%3A%2F%2Fi1.hdslb.com%2Fbfs%2Farchive%2F763293ce06bf1e684ef0ea3da43ae5008d8564b8.jpg)
+    /* background-image: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1527268957029&di=555e8c6a7a568d3fca59dea9354a19e2&imgtype=0&src=http%3A%2F%2Fi1.hdslb.com%2Fbfs%2Farchive%2F763293ce06bf1e684ef0ea3da43ae5008d8564b8.jpg) */
 }
 /* 苹果设备背景如固定兼容，但是会导致移动设备也出现背景图 */
 /* body:before {
@@ -192,6 +192,26 @@ aside {
 
 }
 .notecontent{padding-bottom: 10px;}
+
+/*留言表单*/
+.message-box form{
+    margin: 10px;
+    border-bottom: 1px solid #572C82;
+}
+form .form-group{
+    margin: 15px 0;
+}
+.message-box .y-input input{
+    font-size: 14px;
+    line-height: 1.42857143;
+    color:#555;
+    background-color:#fff;
+    border-radius: 4px;
+}
+.message-box .message-list div{
+    border-bottom: 1px dotted #572C82;
+    padding-bottom: 5px;
+}
 /* 中等屏幕（桌面显示器，平板电脑，大于等于 992px） */
 @media screen and (min-width: 768px) and (max-width: 992px) {
     article {
