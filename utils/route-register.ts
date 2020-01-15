@@ -3,9 +3,10 @@ import { Express, Request, Response } from 'express';
 import * as Path from 'path';
 import * as IO from './Io';
 import Message from "../utils/message";
-import { errorAlert } from '../settings';
+import { errorAlert, blockIP } from '../settings';
 import { RedirecPage } from './route';
 import { getNewTopFriend } from '../routes/article';
+import { getIP } from './viewer-log';
 var debug = require('debug')("yuedun:route-register.ts");
 
 const cwd = process.cwd();
@@ -100,6 +101,12 @@ export default class RouteRegister {
         expressMethod.call(this.app, path, (req: Request, res: Response) => {
             new Promise((resolve, reject) => {
                 //可以做一些预处理
+                // 防刷
+                console.log(getIP(req));
+                
+                if (blockIP.includes(getIP(req))) {
+                    reject(new Error('访问过于频繁！'));
+                }
                 resolve("权限验证通过");
             }).then(data => {
                 //获取到数据可以做一些后续补充处理

@@ -7,6 +7,7 @@ var message_1 = require("../utils/message");
 var settings_1 = require("../settings");
 var route_1 = require("./route");
 var article_1 = require("../routes/article");
+var viewer_log_1 = require("./viewer-log");
 var debug = require('debug')("yuedun:route-register.ts");
 var cwd = process.cwd();
 var RouteRegister = (function () {
@@ -76,6 +77,10 @@ var RouteRegister = (function () {
         }
         expressMethod.call(this.app, path, function (req, res) {
             new Promise(function (resolve, reject) {
+                console.log(viewer_log_1.getIP(req));
+                if (settings_1.blockIP.includes(viewer_log_1.getIP(req))) {
+                    reject(new Error('访问过于频繁！'));
+                }
                 resolve("权限验证通过");
             }).then(function (data) {
                 return route.handler.call(route.target, req, res);
