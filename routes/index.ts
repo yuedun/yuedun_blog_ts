@@ -68,12 +68,12 @@ export default class Routes {
     }
 
     /**
-     * 拉钩数据拉取
+     * 拉钩数据拉取 使用go已实现数据拉取
      */
-    @route({
-        method: "get",
-        json: true
-    })
+    // @route({
+    //     method: "get",
+    //     json: true
+    // })
     static lagouPosition(req: Request, res: Response): Promise.Thenable<any> {
         let args = req.query;
         console.log(">>>>>>>>", args);

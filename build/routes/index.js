@@ -95,12 +95,6 @@ var Routes = (function () {
             json: true
         })
     ], Routes, "uploadImg", null);
-    __decorate([
-        route_1.route({
-            method: "get",
-            json: true
-        })
-    ], Routes, "lagouPosition", null);
     return Routes;
 }());
 exports.default = Routes;
