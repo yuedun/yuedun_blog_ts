@@ -10,7 +10,7 @@ var ViewerLogSchema: Schema = new Schema({
     url: String,//访问地址
     referer: String,//跳转来源页面
     userAgent: String,//浏览器信息
-    createdAt: String,//创建时间
+    createdAt: Date,//创建时间
 });
 
 export interface IViewerLog extends Document {
@@ -20,7 +20,7 @@ export interface IViewerLog extends Document {
     url: string,//访问地址
     referer: string,//跳转来源页面
     userAgent: string,//浏览器信息
-    createdAt: string,//创建时间
+    createdAt: Date,//创建时间
 }
 var ViewerLogModel: Model<IViewerLog> = model<IViewerLog>('ViewerLog', ViewerLogSchema);
 

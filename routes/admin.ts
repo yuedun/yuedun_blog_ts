@@ -36,12 +36,13 @@ export default class Routes {
     static index(req: Request, res: Response): Promise.Thenable<any> {
         var user = req.session && req.session.user ? req.session.user : null;
         if (user != null) {
-            var today = Moment().format('YYYY-MM-DD');
+            let todayStart = Moment().hours(0).minutes(0).seconds(0).toDate();
+            let todayEnd = Moment().toDate();
             return Promise.all<any, number, any, any>([
                 Blog.aggregate([{ $group: { _id: null, pvCount: { $sum: '$pv' } } }]),//聚合查询，总访问量,分组必须包含_id
-                ViewerLogModel.count({ createdAt: { $regex: today, $options: 'i' } }).exec(),//模糊查询"%text%"，今日访问量
+                ViewerLogModel.count({ createdAt: { $gte: todayStart, $lte: todayEnd } }).exec(),//模糊查询"%text%"，今日访问量
                 ViewerLogModel.aggregate([
-                    { $match: { createdAt: { $regex: today, $options: 'i' } } },
+                    { $match: { createdAt: { $gte: todayStart, $lte: todayEnd } } },
                     { $group: { _id: { blogId: '$blogId', title: "$title", url: "$url" }, pv: { $sum: 1 } } },
                     { $sort: { createAt: -1 } }
                 ]),

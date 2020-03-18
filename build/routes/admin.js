@@ -37,12 +37,13 @@ var Routes = (function () {
     Routes.index = function (req, res) {
         var user = req.session && req.session.user ? req.session.user : null;
         if (user != null) {
-            var today = Moment().format('YYYY-MM-DD');
+            var todayStart = Moment().hours(0).minutes(0).seconds(0).toDate();
+            var todayEnd = Moment().toDate();
             return Promise.all([
                 blog_model_1.default.aggregate([{ $group: { _id: null, pvCount: { $sum: '$pv' } } }]),
-                viewer_log_model_1.default.count({ createdAt: { $regex: today, $options: 'i' } }).exec(),
+                viewer_log_model_1.default.count({ createdAt: { $gte: todayStart, $lte: todayEnd } }).exec(),
                 viewer_log_model_1.default.aggregate([
-                    { $match: { createdAt: { $regex: today, $options: 'i' } } },
+                    { $match: { createdAt: { $gte: todayStart, $lte: todayEnd } } },
                     { $group: { _id: { blogId: '$blogId', title: "$title", url: "$url" }, pv: { $sum: 1 } } },
                     { $sort: { createAt: -1 } }
                 ]),
