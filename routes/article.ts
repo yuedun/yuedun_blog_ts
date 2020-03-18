@@ -81,20 +81,26 @@ export default class Routes {
 
         return Promise.resolve(blogPromise).then(doc => {
             if ((doc && doc.status === 0) || !doc) {
-                return new Error("找不到文章");
+                new Error("找不到文章");
             }
-            if (doc.ismd) {
-                doc.content = md.render(doc.content);
-            }
-            res.cookie('visited' + blogId, visited, { maxAge: 1000 * 60 * 60 * 24 * 2, httpOnly: false });
-            return {
-                blog: doc,
-                description: doc.content.replace(/<\/?.+?>/g, "").substring(0, 300)
-            }
+            return Blog.find({ status: 1, category: doc.category }, 'title', { sort: { _id: -1 } }).exec().then(cats => {
+                if (doc.ismd) {
+                    doc.content = md.render(doc.content);
+                }
+                res.cookie('visited' + blogId, visited, { maxAge: 1000 * 60 * 60 * 24 * 2, httpOnly: false });
+                return {
+                    blog: doc,
+                    description: doc.content.replace(/<\/?.+?>/g, "").substring(0, 300),
+                    sameCategories: cats,
+                    category: doc.category,
+                }
+            })
+
         }).catch(err => {
             return {
                 blog: null,
-                description: null
+                description: null,
+                sameCategories: null
             }
         })
     }
@@ -228,7 +234,7 @@ export default class Routes {
 }
 //最近新建
 var twoMonth = function () {
-    return moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
+    return moment().subtract(2, "month").toDate();
 }
 var latestTop = function () {
     return Blog.find({ status: 1, createdAt: { $gt: twoMonth() } }, null, { sort: { _id: -1 }, limit: 5 }).exec();

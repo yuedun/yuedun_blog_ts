@@ -110,6 +110,7 @@ var RouteRegister = (function () {
                 else {
                     return article_1.getNewTopFriend()
                         .then(function (list) {
+                        data.sameCategories = data.sameCategories ? data.sameCategories : null;
                         data.newList = list.newList;
                         data.topList = list.topList;
                         data.friendLinks = list.friendLink;

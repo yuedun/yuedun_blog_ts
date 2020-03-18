@@ -11,13 +11,13 @@ var IAboutSchema: Schema = new Schema({
 });
 
 export interface IAbout extends Document {
-	nickname: string,
-	job: string,
-	addr: string,
-	tel: string,
-	email: string,
-	resume: string,
-	other: string
+	nickname: string;
+	job: string;
+	addr: string;
+	tel: string;
+	email: string;
+	resume: string;
+	other: string;
 }
 var IAboutModel: Model<IAbout> = model<IAbout>('About', IAboutSchema);
 

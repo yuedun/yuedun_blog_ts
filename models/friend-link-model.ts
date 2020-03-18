@@ -7,14 +7,11 @@ var FriendLinkSchema: Schema = new Schema({
 }, { validateBeforeSave: true, timestamps: true });
 
 export interface IFriendLink extends Document {
-	url: string,
-	name: string,
-	state: {
-		type: number,
-		default: 1,//1可用，0暂停
-	},//用户是否可用
-	createdAt: Date,//发表时间
-    updatedAt: Date,//修改时间
+	url: string;
+	name: string;
+	state: number;//用户是否可用
+	createdAt: Date;//发表时间
+    updatedAt: Date;//修改时间
 }
 var FriendLinkModel: Model<IFriendLink> = model<IFriendLink>('FriendLink', FriendLinkSchema);
 

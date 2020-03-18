@@ -103,7 +103,7 @@ export default class RouteRegister {
                 //可以做一些预处理
                 // 防刷
                 console.log(getIP(req));
-                
+
                 if (blockIP.includes(getIP(req))) {
                     reject(new Error('访问过于频繁！'));
                 }
@@ -140,6 +140,7 @@ export default class RouteRegister {
                     //获取公共数据
                     return getNewTopFriend()
                         .then(list => {
+                            data.sameCategories = data.sameCategories ? data.sameCategories : null;
                             data.newList = list.newList;
                             data.topList = list.topList;
                             data.friendLinks = list.friendLink;

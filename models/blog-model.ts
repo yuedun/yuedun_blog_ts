@@ -26,19 +26,19 @@ BlogSchema.virtual('updateTime').get(function () {
 
 export interface IBlog extends Document {
     // _id在Document中存在
-    title: string,//标题
-    createdAt: Date,//发表时间
-    updatedAt: Date,//修改时间
-    content: string, //内容
-    status: number,//发布，草稿，
-    comments: string[],//评论
-    commentCount: number,
-    category: string,//分类
-    top: number,//置顶
-    tags: string,//标签
-    pv: number,//访问量,
-    ismd: number,//是否markdown编写0否，1是
-    createDate: string,
+    title: string;//标题
+    createdAt: Date;//发表时间
+    updatedAt: Date;//修改时间
+    content: string; //内容
+    status: number;//发布，草稿，
+    comments: string[];//评论
+    commentCount: number;
+    category: string;//分类
+    top: number;//置顶
+    tags: string;//标签
+    pv: number;//访问量;
+    ismd: number;//是否markdown编写0否，1是
+    createDate: string;
 }
 var BlogModel: Model<IBlog> = model<IBlog>('Blog', BlogSchema);
 
