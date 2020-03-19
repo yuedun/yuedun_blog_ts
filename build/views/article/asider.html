@@ -19,15 +19,12 @@
             <%})%>
         </div>
     </div>
-    
     <%if(sameCategories && sameCategories.length>0){%>
     <div class="aside-block backgroud border">
         <h4><%=category%>同类博客</h4>
-        <div class="category">
-            <% sameCategories.forEach(function(blog){%>
-            <p><a href="/blogdetail/<%= blog._id%>"><%=blog.title%></a></p>
-            <%})%>
-        </div>
+        <% sameCategories.forEach(function(blog){%>
+        <p><a href="/blogdetail/<%= blog._id%>"><%=blog.title%></a></p>
+        <%})%>
     </div>
     <%}%>
     <div class="aside-block backgroud border">
