@@ -121,8 +121,7 @@ article {
     display: inline-block;
     -webkit-transition: all 1s; -moz-transition: all 1s; -o-transition: all 1s; transition: all 1s;
 }
-.blog_content {text-indent: 2em;}
-.blog_content p {line-height: 2em;letter-spacing:1px;word-wrap: break-word;}
+.blog_content p {line-height: 2em;letter-spacing:1px;word-wrap: break-word;text-indent: 2em;}
 .readall{float: right;border-bottom: 1px solid #572C82;padding-bottom: 4px;}
 .blog_content p img{
     width: 100%;
