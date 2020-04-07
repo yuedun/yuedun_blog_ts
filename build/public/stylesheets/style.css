@@ -9,13 +9,13 @@ body {
     margin: 0px;
     padding: 0px;
     color: #454545;
-    /* background-color: #9dd6d3; */
-    filter: grayscale(100%);
+    background-color: #9dd6d3;
+    /* filter: grayscale(100%); */
     font-family: "Microsoft Yahei","Lato","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Verdana,Tahoma,sans-serif;
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-attachment: fixed;
-    /* background-image: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1527268957029&di=555e8c6a7a568d3fca59dea9354a19e2&imgtype=0&src=http%3A%2F%2Fi1.hdslb.com%2Fbfs%2Farchive%2F763293ce06bf1e684ef0ea3da43ae5008d8564b8.jpg) */
+    background-image: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1527268957029&di=555e8c6a7a568d3fca59dea9354a19e2&imgtype=0&src=http%3A%2F%2Fi1.hdslb.com%2Fbfs%2Farchive%2F763293ce06bf1e684ef0ea3da43ae5008d8564b8.jpg)
 }
 /* 苹果设备背景如固定兼容，但是会导致移动设备也出现背景图 */
 /* body:before {
