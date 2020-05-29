@@ -45,7 +45,7 @@ var Routes = (function () {
             condition.category = category;
         }
         var blogPromise = Promise.resolve(blog_model_1.default.find(condition, null, { sort: { _id: -1 }, skip: pageIndex * pageSize, limit: pageSize }).exec());
-        return Promise.all([blogPromise, blog_model_1.default.count(condition).exec()])
+        return Promise.all([blogPromise, blog_model_1.default.countDocuments(condition).exec()])
             .then(function (_a) {
             var blogList = _a[0], totalIndex = _a[1];
             blogList.forEach(function (item, index) {

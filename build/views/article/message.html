@@ -12,7 +12,7 @@
 </head>
 
 <body>
-	<% include header.html %>
+	<%- include('header.html')%>
 	<div class="container">
 		<article class="backgroud border blog message-box">
 			<h4>留言|<a href="/message">查看全部</a></h4>
@@ -58,9 +58,9 @@
 				<% })%>
 			</div>
 		</article>
-		<% include asider.html %>
+		<%- include('asider.html')%>
 	</div>
-	<% include footer.html %>
+	<%- include('footer.html')%>
 	<script src="/javascripts/silder.js"></script>
 </body>
 

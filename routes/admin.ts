@@ -40,7 +40,7 @@ export default class Routes {
             let todayEnd = Moment().toDate();
             return Promise.all<any, number, any, any>([
                 Blog.aggregate([{ $group: { _id: null, pvCount: { $sum: '$pv' } } }]),//聚合查询，总访问量,分组必须包含_id
-                ViewerLogModel.count({ createdAt: { $gte: todayStart, $lte: todayEnd } }).exec(),//模糊查询"%text%"，今日访问量
+                ViewerLogModel.countDocuments({ createdAt: { $gte: todayStart, $lte: todayEnd } }).exec(),//模糊查询"%text%"，今日访问量
                 ViewerLogModel.aggregate([
                     { $match: { createdAt: { $gte: todayStart, $lte: todayEnd } } },
                     { $group: { _id: { blogId: '$blogId', title: "$title", url: "$url" }, pv: { $sum: 1 } } },
@@ -320,10 +320,9 @@ export default class Routes {
      * 查看用户列表
      */
     @route({})
-    static viewUser(req: Request, res: Response): void {
-        User.find({}, null, function (err, docs) {
-            if (err) res.send(err.message);
-            res.render('admin/viewUser', { users: docs, title: req.query.title, });
+    static viewUser(req: Request, res: Response): Promise.Thenable<any> {
+        return User.find({}).exec().then(docs => {
+            return Promise.resolve({ users: docs, title: req.query.title });
         });
     }
     /**
@@ -371,14 +370,14 @@ export default class Routes {
         path: ":userId"
     })
     static deleteUser(req: Request, res: Response): void {
-        User.remove({ _id: req.params.userId }).then(()=>{
+        User.remove({ _id: req.params.userId }).then(() => {
             return new RedirecPage('/admin/viewUser');
         });
     }
     /*  登出  */
     @route({})
     static logout(req: Request, res: Response): Promise.Thenable<RedirecPage> {
-        return new Promise((resolve, reject)=>{
+        return new Promise((resolve, reject) => {
             req.session.destroy(function (err) {
                 // res.redirect('/admin/login');
                 resolve(new RedirecPage('/admin/login'))
@@ -497,9 +496,9 @@ export default class Routes {
     })
     static deleteNote(req: Request, res: Response): Promise.Thenable<RedirecPage> {
         return QuickNote.remove({ _id: req.params.id }).exec()
-        .then(()=>{
-            return new RedirecPage('/admin/quickNoteList');
-        });
+            .then(() => {
+                return new RedirecPage('/admin/quickNoteList');
+            });
     }
     /*
      * 速记列表

@@ -13,11 +13,11 @@
 
 <body>
 
-<% include header.html %>
+<%- include('header.html')%>
 <!-- end of header bar -->
 
 <!--导入菜单-->
-<%- include menu.html %>
+<%- include('menu.html')%>
 <section id="main" class="column">
     <%if(success==1){%>
     <h4 class="alert_info">创建成功。</h4>

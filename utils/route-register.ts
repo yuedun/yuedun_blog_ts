@@ -128,6 +128,7 @@ export default class RouteRegister {
                 //可以添加类似于全局变量的返回数据
                 if (data && !data.title) {
                     data.title = "";
+                    
                 }
                 if (route.json) {
                     res.json(data);

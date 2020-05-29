@@ -42,7 +42,7 @@ export default class Routes {
         }
         var blogPromise = Promise.resolve(Blog.find(condition, null, { sort: { _id: -1 }, skip: pageIndex * pageSize, limit: pageSize }).exec());
 
-        return Promise.all([blogPromise, Blog.count(condition).exec()])
+        return Promise.all([blogPromise, Blog.countDocuments(condition).exec()])
             .then(([blogList, totalIndex]) => {
                 blogList.forEach(function (item, index) {
                     if (item.ismd) {

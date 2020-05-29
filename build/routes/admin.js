@@ -41,7 +41,7 @@ var Routes = (function () {
             var todayEnd = Moment().toDate();
             return Promise.all([
                 blog_model_1.default.aggregate([{ $group: { _id: null, pvCount: { $sum: '$pv' } } }]),
-                viewer_log_model_1.default.count({ createdAt: { $gte: todayStart, $lte: todayEnd } }).exec(),
+                viewer_log_model_1.default.countDocuments({ createdAt: { $gte: todayStart, $lte: todayEnd } }).exec(),
                 viewer_log_model_1.default.aggregate([
                     { $match: { createdAt: { $gte: todayStart, $lte: todayEnd } } },
                     { $group: { _id: { blogId: '$blogId', title: "$title", url: "$url" }, pv: { $sum: 1 } } },
@@ -239,10 +239,8 @@ var Routes = (function () {
         });
     };
     Routes.viewUser = function (req, res) {
-        user_model_1.default.find({}, null, function (err, docs) {
-            if (err)
-                res.send(err.message);
-            res.render('admin/viewUser', { users: docs, title: req.query.title, });
+        return user_model_1.default.find({}).exec().then(function (docs) {
+            return Promise.resolve({ users: docs, title: req.query.title });
         });
     };
     Routes.toModifyUser = function (req, res) {
