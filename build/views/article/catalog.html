@@ -20,7 +20,7 @@
 				<% catalog.forEach(function(item, index){%>
 				<div>
 					<time title="创建时间"><%= item.createDate.substring(0, 10)%></time>
-					<a href="/blogdetail/<%= item.id%>"><%= item.title%></a>
+					<a href="/blogdetail/<%= item.id%>" title="<%= item.title%>"><%= item.title%></a>
 					<span title="阅读数">阅读数：(<%= item.pv%>)</span>
 				</div>
 				<%})%>
