@@ -39,7 +39,7 @@ export default class Message {
         // setup e-mail data with unicode symbols 
         var mailOptions = {
             from: mail.from, // sender address 
-            to: this.mailTo, // list of receivers 'hale.huo@zhangmen.com'
+            to: this.mailTo, // list of receivers
             subject: this.subject, // Subject line 
             text: this.text, // plaintext body 
             html: this.content// html body 
