@@ -27,7 +27,7 @@
 				<div class="form-group">
 					<label for="email" class="col-sm-2 control-label">邮箱</label>
 					<div class="y-input">
-						<input type="email" class="form-control" id="email" name="email" placeholder="邮箱">
+						<input type="email" class="form-control" id="email" name="email" placeholder="邮箱用户回复留言">
 					</div>
 				</div>
 				<div class="form-group">
@@ -40,7 +40,7 @@
 				<div class="form-group">
 					<label for="blog" class="col-sm-2 control-label">个人网站</label>
 					<div class="y-input">
-						<input type="text" class="form-control" id="blog" placeholder="个人网站">
+						<input type="text" class="form-control" id="blog" name="website" placeholder="http://www.example.com">
 					</div>
 				</div>
 				<div class="form-group">
@@ -52,7 +52,7 @@
 			<div class="message-list">
 				<% messageList.forEach(function(msg){%>
 				<div>
-					<p><%=msg.nickname%>：<%=msg.createdDate%></p>
+					<p><span><a href="<%=msg.website%>" target="_blank" rel="noopener noreferrer"><%=msg.nickname%></a></span>:<span><%=msg.createdDate%></span></p>
 					<p><%=msg.content%></p>
 				</div>
 				<% })%>

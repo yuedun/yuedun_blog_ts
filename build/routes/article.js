@@ -6,6 +6,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getNewTopFriend = void 0;
 var Promise = require("bluebird");
 var moment = require("moment");
 var blog_model_1 = require("../models/blog-model");
@@ -178,7 +179,7 @@ var Routes = (function () {
         if (blogId) {
             condition.replyid = blogId;
         }
-        return message_model_1.default.find(condition)
+        return message_model_1.default.find(condition, null, { sort: { createdAt: -1 } })
             .then(function (data) {
             debug(">>>>>>>>>>>.", data);
             data.forEach(function (element) {

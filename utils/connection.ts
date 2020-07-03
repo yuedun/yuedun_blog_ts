@@ -31,6 +31,7 @@ export default class MongoConnection {
             useNewUrlParser: true,
             useUnifiedTopology: true,
         };
+        mongoose.set('useFindAndModify', false);
         mongoose.connect(this.url, opts, function (err) {
             if (err) {
                 console.log('connection callback error', err);

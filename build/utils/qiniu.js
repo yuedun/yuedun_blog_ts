@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.uploadFile = exports.uploadBuf = exports.downloadUrl = exports.uptoken = void 0;
 var qiniu = require('qiniu');
 var Promise = require("bluebird");
 var settings_1 = require("../settings");

@@ -1,5 +1,6 @@
 'use strict';
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getIP = void 0;
 var moment = require("moment");
 var viewer_log_model_1 = require("../models/viewer-log-model");
 var blog_model_1 = require("../models/blog-model");

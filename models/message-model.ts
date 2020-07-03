@@ -7,8 +7,7 @@ export var Mychema: Schema = new Schema({
 	status: Number,//留言状态
 	nickname: String,//昵称
 	email: String,
-	usericon: String,//头像
-	useragent: String,//
+	website: String,
 	createdAt: Date,
 	updatedAt: Date,
 }, { timestamps: true });
@@ -20,8 +19,7 @@ export interface IMessage extends Document {
 	status: number,
 	nickname: string,
 	email: string,
-	usericon: string
-	useragent: string
+	website: string,
 	createdAt: Date;
 	createdDate: string;
 	updatedAt: Date;

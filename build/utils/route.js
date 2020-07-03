@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.RedirecPage = exports.route = void 0;
 function route(_a) {
     var path = _a.path, _b = _a.method, method = _b === void 0 ? "get" : _b, _c = _a.json, json = _c === void 0 ? false : _c;
     return function (target, name) {

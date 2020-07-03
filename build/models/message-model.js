@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.Mychema = void 0;
 var mongoose_1 = require("mongoose");
 exports.Mychema = new mongoose_1.Schema({
     content: String,
@@ -8,8 +9,7 @@ exports.Mychema = new mongoose_1.Schema({
     status: Number,
     nickname: String,
     email: String,
-    usericon: String,
-    useragent: String,
+    website: String,
     createdAt: Date,
     updatedAt: Date,
 }, { timestamps: true });

@@ -246,6 +246,9 @@ aside {
     border-bottom: 1px dotted #572C82;
     padding-bottom: 5px;
 }
+.message-box .message-list span{
+    padding-left: 10px;
+}
 /* 中等屏幕（桌面显示器，平板电脑，大于等于 992px） */
 @media screen and (min-width: 768px) and (max-width: 992px) {
     article {

@@ -190,7 +190,7 @@ export default class Routes {
         if (blogId) {
             condition.replyid = blogId;
         }
-        return MessageModel.find(condition)
+        return MessageModel.find(condition, null, { sort: { createdAt: -1 } })
             .then(data => {
                 debug(">>>>>>>>>>>.", data)
                 data.forEach(element => {
