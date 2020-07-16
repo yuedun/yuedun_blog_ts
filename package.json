@@ -21,7 +21,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.1",
     "formidable": "^1.2.2",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
     "markdown-it": "^11.0.0",
     "moment": "^2.26.0",
     "mongoose": "^5.9.16",
