@@ -250,9 +250,9 @@ aside {
     padding-left: 10px;
 }
 /* 中等屏幕（桌面显示器，平板电脑，大于等于 992px） */
-@media screen and (min-width: 768px) and (max-width: 992px) {
+@media screen and (min-width: 768px) and (max-width: 1024px) {
     article {
-        width: 59%;
+        width: 60%;
         margin-left: 10%;
         background-color: #FFF;
         border-radius: 10px;
