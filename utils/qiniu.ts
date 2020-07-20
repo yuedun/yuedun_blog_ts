@@ -1,54 +1,46 @@
 /**
  * Created by huopanpan on 2014/10/22.
  */
-var qiniu = require('qiniu');
-import * as Promise from 'bluebird';
+import * as qiniu from 'qiniu';
 import { qiniuConfig } from '../settings';
 
-// @gist init
-qiniu.conf.ACCESS_KEY = qiniuConfig.accessKey;
-qiniu.conf.SECRET_KEY = qiniuConfig.secretKey;
-// @endgist
+// init
+const mac = new qiniu.auth.digest.Mac(qiniuConfig.accessKey, qiniuConfig.secretKey);
+const config = new qiniu.conf.Config({ zone: qiniu.zone.Zone_z0 });
 
-// @gist uptoken获取token
-export var uptoken = function (bucketName: string, callbackUrl?: string, callbackBody?: string) {
-    var putPolicy = new qiniu.rs.PutPolicy(bucketName);//只传递一个参数实际上是scope(bucket)
-    //putPolicy.callbackUrl = callbackUrl || null;//回调地址，即上传成功后七牛服务器调用我的服务器地址
-    //putPolicy.callbackBody = callbackBody || null;//回调内容
-    //putPolicy.returnUrl = returnUrl;
-    //putPolicy.returnBody = returnBody;
-    //putPolicy.asyncOps = asyncOps;
-    //putPolicy.expires = expires;//uptoken过期时间，默认3600s=1小时
-    putPolicy.getFlags(putPolicy);
-    return putPolicy.token();
-}
-// @endgist
+// uptoken获取token
+export var uptoken = function uptoken(bucketname: string, callbackUrl?: string, callbackBody?: any) {
+    let options = {
+        scope: bucketname,
+        // callbackUrl: callbackUrl,
+        callbackBody: '{"key":"$(key)","hash":"$(etag)","fsize":$(fsize),"bucket":"$(bucket)","name":"$(x:name)"}',
+        callbackBodyType: 'application/json',
 
-// @gist downloadUrl
-export var downloadUrl = function (domain: string, key: string) {
-    var baseUrl = qiniu.rs.makeBaseUrl(domain, key);
-    var policy = new qiniu.rs.GetPolicy();
-    return policy.makeRequest(baseUrl);
+    };
+    let putPolicy = new qiniu.rs.PutPolicy(options);//只传递一个参数实际上是scope(bucket),其余参数暂不指定
+    let uploadToken = putPolicy.uploadToken(mac);
+    return uploadToken;
 }
+
 /**
  * 服务端上传时使用
  */
-export var uploadBuf = function (body: any, key: string, uptoken: string) {
-    var extra = new qiniu.io.PutExtra();
-    //extra.params = params;
-    //extra.mimeType = mimeType;
-    //extra.crc32 = crc32;
-    //extra.checkCrc = checkCrc;
+export const uploadBuf = function (body: any, key: string, uploadToken: string) {
+    let formUploader = new qiniu.form_up.FormUploader(config);
+    let putExtra = new qiniu.form_up.PutExtra();
+    formUploader.put(uploadToken, key, body, putExtra, function (respErr, respBody, respInfo) {
+        console.log(respBody, respInfo);
 
-    qiniu.io.put(uptoken, key, body, extra, function (err: any, ret: any) {
-        if (!err) {
-            // 上传成功， 处理返回值
-            console.log(ret.key, ret.hash);
-            // ret.key & ret.hash
-        } else {
+        if (respErr) {
             // 上传失败， 处理返回代码
-            console.log(err)
-            // http://developer.qiniu.com/docs/v6/api/reference/codes.html
+            console.log(respErr)
+            throw respErr;
+        }
+        if (respInfo.statusCode == 200) {
+            console.log(respBody);
+        } else {
+            console.log(respInfo.statusCode);
+            console.log(respBody);
         }
     });
 }
@@ -58,26 +50,37 @@ export var uploadBuf = function (body: any, key: string, uptoken: string) {
  * @param key
  * @param uptoken
  */
-export var uploadFile = function (localFile: string, key: string, uptoken: string, callback?: Function): Promise.Thenable<any> {
-    var extra = new qiniu.io.PutExtra();
-    //extra.params = params;
-    //extra.mimeType = mimeType;
-    //extra.crc32 = crc32;
-    //extra.checkCrc = checkCrc;
+export const uploadFile = function (localFile: string, key: string, uploadToken: string): Promise<any> {
+    let formUploader = new qiniu.form_up.FormUploader(config);
+    let putExtra = new qiniu.form_up.PutExtra();
+    // 文件上传
     return new Promise((resolve, reject) => {
-        qiniu.io.putFile(uptoken, key, localFile, extra, function (err: any, ret: any) {
-            if (!err) {
-                // 上传成功， 处理返回值
-                console.log(ret.key, ret.hash);
-                resolve({ key: ret.key, hash: ret.hash });
-                callback && callback(null, ret); return;
-                // ret.key & ret.hash
+        formUploader.putFile(uploadToken, key, localFile, putExtra, function (respErr, respBody, respInfo) {
+            if (respErr) {
+                reject(respErr);
             } else {
-                // 上传失败， 处理返回代码
-                console.log(err);
-                reject(err);
-                callback && callback(err); return;
-                // http://developer.qiniu.com/docs/v6/api/reference/codes.html
+                resolve(respBody);
+            }
+        });
+    })
+}
+
+// 数据流上传（表单方式）
+export const uploadStream = function uploadBuf(body: NodeJS.ReadableStream, key: string, uploadToken: string): Promise<any> {
+    var formUploader = new qiniu.form_up.FormUploader(config);
+    var putExtra = new qiniu.form_up.PutExtra();
+    var readableStream = body; // 可读的流
+    return new Promise((resolve, reject) => {
+        formUploader.putStream(uploadToken, key, readableStream, putExtra, function (respErr,
+            respBody, respInfo) {
+            if (respErr) {
+                throw respErr;
+            }
+            if (respInfo.statusCode == 200) {
+                console.log(respBody);
+            } else {
+                console.log(respInfo.statusCode);
+                console.log(respBody);
             }
         });
     })
