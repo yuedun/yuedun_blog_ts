@@ -1,13 +1,10 @@
 import * as Promise from 'bluebird';
-import * as formidable from 'formidable';
 import * as Debug from 'debug';
 import * as HttpRequest from 'request';
 var debug = Debug('yuedun:index');
 import { Request, Response } from 'express';
 import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
-import { uploadFile, uptoken } from '../utils/qiniu';
 import { route } from '../utils/route';
-import { qiniuConfig } from '../settings';
 
 export default class Routes {
 

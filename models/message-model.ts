@@ -4,7 +4,10 @@ export var Mychema: Schema = new Schema({
 	content: String,//留言内容
 	ip: String,
 	replyid: String,//留言博客id
-	status: Number,//留言状态
+	status: {
+		type: Number,
+		default: 1,
+	},//留言状态
 	nickname: String,//昵称
 	email: String,
 	website: String,
@@ -16,6 +19,7 @@ export interface IMessage extends Document {
 	content: string,
 	ip: string,
 	replyid: string,
+	replyTitle?: string,
 	status: number,
 	nickname: string,
 	email: string,

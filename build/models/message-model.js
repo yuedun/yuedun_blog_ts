@@ -6,7 +6,10 @@ exports.Mychema = new mongoose_1.Schema({
     content: String,
     ip: String,
     replyid: String,
-    status: Number,
+    status: {
+        type: Number,
+        default: 1,
+    },
     nickname: String,
     email: String,
     website: String,

@@ -8,7 +8,7 @@ import * as Debug from 'debug';
 import * as formidable from 'formidable';
 var debug = Debug('yuedun:admin');
 import { default as User } from '../models/user-model';
-import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
+import BlogModel, { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
 import { default as QuickNote } from '../models/quick-note-model';
 import { default as Category, ICategory as CategoryInstance } from '../models/category-model';
 import { default as WeatherUser } from '../models/weather-user-model';
@@ -16,6 +16,7 @@ import { default as About } from '../models/about-model';
 import { default as ViewerLogModel } from '../models/viewer-log-model';
 import { default as FriendLinkModel } from '../models/friend-link-model';
 import { default as ResumeModel } from '../models/resume-model';
+import { default as MessageModel, IMessage } from '../models/message-model';
 import { uptoken, uploadFile } from '../utils/qiniu';
 import { qiniuConfig } from '../settings';
 var md = Markdown();
@@ -326,7 +327,6 @@ export default class Routes {
     static deleteCate(req: Request, res: Response): void {
         var user = req.session.user;
         Category.findByIdAndRemove(req.params.id, function (err) {
-            // res.redirect('/admin/category');
             return new RedirecPage('/admin/category');
         });
     }
@@ -422,7 +422,6 @@ export default class Routes {
     static logout(req: Request, res: Response): Promise.Thenable<RedirecPage> {
         return new Promise((resolve, reject) => {
             req.session.destroy(function (err) {
-                // res.redirect('/admin/login');
                 resolve(new RedirecPage('/admin/login'))
             })
         })
@@ -455,7 +454,6 @@ export default class Routes {
         });
         return weathUser.save()
             .then(data => {
-                // res.redirect('/admin/weatherUserList');
                 return new RedirecPage('/admin/weatherUserList');
             })
     }
@@ -479,7 +477,6 @@ export default class Routes {
     static delWeatherUser(req: Request, res: Response): Promise.Thenable<RedirecPage> {
         return Promise.resolve(WeatherUser.remove({ _id: req.params.userId }).exec())
             .then(d => {
-                // res.redirect('/admin/weatherUserList');
                 return new RedirecPage('/admin/weatherUserList');
             })
     }
@@ -497,7 +494,6 @@ export default class Routes {
         });
         return quicknote.save()
             .then(data => {
-                // res.redirect('/admin/quickNoteList');
                 return new RedirecPage('/admin/quickNoteList');
             })
     }
@@ -527,7 +523,6 @@ export default class Routes {
                 updateDate: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
         }).then(() => {
-            // res.redirect('/admin/quickNoteList');
             return new RedirecPage('/admin/quickNoteList');
         })
     }
@@ -672,7 +667,6 @@ export default class Routes {
             url: req.body.url,
             name: req.body.name
         }).then(data => {
-            // res.redirect('/admin/friendLinkList');
             return new RedirecPage('/admin/friendLinkList');
         })
     }
@@ -690,7 +684,6 @@ export default class Routes {
         }, {
             state
         }).then(data => {
-            // res.redirect('/admin/friendLinkList');
             return new RedirecPage('/admin/friendLinkList');
         })
     }
@@ -705,8 +698,47 @@ export default class Routes {
         return FriendLinkModel.remove({
             _id: req.params.id
         }).then(data => {
-            // res.redirect('/admin/friendLinkList');
             return new RedirecPage('/admin/friendLinkList');
+        })
+    }
+    /**
+     * 留言
+     */
+    @route({})
+    static message(req: Request, res: Response): Promise.Thenable<any> {
+        return MessageModel.find({}).then(data => {
+            return Promise.map(data, item => {
+                if (item.replyid) {
+                    return BlogModel.findById(item.replyid, { "title": 1 }).exec().then(blog => {
+                        let newItem = item.toObject();
+                        newItem.replyTitle = blog.title;
+                        newItem.createdAt = Moment(item.createdAt).format("YYYY-MM-DD HH:mm:ss");
+                        return newItem;
+                    })
+                } else {
+                    let newItem = item.toObject();
+                    newItem.createdAt = Moment(item.createdAt).format("YYYY-MM-DD HH:mm:ss");
+                    return newItem;
+                }
+            }).then(list => {
+                return {
+                    messageList: list
+                };
+            })
+        })
+    }
+    /**
+     * 删除留言
+     */
+    @route({
+        method: "get",
+        path: ":id"
+    })
+    static deleteMessage(req: Request, res: Response): Promise.Thenable<RedirecPage> {
+        return MessageModel.remove({
+            _id: req.params.id
+        }).then(data => {
+            return new RedirecPage('/admin/message');
         })
     }
 

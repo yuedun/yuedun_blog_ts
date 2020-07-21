@@ -23,6 +23,7 @@ var about_model_1 = require("../models/about-model");
 var viewer_log_model_1 = require("../models/viewer-log-model");
 var friend_link_model_1 = require("../models/friend-link-model");
 var resume_model_1 = require("../models/resume-model");
+var message_model_1 = require("../models/message-model");
 var qiniu_1 = require("../utils/qiniu");
 var settings_1 = require("../settings");
 var md = Markdown();
@@ -492,6 +493,36 @@ var Routes = (function () {
             return new route_1.RedirecPage('/admin/friendLinkList');
         });
     };
+    Routes.message = function (req, res) {
+        return message_model_1.default.find({}).then(function (data) {
+            return Promise.map(data, function (item) {
+                if (item.replyid) {
+                    return blog_model_1.default.findById(item.replyid, { "title": 1 }).exec().then(function (blog) {
+                        var newItem = item.toObject();
+                        newItem.replyTitle = blog.title;
+                        newItem.createdAt = Moment(item.createdAt).format("YYYY-MM-DD HH:mm:ss");
+                        return newItem;
+                    });
+                }
+                else {
+                    var newItem = item.toObject();
+                    newItem.createdAt = Moment(item.createdAt).format("YYYY-MM-DD HH:mm:ss");
+                    return newItem;
+                }
+            }).then(function (list) {
+                return {
+                    messageList: list
+                };
+            });
+        });
+    };
+    Routes.deleteMessage = function (req, res) {
+        return message_model_1.default.remove({
+            _id: req.params.id
+        }).then(function (data) {
+            return new route_1.RedirecPage('/admin/message');
+        });
+    };
     Routes.updateTime = function (req, res) {
         return blog_model_1.default.find().then(function (blogs) {
             return Promise.each(blogs, function (item, index) {
@@ -688,6 +719,15 @@ var Routes = (function () {
             path: ":id"
         })
     ], Routes, "delFriendLink", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "message", null);
+    __decorate([
+        route_1.route({
+            method: "get",
+            path: ":id"
+        })
+    ], Routes, "deleteMessage", null);
     __decorate([
         route_1.route({ json: true })
     ], Routes, "updateTime", null);
