@@ -15,7 +15,7 @@ body {
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-attachment: fixed;
-    background-image: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1527268957029&di=555e8c6a7a568d3fca59dea9354a19e2&imgtype=0&src=http%3A%2F%2Fi1.hdslb.com%2Fbfs%2Farchive%2F763293ce06bf1e684ef0ea3da43ae5008d8564b8.jpg)
+    background-image: url("http://hopefully-img.yuedun.wang/blogbackground.jpg")
 }
 /* 苹果设备背景如固定兼容，但是会导致移动设备也出现背景图 */
 /* body:before {
@@ -27,7 +27,7 @@ body {
     bottom: 0;
     left: 0;
     background-size: 100% 100%;
-    background-image: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1527268957029&di=555e8c6a7a568d3fca59dea9354a19e2&imgtype=0&src=http%3A%2F%2Fi1.hdslb.com%2Fbfs%2Farchive%2F763293ce06bf1e684ef0ea3da43ae5008d8564b8.jpg)
+    background-image: url("http://hopefully-img.yuedun.wang/blogbackground.jpg")
 } */
 h1,h2,h3,h4,h5,h6{
     margin: 0;
