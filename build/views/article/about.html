@@ -38,9 +38,11 @@
 			if (telObj) {
 				telObj.addEventListener("click", function () {
 					this.innerText = "<%= config.tel %>";
+					_hmt.push(['_trackEvent', '手机', '点击']);
 				})
 				mobileObj.addEventListener("click", function () {
 					this.innerText = "<%= config.email %>";
+					_hmt.push(['_trackEvent', '邮箱', '点击']);
 				})
 			}
 		}()
