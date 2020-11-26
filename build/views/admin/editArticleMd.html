@@ -37,7 +37,8 @@
                     <fieldset>
                         <!-- to make two field float next to one another, adjust values accordingly -->
                         <label>Category</label>
-                        <input class="input-large" type="text" list="catelist" name="category" value="<%= blog.category%>">
+                        <input class="input-large" type="text" list="catelist" name="category"
+                            value="<%= blog.category%>">
                         <datalist id="catelist">
                             <% categories.forEach(function(cate){%>
                             <option><%= cate.cateName%></option>
@@ -78,6 +79,7 @@
                 imageUpload: true,
                 imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
                 imageUploadURL: "/admin/uploadImg",
+                emoji: true,
                 /*
                 上传的后台只需要返回一个 JSON 数据，结构如下：
                 {
