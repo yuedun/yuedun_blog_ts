@@ -126,6 +126,7 @@ article {
 .readall{float: right;border-bottom: 1px solid #572C82;padding-bottom: 4px;}
 .blog_content p img{
     width: 100%;
+    display: block;
 }
 /*旁边*/
 aside {
