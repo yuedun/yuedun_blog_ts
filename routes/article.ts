@@ -8,9 +8,10 @@ import { default as ViewerLogModel } from '../models/viewer-log-model';
 import { default as FriendLinkModel, IFriendLink as FriendLinkInstance } from '../models/friend-link-model';
 import { default as ResumeModel } from '../models/resume-model';
 import { default as CategoryModel, ICategory as CategoryInstance } from '../models/category-model';
+import { default as MessageModel, IMessage } from '../models/message-model';
 import * as Markdown from 'markdown-it';
 import * as Debug from 'debug';
-import { route } from '../utils/route';
+import { route, RedirecPage } from '../utils/route';
 import * as settings from '../settings';
 var debug = Debug('yuedun:article');
 var md = Markdown({
@@ -41,30 +42,24 @@ export default class Routes {
         }
         var blogPromise = Promise.resolve(Blog.find(condition, null, { sort: { _id: -1 }, skip: pageIndex * pageSize, limit: pageSize }).exec());
 
-        return getNewTopFriend().then(list => {
-            return Promise.all([blogPromise, Blog.count(condition).exec()])
-                .then(([blogList, totalIndex]) => {
-                    blogList.forEach(function (item, index) {
-                        if (item.ismd) {
-                            item.content = md.render(item.content).replace(/<\/?.+?>/g, "").substring(0, 300);
-                        } else {
-                            item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
-                        }
-                    });
-                    return {
-                        blogList: blogList,
-                        totalIndex: totalIndex,
-                        newList: list.newList,
-                        topList: list.topList,
-                        pageIndex: req.query.pageIndex ? req.query.pageIndex : pageIndex,
-                        pageSize: pageSize,
-                        pageCount: blogList.length,
-                        category: category,
-                        friendLinks: list.friendLink,
-                        categories: list.category
-                    };
-                })
-        })
+        return Promise.all([blogPromise, Blog.countDocuments(condition).exec()])
+            .then(([blogList, totalIndex]) => {
+                blogList.forEach(function (item, index) {
+                    if (item.ismd) {
+                        item.content = md.render(item.content).replace(/<\/?.+?>/g, "").substring(0, 300);
+                    } else {
+                        item.content = item.content.replace(/<\/?.+?>/g, "").substring(0, 300);
+                    }
+                });
+                return {
+                    blogList: blogList,
+                    totalIndex: totalIndex,
+                    pageIndex: req.query.pageIndex ? req.query.pageIndex : pageIndex,
+                    pageSize: pageSize,
+                    pageCount: blogList.length,
+                    category: category,
+                };
+            })
     };
 
     /**
@@ -84,91 +79,68 @@ export default class Routes {
             blogPromise = Blog.findByIdAndUpdate(req.params.id, { $inc: { pv: 1 } }).exec();
         }
 
-        return getNewTopFriend().then(list => {
-            return Promise.resolve(blogPromise).then(doc => {
-                if ((doc && doc.status === 0) || !doc) {
-                    return new Error("找不到文章");
-                }
+        return Promise.resolve(blogPromise).then(doc => {
+            if ((doc && doc.status === 0) || !doc) {
+                new Error("找不到文章");
+            }
+            return Blog.find({ status: 1, category: doc.category }, 'title', { sort: { _id: -1 } }).exec().then(cats => {
                 if (doc.ismd) {
                     doc.content = md.render(doc.content);
                 }
                 res.cookie('visited' + blogId, visited, { maxAge: 1000 * 60 * 60 * 24 * 2, httpOnly: false });
                 return {
                     blog: doc,
-                    newList: list.newList,
-                    topList: list.topList,
-                    friendLinks: list.friendLink,
-                    categories: list.category,
-                    description: doc.content.replace(/<\/?.+?>/g, "").substring(0, 300)
-                }
-            }).catch(err => {
-                return {
-                    blog: null,
-                    newList: list.newList,
-                    topList: list.topList,
-                    friendLinks: list.friendLink,
-                    categories: list.category,
-                    description: null
+                    description: doc.content.replace(/<\/?.+?>/g, "").substring(0, 300),
+                    sameCategories: cats,
+                    category: doc.category,
                 }
             })
+
+        }).catch(err => {
+            return {
+                blog: null,
+                description: null,
+                sameCategories: null
+            }
         })
     }
     /* 博客目录 */
     @route({})
     static catalog(req: Request, res: Response): Promise.Thenable<any> {
         var catalogPromise = Blog.find({ status: 1 }, 'title createdAt pv', { sort: { _id: -1 } }).exec();
-        return getNewTopFriend().then(list => {
-            return Promise.resolve(catalogPromise)
-                .then(catalog => {
-                    return {
-                        catalog,
-                        newList: list.newList,
-                        topList: list.topList,
-                        friendLinks: list.friendLink,
-                        categories: list.category
-                    };
-                })
-        });
+        return Promise.resolve(catalogPromise)
+            .then(catalog => {
+                return {
+                    catalog,
+                };
+            })
     };
     /* 我的微博 */
     @route({})
     static weibo(req: Request, res: Response): Promise.Thenable<any> {
-        return getNewTopFriend().then(list => {
-            return {
-                newList: list.newList,
-                topList: list.topList,
-                friendLinks: list.friendLink,
-                categories: list.category
-            };
-        });
+        return Promise.resolve({});
     };
     /* 关于我 */
     @route({})
     static about(req: Request, res: Response): Promise.Thenable<any> {
-        return getNewTopFriend().then(list => {
-            return Promise.resolve(About.findOne().exec())
-                .then(about => {
-                    var resume = new About({
-                        nickname: "",
-                        job: "",
-                        addr: "",
-                        tel: "",
-                        email: "",
-                        resume: "",
-                        other: ""
-                    })
-                    if (!about) {
-                        about = resume;
-                    }
-                    return {
-                        config: about,
-                        newList: list.newList,
-                        topList: list.topList,
-                        friendLinks: list.friendLink,
-                        categories: list.category
-                    };
+        return Promise.resolve(About.findOne().exec())
+            .then(about => {
+                var resume = new About({
+                    nickname: "",
+                    job: "",
+                    addr: "",
+                    tel: "",
+                    email: "",
+                    resume: "",
+                    other: ""
                 })
-        })
+                if (!about) {
+                    about = resume;
+                }
+                return {
+                    config: about,
+                };
+            })
     };
 
     //婚纱
@@ -202,18 +174,46 @@ export default class Routes {
     //速记本
     @route({})
     static quicknote(req: Request, res: Response): Promise.Thenable<any> {
-        return getNewTopFriend().then(list => {
-            return Promise.resolve(QuickNote.find(null, null, { sort: { '_id': -1 } }).exec())
-                .then(quicknote => {
-                    return {
-                        quickNoteList: quicknote,
-                        newList: list.newList,
-                        topList: list.topList,
-                        friendLinks: list.friendLink,
-                        categories: list.category
-                    };
-                })
-        });
+        return Promise.resolve(QuickNote.find(null, null, { sort: { '_id': -1 } }).exec())
+            .then(quicknote => {
+                return {
+                    quickNoteList: quicknote,
+                };
+            })
+    };
+
+    //留言列表
+    @route({})
+    static message(req: Request, res: Response): Promise.Thenable<any> {
+        let blogId = req.query.blogId;
+        let condition: any = {};
+        if (blogId) {
+            condition.replyid = blogId;
+        }
+        return MessageModel.find(condition, null, { sort: { createdAt: -1 } })
+            .then(data => {
+                debug(">>>>>>>>>>>.", data)
+                data.forEach(element => {
+                    element.createdDate = moment(element.createdAt).format('YYYY-MM-DD HH:mm:SS')
+                });
+                return {
+                    messageList: data,
+                    replyid: blogId,
+                };
+            });
+    };
+    //留言
+    @route({
+        method: 'post'
+    })
+    static messagePost(req: Request, res: Response): Promise.Thenable<RedirecPage> {
+        let args = req.body;
+        debug(args);
+        return MessageModel.create(args)
+            .then(data => {
+                debug(">>>>>>>>>>>", data)
+                return new RedirecPage('/message');
+            });
     };
 
     //临时使用
@@ -234,7 +234,7 @@ export default class Routes {
 }
 //最近新建
 var twoMonth = function () {
-    return moment().subtract(2, "month").format("YYYY-MM-DD HH:ss:mm");
+    return moment().subtract(2, "month").toDate();
 }
 var latestTop = function () {
     return Blog.find({ status: 1, createdAt: { $gt: twoMonth() } }, null, { sort: { _id: -1 }, limit: 5 }).exec();
@@ -242,11 +242,11 @@ var latestTop = function () {
 
 //近两月访问最多
 var visitedTop = function () {
-    return ViewerLogModel.aggregate(
+    return ViewerLogModel.aggregate([
         { $match: { createdAt: { $gt: twoMonth() } } },
         { $group: { _id: { blogId: '$blogId', title: "$title" }, pv: { $sum: 1 } } },
         { $sort: { createAt: -1 } }
-    ).sort({ pv: -1 }).limit(5).exec();
+    ]).sort({ pv: -1 }).limit(5).exec();
 }
 /**
  * Blog.find(条件, 字段, 排序、limit)
@@ -261,8 +261,6 @@ var categies = function () {
     return CategoryModel.find().exec();
 }
 
-var promisies: Array<any> = [latestTop, visitedTop, friendLink, categies];
-
 interface CommonList {
     newList: Array<BlogInstance>;
     topList: Array<BlogInstance>;
@@ -270,7 +268,7 @@ interface CommonList {
     category: Array<CategoryInstance>;
 }
 //获取公共数据
-function getNewTopFriend(): Promise.Thenable<CommonList> {
+export function getNewTopFriend(): Promise.Thenable<CommonList> {
     return Promise.all([latestTop(), visitedTop(), friendLink(), categies()]).then(([newList, topList, friendLink, category]) => {
         return {
             newList,

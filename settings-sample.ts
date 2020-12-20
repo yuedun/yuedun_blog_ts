@@ -50,3 +50,6 @@ export const mail = {
 
 //错误发送至
 export const errorAlert = "xx@163.com";
+
+//黑名单
+export const blockIP: string[] = [];

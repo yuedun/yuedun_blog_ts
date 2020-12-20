@@ -16,7 +16,7 @@ export default class Routes {
     static sendmsg(req: Request, res: Response): Promise.Thenable<any> {
         if (req.query.code = SMS_ACCOUNT.code) {
             return new Promise((resove, reject) => {
-                sms.sendSMS(req.query.mobile, req.query.text, (err: any, result: any) => {
+                sms.sendSMS(<string>req.query.mobile, <string>req.query.text, (err: any, result: any) => {
                     if (err) {
                         reject(err);
                     }

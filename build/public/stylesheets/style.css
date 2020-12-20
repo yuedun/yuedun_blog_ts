@@ -10,11 +10,12 @@ body {
     padding: 0px;
     color: #454545;
     background-color: #9dd6d3;
+    /* filter: grayscale(100%); */
     font-family: "Microsoft Yahei","Lato","Lucida Grande","Lucida Sans Unicode","Lucida Sans",Verdana,Tahoma,sans-serif;
     background-repeat: no-repeat;
     background-size: 100% 100%;
     background-attachment: fixed;
-    background-image: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1527268957029&di=555e8c6a7a568d3fca59dea9354a19e2&imgtype=0&src=http%3A%2F%2Fi1.hdslb.com%2Fbfs%2Farchive%2F763293ce06bf1e684ef0ea3da43ae5008d8564b8.jpg)
+    background-image: url("http://hopefully-img.yuedun.wang/blogbackground.jpg")
 }
 /* 苹果设备背景如固定兼容，但是会导致移动设备也出现背景图 */
 /* body:before {
@@ -26,7 +27,7 @@ body {
     bottom: 0;
     left: 0;
     background-size: 100% 100%;
-    background-image: url(https://timgsa.baidu.com/timg?image&quality=80&size=b9999_10000&sec=1527268957029&di=555e8c6a7a568d3fca59dea9354a19e2&imgtype=0&src=http%3A%2F%2Fi1.hdslb.com%2Fbfs%2Farchive%2F763293ce06bf1e684ef0ea3da43ae5008d8564b8.jpg)
+    background-image: url("http://hopefully-img.yuedun.wang/blogbackground.jpg")
 } */
 h1,h2,h3,h4,h5,h6{
     margin: 0;
@@ -110,7 +111,7 @@ article {
     margin-top: 30px;
     padding-bottom: 2.5rem;
     border-bottom: 1px dotted #111;
-
+    word-break: break-word;
 }
 .blog_sumary {
     font-size: 12px;
@@ -121,11 +122,11 @@ article {
     display: inline-block;
     -webkit-transition: all 1s; -moz-transition: all 1s; -o-transition: all 1s; transition: all 1s;
 }
-.blog_content {text-indent: 2em;}
-.blog_content p {line-height: 2em;letter-spacing:1px;word-wrap: break-word;}
+.blog_content p {line-height: 2em;letter-spacing:1px;word-wrap: break-word;text-indent: 2em;}
 .readall{float: right;border-bottom: 1px solid #572C82;padding-bottom: 4px;}
 .blog_content p img{
     width: 100%;
+    display: block;
 }
 /*旁边*/
 aside {
@@ -192,10 +193,67 @@ aside {
 
 }
 .notecontent{padding-bottom: 10px;}
+
+/*留言表单*/
+.message-box form{
+    padding: 20px;
+    border: 1px solid #eee;
+}
+.message-box form .form-group{
+    margin-bottom: 15px;
+    clear: both;
+}
+.message-box .y-input input{
+    height: 38px;
+    line-height: 1.3;
+    border-width: 1px;
+    border-style: solid;
+    background-color: #fff;
+    border-radius: 2px;
+    display: block;
+    width: 100%;
+    padding-left: 10px;
+    border-color: #e6e6e6;
+}
+.message-box textarea{
+    min-height: 100px;
+    height: auto;
+    line-height: 20px;
+    padding: 6px 10px;
+    resize: vertical;
+    display: block;
+    width: 100%;
+    border-width: 1px;
+    border-style: solid;
+    background-color: #fff;
+    border-radius: 2px;
+    border-color: #e6e6e6;
+}
+.message-box button{
+    display: inline-block;
+    height: 38px;
+    line-height: 38px;
+    padding: 0 18px;
+    background-color: #572C82;
+    color: #fff;
+    white-space: nowrap;
+    text-align: center;
+    font-size: 14px;
+    border: none;
+    border-radius: 2px;
+    cursor: pointer;
+}
+.message-box .message-list div{
+    border-bottom: 1px dotted #572C82;
+    padding-bottom: 5px;
+}
+.message-box .message-list span{
+    padding-left: 10px;
+}
 /* 中等屏幕（桌面显示器，平板电脑，大于等于 992px） */
-@media screen and (min-width: 768px) and (max-width: 992px) {
+@media screen and (min-width: 768px) and (max-width: 1024px) {
     article {
-        width: 59%;
+        width: 60%;
         margin-left: 10%;
         background-color: #FFF;
         border-radius: 10px;

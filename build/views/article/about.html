@@ -11,29 +11,24 @@
 </head>
 
 <body>
-	<% include header.html %>
+	<%- include('header.html')%>
 	<div class="container">
 		<article class="backgroud border">
 			<div class="about">
 				<div>
-					<p>网名：<%- config.nickname%></p>
-					<p>工作地：<%- config.addr%></p>
-					<p>电话：<a id="mobile" class="myinfo" href="javascript:void(0)">点击获取</a></p>
-					<p>邮箱：<a id="email" class="myinfo" href="javascript:void(0)">点击获取</a></p>
-					<h3>目前工作</h3>
-					<p><%- config.job%></p>
-					<h3>关于博客</h3>
-					<p><%- config.resume%></p>
+					<p><strong>网名：</strong><span><%- config.nickname%></span></p>
+					<p><strong>工作地：</strong><%- config.addr%></p>
+					<p><strong>电话：</strong><a id="mobile" class="myinfo" href="javascript:void(0)">点击获取</a></p>
+					<p><strong>邮箱：</strong><a id="email" class="myinfo" href="javascript:void(0)">点击获取</a></p>
+					<p><strong>技能：</strong><span><%- config.job%></span></p>
+					<p><strong>其他：</strong></p>
 					<p><%- config.other%></p>
-					<p>QQ：438473005
-						<a target="_blank" href="http://wpa.qq.com/msgrd?v=3&uin=438473005&site=qq&menu=yes"><img border="0" src="http://wpa.qq.com/pa?p=2:438473005:52" alt="点击这里给我发消息" title="点击这里给我发消息" /></a>
-					</p>
 				</div>
 			</div>
 		</article>
-		<% include asider.html %>
+		<%- include('asider.html')%>
 	</div>
-	<% include footer.html %>
+	<%- include('footer.html')%>
 	<script src="/javascripts/silder.js"></script>
 	<script>
 		//获取手机
@@ -42,10 +37,12 @@
 			var mobileObj = document.querySelector("#email");
 			if (telObj) {
 				telObj.addEventListener("click", function () {
-					this.innerText = "18701897527";
+					this.innerText = "<%= config.tel %>";
+					_hmt.push(['_trackEvent', '手机', '点击']);
 				})
 				mobileObj.addEventListener("click", function () {
-					this.innerText = "huo.win.n@gmail.com";
+					this.innerText = "<%= config.email %>";
+					_hmt.push(['_trackEvent', '邮箱', '点击']);
 				})
 			}
 		}()

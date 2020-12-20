@@ -1,15 +1,14 @@
-'use strict'
-import * as express from 'express';
 import * as Promise from 'bluebird';
-import { Express, Router, Request, Response } from 'express';
-import * as Fs from 'fs';
+import { Express, Request, Response } from 'express';
 import * as Path from 'path';
 import * as IO from './Io';
 import Message from "../utils/message";
-import { errorAlert } from '../settings';
+import { errorAlert, blockIP } from '../settings';
+import { RedirecPage } from './route';
+import { getNewTopFriend } from '../routes/article';
+import { getIP } from './viewer-log';
 var debug = require('debug')("yuedun:route-register.ts");
 
-const router = express.Router();
 const cwd = process.cwd();
 
 export interface RouteInfo {
@@ -26,7 +25,6 @@ interface ROUTE {
 export default class RouteRegister {
     private app: Express;
     private jsExtRegex = /\.js$/;
-    private htmlExtRegex = /\.html$/;
     private adminHtmlPath = "admin";
     private articleHtmlPath = "article";
     /**
@@ -103,19 +101,22 @@ export default class RouteRegister {
         expressMethod.call(this.app, path, (req: Request, res: Response) => {
             new Promise((resolve, reject) => {
                 //可以做一些预处理
+                // 防刷
+                console.log(getIP(req));
+
+                if (blockIP.includes(getIP(req))) {
+                    reject(new Error('访问过于频繁！'));
+                }
                 resolve("权限验证通过");
             }).then(data => {
                 //获取到数据可以做一些后续补充处理
                 return route.handler.call(route.target, req, res);
             }).then(data => {
-                if (!data) {
-                    console.warn("没有数据返回，或许是路由中重定向或render")
+                //返回重定向实例
+                if (data instanceof RedirecPage) {
+                    res.redirect(data.url);
                     return;
-                }//没有返回数据，一般是redirect跳转了，不需要往下执行。也可以返回需要重定向的地址，在此统一处理
-                // if(typeof data == "string"){
-                //     res.redirect(data);
-                //     return;
-                // }
+                }
                 if (data instanceof Error) {
                     res.render('error', {
                         message: data.message,
@@ -125,8 +126,9 @@ export default class RouteRegister {
                 }
 
                 //可以添加类似于全局变量的返回数据
-                if (!data.title) {
+                if (data && !data.title) {
                     data.title = "";
+                    
                 }
                 if (route.json) {
                     res.json(data);
@@ -136,10 +138,20 @@ export default class RouteRegister {
                     let html = this.adminHtmlPath + "/" + methodName;
                     res.render(html, data);
                 } else {
-                    let html = this.articleHtmlPath + "/" + methodName;
-                    res.render(html, data);
+                    //获取公共数据
+                    return getNewTopFriend()
+                        .then(list => {
+                            data.sameCategories = data.sameCategories ? data.sameCategories : null;
+                            data.newList = list.newList;
+                            data.topList = list.topList;
+                            data.friendLinks = list.friendLink;
+                            data.categories = list.category;
+                            let html = this.articleHtmlPath + "/" + methodName;
+                            res.render(html, data);
+                        })
                 }
             }).catch((err: Error) => {
+                console.log(err.message);
                 let errMsg = `【访问url】：${req.url}\n【错误堆栈】：${err.stack.match(/[^\n]+\n[^\n]+\n[^\n]+/)}`
                 var msg = new Message(errorAlert, `错误提醒`, null, errMsg)
                 msg.send().then(data => {

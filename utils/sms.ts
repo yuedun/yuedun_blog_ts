@@ -1,10 +1,7 @@
-'use strict';
-
 import * as http from 'http';
 import * as moment from 'moment';
 import * as querystring from 'querystring';
 import { default as WeatherLog } from '../models/weather-log-model';
-import * as errmsg from '../utils/error-code';
 import * as settings from '../settings';
 const SMS_ACCOUNT = settings.SMS_ACCOUNT;
 /**
@@ -39,9 +36,8 @@ export var sendSMS = function (mobiles: string, text: string, callback: Function
                 weather: text,
                 createAt: moment().format('YYYY-MM-DD HH:mm:ss'),
             });
-            weathLog.save(function (e, docs, numberAffected) {
-                callback(null, resStr);
-            });
+            weathLog.save();
+            callback(null);
         })
     });
     myReq.on('error', function (e) {

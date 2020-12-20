@@ -1,5 +1,6 @@
-'use strict';
+"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.sendSMS = void 0;
 var http = require("http");
 var moment = require("moment");
 var querystring = require("querystring");
@@ -34,9 +35,8 @@ exports.sendSMS = function (mobiles, text, callback) {
                 weather: text,
                 createAt: moment().format('YYYY-MM-DD HH:mm:ss'),
             });
-            weathLog.save(function (e, docs, numberAffected) {
-                callback(null, resStr);
-            });
+            weathLog.save();
+            callback(null);
         });
     });
     myReq.on('error', function (e) {

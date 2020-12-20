@@ -7,11 +7,11 @@ var ResumeSchema: Schema = new Schema({
 }, { timestamps: true });
 
 export interface IResume extends Document {
-	state: number;
-	content: string;
-	bakup: string;
-	createdAt: Date;
-	updatedAt: Date;
+	state?: number;
+	content?: string;
+	bakup?: string;
+	createdAt?: Date;
+	updatedAt?: Date;
 }
 
 var ResumeModel: Model<IResume> = model<IResume>('Resume', ResumeSchema);

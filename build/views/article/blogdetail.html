@@ -3,18 +3,17 @@
 
 <head>
 	<meta charset="UTF-8">
-	<title><%= blog?blog.title:''%></title>
-	<meta name="keywords" content="<%= blog?blog.tags:''%>" />
-	<meta name="keywords" content="霍潘,月盾,nodejs,node.js,go,golang,技术分享,个人博客,<%= blog?blog.tags:''%>">
+	<title><%= blog?blog.title:''%> - 月盾</title>
+	<meta name="keywords" content="<%= blog?blog.tags:''%>, 霍潘,月盾,nodejs,node.js,go,golang,架构,">
 	<meta name="description" content="<%= description?description:''%>">
-	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
+	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=2.0">
 	<meta name="baidu-site-verification" content="gjQe88t6Om" />
 	<link rel="stylesheet" href="/stylesheets/style.css" />
 	<link href="https://cdn.staticfile.org/prettify/r298/prettify.min.css" rel="stylesheet">
 </head>
 
 <body>
-	<% include header.html %>
+	<%- include('header.html')%>
 	<div class="container">
 		<article class="backgroud border blog">
 			<% if(blog){ %>
@@ -36,51 +35,59 @@
 			</div>
 			<footer>
 				<div class="keybq">
-					<p><img src="/images/6264.png"/>关键字词：<span><%= blog.tags%></span></p>
+					<p><img src="/images/6264.png" />关键字词：<span><%= blog.tags%></span></p>
 				</div>
 				<div class="comment">
-					<!--评论-->
-					<div id="SOHUCS" sid="<%=blog._id%>"></div>
-					<script charset="utf-8" type="text/javascript" src="https://changyan.sohu.com/upload/changyan.js" ></script>
-					<script>
-					window.changyan.api.config({
-						appid: 'cyt3jJvEt',
-						conf: 'prod_a624b3b54fee0783e886929e85225a64'
-					});
-					</script>
+					<p>
+						<img src="/images/message.png" /><a href="/message?blogId=<%= blog.id%>">留言____</a>
+					</p>
 				</div>
 			</footer>
 			<%} else {%>
-				<p class="error"><strong>找不到文章</strong></p>
+			<p class="error"><strong>找不到文章</strong></p>
 			<%}%>
 		</article>
-		<% include asider.html %>
+		<!--图片放大后的div 开始  这块粘贴在你的html中最后body前 -->
+		<div id="outerdiv" style="text-align: center;position: fixed;z-index: 9999;top: 0;left: 0;width: 100%;height: 100%;background-color: rgba(28,28,28,0.9);">
+			<img id="bigimg" style="max-height: 800px;max-width: 100%;border: 0;margin: auto;position: absolute;top: 0;bottom: 0;left: 0;right: 0;" src="" />
+		</div> 
+		<!--图片放大后的div 结束 这块粘贴在你的html中最后body前-->
+
+		<%- include('asider.html')%>
 	</div>
-	<% include footer.html %>
+	<%- include('footer.html')%>
 	<script src="/javascripts/silder.js"></script>
 	<script src="https://cdn.staticfile.org/prettify/r298/prettify.min.js"></script>
 	<script>
-		window.onload = function(){
+		window.onload = function () {
 			prettyPrint();//代码高亮
 		}
 	</script>
-	<script>
-		setInterval(function () {
-			var ad = document.querySelector("#pop_ad");
-			var adblock = document.querySelector("#feedAv");
-			var adblockcontent = document.querySelector("div[node-type=cmt-list]");
-			if (ad) {
-				ad.style.display = "none";
-			}
-			// if (adblock) {
-			// 	adblock.style.display = "display:block !important;";
-			// 	adblock.remove();
-			// }
-			// if (adblockcontent) {
-			// 	adblockcontent.attributes[0] = "node-type2";
-			// }
-		}, 2000);
+	<!--js开始 是放大点击的触发事件 这块粘贴在你的html中最后body前-->
+	<script type="text/javascript">
+		//图片放大  
+		document.querySelector("#outerdiv").style.display = "none";
+
+		document.querySelectorAll("img").forEach(function (item) {
+			item.style.cursor = "pointer";
+		});
+
+		document.querySelectorAll("img").forEach(function (item) {
+			item.addEventListener("click", function () {
+				imgShow("#outerdiv", "#bigimg", this);
+			})
+		})
+
+		function imgShow(outerdiv, bigimg, _this) {
+			var src = _this.src;//获取当前点击的pimg元素中的src属性    
+			document.querySelector('#outerdiv').style.display = "block";
+			document.querySelector(bigimg).src = src;//设置#bigimg元素的src属性  
+		}
+		document.querySelector("#outerdiv").addEventListener("click", function () {//再次点击淡出消失弹出层    
+			document.querySelector('#outerdiv').style.display = "none";
+		});    
 	</script>
+	<!--js开始 是放大点击的触发事件 这块粘贴在你的html中最后body前-->
 </body>
 
 </html>
