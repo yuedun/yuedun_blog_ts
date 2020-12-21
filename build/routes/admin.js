@@ -486,17 +486,6 @@ var Routes = (function () {
             return new route_1.RedirecPage('/admin/friendLinkList');
         });
     };
-    Routes.freezeFriendLink = function (req, res) {
-        var state = req.query.state;
-        return friend_link_model_1.default.update({
-            _id: req.params.id
-        }, {
-            state: state
-        }).then(function (data) {
-            res.redirect('/admin/friendLinkList');
-            return;
-        });
-    };
     Routes.delFriendLink = function (req, res) {
         return friend_link_model_1.default.remove({
             _id: req.params.id
@@ -718,12 +707,6 @@ var Routes = (function () {
             json: true
         })
     ], Routes, "addFriendLink", null);
-    __decorate([
-        route_1.route({
-            method: "get",
-            path: ":id"
-        })
-    ], Routes, "freezeFriendLink", null);
     __decorate([
         route_1.route({
             method: "get",

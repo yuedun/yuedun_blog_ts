@@ -688,24 +688,6 @@ export default class Routes {
         })
     }
     /**
-     * 暂停友链
-     */
-    @route({
-        method: "get",
-        path: ":id"
-    })
-    static freezeFriendLink(req: Request, res: Response): Promise.Thenable<void> {
-        let state = req.query.state;
-        return FriendLinkModel.update({
-            _id: req.params.id
-        }, {
-            state
-        }).then(data => {
-            res.redirect('/admin/friendLinkList');
-            return
-        })
-    }
-    /**
      * 删除友链
      */
     @route({
