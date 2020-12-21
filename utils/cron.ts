@@ -3,7 +3,6 @@ import * as async from 'async';
 import * as _ from 'lodash';
 import * as schedule from "node-schedule";
 import * as http from 'http';
-import * as Moment from 'moment';
 import * as settings from '../settings';
 import * as sms from './sms';
 import { default as WeatherUser, IWeatherUser as WeatherUserInstance } from '../models/weather-user-model';

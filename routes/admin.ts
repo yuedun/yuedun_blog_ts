@@ -37,7 +37,7 @@ export default class Routes {
     /*进入后台主界面 */
     @route({})
     static index(req: Request, res: Response): Promise.Thenable<any> {
-        var user = req.session && req.session.user ? req.session.user : null;
+        var user = req.session && (req.session as any).user ? (req.session as any).user : null;
         if (user != null) {
             let todayStart = Moment().hours(0).minutes(0).seconds(0).toDate();
             let todayEnd = Moment().toDate();
@@ -77,7 +77,7 @@ export default class Routes {
         return User.findOne(user)
             .then(obj => {
                 if (obj || process.env.NODE_ENV === 'development') {
-                    req.session.user = user;
+                    (req.session as any).user = user;
                     return new RedirecPage('/admin/blogList');
                 } else {
                     return new RedirecPage('/admin/login');
@@ -195,10 +195,10 @@ export default class Routes {
      */
     @route({})
     static blogList(req: Request, res: Response): Promise.Thenable<any> {
-        var user = req.session ? req.session.user : null;
+        var user = (req.session as any) ? (req.session as any).user : null;
         var success = req.query.success || 0;
-        var pageIndex = 1;
-        var pageSize = 10;
+        var pageIndex: any = 1;
+        var pageSize: any = 10;
         pageIndex = req.query.pageIndex ? req.query.pageIndex : pageIndex;
         pageSize = req.query.pageSize ? req.query.pageSize : pageSize;
         let conditions: { title?: any } = {};
@@ -233,7 +233,7 @@ export default class Routes {
         path: ":id"
     })
     static blogDetail(req: Request, res: Response): Promise.Thenable<any> {
-        var user = req.session.user;
+        var user = (req.session as any).user;
         return Blog.findById(req.params.id)
             .then(doc => {
                 if (doc.ismd) {
@@ -290,7 +290,6 @@ export default class Routes {
         path: ":id"
     })
     static deleteBlog(req: Request, res: Response): Promise.Thenable<any> {
-        var user = req.session.user;
         return Blog.findByIdAndRemove(req.params.id)
             .then(doc => {
                 return new RedirecPage('/admin/blogList');
@@ -325,7 +324,6 @@ export default class Routes {
         path: ":id"
     })
     static deleteCate(req: Request, res: Response): void {
-        var user = req.session.user;
         Category.findByIdAndRemove(req.params.id, function (err) {
             return new RedirecPage('/admin/category');
         });
@@ -543,10 +541,10 @@ export default class Routes {
      */
     @route({})
     static quickNoteList(req: Request, res: Response): Promise.Thenable<any> {
-        var user = req.session.user;
+        var user = (req.session as any).user;
         var success = req.query.success || 0;
-        var pageIndex = 1;
-        var pageSize = 10;
+        var pageIndex: any = 1;
+        var pageSize: any = 10;
         pageIndex = req.query.pageIndex ? req.query.pageIndex : pageIndex;
         pageSize = req.query.pageSize ? req.query.pageSize : pageSize;
         return QuickNote.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize })
@@ -678,7 +676,7 @@ export default class Routes {
         path: ":id"
     })
     static freezeFriendLink(req: Request, res: Response): Promise.Thenable<RedirecPage> {
-        let state = req.query.state;
+        let state: any = req.query.state;
         return FriendLinkModel.update({
             _id: req.params.id
         }, {

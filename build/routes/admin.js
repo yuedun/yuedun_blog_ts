@@ -229,7 +229,6 @@ var Routes = (function () {
         });
     };
     Routes.deleteBlog = function (req, res) {
-        var user = req.session.user;
         return blog_model_1.default.findByIdAndRemove(req.params.id)
             .then(function (doc) {
             return new route_1.RedirecPage('/admin/blogList');
@@ -249,7 +248,6 @@ var Routes = (function () {
         return Promise.resolve(category.save());
     };
     Routes.deleteCate = function (req, res) {
-        var user = req.session.user;
         category_model_1.default.findByIdAndRemove(req.params.id, function (err) {
             return new route_1.RedirecPage('/admin/category');
         });
