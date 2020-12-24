@@ -1,0 +1,4 @@
+﻿User-agent:*
+Disallow:admin
+
+Sitemap:http://www.yuedun.wang/sitemap.xml
