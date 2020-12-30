@@ -248,7 +248,7 @@ var Routes = (function () {
         return Promise.resolve(category.save());
     };
     Routes.deleteCate = function (req, res) {
-        category_model_1.default.findByIdAndRemove(req.params.id, function (err) {
+        category_model_1.default.findByIdAndRemove(req.params.id, null, function (err) {
             return new route_1.RedirecPage('/admin/category');
         });
     };
@@ -294,7 +294,7 @@ var Routes = (function () {
                 password: req.body.password,
                 updateDate: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
-        }, function (err, doc) {
+        }, null, function (err, doc) {
             if (err)
                 res.send(err.message);
             res.render('admin/modifyuser', { user: doc, success: 1, flag: 1 });
@@ -524,11 +524,6 @@ var Routes = (function () {
     Routes.updateTime = function (req, res) {
         return blog_model_1.default.find().then(function (blogs) {
             return Promise.each(blogs, function (item, index) {
-                var time = new Date(item.createdAt);
-                item.set("createdAt", time);
-                console.log(">>>>>>>>>", time);
-                item.set("updatedAt", time);
-                return item.save();
             });
         });
     };

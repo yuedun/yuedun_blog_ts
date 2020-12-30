@@ -11,7 +11,7 @@
         "experimentalDecorators": true,
         "removeComments": true, //输出文件移除注释
         "pretty": true,
-        "noEmitOnError": true, //ts文件错误时不生成js
+        "noEmitOnError": false, //ts文件错误时不生成js
         "outDir": "./build", //编译文件输出目录
         // "inlineSources":true, //将代码与sourcemaps生成到一个文件中(编译后的js文件)，要求同时设置了--inlineSourceMap或--sourceMap属性
         // "inlineSourceMap":true

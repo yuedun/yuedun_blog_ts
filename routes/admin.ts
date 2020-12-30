@@ -10,7 +10,7 @@ var debug = Debug('yuedun:admin');
 import { default as User } from '../models/user-model';
 import BlogModel, { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
 import { default as QuickNote } from '../models/quick-note-model';
-import { default as Category, ICategory as CategoryInstance } from '../models/category-model';
+import { default as Category, ICategory as CategoryInstance, ICategory } from '../models/category-model';
 import { default as WeatherUser } from '../models/weather-user-model';
 import { default as About } from '../models/about-model';
 import { default as ViewerLogModel } from '../models/viewer-log-model';
@@ -131,7 +131,7 @@ export default class Routes {
             ismd: args.ismd
         });
         return Category.findOne({ cateName: args.category })
-            .then(category => {
+            .then((category: ICategory) => {
                 if (!category) {
                     var category = new Category({
                         cateName: args.category,
@@ -324,7 +324,7 @@ export default class Routes {
         path: ":id"
     })
     static deleteCate(req: Request, res: Response): void {
-        Category.findByIdAndRemove(req.params.id, function (err) {
+        Category.findByIdAndRemove(req.params.id, null, (err) => {
             return new RedirecPage('/admin/category');
         });
     }
@@ -399,7 +399,7 @@ export default class Routes {
                 password: req.body.password,
                 updateDate: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
-        }, function (err, doc) {
+        }, null, function (err, doc) {
             if (err) res.send(err.message);
             res.render('admin/modifyuser', { user: doc, success: 1, flag: 1 });
         });
@@ -704,7 +704,7 @@ export default class Routes {
      */
     @route({})
     static message(req: Request, res: Response): Promise.Thenable<any> {
-        return MessageModel.find({}).then(data => {
+        return MessageModel.find({}).then((data: IMessage[]) => {
             return Promise.map(data, item => {
                 if (item.replyid) {
                     return BlogModel.findById(item.replyid, { "title": 1 }).exec().then(blog => {
@@ -746,11 +746,11 @@ export default class Routes {
         return Blog.find().then(blogs => {
             return Promise.each(blogs, (item, index) => {
                 // item.createdAt = moment(item.createdAt).toDate()
-                let time = new Date(item.createdAt)
-                item.set("createdAt", time)
-                console.log(">>>>>>>>>", time);
-                item.set("updatedAt", time)
-                return item.save()
+                // let time = new Date(item.createdAt)
+                // item.set("createdAt", time)
+                // console.log(">>>>>>>>>", time);
+                // item.set("updatedAt", time)
+                // return item.save()
             })
         })
     };

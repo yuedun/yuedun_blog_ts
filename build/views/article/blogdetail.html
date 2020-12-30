@@ -35,7 +35,7 @@
 			</div>
 			<footer>
 				<div class="keybq">
-					<p><img src="/images/6264.png" />关键字词：<span><%= blog.tags%></span></p>
+					<p><img src="/images/6264.png" />关键字词：<span><% tags.forEach(function(tag){ %> <a href="/?tag=<%= tag%>"><%= tag%></a> <% }) %></span></p>
 				</div>
 				<div class="comment">
 					<p>

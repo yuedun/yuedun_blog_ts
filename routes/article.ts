@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import * as Promise from 'bluebird';
 import * as moment from 'moment';
-import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
+import { default as Blog, IBlog as BlogInstance, IBlog } from '../models/blog-model';
 import { default as About } from '../models/about-model';
 import { default as QuickNote } from '../models/quick-note-model';
 import { default as ViewerLogModel } from '../models/viewer-log-model';
@@ -34,11 +34,15 @@ export default class Routes {
         pageIndex = req.query.pageIndex ? Number(req.query.pageIndex) : pageIndex;
         pageSize = req.query.pageSize ? Number(req.query.pageSize) : pageSize;
         var category = req.query.category;
+        var tag = req.query.tag;
         var condition: any = {
             status: 1
         }
         if (category) {
             condition.category = category;
+        }
+        if(tag){
+            condition.tags = { $regex: tag, $options: 'i' }
         }
         var blogPromise = Promise.resolve(Blog.find(condition, null, { sort: { _id: -1 }, skip: pageIndex * pageSize, limit: pageSize }).exec());
 
@@ -90,9 +94,10 @@ export default class Routes {
                 res.cookie('visited' + blogId, visited, { maxAge: 1000 * 60 * 60 * 24 * 2, httpOnly: false });
                 return {
                     blog: doc,
-                    description: doc.content.replace(/<\/?.+?>/g, "").substring(0, 300),
+                    description: doc.content.replace(/<\/?.+?>/g, "").substring(0, 80),
                     sameCategories: cats,
                     category: doc.category,
+                    tags: doc.tags.split('，')
                 }
             })
 
@@ -214,22 +219,6 @@ export default class Routes {
                 debug(">>>>>>>>>>>", data)
                 return new RedirecPage('/message');
             });
-    };
-
-    //临时使用
-    @route({ json: true })
-    static updateTime(req: Request, res: Response): Promise.Thenable<any> {
-        return Blog.find({ createdAt: { $type: 2 } }).then(blogs => {
-            return Promise.each(blogs, (item, index) => {
-                // item.createdAt = moment(item.createdAt).toDate()
-                let time = new Date(item.createdAt)
-                item.set("createdAt", time)
-                // item.createdAt = time;
-                console.log(">>>>>>>>>", item.createdAt);
-                // item.set("updatedAt", time)
-                return item.save()
-            })
-        })
     };
 }
 //最近新建

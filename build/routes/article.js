@@ -39,11 +39,15 @@ var Routes = (function () {
         pageIndex = req.query.pageIndex ? Number(req.query.pageIndex) : pageIndex;
         pageSize = req.query.pageSize ? Number(req.query.pageSize) : pageSize;
         var category = req.query.category;
+        var tag = req.query.tag;
         var condition = {
             status: 1
         };
         if (category) {
             condition.category = category;
+        }
+        if (tag) {
+            condition.tags = { $regex: tag, $options: 'i' };
         }
         var blogPromise = Promise.resolve(blog_model_1.default.find(condition, null, { sort: { _id: -1 }, skip: pageIndex * pageSize, limit: pageSize }).exec());
         return Promise.all([blogPromise, blog_model_1.default.countDocuments(condition).exec()])
@@ -90,9 +94,10 @@ var Routes = (function () {
                 res.cookie('visited' + blogId, visited, { maxAge: 1000 * 60 * 60 * 24 * 2, httpOnly: false });
                 return {
                     blog: doc,
-                    description: doc.content.replace(/<\/?.+?>/g, "").substring(0, 300),
+                    description: doc.content.replace(/<\/?.+?>/g, "").substring(0, 80),
                     sameCategories: cats,
                     category: doc.category,
+                    tags: doc.tags.split('，')
                 };
             });
         }).catch(function (err) {
@@ -202,17 +207,6 @@ var Routes = (function () {
         });
     };
     ;
-    Routes.updateTime = function (req, res) {
-        return blog_model_1.default.find({ createdAt: { $type: 2 } }).then(function (blogs) {
-            return Promise.each(blogs, function (item, index) {
-                var time = new Date(item.createdAt);
-                item.set("createdAt", time);
-                console.log(">>>>>>>>>", item.createdAt);
-                return item.save();
-            });
-        });
-    };
-    ;
     __decorate([
         route_1.route({
             path: "/"
@@ -249,9 +243,6 @@ var Routes = (function () {
             method: 'post'
         })
     ], Routes, "messagePost", null);
-    __decorate([
-        route_1.route({ json: true })
-    ], Routes, "updateTime", null);
     return Routes;
 }());
 exports.default = Routes;
