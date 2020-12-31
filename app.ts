@@ -61,14 +61,15 @@ app.use('/*', function (req, res, next) {
  * 未登录状态下跳转到登录页面，点击登录时（此时还未登录）不对“/doLogin”进行验证直接转交给下一个路由。
  * 如果是登录状态则直接转交给下一个路由
  **/
+
 app.use('/admin', function (req, res, next) {
-    if (!req.session.user) {
+    if (!(req.session as any).user) {
         if (req.url == "/doLogin") {
             next();
             return;
         }
         res.render('admin/login');
-    } else if (req.session.user) {
+    } else if ((req.session as any).user) {
         next();
     }
 });
