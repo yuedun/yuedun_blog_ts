@@ -135,3 +135,6 @@ Category.findOne({ cateName: req.body.category })
 var debug =require("debug")("yuedun:www");
 ```
 参数是什么(模块名)就会输出哪个模块的内容，如果Debug('http')就会输出http模块中的debug输出。设置DEBUG=*会输出所有模块的内容，所以最好加一个前缀来输出指定部分内容，比如自定义模块就传参`yuedun:www`冒号后面为文件名就会输出该文件下的debug
+
+# 启动mongo服务
+> /usr/local/mongodb/bin/mongod --dbpath=/usr/local/mongodb/data --logpath=/usr/local/mongodb/logs --logappend --bind_ip_all --fork --auth

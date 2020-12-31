@@ -5,20 +5,23 @@ import * as Promise from 'bluebird';
 import * as crypto from "crypto";
 import * as Markdown from 'markdown-it';
 import * as Debug from 'debug';
+import * as formidable from 'formidable';
 var debug = Debug('yuedun:admin');
 import { default as User } from '../models/user-model';
-import { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
+import BlogModel, { default as Blog, IBlog as BlogInstance } from '../models/blog-model';
 import { default as QuickNote } from '../models/quick-note-model';
-import { default as Category, ICategory as CategoryInstance } from '../models/category-model';
+import { default as Category, ICategory as CategoryInstance, ICategory } from '../models/category-model';
 import { default as WeatherUser } from '../models/weather-user-model';
-import { default as About, IAbout as AboutInstance } from '../models/about-model';
-import { default as ViewerLogModel, IViewerLog as ViewerLogInstance } from '../models/viewer-log-model';
-import { default as FriendLinkModel, IFriendLink as FriendLinkInstance } from '../models/friend-link-model';
-import { default as ResumeModel, IResume as ResumeInstance } from '../models/resume-model';
-import * as qiniu from '../utils/qiniu';
+import { default as About } from '../models/about-model';
+import { default as ViewerLogModel } from '../models/viewer-log-model';
+import { default as FriendLinkModel } from '../models/friend-link-model';
+import { default as ResumeModel } from '../models/resume-model';
+import { default as MessageModel, IMessage } from '../models/message-model';
+import { uptoken, uploadFile } from '../utils/qiniu';
+import { qiniuConfig } from '../settings';
 var md = Markdown();
 var area = require('../area');
-import { route } from '../utils/route';
+import { route, RedirecPage } from '../utils/route';
 
 function generatorPassword(password: string): string {
     const hash = crypto.createHash('sha1');
@@ -34,17 +37,18 @@ export default class Routes {
     /*进入后台主界面 */
     @route({})
     static index(req: Request, res: Response): Promise.Thenable<any> {
-        var user = req.session && req.session.user ? req.session.user : null;
+        var user = req.session && (req.session as any).user ? (req.session as any).user : null;
         if (user != null) {
-            var today = Moment().format('YYYY-MM-DD');
+            let todayStart = Moment().hours(0).minutes(0).seconds(0).toDate();
+            let todayEnd = Moment().toDate();
             return Promise.all<any, number, any, any>([
-                Blog.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),//聚合查询，总访问量,分组必须包含_id
-                ViewerLogModel.count({ createdAt: { $regex: today, $options: 'i' } }),//模糊查询"%text%"，今日访问量
-                ViewerLogModel.aggregate(
-                    { $match: { createdAt: { $regex: today, $options: 'i' } } },
+                Blog.aggregate([{ $group: { _id: null, pvCount: { $sum: '$pv' } } }]),//聚合查询，总访问量,分组必须包含_id
+                ViewerLogModel.countDocuments({ createdAt: { $gte: todayStart, $lte: todayEnd } }).exec(),//模糊查询"%text%"，今日访问量
+                ViewerLogModel.aggregate([
+                    { $match: { createdAt: { $gte: todayStart, $lte: todayEnd } } },
                     { $group: { _id: { blogId: '$blogId', title: "$title", url: "$url" }, pv: { $sum: 1 } } },
                     { $sort: { createAt: -1 } }
-                ),
+                ]),
                 ViewerLogModel.find({}, null, { sort: { _id: -1 }, limit: 20 })
             ]).then(([result1, result2, result3, result4]) => {
                 return { readCount: result1[0].pvCount, todayRead: result2, recent: result3, newRead: result4 }
@@ -73,12 +77,10 @@ export default class Routes {
         return User.findOne(user)
             .then(obj => {
                 if (obj || process.env.NODE_ENV === 'development') {
-                    req.session.user = user;
-                    res.redirect('/admin/blogList')
-                    return
+                    (req.session as any).user = user;
+                    return new RedirecPage('/admin/blogList');
                 } else {
-                    res.redirect('/admin/login')
-                    return
+                    return new RedirecPage('/admin/login');
                 }
             })
     }
@@ -88,7 +90,7 @@ export default class Routes {
      */
     @route({})
     static newArticle(req: Request, res: Response): Promise.Thenable<any> {
-        var token = qiniu.uptoken('hopefully');
+        var token = uptoken('hopefully');
         return Category.find({})
             .then(catotory => {
                 return { success: 0, categories: catotory, token: token };
@@ -100,7 +102,7 @@ export default class Routes {
      */
     @route({})
     static newArticleMd(req: Request, res: Response): Promise.Thenable<any> {
-        var token = qiniu.uptoken('hopefully');
+        var token = uptoken('hopefully');
         return Category.find({})
             .then(catogory => {
                 return { success: 0, categories: catogory, token: token };
@@ -129,7 +131,7 @@ export default class Routes {
             ismd: args.ismd
         });
         return Category.findOne({ cateName: args.category })
-            .then(category => {
+            .then((category: ICategory) => {
                 if (!category) {
                     var category = new Category({
                         cateName: args.category,
@@ -148,14 +150,55 @@ export default class Routes {
             })
     }
     /**
+     * 上传图片
+     */
+    @route({
+        method: "post",
+        json: true
+    })
+    static uploadImg(req: Request, res: Response, next: Function): Promise.Thenable<any> {
+        debug(">>>>>>>>>>>>>upload");
+        var token = uptoken(qiniuConfig.bucketName);
+        var form = new formidable.IncomingForm();
+
+        return new Promise((resolve, reject) => {
+            form.parse(req, function (err, fields, files) {
+                if (!err) {
+                    resolve(files['editormd-image-file'])
+                } else {
+                    reject(err)
+                }
+                //{"editormd-image-file":{"size":390555,"path":"C:\\Users\\ADMINI~1\\AppData\\Local\\Temp\\upload_bfe95c754c06d69b3a4c910a315032ae","name":"微信图片_20170515182352.png","type":"image/png","mtime":"2017-05-16T09:21:12.147Z"}}
+            });
+        }).then((files: { path: string; name: string }) => {
+            // let suffix = file.substr(file.lastIndexOf("."));
+            // let file_name = moment().format("YYYY-MM-DD_HHmmSS") + suffix;
+            let file = files.path;
+            let file_name = files.name;
+            return uploadFile(file, file_name, token)
+                .then(data => {
+                    return {
+                        success: 1,           // 0 表示上传失败，1 表示上传成功
+                        message: "上传成功",//提示的信息，上传成功或上传失败及错误信息等。
+                        url: qiniuConfig.url + data.key        // 上传成功时才返回
+                    }
+                })
+        }).catch(err => {
+            return {
+                success: 0,           // 0 表示上传失败，1 表示上传成功
+                message: err,//提示的信息，上传成功或上传失败及错误信息等。
+            }
+        })
+    }
+    /**
      *文章列表
      */
     @route({})
     static blogList(req: Request, res: Response): Promise.Thenable<any> {
-        var user = req.session ? req.session.user : null;
+        var user = (req.session as any) ? (req.session as any).user : null;
         var success = req.query.success || 0;
-        var pageIndex = 1;
-        var pageSize = 10;
+        var pageIndex: any = 1;
+        var pageSize: any = 10;
         pageIndex = req.query.pageIndex ? req.query.pageIndex : pageIndex;
         pageSize = req.query.pageSize ? req.query.pageSize : pageSize;
         let conditions: { title?: any } = {};
@@ -190,7 +233,7 @@ export default class Routes {
         path: ":id"
     })
     static blogDetail(req: Request, res: Response): Promise.Thenable<any> {
-        var user = req.session.user;
+        var user = (req.session as any).user;
         return Blog.findById(req.params.id)
             .then(doc => {
                 if (doc.ismd) {
@@ -207,8 +250,8 @@ export default class Routes {
         path: ":id"
     })
     static editArticleMd(req: Request, res: Response): Promise.Thenable<any> {
-        let getBlogById = Blog.findById(req.params.id);
-        let getCategory = Category.find({});
+        let getBlogById = Blog.findById(req.params.id).exec();
+        let getCategory = Category.find({}).exec();
 
         return Promise.all([getBlogById, getCategory])
             .then(([blogObj, categories]: [BlogInstance, CategoryInstance[]]) => {
@@ -247,10 +290,9 @@ export default class Routes {
         path: ":id"
     })
     static deleteBlog(req: Request, res: Response): Promise.Thenable<any> {
-        var user = req.session.user;
         return Blog.findByIdAndRemove(req.params.id)
             .then(doc => {
-                res.redirect('/admin/blogList');
+                return new RedirecPage('/admin/blogList');
             })
     }
 
@@ -268,15 +310,12 @@ export default class Routes {
     @route({
         method: "post"
     })
-    static addCategory(req: Request, res: Response): void {
+    static addCategory(req: Request, res: Response): Promise<any> {
         var category = new Category({
             cateName: req.body.cateName,
             state: true
         });
-        category.save(function (e, docs, numberAffected) {
-            if (e) res.send(e.message);
-            res.redirect('/admin/category');
-        });
+        return Promise.resolve(category.save());
     }
     /**
      * 删除分类
@@ -285,9 +324,8 @@ export default class Routes {
         path: ":id"
     })
     static deleteCate(req: Request, res: Response): void {
-        var user = req.session.user;
-        Category.findByIdAndRemove(req.params.id, function (err) {
-            res.redirect('/admin/category');
+        Category.findByIdAndRemove(req.params.id, null, (err) => {
+            return new RedirecPage('/admin/category');
         });
     }
 
@@ -312,7 +350,7 @@ export default class Routes {
             password: generatorPassword(password),
             level: 1,//权限级别，最高
             state: true,//可用/停用
-            createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
+            createdAt: new Date()
         });
         return user.save()
             .then(() => {
@@ -323,10 +361,9 @@ export default class Routes {
      * 查看用户列表
      */
     @route({})
-    static viewUser(req: Request, res: Response): void {
-        User.find({}, null, function (err, docs) {
-            if (err) res.send(err.message);
-            res.render('admin/viewUser', { users: docs });
+    static viewUser(req: Request, res: Response): Promise.Thenable<any> {
+        return User.find({}).exec().then(docs => {
+            return Promise.resolve({ users: docs, title: req.query.title });
         });
     }
     /**
@@ -362,7 +399,7 @@ export default class Routes {
                 password: req.body.password,
                 updateDate: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
-        }, function (err, doc) {
+        }, null, function (err, doc) {
             if (err) res.send(err.message);
             res.render('admin/modifyuser', { user: doc, success: 1, flag: 1 });
         });
@@ -374,17 +411,19 @@ export default class Routes {
         path: ":userId"
     })
     static deleteUser(req: Request, res: Response): void {
-        User.remove({ _id: req.params.userId }, function (err) {
-            res.redirect('/admin/viewUser');
+        User.remove({ _id: req.params.userId }).then(() => {
+            return new RedirecPage('/admin/viewUser');
         });
     }
     /*  登出  */
     @route({})
-    static logout(req: Request, res: Response): void {
-        req.session.destroy(function (err) {
-            res.redirect('/admin/login');
-            return;
+    static logout(req: Request, res: Response): Promise.Thenable<RedirecPage> {
+        return new Promise((resolve, reject) => {
+            req.session.destroy(function (err) {
+                resolve(new RedirecPage('/admin/login'))
+            })
         })
+
     }
 
     //添加天气用户界面
@@ -401,7 +440,7 @@ export default class Routes {
     static createWeatherUser(req: Request, res: Response): Promise.Thenable<any> {
         var args = req.body;
         // var areaObjs = JSON.parse(area);
-        var areaId = _.result(_.find(area, { 'NAMECN': args.city }), 'AREAID');
+        var areaId = _.result<number>(_.find(area, { 'NAMECN': args.city }), 'AREAID');
         var weathUser = new WeatherUser({
             username: args.username,
             mobile: args.mobile,
@@ -409,11 +448,11 @@ export default class Routes {
             cityCode: areaId,
             sendCount: 0,
             status: 1,//1可用/0停用
-            createAt: Moment().format('YYYY-MM-DD HH:mm:ss'),
+            createAt: new Date()
         });
         return weathUser.save()
             .then(data => {
-                res.redirect('/admin/weatherUserList');
+                return new RedirecPage('/admin/weatherUserList');
             })
     }
     /**
@@ -433,10 +472,10 @@ export default class Routes {
     @route({
         path: ":userId"
     })
-    static delWeatherUser(req: Request, res: Response): Promise.Thenable<void> {
-        return Promise.resolve(WeatherUser.remove({ _id: req.params.userId }))
+    static delWeatherUser(req: Request, res: Response): Promise.Thenable<RedirecPage> {
+        return Promise.resolve(WeatherUser.remove({ _id: req.params.userId }).exec())
             .then(d => {
-                res.redirect('/admin/weatherUserList');
+                return new RedirecPage('/admin/weatherUserList');
             })
     }
     /**
@@ -445,15 +484,15 @@ export default class Routes {
     @route({
         method: "post"
     })
-    static quicknote(req: Request, res: Response): Promise.Thenable<void> {
+    static quicknote(req: Request, res: Response): Promise.Thenable<RedirecPage> {
         var quicknote = new QuickNote({
             content: req.body.content,
-            state: true,//可用/停用
+            status: true,//可用/停用
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
         });
         return quicknote.save()
             .then(data => {
-                res.redirect('/admin/quickNoteList');
+                return new RedirecPage('/admin/quickNoteList');
             })
     }
     /**
@@ -482,7 +521,7 @@ export default class Routes {
                 updateDate: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
         }).then(() => {
-            res.redirect('/admin/quickNoteList');
+            return new RedirecPage('/admin/quickNoteList');
         })
     }
     /*
@@ -491,20 +530,21 @@ export default class Routes {
     @route({
         path: ":id"
     })
-    static deleteNote(req: Request, res: Response): void {
-        QuickNote.remove({ _id: req.params.id }, function (err) {
-            res.redirect('/admin/quickNoteList');
-        });
+    static deleteNote(req: Request, res: Response): Promise.Thenable<RedirecPage> {
+        return QuickNote.remove({ _id: req.params.id }).exec()
+            .then(() => {
+                return new RedirecPage('/admin/quickNoteList');
+            });
     }
     /*
      * 速记列表
      */
     @route({})
     static quickNoteList(req: Request, res: Response): Promise.Thenable<any> {
-        var user = req.session.user;
+        var user = (req.session as any).user;
         var success = req.query.success || 0;
-        var pageIndex = 1;
-        var pageSize = 10;
+        var pageIndex: any = 1;
+        var pageSize: any = 10;
         pageIndex = req.query.pageIndex ? req.query.pageIndex : pageIndex;
         pageSize = req.query.pageSize ? req.query.pageSize : pageSize;
         return QuickNote.find({}, null, { sort: { '_id': -1 }, skip: (pageIndex - 1) * pageSize, limit: ~~pageSize })
@@ -524,7 +564,7 @@ export default class Routes {
     @route({})
     static aboutConfig(req: Request, res: Response): Promise.Thenable<any> {
         let arr: { key: string; value: Object }[] = [];
-        return Promise.resolve(About.findOne())
+        return Promise.resolve(About.findOne().exec())
             .then(resume => {
                 if (!resume) {
                     var r = new About({
@@ -577,7 +617,7 @@ export default class Routes {
                 return { resume }
             })
     };
-    //简历
+    //简历是否可访问
     @route({
         method: "post",
         json: true
@@ -587,6 +627,19 @@ export default class Routes {
         var id = req.body.id;
         return ResumeModel.findByIdAndUpdate(id, {
             $set: { state: state }
+        }).exec();
+    };
+    //更新简历内容
+    @route({
+        method: "post",
+        json: true
+    })
+    static updateResume(req: Request, res: Response): Promise.Thenable<any> {
+        var { id, content } = req.body;
+        return ResumeModel.findById(id).then(record => {
+            record.bakup = record.content;
+            record.content = content;
+            return record.save();
         })
     };
     /**
@@ -597,7 +650,6 @@ export default class Routes {
         return FriendLinkModel.find().exec()
             .then(data => {
                 console.log(data);
-                
                 return { success: 0, friendLinks: data }
             })
     }
@@ -608,12 +660,12 @@ export default class Routes {
         method: "post",
         json: true
     })
-    static addFriendLink(req: Request, res: Response): Promise.Thenable<any> {
+    static addFriendLink(req: Request, res: Response): Promise.Thenable<RedirecPage> {
         return FriendLinkModel.create({
             url: req.body.url,
             name: req.body.name
         }).then(data => {
-            res.redirect('/admin/friendLinkList');
+            return new RedirecPage('/admin/friendLinkList');
         })
     }
     /**
@@ -623,15 +675,14 @@ export default class Routes {
         method: "get",
         path: ":id"
     })
-    static freezeFriendLink(req: Request, res: Response): Promise.Thenable<void> {
-        let state = req.query.state;
+    static freezeFriendLink(req: Request, res: Response): Promise.Thenable<RedirecPage> {
+        let state: any = req.query.state;
         return FriendLinkModel.update({
             _id: req.params.id
-        },{
+        }, {
             state
         }).then(data => {
-            res.redirect('/admin/friendLinkList');
-            return
+            return new RedirecPage('/admin/friendLinkList');
         })
     }
     /**
@@ -641,11 +692,51 @@ export default class Routes {
         method: "get",
         path: ":id"
     })
-    static delFriendLink(req: Request, res: Response): Promise.Thenable<void> {
+    static delFriendLink(req: Request, res: Response): Promise.Thenable<RedirecPage> {
         return FriendLinkModel.remove({
             _id: req.params.id
         }).then(data => {
-            res.redirect('/admin/friendLinkList');
+            return new RedirecPage('/admin/friendLinkList');
+        })
+    }
+    /**
+     * 留言
+     */
+    @route({})
+    static message(req: Request, res: Response): Promise.Thenable<any> {
+        return MessageModel.find({}).then((data: IMessage[]) => {
+            return Promise.map(data, item => {
+                if (item.replyid) {
+                    return BlogModel.findById(item.replyid, { "title": 1 }).exec().then(blog => {
+                        let newItem = item.toObject();
+                        newItem.replyTitle = blog.title;
+                        newItem.createdDate = Moment(item.createdAt).format("YYYY-MM-DD HH:mm:ss");
+                        return newItem;
+                    })
+                } else {
+                    let newItem = item.toObject();
+                    newItem.createdDate = Moment(item.createdAt).format("YYYY-MM-DD HH:mm:ss");
+                    return newItem;
+                }
+            }).then(list => {
+                return {
+                    messageList: list
+                };
+            })
+        })
+    }
+    /**
+     * 删除留言
+     */
+    @route({
+        method: "get",
+        path: ":id"
+    })
+    static deleteMessage(req: Request, res: Response): Promise.Thenable<RedirecPage> {
+        return MessageModel.remove({
+            _id: req.params.id
+        }).then(data => {
+            return new RedirecPage('/admin/message');
         })
     }
 
@@ -655,11 +746,11 @@ export default class Routes {
         return Blog.find().then(blogs => {
             return Promise.each(blogs, (item, index) => {
                 // item.createdAt = moment(item.createdAt).toDate()
-                let time = new Date(item.createdAt)
-                item.set("createdAt", time)
-                console.log(">>>>>>>>>", time);
-                item.set("updatedAt", time)
-                return item.save()
+                // let time = new Date(item.createdAt)
+                // item.set("createdAt", time)
+                // console.log(">>>>>>>>>", time);
+                // item.set("updatedAt", time)
+                // return item.save()
             })
         })
     };

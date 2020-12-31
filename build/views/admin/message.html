@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="utf-8"/>
+    <meta name="renderer" content="webkit">
+    <title>分类列表</title>
+    <link rel="stylesheet" href="/stylesheets/layout.css" type="text/css" media="screen"/>
+    <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js" type="text/javascript"></script>
+    <script>
+        $(document).ready(function () {
+            
+        });
+        function deleteCate(userId) {
+            if (confirm("确定删除此分类吗？")) {
+                location.href = "/admin/deleteMessage/" + userId;
+            }
+        }
+    </script>
+</head>
+
+<body>
+
+<%- include('header.html')%>
+<!-- end of header bar -->
+<!--导入菜单-->
+<%- include('menu.html')%>
+<section id="main" class="column">
+
+    <h4 class="alert_info">提示信息</h4>
+
+    <article class="module width_full">
+        <header><h3 class="tabs_involved">分类列表</h3>
+        </header>
+
+        <div class="tab_container">
+            <div id="tab1" class="tab_content">
+                <table class="tablesorter" cellspacing="0">
+                    <thead>
+                    <tr>
+                        <th>标题</th>
+                        <th>留言内容</th>
+                        <th>昵称</th>
+                        <th>邮箱</th>
+                        <th>网站</th>
+                        <th>状态</th>
+                        <th>创建时间</th>
+                        <th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <% messageList.forEach(function(msg){ %>
+                    <tr>
+                        <td><a href="/admin/blogDetail/<%= msg.replyid%>" target="_blank" rel="noopener noreferrer"><%= msg.replyTitle%></a></td>
+                        <td><%= msg.content%></td>
+                        <td><%= msg.content%></td>
+                        <td><%= msg.email%></td>
+                        <td><a href="<%= msg.website%>" target="_blank" rel="noopener noreferrer"><%= msg.website%></a></td>
+                        <td><%= msg.status%></td>
+                        <td><%= msg.createdAt%></td>
+                        <td>
+                            <a href="javascript:void(0);" onclick="deleteCate('<%=msg._id%>');">
+                                <input type="image" src="/images/admin/icn_trash.png" title="Trash">
+                            </a>
+                        </td>
+                    </tr>
+                    <% }) %>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- end of .tab_container -->
+    </article>
+    <!-- end of content manager article -->
+    <div class="clear"></div>
+
+</section>
+
+</body>
+
+</html>

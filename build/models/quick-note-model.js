@@ -4,7 +4,7 @@ var mongoose_1 = require("mongoose");
 var QuickNoteSchema = new mongoose_1.Schema({
     createDate: String,
     content: String,
-    status: String,
+    status: Boolean,
 });
 var QuickNoteModel = mongoose_1.model('QuickNote', QuickNoteSchema);
 exports.default = QuickNoteModel;

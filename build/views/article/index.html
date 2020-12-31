@@ -1,24 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="cmn">
 
-<head lang="zh-cmn">
+<head>
 	<meta charset="UTF-8">
 	<title>月盾</title>
-	<meta name="keywords" content="霍潘,月盾,nodejs,node.js,go,golang,技术分享,个人博客">
-	<meta name="description" content="霍潘的技术博客,工作经验分享,记录,月盾,nodejs,node.js,go,golang,技术分享,个人博客">
+	<meta name="keywords" content="霍潘,月盾,nodejs,node.js,go,golang,个人博客">
+	<meta name="description" content="霍潘的技术博客,月盾,nodejs,node.js,go,golang,个人博客">
 	<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0">
 	<meta name="baidu-site-verification" content="gjQe88t6Om" />
 	<link rel="stylesheet" href="/stylesheets/style.css" />
 </head>
 
 <body>
-	<% include header.html %>
+	<%- include('header.html')%>
 	<div class="container">
 		<article class="backgroud border">
 			<% blogList.forEach(function(blog){%>
 			<section class="blog-section">
 				<div class="blog_title">
-					<a href="/blogdetail/<%= blog._id%>"><%= blog.title%></a>
+					<h1><a href="/blogdetail/<%= blog._id%>" title="<%= blog.title%>"><%= blog.title%></a></h1>
 				</div>
 				<div class="blog_sumary">
 					<ul>
@@ -32,19 +32,19 @@
 					<p>
 						<%- blog.content%>
 					</p>
-					<a href="/blogdetail/<%= blog._id%>" class="readall">阅读全文</a>
+					<a href="/blogdetail/<%= blog._id%>" class="readall" title="<%= blog.title%>">阅读全文</a>
 				</div>
 			</section>
 			<% })%>
 			<div id="Pagination" class="pagination"><!-- 这里显示分页 --></div>
 		</article>
-		<% include asider.html %>
+		<%- include('asider.html') %>
 	</div>
-	<% include footer.html %>
-	<script src="http://apps.bdimg.com/libs/zepto/1.1.4/zepto.min.js"></script>
+	<%- include('footer.html') %>
+	<script src="https://cdn.staticfile.org/zepto/1.2.0/zepto.min.js"></script>
 	<script src="/javascripts/silder.js"></script>
 	<script src="/javascripts/jquery.pagination.js"></script>
-	<script type="text/javascript">
+	<script>
 		$(function(){
 			var current = parseInt('<%= pageIndex%>');
 			var pageSize = parseInt('<%= pageSize%>');

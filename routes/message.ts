@@ -1,9 +1,7 @@
 'use strict';
 import * as http from 'http';
-import * as express from 'express';
 import * as Promise from 'bluebird';
 import { Request, Response } from 'express';
-import * as errmsg from '../utils/error-code';
 import * as sms from '../utils/sms';
 import * as settings from '../settings';
 import { route } from '../utils/route';
@@ -18,7 +16,7 @@ export default class Routes {
     static sendmsg(req: Request, res: Response): Promise.Thenable<any> {
         if (req.query.code = SMS_ACCOUNT.code) {
             return new Promise((resove, reject) => {
-                sms.sendSMS(req.query.mobile, req.query.text, (err: any, result: any) => {
+                sms.sendSMS(<string>req.query.mobile, <string>req.query.text, (err: any, result: any) => {
                     if (err) {
                         reject(err);
                     }

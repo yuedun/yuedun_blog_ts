@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.getAccessToken = exports.validateToken = void 0;
 var crypto = require("crypto");
 var HttpRequest = require("request");
 var Debug = require("debug");

@@ -12,6 +12,7 @@ var Promise = require("bluebird");
 var crypto = require("crypto");
 var Markdown = require("markdown-it");
 var Debug = require("debug");
+var formidable = require("formidable");
 var debug = Debug('yuedun:admin');
 var user_model_1 = require("../models/user-model");
 var blog_model_1 = require("../models/blog-model");
@@ -22,7 +23,9 @@ var about_model_1 = require("../models/about-model");
 var viewer_log_model_1 = require("../models/viewer-log-model");
 var friend_link_model_1 = require("../models/friend-link-model");
 var resume_model_1 = require("../models/resume-model");
-var qiniu = require("../utils/qiniu");
+var message_model_1 = require("../models/message-model");
+var qiniu_1 = require("../utils/qiniu");
+var settings_1 = require("../settings");
 var md = Markdown();
 var area = require('../area');
 var route_1 = require("../utils/route");
@@ -37,11 +40,16 @@ var Routes = (function () {
     Routes.index = function (req, res) {
         var user = req.session && req.session.user ? req.session.user : null;
         if (user != null) {
-            var today = Moment().format('YYYY-MM-DD');
+            var todayStart = Moment().hours(0).minutes(0).seconds(0).toDate();
+            var todayEnd = Moment().toDate();
             return Promise.all([
-                blog_model_1.default.aggregate({ $group: { _id: null, pvCount: { $sum: '$pv' } } }),
-                viewer_log_model_1.default.count({ createdAt: { $regex: today, $options: 'i' } }),
-                viewer_log_model_1.default.aggregate({ $match: { createdAt: { $regex: today, $options: 'i' } } }, { $group: { _id: { blogId: '$blogId', title: "$title", url: "$url" }, pv: { $sum: 1 } } }, { $sort: { createAt: -1 } }),
+                blog_model_1.default.aggregate([{ $group: { _id: null, pvCount: { $sum: '$pv' } } }]),
+                viewer_log_model_1.default.countDocuments({ createdAt: { $gte: todayStart, $lte: todayEnd } }).exec(),
+                viewer_log_model_1.default.aggregate([
+                    { $match: { createdAt: { $gte: todayStart, $lte: todayEnd } } },
+                    { $group: { _id: { blogId: '$blogId', title: "$title", url: "$url" }, pv: { $sum: 1 } } },
+                    { $sort: { createAt: -1 } }
+                ]),
                 viewer_log_model_1.default.find({}, null, { sort: { _id: -1 }, limit: 20 })
             ]).then(function (_a) {
                 var result1 = _a[0], result2 = _a[1], result3 = _a[2], result4 = _a[3];
@@ -65,24 +73,22 @@ var Routes = (function () {
             .then(function (obj) {
             if (obj || process.env.NODE_ENV === 'development') {
                 req.session.user = user;
-                res.redirect('/admin/blogList');
-                return;
+                return new route_1.RedirecPage('/admin/blogList');
             }
             else {
-                res.redirect('/admin/login');
-                return;
+                return new route_1.RedirecPage('/admin/login');
             }
         });
     };
     Routes.newArticle = function (req, res) {
-        var token = qiniu.uptoken('hopefully');
+        var token = qiniu_1.uptoken('hopefully');
         return category_model_1.default.find({})
             .then(function (catotory) {
             return { success: 0, categories: catotory, token: token };
         });
     };
     Routes.newArticleMd = function (req, res) {
-        var token = qiniu.uptoken('hopefully');
+        var token = qiniu_1.uptoken('hopefully');
         return category_model_1.default.find({})
             .then(function (catogory) {
             return { success: 0, categories: catogory, token: token };
@@ -120,6 +126,37 @@ var Routes = (function () {
             return { success: 1 };
         }).catch(function (err) {
             return { success: 0, msg: err };
+        });
+    };
+    Routes.uploadImg = function (req, res, next) {
+        debug(">>>>>>>>>>>>>upload");
+        var token = qiniu_1.uptoken(settings_1.qiniuConfig.bucketName);
+        var form = new formidable.IncomingForm();
+        return new Promise(function (resolve, reject) {
+            form.parse(req, function (err, fields, files) {
+                if (!err) {
+                    resolve(files['editormd-image-file']);
+                }
+                else {
+                    reject(err);
+                }
+            });
+        }).then(function (files) {
+            var file = files.path;
+            var file_name = files.name;
+            return qiniu_1.uploadFile(file, file_name, token)
+                .then(function (data) {
+                return {
+                    success: 1,
+                    message: "上传成功",
+                    url: settings_1.qiniuConfig.url + data.key
+                };
+            });
+        }).catch(function (err) {
+            return {
+                success: 0,
+                message: err,
+            };
         });
     };
     Routes.blogList = function (req, res) {
@@ -167,8 +204,8 @@ var Routes = (function () {
         });
     };
     Routes.editArticleMd = function (req, res) {
-        var getBlogById = blog_model_1.default.findById(req.params.id);
-        var getCategory = category_model_1.default.find({});
+        var getBlogById = blog_model_1.default.findById(req.params.id).exec();
+        var getCategory = category_model_1.default.find({}).exec();
         return Promise.all([getBlogById, getCategory])
             .then(function (_a) {
             var blogObj = _a[0], categories = _a[1];
@@ -192,10 +229,9 @@ var Routes = (function () {
         });
     };
     Routes.deleteBlog = function (req, res) {
-        var user = req.session.user;
         return blog_model_1.default.findByIdAndRemove(req.params.id)
             .then(function (doc) {
-            res.redirect('/admin/blogList');
+            return new route_1.RedirecPage('/admin/blogList');
         });
     };
     Routes.category = function (req, res) {
@@ -209,16 +245,11 @@ var Routes = (function () {
             cateName: req.body.cateName,
             state: true
         });
-        category.save(function (e, docs, numberAffected) {
-            if (e)
-                res.send(e.message);
-            res.redirect('/admin/category');
-        });
+        return Promise.resolve(category.save());
     };
     Routes.deleteCate = function (req, res) {
-        var user = req.session.user;
-        category_model_1.default.findByIdAndRemove(req.params.id, function (err) {
-            res.redirect('/admin/category');
+        category_model_1.default.findByIdAndRemove(req.params.id, null, function (err) {
+            return new route_1.RedirecPage('/admin/category');
         });
     };
     Routes.addUserUi = function (req, res) {
@@ -232,7 +263,7 @@ var Routes = (function () {
             password: generatorPassword(password),
             level: 1,
             state: true,
-            createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
+            createdAt: new Date()
         });
         return user.save()
             .then(function () {
@@ -240,10 +271,8 @@ var Routes = (function () {
         });
     };
     Routes.viewUser = function (req, res) {
-        user_model_1.default.find({}, null, function (err, docs) {
-            if (err)
-                res.send(err.message);
-            res.render('admin/viewUser', { users: docs });
+        return user_model_1.default.find({}).exec().then(function (docs) {
+            return Promise.resolve({ users: docs, title: req.query.title });
         });
     };
     Routes.toModifyUser = function (req, res) {
@@ -265,21 +294,22 @@ var Routes = (function () {
                 password: req.body.password,
                 updateDate: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
-        }, function (err, doc) {
+        }, null, function (err, doc) {
             if (err)
                 res.send(err.message);
             res.render('admin/modifyuser', { user: doc, success: 1, flag: 1 });
         });
     };
     Routes.deleteUser = function (req, res) {
-        user_model_1.default.remove({ _id: req.params.userId }, function (err) {
-            res.redirect('/admin/viewUser');
+        user_model_1.default.remove({ _id: req.params.userId }).then(function () {
+            return new route_1.RedirecPage('/admin/viewUser');
         });
     };
     Routes.logout = function (req, res) {
-        req.session.destroy(function (err) {
-            res.redirect('/admin/login');
-            return;
+        return new Promise(function (resolve, reject) {
+            req.session.destroy(function (err) {
+                resolve(new route_1.RedirecPage('/admin/login'));
+            });
         });
     };
     Routes.addWeatherUser = function (req, res) {
@@ -295,11 +325,11 @@ var Routes = (function () {
             cityCode: areaId,
             sendCount: 0,
             status: 1,
-            createAt: Moment().format('YYYY-MM-DD HH:mm:ss'),
+            createAt: new Date()
         });
         return weathUser.save()
             .then(function (data) {
-            res.redirect('/admin/weatherUserList');
+            return new route_1.RedirecPage('/admin/weatherUserList');
         });
     };
     Routes.weatherUserList = function (req, res) {
@@ -309,20 +339,20 @@ var Routes = (function () {
         });
     };
     Routes.delWeatherUser = function (req, res) {
-        return Promise.resolve(weather_user_model_1.default.remove({ _id: req.params.userId }))
+        return Promise.resolve(weather_user_model_1.default.remove({ _id: req.params.userId }).exec())
             .then(function (d) {
-            res.redirect('/admin/weatherUserList');
+            return new route_1.RedirecPage('/admin/weatherUserList');
         });
     };
     Routes.quicknote = function (req, res) {
         var quicknote = new quick_note_model_1.default({
             content: req.body.content,
-            state: true,
+            status: true,
             createDate: Moment().format('YYYY-MM-DD HH:mm:ss')
         });
         return quicknote.save()
             .then(function (data) {
-            res.redirect('/admin/quickNoteList');
+            return new route_1.RedirecPage('/admin/quickNoteList');
         });
     };
     Routes.editQuickNote = function (req, res) {
@@ -337,12 +367,13 @@ var Routes = (function () {
                 updateDate: Moment().format('YYYY-MM-DD HH:mm:ss')
             }
         }).then(function () {
-            res.redirect('/admin/quickNoteList');
+            return new route_1.RedirecPage('/admin/quickNoteList');
         });
     };
     Routes.deleteNote = function (req, res) {
-        quick_note_model_1.default.remove({ _id: req.params.id }, function (err) {
-            res.redirect('/admin/quickNoteList');
+        return quick_note_model_1.default.remove({ _id: req.params.id }).exec()
+            .then(function () {
+            return new route_1.RedirecPage('/admin/quickNoteList');
         });
     };
     Routes.quickNoteList = function (req, res) {
@@ -365,7 +396,7 @@ var Routes = (function () {
     };
     Routes.aboutConfig = function (req, res) {
         var arr = [];
-        return Promise.resolve(about_model_1.default.findOne())
+        return Promise.resolve(about_model_1.default.findOne().exec())
             .then(function (resume) {
             if (!resume) {
                 var r = new about_model_1.default({
@@ -416,6 +447,15 @@ var Routes = (function () {
         var id = req.body.id;
         return resume_model_1.default.findByIdAndUpdate(id, {
             $set: { state: state }
+        }).exec();
+    };
+    ;
+    Routes.updateResume = function (req, res) {
+        var _a = req.body, id = _a.id, content = _a.content;
+        return resume_model_1.default.findById(id).then(function (record) {
+            record.bakup = record.content;
+            record.content = content;
+            return record.save();
         });
     };
     ;
@@ -431,7 +471,7 @@ var Routes = (function () {
             url: req.body.url,
             name: req.body.name
         }).then(function (data) {
-            res.redirect('/admin/friendLinkList');
+            return new route_1.RedirecPage('/admin/friendLinkList');
         });
     };
     Routes.freezeFriendLink = function (req, res) {
@@ -441,25 +481,49 @@ var Routes = (function () {
         }, {
             state: state
         }).then(function (data) {
-            res.redirect('/admin/friendLinkList');
-            return;
+            return new route_1.RedirecPage('/admin/friendLinkList');
         });
     };
     Routes.delFriendLink = function (req, res) {
         return friend_link_model_1.default.remove({
             _id: req.params.id
         }).then(function (data) {
-            res.redirect('/admin/friendLinkList');
+            return new route_1.RedirecPage('/admin/friendLinkList');
+        });
+    };
+    Routes.message = function (req, res) {
+        return message_model_1.default.find({}).then(function (data) {
+            return Promise.map(data, function (item) {
+                if (item.replyid) {
+                    return blog_model_1.default.findById(item.replyid, { "title": 1 }).exec().then(function (blog) {
+                        var newItem = item.toObject();
+                        newItem.replyTitle = blog.title;
+                        newItem.createdDate = Moment(item.createdAt).format("YYYY-MM-DD HH:mm:ss");
+                        return newItem;
+                    });
+                }
+                else {
+                    var newItem = item.toObject();
+                    newItem.createdDate = Moment(item.createdAt).format("YYYY-MM-DD HH:mm:ss");
+                    return newItem;
+                }
+            }).then(function (list) {
+                return {
+                    messageList: list
+                };
+            });
+        });
+    };
+    Routes.deleteMessage = function (req, res) {
+        return message_model_1.default.remove({
+            _id: req.params.id
+        }).then(function (data) {
+            return new route_1.RedirecPage('/admin/message');
         });
     };
     Routes.updateTime = function (req, res) {
         return blog_model_1.default.find().then(function (blogs) {
             return Promise.each(blogs, function (item, index) {
-                var time = new Date(item.createdAt);
-                item.set("createdAt", time);
-                console.log(">>>>>>>>>", time);
-                item.set("updatedAt", time);
-                return item.save();
             });
         });
     };
@@ -487,6 +551,12 @@ var Routes = (function () {
             json: true
         })
     ], Routes, "createArticle", null);
+    __decorate([
+        route_1.route({
+            method: "post",
+            json: true
+        })
+    ], Routes, "uploadImg", null);
     __decorate([
         route_1.route({})
     ], Routes, "blogList", null);
@@ -616,6 +686,12 @@ var Routes = (function () {
         })
     ], Routes, "resumeSwitch", null);
     __decorate([
+        route_1.route({
+            method: "post",
+            json: true
+        })
+    ], Routes, "updateResume", null);
+    __decorate([
         route_1.route({})
     ], Routes, "friendLinkList", null);
     __decorate([
@@ -636,6 +712,15 @@ var Routes = (function () {
             path: ":id"
         })
     ], Routes, "delFriendLink", null);
+    __decorate([
+        route_1.route({})
+    ], Routes, "message", null);
+    __decorate([
+        route_1.route({
+            method: "get",
+            path: ":id"
+        })
+    ], Routes, "deleteMessage", null);
     __decorate([
         route_1.route({ json: true })
     ], Routes, "updateTime", null);

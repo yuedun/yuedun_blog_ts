@@ -8,10 +8,10 @@
     <link rel="stylesheet" href="/stylesheets/layout.css" type="text/css" media="screen"/>
 </head>
 <body>
-<% include header.html %>
+<%- include('header.html')%>
 <!-- end of header bar -->
 <!--导入菜单-->
-<% include menu.html %>
+<%- include('menu.html')%>
 <section id="main" class="column">
     <h4 class="alert_info">Welcome to the free MediaLoot admin panel template, this could be an informative
         message.</h4>
@@ -34,7 +34,7 @@
     <div class="spacer"></div>
 </section>
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script type="text/javascript">
+    <script>
         $(document).ready(function () {
             //删除文章
             $("[name='del']").click(function () {

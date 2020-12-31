@@ -8,7 +8,7 @@ var ViewerLogSchema = new mongoose_1.Schema({
     url: String,
     referer: String,
     userAgent: String,
-    createdAt: String,
+    createdAt: Date,
 });
 var ViewerLogModel = mongoose_1.model('ViewerLog', ViewerLogSchema);
 exports.default = ViewerLogModel;

@@ -1,5 +1,3 @@
-import RouteRegister from './route-register'
-
 interface RouteParam {
 	path?: string;
 	method?: string;
@@ -29,4 +27,10 @@ export function route({ path, method = "get", json = false }: RouteParam) {
 			json
 		});
 	}
+}
+
+export class RedirecPage {
+	constructor(
+		public url: string
+	) { }
 }

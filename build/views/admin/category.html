@@ -7,7 +7,7 @@
     <title>分类列表</title>
     <link rel="stylesheet" href="/stylesheets/layout.css" type="text/css" media="screen"/>
     <script src="http://libs.baidu.com/jquery/1.9.0/jquery.js" type="text/javascript"></script>
-    <script type="text/javascript">
+    <script>
         $(document).ready(function () {
             
         });
@@ -21,10 +21,10 @@
 
 <body>
 
-<% include header.html %>
+<%- include('header.html')%>
 <!-- end of header bar -->
 <!--导入菜单-->
-<% include menu.html %>
+<%- include('menu.html')%>
 <section id="main" class="column">
 
     <h4 class="alert_info">提示信息</h4>

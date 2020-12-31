@@ -19,6 +19,14 @@
             <%})%>
         </div>
     </div>
+    <%if(sameCategories && sameCategories.length>0){%>
+    <div class="aside-block backgroud border">
+        <h4><%=category%>同类博客</h4>
+        <% sameCategories.forEach(function(blog){%>
+        <p><a href="/blogdetail/<%= blog._id%>"><%=blog.title%></a></p>
+        <%})%>
+    </div>
+    <%}%>
     <div class="aside-block backgroud border">
         <h4>其他博客</h4>
         <p><a href="http://guard.iteye.com/admin" target="_blank">ITEYE</a></p>

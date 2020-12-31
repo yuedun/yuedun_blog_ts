@@ -10,6 +10,6 @@ var IAboutSchema = new mongoose_1.Schema({
     resume: String,
     other: String,
 });
-var IAboutModel = mongoose_1.model('Resume', IAboutSchema);
+var IAboutModel = mongoose_1.model('About', IAboutSchema);
 exports.default = IAboutModel;
 //# sourceMappingURL=about-model.js.map

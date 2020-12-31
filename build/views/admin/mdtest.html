@@ -6,15 +6,15 @@
     <meta name="renderer" content="webkit">
     <title>新建文章</title>
     <link rel="stylesheet" href="/stylesheets/bootstrap.min.css" />
-    <link rel="stylesheet" href="/vendors/editor.md-master/css/editormd.css" />
+    <link rel="stylesheet" href="/vendors/editor.md/css/editormd.css" />
     <link rel="stylesheet" href="/stylesheets/layout.css" type="text/css" media="screen" />
 </head>
 
 <body>
-    <% include header.html %>
+    <%- include('header.html')%>
     <!-- end of header bar -->
     <!--导入菜单-->
-    <% include menu.html %>
+    <%- include('menu.html')%>
     <section id="main" class="column">
         <h4 class="alert_info">新建成功。</h4>
         <div class="clear"></div>
@@ -90,15 +90,15 @@
         <div class="spacer"></div>
     </section>
     <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="/vendors/editor.md-master/editormd.min.js"></script>
-    <script type="text/javascript">
+    <script src="/vendors/editor.md/editormd.min.js"></script>
+    <script>
         var testEditor;
         $(function () {
             testEditor = editormd("test-editormd", {
                 width: "90%",
                 height: 640,
                 syncScrolling: "single",
-                path: "/vendors/editor.md-master/lib/"
+                path: "/vendors/editor.md/lib/"
             });
 
             /*

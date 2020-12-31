@@ -3,15 +3,14 @@ Object.defineProperty(exports, "__esModule", { value: true });
 var mongoose = require("mongoose");
 var Promise = require("bluebird");
 mongoose.Promise = Promise;
-var settings = require("../settings");
-var mongodbConfig = settings.mongodb;
+var settings_1 = require("../settings");
 var MongoConnection = (function () {
     function MongoConnection() {
-        this.host = mongodbConfig.host;
-        this.port = mongodbConfig.port;
-        this.username = mongodbConfig.uid;
-        this.password = mongodbConfig.pwd;
-        this.dbName = mongodbConfig.db;
+        this.host = settings_1.mongodb.host;
+        this.port = settings_1.mongodb.port;
+        this.username = settings_1.mongodb.uid;
+        this.password = settings_1.mongodb.pwd;
+        this.dbName = settings_1.mongodb.db;
         this.url = "mongodb://" + this.username + ":" + this.password + "@" + this.host + ":" + this.port + "/" + this.dbName;
         this.mongoose = mongoose;
         if (process.env.NODE_ENV == "development") {
@@ -19,11 +18,13 @@ var MongoConnection = (function () {
         }
         var opts = {
             loggerLevel: "warn",
-            useMongoClient: true
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
         };
+        mongoose.set('useFindAndModify', false);
         mongoose.connect(this.url, opts, function (err) {
             if (err) {
-                console.log('connection callback error');
+                console.log('connection callback error', err);
             }
         });
     }

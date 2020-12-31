@@ -1,28 +1,26 @@
 import * as express from 'express';
 import { Request, Response } from 'express';
 import * as path from 'path';
-import * as http from 'http';
 import * as favicon from 'serve-favicon';//图标组件由static-favicon改为serve-favicon
 import * as logger from 'morgan';//此模块及以下部分模块由express分离出来
 import * as cookieParser from 'cookie-parser';
-// import * as bodyParser from 'body-parser';
-var bodyParser = require('body-parser')
+const bodyParser = require('body-parser')
 import * as ejs from 'ejs';
 import * as session from 'express-session';
 import * as mongoStore from 'connect-mongo';
-var MongoStore = mongoStore(session);//connect-mongo(session),mongoose(orm)
+const MongoStore = mongoStore(session);
 import MongoConnection from './utils/connection';
 const connection = new MongoConnection();
 import * as settins from './settings';
-var mongodb = settins.mongodb;
+const mongodb = settins.mongodb;
 (require('./utils/cron'))();//定时任务
 import { default as pvLog } from './utils/viewer-log';//访问日志
 import RouteRegister from './utils/route-register';
-var originRoutes = require('./routes/origin-routes');
+const originRoutes = require('./routes/origin-routes');
 import Message from "./utils/message";
-var debug = require('debug')('yuedun:app.ts');
-var app = express();
-var store = new MongoStore({
+const debug = require('debug')('yuedun:app.ts');
+const app = express();
+const store = new MongoStore({
     // autoRemove: 'native',//自动清除过期session
     mongooseConnection: connection.mongoose.connection
 });
@@ -99,6 +97,7 @@ if (app.get('env') === 'development') {
 // no stacktraces leaked to user
 app.use(function (err: any, req: Request, res: Response, next: Function) {
     var msg = new Message(settins.errorAlert, `错误提醒`, null, err.message);
+    debug(err.message);
     msg.send().then(data => {
         debug(">>>>>", data)
     })

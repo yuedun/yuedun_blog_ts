@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.BlogSchema = void 0;
 var mongoose_1 = require("mongoose");
 var moment = require("moment");
 exports.BlogSchema = new mongoose_1.Schema({
@@ -10,6 +11,7 @@ exports.BlogSchema = new mongoose_1.Schema({
         default: 1
     },
     comments: [],
+    commentCount: Number,
     category: String,
     top: Number,
     tags: String,

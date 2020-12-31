@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html>
+<html lang="cmn">
 
-<head lang="zh-cmn">
+<head>
 	<meta charset="UTF-8">
 	<title>速记</title>
 	<meta name="keywords" content="霍潘,月盾,nodejs,node.js,go,golang,技术分享,个人博客">
@@ -12,7 +12,7 @@
 </head>
 
 <body>
-	<% include header.html %>
+	<%- include('header.html')%>
 	<div class="container">
 		<article class="backgroud border">
 			<section>
@@ -28,7 +28,7 @@
 				<% })%>
 		</section>
 		</article>
-		<% include asider.html %>
+		<%- include('asider.html')%>
 	</div>
 	<script src="/javascripts/silder.js"></script>
 </body>

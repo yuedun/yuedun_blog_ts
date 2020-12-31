@@ -1,18 +1,18 @@
-'use strict';
+"use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-var express = require("express");
 var Promise = require("bluebird");
 var Path = require("path");
 var IO = require("./Io");
 var message_1 = require("../utils/message");
 var settings_1 = require("../settings");
+var route_1 = require("./route");
+var article_1 = require("../routes/article");
+var viewer_log_1 = require("./viewer-log");
 var debug = require('debug')("yuedun:route-register.ts");
-var router = express.Router();
 var cwd = process.cwd();
 var RouteRegister = (function () {
     function RouteRegister(app, module) {
         this.jsExtRegex = /\.js$/;
-        this.htmlExtRegex = /\.html$/;
         this.adminHtmlPath = "admin";
         this.articleHtmlPath = "article";
         this.app = app;
@@ -77,12 +77,16 @@ var RouteRegister = (function () {
         }
         expressMethod.call(this.app, path, function (req, res) {
             new Promise(function (resolve, reject) {
+                console.log(viewer_log_1.getIP(req));
+                if (settings_1.blockIP.includes(viewer_log_1.getIP(req))) {
+                    reject(new Error('访问过于频繁！'));
+                }
                 resolve("权限验证通过");
             }).then(function (data) {
                 return route.handler.call(route.target, req, res);
             }).then(function (data) {
-                if (!data) {
-                    console.warn("没有数据返回，或许是路由中重定向或render");
+                if (data instanceof route_1.RedirecPage) {
+                    res.redirect(data.url);
                     return;
                 }
                 if (data instanceof Error) {
@@ -92,7 +96,7 @@ var RouteRegister = (function () {
                     });
                     return;
                 }
-                if (!data.title) {
+                if (data && !data.title) {
                     data.title = "";
                 }
                 if (route.json) {
@@ -104,10 +108,19 @@ var RouteRegister = (function () {
                     res.render(html, data);
                 }
                 else {
-                    var html = _this.articleHtmlPath + "/" + methodName;
-                    res.render(html, data);
+                    return article_1.getNewTopFriend()
+                        .then(function (list) {
+                        data.sameCategories = data.sameCategories ? data.sameCategories : null;
+                        data.newList = list.newList;
+                        data.topList = list.topList;
+                        data.friendLinks = list.friendLink;
+                        data.categories = list.category;
+                        var html = _this.articleHtmlPath + "/" + methodName;
+                        res.render(html, data);
+                    });
                 }
             }).catch(function (err) {
+                console.log(err.message);
                 var errMsg = "\u3010\u8BBF\u95EEurl\u3011\uFF1A" + req.url + "\n\u3010\u9519\u8BEF\u5806\u6808\u3011\uFF1A" + err.stack.match(/[^\n]+\n[^\n]+\n[^\n]+/);
                 var msg = new message_1.default(settings_1.errorAlert, "\u9519\u8BEF\u63D0\u9192", null, errMsg);
                 msg.send().then(function (data) {

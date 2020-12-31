@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.listFiles = void 0;
 var FS = require("fs");
 var Path = require("path");
 function listFiles(path, regex) {
