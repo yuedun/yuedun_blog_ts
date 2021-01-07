@@ -113,8 +113,8 @@ article {
     border-bottom: 1px dotted #111;
     word-break: break-word;
 }
-.blog-section .blog_title h1{
-    font-size: 30px;
+.blog-section .blog_title h2{
+    font-size: 26px;
     text-align: center;
 }
 .blog_sumary {

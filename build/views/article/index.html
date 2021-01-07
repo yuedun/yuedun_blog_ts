@@ -18,7 +18,7 @@
 			<% blogList.forEach(function(blog){%>
 			<section class="blog-section">
 				<div class="blog_title">
-					<h1><a href="/blogdetail/<%= blog._id%>" title="<%= blog.title%>"><%= blog.title%></a></h1>
+					<h2><a href="/blogdetail/<%= blog._id%>" title="<%= blog.title%>"><%= blog.title%></a></h2>
 				</div>
 				<div class="blog_sumary">
 					<ul>
@@ -46,6 +46,7 @@
 	<script src="/javascripts/jquery.pagination.js"></script>
 	<script>
 		$(function(){
+			// 分页
 			var current = parseInt('<%= pageIndex%>');
 			var pageSize = parseInt('<%= pageSize%>');
 			var totalIndex = parseInt('<%= totalIndex%>');
