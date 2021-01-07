@@ -108,6 +108,7 @@ var RouteRegister = (function () {
                     res.render(html, data);
                 }
                 else {
+                    data.env = process.env.NODE_ENV;
                     return article_1.getNewTopFriend()
                         .then(function (list) {
                         data.sameCategories = data.sameCategories ? data.sameCategories : null;

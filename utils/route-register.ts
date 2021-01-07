@@ -138,6 +138,7 @@ export default class RouteRegister {
                     let html = this.adminHtmlPath + "/" + methodName;
                     res.render(html, data);
                 } else {
+                    data.env = process.env.NODE_ENV;
                     //获取公共数据
                     return getNewTopFriend()
                         .then(list => {
